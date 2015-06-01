@@ -1,0 +1,17 @@
+{% if not app.user.isLoggedIn() %}
+    {% do app.redirect('/account/login/'~app.request.url) %}
+{% endif %}
+
+{# Route logic, requires a url like /<id>/<action> #}
+{% set id     = app.request.path|split('/')|first|integer %}
+{% set action = app.request.path|split('/')|last %}
+
+{% if action == id %}
+    {% set action = 'index' %}
+{% endif %}
+
+{% if id is empty or action not in ['cancel'] %}
+    {% do app.redirect('/account/returns') %}
+{% endif %}
+
+{% include '/account/return/_partials/' ~ action ~ '.html.twig' %}

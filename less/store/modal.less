@@ -1,0 +1,342 @@
+//
+//  Product-Details Pop-up Modal
+// --------------------------------------------------
+
+/* quick view btn */
+div.quickview {
+    display: block;
+    margin-top: 40%;
+    max-height: 50px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 2;
+    visibility: hidden;
+}
+
+.product:hover div.quickview {
+    visibility: visible;
+}
+
+.btn-quickview {
+    border-radius: 2px;
+    font-family: "Oswald", Helvetica Neue, Arial, sans-serif;
+    letter-spacing: 2px;
+    color: #2c3e50 !important;
+    text-transform: uppercase;
+    background: #fff; /* old borwser */
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #eee;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    -ms-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    -moz-o-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    left: auto;
+    min-width: 100px;
+    max-height: 40px;
+    height: 40px !important;
+    opacity: 0;
+    -webkit-opacity: 0;
+    -ms-opacity: 0;
+    padding: 10px;
+    visibility: hidden;
+    width: auto;
+    display: inline-block !important;
+    z-index: 2;
+    transform: scale(0.75);
+    -webkit-transform: scale(0.75);
+    -o-transform: scale(0.75);
+    -ms-transform: scale(0.75);
+    -moz-transform: scale(0.75);
+    transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -ms-transition: all 0.3s ease 0s;
+}
+
+.product:hover .btn-quickview {
+    visibility: visible;
+    opacity: 0.85;
+    -webkit-opacity: 0.85;
+    -ms-opacity: 0.85;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -o-transform: scale(1);
+    -ms-transform: scale(1);
+    -moz-transform: scale(1);
+}
+
+.list-view .product:hover div.quickview {
+    margin-top: 45%;
+}
+
+@media (max-width: 460px) {
+    div.quickview {
+        margin-top: 25%;
+    }
+}
+
+@media (max-width: 400px) {
+    div.quickview {
+        margin-top: 35%;
+    }
+}
+
+.product > .btn-quickview:hover {
+    opacity: 0.95;
+}
+
+/* quick view btn end */
+
+#product-details-modal .modal-dialog {
+    background: #fff;
+    max-width: 960px;
+    overflow: auto;
+    width: 100%;
+}
+
+#product-details-modal .close {
+    color: #2c3e50;
+    display: block;
+    font-size: 34px;
+    font-weight: lighter;
+    line-height: 10px;
+    opacity: 0.6;
+    padding: 12px;
+    position: absolute;
+    right: 0;
+    text-shadow: none;
+    top: 0;
+    z-index: 1;
+}
+
+#product-details-modal .close:hover {
+    opacity: 0.8;
+}
+
+@media (max-width: 800px) {
+    #product-details-modal .modal-dialog {
+        max-width: 90%;
+        margin: 20px auto;
+    }
+}
+
+@media (min-width: 840px) {
+    .modal-details-inner {
+        min-height: 552px;
+    }
+}
+
+@media (max-width: 600px) {
+    #product-details-modal .modal-dialog {
+        max-width: 96%;
+        margin: 20px auto;
+    }
+}
+
+#product-details-modal .modal-content {
+    background: #fff;
+    display: block;
+    height: auto;
+    padding: 0;
+    box-shadow: none;
+}
+
+.modal-details-inner {
+    padding: 30px;
+}
+
+#product-details-modal .productFilter {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+#product-details-modal .filterBox {
+    display: inline-block;
+    margin-right: 10px;
+    width: 45%;
+}
+
+#product-details-modal .cart-actions {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+#product-details-modal .color-details {
+    margin-top: 5px;
+}
+
+#product-details-modal .product-share {
+    border-top: 0 none;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.modal-product-thumb {
+    border-top: 1px solid #ddd;
+    clear: both;
+    display: block;
+    text-align: center;
+}
+
+.modal-product-thumb a {
+    border: 1px solid #ccc;
+    display: inline-block;
+    float: none;
+    margin-right: 10px !important;
+    margin-top: 5px;
+    height: 75px;
+    overflow: hidden;
+    width: 60px !important;
+}
+
+.modal-product-thumb a.selected, .modal-product-thumb a:hover {
+    border: 1px solid #000 !important;
+}
+
+.modal-product-thumb a img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 75px;
+    width: 60px !important;
+}
+
+
+//
+//  Subscribe|promotional - Modal
+// --------------------------------------------------
+
+#modalAds .modal-bg-1 {
+    background: url(../images/site/modal-img-1.jpg) right bottom no-repeat;
+    background-color: #F3F6FB;
+}
+
+.modal-bg-1 .close {
+    color: #2c3e50;
+    display: block;
+    font-size: 34px;
+    font-weight: lighter;
+    line-height: 10px;
+    opacity: 0.6;
+    padding: 12px;
+    position: absolute;
+    right: 0;
+    text-shadow: none;
+    top: 0;
+    z-index: 1;
+}
+
+#modalAds .modal-dialog {
+    max-width: 660px;
+    min-height: 340px;
+    display: block;
+    overflow: auto;
+    padding: 15px;
+    position: relative;
+}
+
+#modalAds h3 {
+    color: #444;
+    font-family: Oswald, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 26px;
+    font-weight: normal;
+    letter-spacing: 1px;
+    line-height: 29px;
+    text-transform: uppercase;
+}
+
+.discountLg {
+    color: #000;
+    font-family: Oswald, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 46px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    line-height: 46px;
+    text-transform: uppercase;
+}
+
+#modalAds h4 {
+    font-size: 24px;
+    font-weight: normal;
+    letter-spacing: 2px;
+    line-height: 28px;
+    text-transform: uppercase;
+}
+
+.newsletter {
+    border: 2px solid #ddd;
+    display: inline-block;
+    width: auto;
+}
+
+.newsletter input[type="text"] {
+    background: #fff;
+    border: medium none;
+    float: left;
+    height: 40px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.newsletter input[type="text"]:focus {
+    text-shadow: none;
+    color: #666;
+}
+
+.newsletter .subscribe-btn {
+    background: #ddd;
+    border: 0 none;
+    border-radius: 0;
+    color: #3a3a3a;
+    float: left;
+    font-weight: normal;
+    height: 40px;
+    line-height: normal;
+    padding: 0 10px;
+}
+
+@media (max-width: 442px) {
+    .discountLg {
+        font-size: 36px;
+        letter-spacing: 2px;
+        line-height: 40px;
+    }
+
+    #modalAds h3 {
+        color: #444;
+        font-size: 22px;
+        letter-spacing: 1px;
+        line-height: 26px;
+    }
+
+    .newsletter input[type="text"] {
+        width: 100%;
+    }
+
+    .newsletter .subscribe-btn {
+        margin-left: 0;
+        margin-top: 5px;
+        width: 100%;
+    }
+}
+
+.newsletter .subscribe-btn:hover {
+    background: #b7b7b7;
+}
+
+.shoplink {
+    color: #000;
+    display: inline-block;
+    clear: both;
+    font-family: Oswald, Helvetica Neue, Helvetica, Arial, sans-serif;
+    left: 2px;
+    margin-top: 20px;
+    text-decoration: underline;
+    text-transform: uppercase;
+}

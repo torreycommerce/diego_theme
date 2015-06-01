@@ -1,0 +1,29 @@
+{% macro normalizer() %}
+    <div style="display: none;" class="row loader_normalizer">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-offset-4 col-md-11">
+                    <div class="alert alert-info">
+                        <i>Please, wait while we check your address ...</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="normalized-address">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-offset-4 col-md-8">
+                    <div id="address-found" class="alert alert-success" style="display: none;">
+                        Please verify your address. Select which address you would like to use:<br>
+                        <input type="radio" name="address-radio" value="current" id="address-current" checked> Current address<br>
+                        <input type="radio" name="address-radio" value="normalized" id="address-normalized"> <span id="address"></span>
+                    </div>
+                    <div id="address-not-found" class="alert alert-warning" style="display:none">
+                        We couldn't verify your address. Please correct your address and try again, or click the button below to continue.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}

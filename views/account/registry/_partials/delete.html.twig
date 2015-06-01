@@ -1,0 +1,7 @@
+{% set result = api.delete('/registry/' ~ registry.id) %}
+{% if result %}
+    {% do app.user.setFlash('Deleted registry successfully.') %}
+{% else %}
+    {% do app.user.setFlash('Error deleting registry.', 'danger') %}
+{% endif %}
+{% do app.redirect('/account/registries') %}

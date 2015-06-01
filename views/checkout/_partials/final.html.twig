@@ -1,0 +1,233 @@
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% block breadcrumb %}
+{{ base.breadcrumbs({'checkout':''}) }}
+{% endblock %}
+
+{% if response is not empty %}
+    {% do app.user.clearCheckoutStates('shipping') %}
+    {% do app.user.clearCheckoutStates('billing') %}
+    {% set final_order = api.get('/order/' ~ response | integer) %}
+    {% set items = api.get('/orderitem', {query:{'order_id':final_order.id}}) %}
+    {% set coupons = api.get('/ordercoupon', {query:{'order_id':final_order.id}}) %}
+    {% set product_ids = items|values_in('product_id') %}
+    {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+    {% set col_ = app.user.isLoggedIn() ? "col-md-12 col-lg-12" : "col-md-8 col-lg-8"%}
+{% endif %}
+
+{% do app.user.setState('order_sent', null) %}
+<div class="container main-container">
+    <div class="row transitionfx">
+        <div class="col-lg-9 col-md-9 col-sm-7">
+            {% if response is not empty %}
+                <h1 class="section-title-inner"><span>
+                <i class="glyphicon glyphicon-shopping-cart"></i> Thank You </span></h1>
+            {% else %}
+                <h1 class="section-title-inner"><span>
+                <i class="glyphicon glyphicon-exclamation-sign"></i> Order failed </span></h1>
+            {% endif %}
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-5 rightSidebar">
+                    <h4 class="caps"><a href="{{ app.url }}/"><i class="fa fa-chevron-left"></i> Back to shopping </a></h4>
+        </div>
+        <div id="order-complete">
+                <div class="col-md-12 col-sm-7">
+                    <div id="order-details">
+                        <div class="well">
+                            {% if response is not empty %}
+                                <h3>Thank You, Your Order is Complete!</h3>
+                                <div>We have sent you an e-mail confirmation.</div>
+                                {% if request.customer_id is defined %}
+                                    <div class="order-number">
+                                        <a href="{{app.url}}/account/order/{{final_order.order_number}}">{{ final_order.order_number }}</a>.
+                                    </div>
+                                    <div class="order-placed">Order Placed: {{ final_order.date_created|date("F jS, Y") }}</div>
+                                    <!-- <div class="order-estimated-delivery">Estimated Delivery: June 5, 2014</div> -->
+                                    <!-- <div class="order-invoice"><a href="#">Order Invoice (Print)</a></div> -->
+                                {% else %}
+                                    <form name="order", action="{{app.url}}/order", method="POST", class="form-horizontal" id="view-order">
+                                        <input type="hidden" name="order[id]" value="{{ final_order.order_number }}" />
+                                        <input type="hidden" name="order[email]" value="{{ final_order.email}}" />
+                                        <a href="javascript: $('form#view-order').submit();">{{ final_order.order_number }}</a>
+                                    </form>                                
+                                {% endif %}
+                                <a href="{{app.url}}">Go back to the store</a>.
+                                {% set response = api.delete('/sessioncart') %}
+                            {% else %}
+                                Order placement failed with the following error(s):
+                                {% if api.error is iterable %}
+                                    <ul>
+                                    {% for field, errors in api.error %}
+                                        <li>
+                                            {{field}}
+                                            <ul>
+                                                {% for error in errors %}
+                                                    <li>{{ error }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    {{ api.error }}
+                                {% endif %}
+                                    <p></p>
+                                {% if request.token is defined %}
+                                    <a href="{{app.url}}/checkout/paypal">Please try again.</a>
+                                {% else %}
+                                    <a href="{{app.url}}/checkout/billing">Please try again.</a>
+                                {% endif %}
+                                </div>
+                                <div class="gap"></div>
+                                <div class="cartFooter w100">
+                                    <div class="box-footer actions">
+                                       <div class="pull-left"><a href="{{app.url}}/checkout/billing" class="btn btn-default"> <i class="fa fa-arrow-left"></i> &nbsp; Back to Billing </a></div>
+                                        <div class="pull-right"><a href="{{app.url}}/" class="btn btn-primary">&nbsp; Continue to shopping <i class="fa fa-arrow-circle-right"></i> </a></div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                    </div>
+                    {% if response is not empty %}
+                        <h2 class="block-title-2">Items Ordered</h2>
+                        <div id="order-items" class="panel-group">
+                            {# LOOP Items #}
+                            {% for product in products %}
+                            <div class="item itemauto panel panel-border">
+                                <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-8 col-sm-9 col-md-9 col-lg-9">
+                                                <h4 class="panel-title">{{ product[0].title }}</h4>
+                                            </div>
+                                            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                                                <h4 class="item-total text-right">Total: ${{ product[0].price }}</h4>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {# End loop items #}
+                        </div>
+                        <div id="order-totals">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-8 col-md-7 col-lg-8">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                            <div class="shipping-address">
+                                                <div><strong>Shipping Address:</strong></div>
+                                                <div class="address">
+                                                    <div class="name">{{ final_order.shipping_first_name }} {{ final_order.shipping_first_name }}</div>
+                                                    <div class="address1">{{ final_order.shipping_street_line1 }}</div>
+                                                    <div class="city-state">{{ final_order.shipping_city }}, {{ final_order.shipping_state }} {{ final_order.shipping_zip }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                            <div class="billing-address">
+                                                <div><strong>Billing Address:</strong></div>
+                                                <div class="address">
+                                                    <div class="name">{{ final_order.billing_first_name }} {{ final_order.billing_first_name }}</div>
+                                                    <div class="address1">{{ final_order.billing_street_line1 }}</div>
+                                                    <div class="city-state">{{ final_order.billing_city }}, {{ final_order.billing_state }} {{ final_order.billing_zip }}</div>
+                                                    <div class="billing-method">Card: {{ final_order.card_type }} | Last Digits {{ final_order.card_last4 }} </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-5 col-lg-4">
+                                    <div class="order-totals">
+                                        <div class="order-subtotal">
+                                            <div class="row">
+                                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Order Subtotal:</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ final_order.subtotal|number_format(2, '.') }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="shipping">
+                                            <div class="row">
+                                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Shipping:</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ final_order.shipping_rate }}</div>
+                                            </div>
+                                        </div>
+                                        {% set discount = 0 %}
+                                        {% for dsc in coupons %}
+                                            {% set discount = discount + dsc.discount %}
+                                        {% endfor %}
+                                        <div class="coupon-discount">
+                                            <div class="row">
+                                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Coupon Discount:</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">$ {{ discount|number_format(2, '.') }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="pre-tax-total">
+                                            <div class="row">
+                                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Total Before Tax:</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">$ {{ (final_order.subtotal + final_order.shipping_rate + discount)|number_format(2, '.') }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="tax">
+                                            <div class="row">
+                                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Sales Tax:</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ final_order.tax|number_format(2, '.')}}</div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="gift-card">
+                                            <div class="row">
+                                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Gift Card Amount:</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">$ XXX</div>
+                                            </div>
+                                        </div> -->
+                                        <div class="order-total">
+                                            <div class="row">
+                                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Order Total:</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ final_order.total|number_format(2, '.') }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gap"></div>
+                        <div class="cartFooter w100">
+                            <div class="box-footer actions">
+                                <div class="pull-right"><a href="{{app.url}}/" class="btn btn-primary">Continue to shopping <i class="fa fa-arrow-circle-right"></i> </a></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+{#                {% if col_ == "col-md-8 col-lg-8" %}
+                <div class="col-md-4 col-lg-4">
+                    <div class="account-create">
+                        <div class="well">
+                            <div class="account-create">
+                                <h3>Create a new account</h3>
+                                <hr>
+                                <p>Create an account and you'll be able to place orders, create registries, create wishlists, check the status of your orders, write reviews, and more.</p>
+                                {{ forms.begin('create', app.url ~ '/account/create', 'post') }}
+                                    <fieldset>
+                                        {{ forms.hidden('create[first_name]',final_order.billing_first_name) }}
+                                        {{ forms.hidden('create[last_name]',final_order.billing_last_name) }}
+                                        {{ forms.hidden('create[phone_number]',final_order.billing_phone_number) }}
+                                        {{ forms.hidden('create[email]',final_order.email) }}
+                                        {{ forms.hidden('create[confirm_email]',final_order.email) }}
+                                        <div class="form-group">
+                                            <label for="input2" class="control-label">Create Password (4-14 Characters)</label>
+                                            {{ forms.password('create[password]', "", {class:'form-control parsley-validated', placeholder:"Password", required:true}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="input2">Verify Password</label>
+                                            {{ forms.password('create[confirm_password]', "", {class:'form-control parsley-validated', placeholder:"Retype Password", required:true}) }}
+                                        </div>                            
+                                        <div class="form-group">
+                                            {{ forms.submit('create[action]', 'create', 'Create Account', {class:'btn btn-primary'})}}
+                                        </div>
+                                    </fieldset>
+                                {{ forms.end() }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %} #}
+
+    </div>{#End row transitionfx#}
+    <div class="gap"></div>
+    {% include '/_partials/analytics.html.twig' %} {# Checkout has special analytics #}
+</div> {# End Main  #}

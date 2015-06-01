@@ -1,0 +1,49 @@
+{
+    "attributeLabels": {
+        "confirm_email": "Confirm Email",
+        "confirm_password": "Confirm Password",
+        "email": "Email",
+        "first_name": "First Name",
+        "last_name": "Last Name",
+        "password": "Password",
+        "phone_number": "Phone Number"
+    },
+    "rules": [
+        {
+            "first_name,last_name,phone_number": "required"
+        },
+        {
+            "phone_number": "modules.store.components.validators.PhoneNumber"
+        },
+        {
+            "email": "length",
+            "max": 100
+        },
+        {
+            "email": "email"
+        },
+        {
+            "confirm_email": "required",
+            "message": "Email confirmation cannot be blank."
+        },
+        {
+            "confirm_email": "compare",
+            "compareAttribute": "email",
+            "message": "Email Address must be repeated exactly."
+        },
+        {
+            "password": "length",
+            "max": 255,
+            "min": 6
+        },
+        {
+            "confirm_password": "required",
+            "message": "Password confirmation cannot be blank."
+        },
+        {
+            "confirm_password": "compare",
+            "compareAttribute": "password",
+            "message": "Password must be repeated exactly."
+        }
+    ]
+}

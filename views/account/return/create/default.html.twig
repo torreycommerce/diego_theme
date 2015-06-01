@@ -1,0 +1,23 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/account/_macros/base.html.twig" as account %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+
+{# Redirect to the login page if user is not logged in. #}
+{# {% do account.login() %} #}
+
+{% set page_name = 'return' %}
+{% set order = api.get('/order',{query:{order_number: app.request.path}}).0 %}
+{% set orderitems = api.get('/orderitem', {query:{order_id:order.id, status:'shipped'}}) %}
+{% if order.date_created|strtotime > app.params.returnTime|strtotime %}
+    {% do app.redirect('/account/orders', {'error':'Order is too old for returns.x' ~ app.request.path ~ 'x'}) %}
+{% endif %}
+
+{% block title %}Account - Order Return{% endblock %}
+
+{% block breadcrumb %}
+    {{ base.breadcrumbs({'Account':'/account','Returns':'/account/returns','Return Item(s)':''}) }}
+{% endblock %}
+
+{% block content %}
+{% include '/account/return/create/_partials/form.html.twig' %}
+{% endblock %}

@@ -1,0 +1,6 @@
+{% for item, quantity in app.request.post.items %}
+    {% if quantity > 0 %}
+        {% set result = api.put('/sessioncartitem', item) %}
+    {% endif %}
+{% endfor %}
+{{ app.redirect('/cart') }}

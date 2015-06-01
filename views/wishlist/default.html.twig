@@ -1,0 +1,21 @@
+{# Route logic, requires a url like /<id>/<action> #}
+{% set id     = app.request.path|split('/')|first|integer %}
+{% set action = app.request.path|split('/')|last %}
+
+{% if action|integer == id %}
+    {% set action = 'index' %}
+{% endif %}
+
+{% if id == 0 %}
+    {% if app.user.id is empty %}
+        {% do app.redirect('/account/login/wishlist') %}
+    {% endif %}
+    {% set wishlist = api.get('/wishlist',{query:{customer_id:app.user.id, default:true}})|first %} {# default wishlist #}
+{% else %}
+    {% set wishlist = api.get('/wishlist/' ~ id) %}
+{% endif %}
+
+{% if app.user.id == wishlist.customer_id and action == 'index' %}
+    {% do app.redirect('/account/wishlist/' ~ wishlist.id) %}
+{% endif %}
+{% include '/wishlist/_partials/' ~ action ~ '.html.twig' %}

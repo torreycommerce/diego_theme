@@ -1,0 +1,24 @@
+{# Variables passed in: order_id #}
+{% set order = api.get('/order/' ~ order_id) %}
+{% set items = api.get('/orderitem', {query:{order_id:order_id}}) %}
+{% set product_ids = items|values_in('product_id') %}
+{% set products = api.get('/product',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+
+You have cancelled your order with {{ app.params['site']['title'] }}.
+
+This email is to confirm your order cancellation.
+
+Order ID: {{ order.order_number }}
+Date: {{ order.date_created }}
+
+--------------------------------------------------------------------------
+{% for item in items %}
+URL: {{app.url}}{{products[item.product_id].0.url}}
+SKU: {{item.sku}}
+Item name: {{ item.name }}
+Price: ${{ item.price }}
+Quantity: {{ item.quantity }}
+{% endfor %}
+--------------------------------------------------------------------------
+
+Thank you for shopping with us.

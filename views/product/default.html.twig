@@ -1,0 +1,62 @@
+{% extends "/_layouts/theme.html.twig" %}
+
+{# Redirect old babyviva product links #}
+{% set request = app.request.path | split('/') %}
+{% if request.1 | split('-') | last | integer %}
+    {% set item  = api.get('/catalog/' ~ request.1 | split('-') | last ) %}
+    {% if item.url is not empty %}
+        {% do app.redirect(item.url,{'code':301}) %}
+    {% else %}
+        {% do app.redirect(app.request.referer,{'error':'Sorry, the product you requested is unavailable.' ~ request.1 | split('-') | last}) %}
+    {% endif %}
+{% endif %}
+
+{% if app.request.path is integer %}
+    {% set item  = api.get('/catalog',{query:{id:app.request.path}})|first %}
+{% else %}
+    {% set item  = api.get('/catalog', {query:{slug:app.request.path}})|first %}
+{% endif %}
+{% if item.id is empty %}
+    {% do app.redirect(app.request.referer,{'error':'Sorry, the product you requested is unavailable.'}) %}
+{% endif %}
+
+{% set reviews = api.get('/productreview', { query:{ product_id: item.id,status:"active" } }) %}
+
+{% set title = item.name|title %}
+
+{% block breadcrumb %}
+    {% set categories = app.request.path|split('/') %}
+    {% set crumbs = [] %}
+
+    {% set category_link = '' %}
+
+    {% for category in item.category|first|split('/') %}
+        {% set category_link = category_link ~ '/' ~ category %}
+        {% set category_title = category|replace('-',' ')|title %}
+        {% set crumbs = crumbs|merge({(category_title):('/category' ~ category_link)})%}
+    {% endfor %}
+
+    {% set crumbs = crumbs|merge({(title):''}) %}
+
+    {{ base.breadcrumbs(crumbs) }}
+{% endblock %}
+
+{% block title %}{{ title|default(seo['title']) }}{% endblock %}
+{% block meta_keywords %}{{ item.keywords|join(',')|default(seo['keywords']) }}{% endblock %}
+{% set meta_description = item.meta_description|default(item.meta_description) %}
+{% block meta_description %}{{ meta_description|default(seo['description']) }}{% endblock %}
+
+{% block content %}
+    {# {% if item.product|length == 1 and item.product[0].variant|length == 1 %} #}
+    {% if item.product|length == 1 %}
+        {% set product = item.product|first %}
+        {% include "/product/_partials/single-item.html.twig" %}
+    {% else %}
+        {% set product = item %}
+        {% include "/product/_partials/collection.html.twig" %}
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+    {% do app.asset.js(app.url_asset ~ '/js/product.js') %}
+{% endblock %}

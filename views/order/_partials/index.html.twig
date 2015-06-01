@@ -1,0 +1,15 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/account/_macros/base.html.twig" as account %}
+{% import "/_macros/form-elements.html.twig" as form %}
+
+{% set page_name = 'order' %}
+
+{% block title %}Order Details{% endblock %} 
+
+{% block breadcrumb %}
+    {{ base.breadcrumbs({'Order Details':''}) }}
+{% endblock %}
+
+{% block content %}
+{% include '/order/_partials/details.html.twig' %}
+{% endblock %}

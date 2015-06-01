@@ -1,0 +1,164 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% block title %}
+Contact Us
+{% endblock %}
+{% block breadcrumb %}
+{{ base.breadcrumbs({'Contact Us':''}) }}
+{% endblock %}
+{% block content %}
+{% set subjects = {
+    'Order Status' : 'Order Status',
+    'Shipping / Tracking Info' : 'Shipping / Tracking Info',
+    'Cancel an Item / Order' : 'Cancel an Item / Order',
+    'Return and Item / Order' : 'Return and Item / Order',
+    'Product Question' : 'Product Question',
+    'Website Comment' : 'Website Comment',
+    'Store Comment' : 'Store Comment',
+    'Gift Registry Comment' : 'Gift Registry Comment',
+    'Other' : 'Other'
+}
+%}
+{% if app.request.post.contact is defined and app.request.post.contact.subject in subjects %}
+    {% do app.request.validateToken() %}
+    {% if app.params['contact-us']['to'] is empty or app.params['contact-us']['from'] is empty %}
+        <div class="alert-danger">We're sorry, contact-us feature has not yet been setup.</div>
+    {% elseif api.post('/contact', app.request.post.contact) %}
+        {% do app.redirect('/', {'success':'Your comment has been submitted. Thank you.'}) %}
+    {% endif %}
+{% endif %}
+<div class="parallaxOffset no-padding fixedContent contact-intro">
+    <div class="w100 map">
+        <iframe width="100%" height="550" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+                src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=+&amp;q={{ app.params['business-info']['business-street-address'] }}+{{ app.params['business-info']['business-complementary-address'] }}+{{ app.params['business-info']['business-city'] }}+{{ app.params['business-info']['business-state'] }}&amp;t=m&amp;z=14&amp;output=embed">
+        </iframe>
+    </div>
+</div>
+<!--/.contact-intro || map end-->
+
+<div class="wrapper whitebg contact-us">
+    <div class="container main-container ">
+        <div class="row innerPage">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+
+                <div class="row userInfo">
+
+                    <div class="col-xs-12 col-sm-12">
+
+                        <h1 class="title-big text-center section-title-style2">
+                            <span> Contact us </span>
+                        </h1>
+
+                        <p class="lead text-center">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac augue at erat hendrerit
+                            dictum. Praesent porta, purus eget sagittis imperdiet, nulla mi ullamcorper metus, id
+                            hendrerit metus diam vitae est. Class aptent taciti sociosqu ad litora torquent per conubia
+                            nostra, per inceptos himenaeos.
+                        </p>
+
+                        <hr>
+
+                        <div class="row">
+
+                           <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
+
+                                <h3 class="block-title-5">
+                                    We are here to help
+                                </h3>
+                                    <p>For questions or comments, please complete the form below.</p>
+                                    <hr>
+                                    {{ forms.begin('contact','','post',{ class:'form-horizontal' }) }}
+                                    
+                                        {# Begin name field #}
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label" for="input1">Name*</label>
+
+                                            <div class="col-md-9">
+                                                {{ forms.text('contact[name]', contact.name|default(app.user.full_name), {class:'form-control parsley-validated', placeholder:"Name", required:true}) }}
+                                            </div>
+                                                <div class="col-md-9">
+                                                    <div class="validation">{{ forms.errorlist(form_errors, 'name') }}</div>
+                                                </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label" for="input1">Email*</label>
+
+                                            <div class="col-md-9">
+                                                {{ forms.email('contact[email]', contact.email|default(app.user.email), {class:'form-control parsley-validated', placeholder:"Email", required:true}) }}
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="validation">{{ forms.errorlist(form_errors, 'email') }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label" for="input1">Subject*</label>
+
+                                            <div class="col-md-9">
+                                                {{ forms.select('contact[subject]', contact.subject, subjects, {class:'form-control parsley-validated', placeholder:"Subject", required:true}) }}
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="validation">{{ forms.errorlist(form_errors, 'subject') }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label" for="input1">Message*</label>
+
+                                            <div class="col-md-9">
+                                                {{ forms.textarea('contact[message]', contact.message, {class:'form-control parsley-validated', placeholder:"Message", required:true}) }}
+                                            </div>
+                                                <div class="col-md-9">
+                                                    <div class="validation">{{ forms.errorlist(form_errors, 'message') }}</div>
+                                                </div>
+                                        </div>
+                                        {# End message field #}
+                                        {# Begin actions #}
+                                        <div class="row">
+                                            <div class="col-xs-10 col-sm-5 col-sm-offset-2">
+                                                <div class="actions">
+                                                    {{ forms.submit('submit', 'create', 'Send request', {class:'btn btn-primary'})}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {# End actions #}
+                            </div>
+                            <div class="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-1 outer">
+                                <div class="inner">
+                                    <h3 class="block-title-5">
+                                        {{ app.params.site.title }}
+                                    </h3>
+                                    <hr>
+                                    <p>
+                                        {{ app.params['business-info']['business-street-address'] }} {{ app.params['business-info']['business-complementary-address'] }}<br>{{ app.params['business-info']['business-city'] }} 
+                                        {{ app.params['business-info']['business-state'] }} {{ app.params['business-info']['business-zip'] }}
+                                        <br>
+                                        <strong>
+                                            Phone number
+                                        </strong>
+                                        : {{ app.params.information['phone_number'] }}
+                                        <br>
+                                        <strong>
+                                            Email us
+                                        </strong>
+                                        : {{ app.params['contact-us']['to'] }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/.row-->
+                         <div style="clear:both"></div>
+                    </div>
+
+
+                </div>
+                <!--/.row  ||  -->
+
+            </div>
+        </div>
+        <!--/row || innerPage end-->
+        <div style="clear:both"></div>
+    </div>
+    <!-- ./main-container -->
+    <div class="gap"></div>
+</div>
+<!-- /main-container -->
+{% endblock %}

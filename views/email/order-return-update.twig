@@ -1,0 +1,10 @@
+{# Variables passed in: order_id, return_id #}
+{% set return = api.get('/orderreturn/' ~ return_id) %}
+{% set item = api.get('/orderitem/' ~ return.item_id) %}
+Your return status has been updated:
+
+Status: {{return.status }}
+RMA#: {{return.rma}}
+Item name: {{item.name}}
+Quantity: {{return.quantity}}
+Reason: {{return.reason}}

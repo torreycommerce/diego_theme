@@ -1,0 +1,113 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% block breadcrumb %}
+{{ base.breadcrumbs({'Search Registries':''}) }}
+{% endblock %}
+{% block content %}
+{% if app.request.get.registry_search is not empty %}
+    {% set params = {} %}
+    {% for key, value in app.request.get.registry_search %}
+        {% if value is not empty %}
+            {% set params = params + {(key):value} %}
+        {% endif %}
+    {% endfor %}    
+    {% set params = params + {privacy:'public'} %}
+    {% set registries = api.get('/registry', {query:params}) %}
+{% endif %}
+<div id="registry_search">
+    <div class="row">
+        <div class="col-md-12">
+            <header>
+                <h1 class="page-header">Gift Registry</h1>
+            </header>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Find a Registry</h2>
+
+            {{ forms.begin('registry_search','','get',{class:'form-horizontal'}) }}
+            <div class="form-group">
+                <label class="control-label col-sm-2 col-md-2 col-lg-2" for="input1">First Name</label>
+                <div class="col-sm-10 col-md-5 col-lg-5">
+                    {{ forms.text('registry_search[first_name]',registry_search.first_name, {class:'form-control parsley-validated', placeholder:"First Name"}) }}
+                </div>
+                <div class="col-sm-10 col-sm-offset-2 col-md-5 col-md-offset-0 col-lg-5">
+                    <div class="validation">{{ forms.errorlist(form_errors, 'first_name') }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2 col-md-2 col-lg-2" for="input1">Last Name</label>
+                <div class="col-sm-10 col-md-5 col-lg-5">
+                    {{ forms.text('registry_search[last_name]',registry_search.last_name, {class:'form-control parsley-validated', placeholder:"Last Name"}) }}
+                </div>
+                <div class="col-sm-10 col-sm-offset-2 col-md-5 col-md-offset-0 col-lg-5">
+                    <div class="validation">{{ forms.errorlist(form_errors, 'last_name') }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2 col-md-2 col-lg-2" for="input1">City</label>
+                <div class="col-sm-10 col-md-5 col-lg-5">
+                    {{ forms.text('registry_search[city]',registry_search.city, {class:'form-control parsley-validated', placeholder:"City"}) }}
+                </div>
+                <div class="col-sm-10 col-sm-offset-2 col-md-5 col-md-offset-0 col-lg-5">
+                    <div class="validation">{{ forms.errorlist(form_errors, 'city') }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2 col-md-2 col-lg-2" for="input1">State</label>
+                <div class="col-sm-2 col-md-2 col-lg-1">
+                    {{ forms.text('registry_search[state]',registry_search.state, {class:'form-control parsley-validated', placeholder: "ST"}) }}
+                </div>
+                <div class="col-sm-10 col-sm-offset-2 col-md-8 col-md-offset-0 col-lg-9">
+                    <div class="validation">{{ forms.errorlist(form_errors, 'state') }}</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2">
+
+                    <div class="actions">
+                        {{ forms.submit('', '', 'Search', {class:'btn btn-primary'})}}
+                    </div>
+                  {% if registries is empty  and app.request.get.registry_search is not empty %} 
+                        <div class="alert alert-warning">Sorry, there were no matching registries found. Please try broadening your search.</div>
+                    {% endif %}                    
+                </div>
+            </div>
+            {{ forms.end() }}
+        </div>
+        <div class="col-md-4">
+            <h2>Create a New Registry</h2>
+            <p>Please login to create a new registry</p>
+            <a class="btn btn-primary" href="{{ app.url }}/account/registries"><i class="fa fa-plus"></i> Create a New Registry</a>
+        </div>
+    </div>
+
+{% if registries is not empty %}
+<div class="search-results">
+    <div class="well">
+        {% for registry in registries %}
+        <div class="registry">
+            <div class="row">        
+                <div class="col-sm-4 col-md-2 col-lg-2">
+                    <div>Date: {{ registry.event_date }}</div>
+                </div>
+                <div class="col-sm-8 col-md-4 col-lg-4">
+                    <div><a href="{{app.url}}/registry/{{registry.id}}">{{ registry.name }}</a></div>
+                </div>            
+                <div class="col-sm-8 col-sm-offset-4 col-md-3 col-md-offset-0 col-lg-3  col-lg-offset-0">
+                    <div>{{ registry.first_name }}&nbsp;{{registry.last_name}}</div>
+                </div>
+                <div class="col-sm-8 col-sm-offset-4 col-md-3 col-md-offset-0 col-lg-3 col-lg-3 col-lg-offset-0">
+                    <div>{{ registry.city }}, {{ registry.state }}</div>
+                </div>
+            </div>
+        </div>   
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+</div>
+{% endblock %}

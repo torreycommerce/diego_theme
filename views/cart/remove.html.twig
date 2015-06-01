@@ -1,0 +1,2 @@
+{% set result = api.delete('/sessioncartitem/' ~ app.request.get.id) %}
+{{ app.redirect('/cart') }}

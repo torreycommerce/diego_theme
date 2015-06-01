@@ -1,0 +1,80 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% import "/_macros/normalizer.html.twig" as normalizer %}
+{% import "/account/_macros/base.html.twig" as account %}
+
+{# Redirect to the login page if user is not logged in. #}
+{% do account.login() %}
+
+{# Set the page_name - used for the page title, heading, tab selection, and breadcrumb in this page. #}
+{% set page_name = 'address' %}
+
+{# Set the html head title #}
+{% block title %}Account - Add new address{% endblock %}
+
+{# Load in the breadcrumbs positioned in /_layouts/main/base.html.twig #}
+{% block breadcrumb %}
+{#
+Passed into the macro is a array of key:value pairs as (title):(relative url)
+- The last link should not have a url, as it will be used as a 'you are here'
+
+#}
+{{ base.breadcrumbs({'Account':'/account','Addresses':'/account/addresses','New':''}) }}
+{% endblock %}
+
+{# Load in the main content positioned in /_layouts/main/base.html.twig #}
+{% block content %}
+{# Load in the tabs for the page, pass in the name of this page, and make sure it's
+set in the array in /account/_macros/base.html.twig #}
+<div class="container main-container">
+    <div class="row">
+        {# Begin content #}
+        <div class="customer-account-address-new">
+            <div class="col-lg-9 col-md-9 col-sm-7">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="section-title-inner"><span><i class="fa fa-edit"></i> 
+                            New Address</span></h1>
+                            <p>Create a new address.</p>
+                            <hr/>
+                    </div>
+                    </div>
+                        <div class="col-lg-9 col-md-9 col-sm-7">
+                            {% if app.request.post.address is defined %}
+                                {% set post_data = app.request.post.address|merge( {'customer_id':app.user.id} ) %}
+                                {% set result = api.post('/customeraddress', post_data) %}
+                                {% if result %}
+                                    {% do app.user.setFlash('A new address has been created.', 'success') %}
+                                    {% if post_data.make_default %}
+                                        {% set result = api.post('/customeraddress/' ~ result ~ '/makeDefault') %}
+                                        {% if result %}
+                                            {% do app.user.setFlash('Your primary address has been successfully updated.', 'success') %}
+                                        {% else %}
+                                            {% set form_errors = api.error() %}
+                                            {% set address = app.request.post.address %}
+                                        {% endif %}
+                                    {% endif %}
+                                    {% do app.redirect('/account/addresses') %}
+                                {% else %}
+                                    {% set form_errors = api.error() %}
+                                {% endif %}
+                            {% endif %}
+                            {% include "/account/addresses/_partials/form.html.twig" %}
+                            <div class="col-lg-12 clearfix">
+                            <ul class="pager">
+                                <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+                                </li>
+                                <li class="next pull-left"><a href="{{app.url}}/account/addresses">&larr; Back to My Addresses</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {# End content #}
+    </div>
+{% endblock %}
+{% block js %}
+{{ app.asset.js(app.url_asset ~ '/js/account.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/region.js') }}
+{% endblock %}

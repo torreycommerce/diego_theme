@@ -1,0 +1,19 @@
+{% set order = api.get('/order', {query:{'order_number':app.request.post.id, 'email':app.request.post.email}})|first %}
+{% if order is empty %}
+    {% do app.user.setFlash('Order not found', 'danger') %}
+    {% do app.redirect('/order') %}
+{% else %}
+    {% if app.request.post.action == 'cancel' %}
+        {% set result = api.put('/order/' ~ order.id, {'status':'cancelled'}) %}
+        {% if result %}
+            {% do app.user.setFlash('Order has been cancelled') %}
+        {% else %}
+            {% do app.user.setFlash('Order cancellation failed: ' ~ api.error, 'danger') %}
+        {% endif %}
+    {% endif %}
+    {% if app.user.id is empty %}
+        {% do app.redirect('/order') %}
+    {% else %}
+        {% do app.redirect('/account/order/' ~ order.order_number) %}
+    {% endif %}
+{% endif %}

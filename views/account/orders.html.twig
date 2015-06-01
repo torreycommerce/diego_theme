@@ -1,0 +1,183 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/base.html.twig" as base %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% import "/account/_macros/base.html.twig" as account %}
+
+{# Redirect to the login page if user is not logged in. #}
+{% do account.login() %}
+
+{# Set the page_name - used for the page title, heading, tab selection, and breadcrumb in this page. #}
+{% set page_name = 'orders' %}
+{% set limit = app.request.get.limit|default(6) %}
+
+{# Set the html head title #}
+{% block title %}Account - {{page_name|title}}{% endblock %}
+
+{# Load in the breadcrumbs positioned in /_layouts/main/base.html.twig #}
+{% block breadcrumb %}
+{#
+Passed into the macro is a array of key:value pairs as (title):(relative url)
+- The last link should not have a url, as it will be used as a 'you are here'
+#}
+{{ base.breadcrumbs({'Account':'/account',(page_name|title):''}) }}
+{% endblock %}
+
+{% block content %}
+<div class="container main-container">
+    <div class="row">
+    {# Begin Order History #}
+    {# Begin Header #}
+        <div class="col-sm-12 col-md-9 col-lg-10">
+            <h1 class="section-title-inner"><span><i class="fa fa-calendar"></i> 
+                Your Orders</span>
+            </h1><hr/>
+            <div class="row userInfo hidden-xs">
+                <div class="col-xs-12 col-sm-12">
+                    {# Begin navigation #}
+                    <div class="navigation">
+                    {{account.navigation('orders')}}
+                    </div>
+                    {# End navigation #}
+                    <div class="clear clearfix"></div><hr/>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /Row -->
+    {# End header #} 
+    <div class="row userInfo">
+        <div class="col-sm-12 col-md-9 col-lg-10 no-padding-left clearfix">
+            {# Begin order filter #}
+            <div class="col-sm-4 col-md-4 col-lg-3 no-padding-right">
+                <div class="order-filter">
+                    {{ forms.begin('ordersearch', app.url ~ '/account/orders', 'get') }}
+                    {{ forms.select('daterange', app.request.get.daterange|e, {'-6 months':'6 months ago', '-3 months' : '3 months ago', '-1 month' : '1 month ago', '-1 week' : '1 week ago', '-1 day' : '1 day ago', '' : 'All orders'}, {class:'form-control'}) }}
+                </div>
+            </div>
+            {# End order filter #}
+            {# Begin order search #}
+            <div class="search-within no-padding-right col-sm-6 col-sm-offset-2 col-md-4 col-md-offset-4 col-lg-3 col-lg-offset-6">
+                <div class="input-group">
+                    <input type="text" id="searchlist" name="q" value="{{app.request.get.q|e}}" class="form-control input-sm" placeholder="Search">
+                    <span class="input-group-btn"><button type="submit" class="btn btn-thin"><i class="fa fa-search"></i></button></span>
+                </div>
+            </div>
+            {# End order search #}
+            {{ forms.end() }}
+        </div>
+    </div>
+    {# End header #}
+    {# Begin pagination #}
+    {% set query = {} %}
+    {% if app.request.get.daterange != '' %}
+        {% set query = {date_created:{'$gte':strtotime(app.request.get.daterange)|date('Y-m-d')}} %}
+    {% endif %}
+    {% set orders = api.get('/order', {query:{customer_id:app.user.id} + query,search:app.request.get.q,sort:'id:-1',limit:limit,page:app.request.get.page}) %}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            {{ base.pagination(orders.num_total,limit) }}
+        </div>
+    </div>
+    {# End pagination #}
+    {% if orders is empty %}
+    There are no orders.
+    {% endif %}
+    {% for order in orders %}
+    {# Begin order #}
+    <div class="col-sm-12 col-md-9 col-lg-10 no-padding-side clearfix">
+        <div class="order">
+            <div class="well">
+                <div class="row">
+                    {# Begin order details #}
+                    <div class="order-details col-sm-4 col-md-4 col-lg-3">
+                        <div class="order-info">
+                            <div><strong>Order Info</strong></div>
+                            <div class="order-id">Order # {{ order.order_number }}</div>
+                            <div class="order-status">Status: {{ order.status }}</div>
+                            <div class="order-date">Ordered: {{ order.date_created }}</div>
+                        </div>
+                        {% if order.hide_shipping != true %}
+                        <div class="shipping-address">
+                            <div><strong>Shipping Address</strong></div>
+                            <address class="shipping-address">
+                                {{ order.shipping_street_line1 }}<br>
+                                {% if order.shipping_street_line2 %}{{ order.shipping_street_line2 }}<br>{% endif %}
+                                {% if order.shipping_company %}{{ order.shipping_company }}<br>{% endif %}
+                                {{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_zip }}<br>
+                                {{ order.shipping_country }}
+                            </address>
+                        </div>
+                        {% endif %}
+                        <div class="order-total">
+                            Total: ${{ order.total }}
+                        </div>
+                        {# Begin actions #}
+                        <div class="actions">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a class="btn btn-default btn-mobile" href="{{ app.url }}/account/order/{{ order.order_number }}"><i class="fa fa-info-circle"></i> Order Details</a>
+                                </div><div class="gap"></div>
+                            </div>
+                        </div>
+                        {# Begin actions #}
+                    </div>
+                    {# End order details #}
+                    {# Begin order items #}
+                    <div class="order-items col-sm-8 col-md-8 col-lg-9">
+                        {% if order.fraud_check is not empty %}
+                        <div class="alert alert-warning">
+                            Please call customer service for faster processing on this order.
+                        </div>
+                        {% endif %}
+                        {% set items = api.get('/orderitem', {query:{order_id:order.id}}) %}
+                        {% set product_ids = items|values_in('product_id') %}
+                        {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+                        {% for item in items %}
+                        <div class="item itemauto">
+                            <div class="row">
+                                {# Begin item image #}
+                                <div class="col-xs-4 col-sm-4 col-md-3 col-md-2">
+                                    <a href="{{ product[item.product_id][0].url }}" class="thumbnail">
+                                        <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="img-responsive" src='{{ products[item.product_id][0].thumbnail }}'>
+                                    </a>
+                                </div>
+                                {# End item image #}
+                                {# Begin item details #}
+                                <div class="col-xs-8 col-sm-8 col-md-9 col-md-10">
+                                    <a href="{{ app.url ~ product[item.product_id][0].url }}">{{ item.name }}</a>
+                                </div>
+                                {# End item details #}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {# End order items #}
+                </div>
+            </div>
+        </div>
+    </div>    
+    {# End order #}
+    {% endfor %}
+    {# Begin pagination #}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            {{ base.pagination(orders.num_total,limit) }}
+        </div>
+    </div>
+    {# End pagination #}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            <ul class="pager">
+                <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+                </li>
+                <li class="next pull-left"><a href="{{app.url}}/account/">&larr; Back to My Account</a></li>
+            </ul>
+        </div>
+    </div>
+    {# End order history list #}
+    <div style="clear:both"></div>
+</div> <!-- /Main Container -->
+<div class="gap"></div>
+{% endblock %}
+{% block js %}
+{{ app.asset.js(app.url_asset ~ '/js/orders.js?v=06192014') }}
+{% endblock %}

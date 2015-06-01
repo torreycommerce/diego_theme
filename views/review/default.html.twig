@@ -1,0 +1,169 @@
+
+{% import "/_macros/form-elements-bootstrap.html.twig" as form %}
+{% extends "/_layouts/theme.html.twig" %}
+{% block breadcrumb %}
+{{ base.breadcrumbs({'Review':''}) }}
+{% endblock %}
+{% set product_id = app.request.path|split('/')|last %}
+{% if not product_id or product_id is not integer %}
+    {% do app.redirect('/',{'error':'The review you requested is not available.'}) %}
+{% endif %}
+{% set product = api.get('/product/' ~ product_id) %}
+{% if product == false %}
+    {% set product = api.get('/collection/' ~ product_id) %}
+{% endif %}
+{% set address_result = api.get('/customeraddress',{"query": { "customer_id":app.user.id, "default":1 }} ) %}
+
+{% if not product.id %}
+    {% do app.redirect('/') %}
+{% endif %}
+
+{% if address_result.0 is defined %}
+    {% set address = address_result.0 %}
+{% endif %}
+
+{% if not app.user.isLoggedIn() %}
+    {% set login_redirect_url = '/review/id/'~ product_id %}
+    {% do app.redirect('/account/login/' ~ app.request.url) %}
+{% else %}
+    {% if app.request.post.review is defined %}
+        {% set review = app.request.post.review + {'customer_id':app.user.id,'status':'pending'} %}
+        {% if api.post('/productreview', review) %}
+            {% do app.redirect('/product/' ~ product.slug, {'success':'Your review has been added and will appear once it has been approved.'}) %}
+        {% else %}
+            {% set form_errors = api.error() %}
+        {% endif %}
+    {% endif %}
+{% endif %}
+
+{% block content %}
+<div class="container main-container">
+<div class="row transitionfx">
+    <div class="col-lg-9 col-md-9 col-sm-7">
+                {# Begin header #}
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="section-title-inner"><span><i class="fa fa-star"></i>
+                            Review Product - {{ product.name }} </span></h1>
+                    </div>
+                </div>
+            {# End header #}
+        {% if form_errors is not empty %}
+            {{ forms.errorlist(form_errors, 'name') }}
+        {% endif %}
+        {# You must be logged in to review an item #}
+        {{ form.begin('review','','post', {class:'form-horizontal'}) }}
+            {{ form.hidden('review[product_id]', product_id) }}
+            <fieldset>
+                <legend class="block-title-2">Identity</legend>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">First Name
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ form.text('review[first_name]',review.first_name|default(app.user.first_name), {class:'form-control parsley-validated', placeholder:"First Name", required: true}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ form.errorlist(form_errors, 'first_name') }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Email
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ form.email('review[email]',review.email|default(app.user.email), {class:'form-control parsley-validated', placeholder:"Email", required: true}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ form.errorlist(form_errors, 'email') }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">City
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ form.text('review[city]',review.city|default(address.city), {class:'form-control parsley-validated', placeholder:"City", required: true}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ form.errorlist(form_errors, 'city') }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">State
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ form.select('review[state]',review.state|default(address.state), {}, {class:'form-control parsley-validated', placeholder:"State", required:true,id:'state'}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ form.errorlist(form_errors, 'state') }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Country
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ form.select('review[country]',review.country|default(address.country), {}, {class:'form-control parsley-validated', placeholder:"Country", required:true,id:'country'}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ form.errorlist(form_errors, 'country') }}</div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend class="block-title-2">Review Text</legend>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Title
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ form.text('review[title]',review.title, {class:'form-control parsley-validated', placeholder:"Title", required: true}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ form.errorlist(form_errors, 'title') }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Comment
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ form.textarea('review[comment]',review.comment, {class:'form-control parsley-validated', placeholder:"Review", required: true}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ form.errorlist(form_errors, 'comment') }}</div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend class="block-title-2">Ratings</legend>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Rate
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ form.rating('review[score]',review.score|default('0.0'),'glyphicon-star') }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2">
+                        <div class="actions">
+                            {% if create %}
+                                {{ form.submit('review[action]', 'create', 'Create', {class:'btn btn-dark'})}}
+                            {% else %}
+                                {{ form.submit('review[action]', 'save', 'Save', {class:'btn btn-dark'})}}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        {{ form.end() }}
+        <div class="gap"></div>
+    </div>
+</div>
+</div>
+{% endblock %}
+{% block js %}
+{{ app.asset.js(app.url_asset ~ '/js/region.js') }}
+{% endblock %}

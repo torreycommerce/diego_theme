@@ -1,0 +1,7 @@
+{% set registry_item = api.get('/registryitem/' ~ id) %}
+{% set registry = api.get('/registry/' ~ registry_item.registry_id) %}
+{% if registry.customer_id != app.user.id %}
+    {% do app.redirect('/registry/' ~ registry.id) %}
+{% endif %}
+{% set result = api.delete('/registryitem/' ~ id) %}
+{% do app.redirect('/registry/' ~ registry_item.registry_id) %}

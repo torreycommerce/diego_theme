@@ -1,0 +1,66 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/account/_macros/base.html.twig" as account %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+
+{% do account.login() %}
+
+{% block title %}Account - Create Registry{% endblock %} 
+
+{% block breadcrumb %}
+{{ base.breadcrumbs({'Account':'/account','Registries':'/account/registries','Create Registry':''}) }}
+{% endblock %}
+
+{% block content %}
+{% set default_address = api.get('/customeraddress', {query:{default:1, verified:1, customer_id:app.user.id}}).0 %}
+{% if default_address == false %}
+    {% do app.user.setFlash('There are no verified addresses. Please create a new address or verify one first.', 'danger') %}
+    {% do app.redirect('/account/registries') %}
+{% endif %}
+{% if app.request.post.registry is not empty %}
+    {% set result = api.post('/registry', app.request.post.registry + {customer_id:app.user.id}) %}
+    {% if result %}
+        {% if app.request.post.registry.make_default %}
+            {% do api.post('/registry/' ~ result ~ '/makeDefault') %}
+        {% endif %}
+        {% do app.user.setFlash('Registry created successfully.') %}
+        {% set items = app.user.getState('registry') %}
+        {% if items is iterable %}
+            {% for item, quantity in items %}
+                {% if quantity is empty %}
+                    {% set quantity = 1 %}
+                {% endif %}
+                {% if quantity > 0 %}
+                    {% set result = api.post('/registryitem', {"registry_id":result, "product_id":item, "quantity":quantity}) %}
+                {% endif %}
+                {% do app.user.setState('registry', false) %}
+            {% endfor %}
+        {% endif %}
+    {% do app.redirect('/account/registries') %}
+    {% else %}
+        {% set form_errors = api.error() %}
+        {% set registry = app.request.post.registry %}
+    {% endif %}
+{% endif %}
+{% set addresses = api.get('/customeraddress', {query:{customer_id:app.user.id}}) %}
+<div class="container main-container">
+    <div class="row">
+    	{# Begin content #}
+    	<div class="col-lg-9 col-md-9 col-sm-7">
+            <header>
+        		<div class="row">
+        			<div class="col-md-12">
+        				<h1>Create a Registry</h1>
+        			</div>
+        		</div>
+            </header>
+    		<div class="row">
+    			<div class="col-md-12">
+    				{% set create = true %}
+    				{% include '/account/registry/_partials/form.html.twig' %}
+    			</div>
+    		</div>
+    	</div>	
+    	{# End content #}
+    </div>
+</div>
+{% endblock %}

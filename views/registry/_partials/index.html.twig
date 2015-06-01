@@ -1,0 +1,13 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/account/_macros/base.html.twig" as account %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% block breadcrumb %}
+{{ base.breadcrumbs({'Registry':''}) }}
+{% endblock %}
+{% block content %}
+{% if registry.privacy == 'private' and app.user.id != registry.customer_id %}
+    {% do app.redirect('/account/login/registry/' ~ app.request.path) %} 
+{% endif %}
+{% include '/registry/_partials/list.html.twig' %}
+{% endblock %}
+

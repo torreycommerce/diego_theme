@@ -1,0 +1,18 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% block breadcrumb %}
+	{{ base.breadcrumbs({'Public Registries':''}) }}
+{% endblock %}
+{% block content %}
+{% set registries = api.get('/registry',{query:{'privacy':'public'}}) %}
+{% if registries is empty %}
+    There are no public registries.
+{% else %}
+	<table class="table table-striped">
+	    <tr><td>Registry ID</td><td>Registry Name</td></tr>
+        {% for registries in registries %}
+        	<a href="{{ app.url }}/registry/{{ registry.id }}"><tr><td>{{ registry.id }}</td><td>{{ registry.name }}</td></tr></a>
+        {% endfor %}
+	</table>
+{% endif %}
+{% endblock %}

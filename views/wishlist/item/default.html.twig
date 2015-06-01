@@ -1,0 +1,13 @@
+{% if not app.user.isLoggedIn() %}
+    {% do app.redirect('/account/login/'~app.request.url) %}
+{% endif %}
+
+{# Route logic, requires a url like /<id>/<action> #}
+{% set id     = app.request.path|split('/')|first|integer %}
+{% set action = app.request.path|split('/')|last %}
+
+{% if id is empty %}
+    {% do app.redirect('/account/wishlists') %}
+{% endif %}
+
+{% include '/wishlist/item/_partials/' ~ action ~ '.html.twig' %}

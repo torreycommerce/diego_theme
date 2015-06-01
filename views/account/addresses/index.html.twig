@@ -1,0 +1,161 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% import "/account/_macros/base.html.twig" as account %}
+
+{# Redirect to the login page if user is not logged in. #}
+{% do account.login() %}
+
+{# Set the page_name - used for the page title, heading, tab selection, and breadcrumb in this page. #}
+{% set page_name = 'addresses' %}
+
+{# Set the html head title #}
+{% block title %}Account - {{page_name|title}}{% endblock %}
+
+{# Load in the breadcrumbs positioned in /_layouts/main/base.html.twig #}
+{% block breadcrumb %}
+{#
+Passed into the macro is a array of key:value pairs as (title):(relative url)
+- The last link should not have a url, as it will be used as a 'you are here'
+#}
+{{ base.breadcrumbs({'Account':'/account',(page_name|title):''}) }}
+{% endblock %}
+
+{# Load in the main content positioned in /_layouts/main/base.html.twig #}
+{% block content %}
+{% if app.request.post.address.action is not empty %}
+{% set action = app.request.post.address.action|split('/')|first %}
+{% set id = app.request.post.address.action|split('/')|last %}
+
+{% if action != id %}
+{% set address = api.get('/customeraddress',{'query':{'customer_id':app.user.id}})[(id - 1)] %}
+{% if address.id is empty %}
+{% do app.redirect('/account/addresses') %}
+{% endif %}
+{% endif %}
+
+{% if action == 'primary' %}
+{% include "/account/addresses/_partials/primary.html.twig" %}
+{% elseif action == 'delete' %}
+{% include "/account/addresses/_partials/delete.html.twig" %}
+{% endif %}
+{% endif %}
+{#
+Load in the tabs for the page, pass in the name of this page, and make sure it's
+set in the array in /account/_macros/base.html.twig
+#}
+<div class="container main-container">
+    <div class="row">
+    {# Begin Address #}
+    {# Begin header #}
+        <div class="col-sm-12 col-md-9 col-lg-10">
+            <h1 class="section-title-inner"><span><i class="fa fa-map-marker"></i> My addresses </span>
+            </h1><hr/>
+            <div class="row userInfo hidden-xs">
+                <div class="col-xs-12 col-sm-12">
+                    {# Begin navigation #}
+                    <div class="navigation">
+                    {{account.navigation('addresses')}}
+                    </div>
+                    {# End navigation #}
+                    <div class="clear clearfix"></div><hr/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <p>Please configure your default billing and delivery addresses when placing an order. You may also add
+                     additional addresses, which can be useful for sending gifts or receiving an order at your office.</p>
+                    <h2 class="block-title-2"> Your addresses are listed below. </h2>
+                    <p> Be sure to update your personal information if it has changed.</p>
+                </div>
+            </div>
+        </div> <!-- /Row -->
+
+    {# End header #}
+    {# End Address #}
+    </div>  <!-- /Row -->
+    <div class="row userInfo">
+        <div class="w100 clearfix">
+                {% set addresses = api.get('/customeraddress',{'query':{'customer_id':app.user.id}}) %}
+                {% if addresses is empty %}
+                There are no addresses.
+                {% else %}
+                    {% for row,address in addresses %}
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="panel {% if address.verified == 0 %} panel-danger {% else %} panel-default {% endif %} {% if row == 0 %} panel-info {% endif %}">
+                            <div class="panel-heading">
+                                {% if row == 0 %}<i class="fa fa-star"></i>{% endif %}
+                                <strong>{{ address.first_name }} {{ address.last_name }}</strong>
+                            </div>
+                            <div class="panel-body">
+                                <address>
+                                    <div class="address-1">{{ address.street_line1 }}</div>
+                                    {% if address.street_line2 %}
+                                        <div class="address-2">{{ address.street_line2 }}</div>
+                                    {% endif %}
+                                    {% if address.company %}
+                                        <div class="company">{{ address.company }}</div>
+                                    {% endif %}
+                                    <div class="zip">{{ address.city }}, {{ address.state }} {{ address.zip }}</div>
+                                    <div class="country">{{ address.country }}</div>
+                                    {% if address.street_line2 == '' %}<br />{% endif %}
+                                    {% if address.company == '' %}<br />{% endif %}
+                                    {% if address.default == 1 %}
+                                        <div class="default">Default Address</div>
+                                    {% endif %}
+                                </address>
+                                {% if address.verified == 0 %}
+                                <span class="text-danger">Please verify this address by clicking the edit address link under options below and fill in any missing information.</span>
+                                {% endif %}
+                            </div>
+                            <div class="panel-footer panel-footer-address">
+                                <div class="btn-group">
+                                    <a class="btn btn-neutral dropdown-toggle" data-toggle="dropdown">
+                                        <span class="text">Options</span>
+                                        <i class="fa fa-caret-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>
+                                            <span class="text">
+                                                <a href="{{ app.url }}/account/addresses/{{ row + 1 }}/edit" class="btn btn-link" name="edit_address">
+                                                    <i class="fa fa-pencil"></i> Edit Address
+                                                </a>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            {{ forms.submit('address[action]', 'primary/' ~  (row + 1), '<i class="fa fa-star"></i>
+                                                <span class="text"> Use as primary address</span>', {class:'btn btn-link'})}}
+                                        </li>
+                                        <li>
+                                            {{ forms.submit('address[action]', 'delete/'  ~  (row + 1), '<i class="fa fa-times"></i> <span class="text"> Delete</span>', {class:'btn btn-link'})}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% endif %}
+        </div> <!--/.w100-->
+    </div> <!-- /Row -->
+    {# New Address Button #}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            <a class="btn   btn-primary" href="{{app.url}}/account/addresses/new"><i class="fa fa-plus-circle"></i> Add New Address </a>
+        </div>
+    </div> <!-- /Row -->
+    {# End Address Button #}
+    {# Begin bottom actions #}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            <ul class="pager">
+                <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+                </li>
+                <li class="next pull-left"><a href="{{app.url}}/account/">&larr; Back to My Account</a></li>
+            </ul>
+        </div>
+    </div> <!-- /Row -->
+    {# Begin bottom actions #}
+    <div style="clear:both"></div>
+</div> <!-- /.main-container -->
+<div class="gap"></div>
+{% endblock %}

@@ -1,0 +1,82 @@
+<div class="container main-container">
+    <!-- Main component call to action -->
+    {% set items_per_row = 4 %}
+    {% set collection_ids = [] %}
+    {% set product_count = 1 %}
+    {% set products = api.get('/catalog?query=tags:{$in:featured}') %}
+
+
+    <div class="morePost row featuredPostContainer style2 globalPaddingTop ">
+        <h3 class="section-title style2 text-center"><span>FEATURED PRODUCT</span></h3>
+
+        <div class="container">
+            <div class="row xsResponse">
+                {% set options = ['image'] %}
+                {% for row,product in products if collection_ids[product.id] is empty and product_count < 13 %}
+                    {% if product.group == 'product' %}
+                        {% for id in product.product.collection_id %}
+                            {% set collection_ids = collection_ids|merge({(id):true}) %}
+                        {% endfor %}
+                    {% else %}
+                        {% set collection_ids = collection_ids|merge({(product.id):true}) %}
+                    {% endif %}
+                    {% set product_count = product_count + 1 %}
+                    {# Begin product #}
+                    {% set product =  product|merge({'variant':product.product|values_in('variant')}) %}
+                    {% set product =  product|merge({'attributes':product.variant|values_in(['price','compare_price','save_price','save_percent','color'])}) %}
+                        
+                   {% if 'image' in options %}
+                    {# Grab image based on color facets #}
+                    {% set img_url = product.thumbnail %}
+
+                    {% if product.attributes.color|length > 1 %}
+                        {% set current_colors = app.request.get.f.color|keys %}
+                        {% for variant in product.variant 
+                            if variant.status == 'active' and variant.color in current_colors and variant.images is not empty %}
+                                {% set img_url = variant.thumbnail %}
+                        {% endfor %}
+                {% endif %}
+
+                {% set secure =  app.url_asset | slice(0,5)  %}
+                {% if secure == 'https' %}
+                {% set img_url = img_url | replace({'http:':'https:'}) %}
+                {% endif %}
+                {% endif %}
+                <div class="item itemauto col-lg-3 col-md-3 col-sm-4 col-xs-6">
+                    <div class="product">
+                        <div class="image">
+                            <a href="{{ app.url }}/product/{{ product.slug }}">
+                                <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ img_url }}" alt="img" class="img-responsive">
+                            </a>
+                        </div>
+                        <div class="description">
+                            <h4><a href="{{ app.url }}/product/{{ product.slug }}">{{ product.title }} </a></h4>
+
+                            <p>{{ product.description|striptags|slice(0, 60) }}... </p>
+                        </div><!--/.End Description-->
+                        <div class="price">
+                            <span>
+                                {% if product.attributes.price %}
+                                    {{ prod.price(product.attributes.price) }}
+                                    {% if product.attributes.compare_price[0] is not empty %}
+                                        <span class="price-standard">
+                                            {{ prod.price(product.variant[0].compare_price) }}
+                                        </span>
+                                    {% endif %}
+                                {% endif %}
+                            </span>
+                        </div><!--/.End Price-->
+                        <div class="action-control"><a class="btn btn-primary"> <span class="add2cart">
+                            <i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
+                        </div>
+                    </div><!--/.End Product-->
+                </div><!--/.End Item Itemauto-->
+                {% endfor %}
+            </div><!--/.End Row xsResponse-->
+            <div class="row">
+                <div class="load-more-block text-center"><a class="btn btn-thin" href="#"> <i
+                        class="fa fa-plus-sign">+</i> load more products</a></div>
+            </div>
+        </div> <!--/.End container-->
+    </div> <!--/.End morePost row featuredPostContainer-->
+</div> <!--/.End container main-container-->

@@ -1,0 +1,122 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% import "/_macros/form-extras.html.twig" as extras %}
+{% block content %}
+{% set cart = api.get('/sessioncart') %}
+{% if cart.items is empty %}
+    {% do app.redirect('/') %}
+{% endif %}
+{% set token = app.request.get.token %}
+{% set step = 'express' %}
+{% set expressdetails = api.get('/order/paypalExpressDetails/' ~ token) %}
+<section id="checkout">
+    <div class="row">
+        <div class="col-md-12">
+            <hgroup>
+                <h1 class="page-header">Checkout: Paypal Express</h1>
+            </hgroup>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {% set address = {'shipping_first_name':expressdetails.FIRSTNAME,
+                              'shipping_last_name':expressdetails.LASTNAME,
+                              'shipping_street_line1':expressdetails.SHIPTOSTREET,
+                              'shipping_street_line2':expressdetails.SHIPTOSTREET2,
+                              'shipping_city':expressdetails.SHIPTOCITY,
+                              'shipping_zip':expressdetails.SHIPTOZIP,
+                              'state_select':expressdetails.SHIPTOSTATE,
+                              'country_select':expressdetails.SHIPTOCOUNTRYCODE} %}
+            {{ forms.begin('express', app.url ~ '/checkout/paypal/place','post', {'class':'form-horizontal'}) }}
+            {{ forms.hidden('express[token]', token) }}
+            <div class="row">
+                <div class="col-sm-8 col-md-8 col-lg-8">
+                    <fieldset>
+                        <legend>Shipping Address</legend>
+                        {% set giftlist_present = false %}
+                        {% set address_select = {'':'Use address below'} %}
+                        {% set selected_address = '' %}
+                        {% if app.user.id is not empty %}
+                            {% set addresses = api.get('/customeraddress', {query:{deleted:{'$ne':1}, verified:1, customer_id:app.user.id}}) %}
+                            {% for address in addresses %}
+                                {% set address_select = address_select + {(address.id):address.one_line} %}
+                            {% endfor %}
+                        {% endif %}
+                        {% for item in api.get('/sessioncartitem') %}
+                            {% if item.wishlist_id is not empty %}
+                                {% set wishlist = api.get('/wishlist/' ~ item.wishlist_id) %}
+                                {% set address = api.get('/customeraddress/' ~ wishlist.address_id) %}
+                                {% if address != false %}
+                                    {% set address_select = address_select + {(wishlist.address_id):'Recipient of wishlist "' ~ wishlist.name ~ '"'} %}
+                                    {% set giftlist_present = true %}
+                                    {% set selected_address = wishlist.address_id %}
+                                {% endif %}
+                            {% endif %}
+                            {% if item.registry_id is not empty %}
+                                {% set registry = api.get('/registry/' ~ item.registry_id) %}
+                                {% set address = api.get('/customeraddress/' ~ registry.address_id) %}
+                                    {% if address != false %}
+                                        {% set address_select = address_select + {(registry.address_id):'Recipient of registry "' ~ registry.name ~ '"'} %}
+                                        {% set giftlist_present = true %}
+                                        {% set selected_address = registry.address_id %}
+                                    {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if address_select|length > 1 %}
+                        <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-5 col-lg-offset-3">
+                                {{ forms.select('express[shipping_address_id]', selected_address, address_select, {class:'form-control parsley-validated', id: 'express_shipping_address_id'}) }}
+                            </div>
+                            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-4">
+                                <div class="validation">{{ forms.errorlist(form_errors, 'shipping_address_id') }}</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div id="custom-address">
+                            <div id="address-fields">
+                                {% if state_select is not empty %}
+                                    {{ forms.hidden('express[shipping_state_select]',address.shipping_state_select) }}
+                                    {{ forms.hidden('express[shipping_country_select]',address.shipping_country_select) }}
+                                {% endif %}
+                                {{ extras.address('express', 'shipping', address) }}
+                            </div>
+                        {% if app.user.id is not empty %}
+                        <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-5 col-lg-offset-3">
+                                <div class="checkbox">
+                                    <label>{{ forms.checkbox('express[shipping_save]', false) }} Save shipping address</label>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        </div>
+                    </fieldset>
+                    <div class="row">
+                        <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-9 col-lg-offset-3">
+                            <div class="actions">
+                                {{ forms.submit('place', 'Place Order', 'Place Order', {'class':'btn btn-primary'}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <section id="order-summary" class="col-sm-4">
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Order Summary</h3>
+                            </div>
+                        </div>
+                        {% include "/checkout/_partials/summary.html.twig" %}
+                    </div>
+                </section>
+            </div>
+        {{ forms.end() }}
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block js %}
+{{ app.asset.js(app.url_asset ~ '/js/checkout.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/region.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/paypal.js') }}
+{% endblock %}

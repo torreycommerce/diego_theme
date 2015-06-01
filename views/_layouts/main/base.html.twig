@@ -1,0 +1,146 @@
+{%- import "/_macros/base.html.twig" as base -%}
+{%- import "/_macros/product.html.twig" as prod -%}
+{%- import "/_macros/form-elements-bootstrap.html.twig" as newsletterform -%}
+{%- import "/_macros/social-sharing.html.twig" as social -%}
+
+{% spaceless %}
+{# Getting Seo from config.mode.json #}
+{% if app.params.seo is defined and app.params.seo is not empty %}
+    {% set seo = app.params.seo %}
+{% else %}
+    {% set seo = { img: "", description: "", keywords: "", title: "Home" } %}
+{% endif %}
+{# End Config Seo #}
+{# Scripts #}
+
+{{ app.asset.js(app.url_asset ~ '/js/jquery-1.10.1.min.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/bootstrap/bootstrap.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/jquery.cycle2.min.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/jquery.easing.1.3.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/jquery.parallax-1.1.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/jquery.mousewheel.min.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/jquery.mCustomScrollbar.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/jquery.cascadingdropdown.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/jquery.maskedinput.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/jquery.mmenu.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/parsley.min.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/parsley.extend.min.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/bootstrap-datepicker.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/normalizer.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/ion-checkRadio/ion.checkRadio.min.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/grids.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/owl.carousel.min.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/jquery.minimalect.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/bootstrap.touchspin.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/home.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/script.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/site.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/jquery-migrate-1.2.1.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/smoothproducts.min.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/ZeroClipboard.min.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/google_map_normalizer.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/quickcart.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/jquery.zoomify.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/rating.js') }}
+{# End Scripts #}
+
+{% endspaceless %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    {% block head %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <meta name="keywords" content="{% block meta_keywords %}{{ seo['keywords'] }}{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{{ seo['description'] }}{% endblock %}">
+
+    {% if app['theme']['logo_images_and_colors']['logo_background']['favicon-image'] == '1' %}
+      <link rel="shortcut icon" href="{{app.theme['logo_images_and_colors']['logo_background']['favicon-upload']}}" type="image/x-icon" />
+    {% endif %}
+    <link rel="stylesheet" href="{{app.url_asset}}/css/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="{{app.url_asset}}/css/css_libraries.css">
+    <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/style.css" />
+    
+    <!-- <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/assets/style.css" /> -->
+    <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/fonts/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/datepicker.css" />
+    
+    
+    <link rel="sitemap" href="{{app.url}}/api/sitemap" />
+
+    {% block css %}{% endblock %}
+    <title>{% block title %}{{ app.params.site.title }}{% endblock %}</title>
+
+    {% if app.params.social_settings is defined and app.params.social_settings is not empty %}
+        {{ social.get_metatags(app.params.social_settings, seo) }}
+    {% endif %}
+
+    <script>
+    var acendaBaseUrl = '{{app.url}}'
+    var acendaBaseThemeUrl = '{{app.url_asset}}'
+    </script>
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+<!--[if lte IE 8]>
+<div id="outdated-warning" class="alert alert-dismissable alert-block alert-danger flash-notification flash-notification-danger">
+<h4>Please upgrade your browser!</h4><br>
+<p>Please upgrade to <a href="http://getfirefox.com" class="alert-link">Firefox</a>, <a href="http://www.google.com/chrome" class="alert-link">Chrome</a> or <a href="http://www.microsoft.com/windows/downloads/ie/getitnow.mspx" class="alert-link">Internet Explorer 9 or 10</a>. Thank you!</p>
+</div>
+<![endif]-->
+    {# Begin Header #}
+    <header id="main">
+        {# avoiding the display of the menu when we're in the store-protected template #}
+        {% if app.request.url != "store-protected" %}
+            {# Begin Toolbar #}
+            <section id="toolbar">
+                <div class="container">
+                    {% block header %}
+                        {%include "/_layouts/main/toolbar.html.twig"%}
+                    {% endblock %}
+                </div>
+            </section>
+            {# End Toolbar #}
+        {% endif %}
+        {# avoiding the display of the menu when we're in the store-protected template #}
+        {% if app.request.url != "store-protected" %}
+        {% endif %}
+    </header>
+    {# End Header #}
+    {# Begin Content #}
+    <section id="content">
+            {% block breadcrumb %}{% endblock %}
+            {% block stage %}
+            {# include "/_layouts/main/stage_header.html.twig" #}
+            {% block content %}
+            {% endblock %}
+            {% endblock %}
+    </section>
+    {# End Content #}
+    {% endblock %}
+    {% block js %}{% endblock %}
+        {# Begin Footer #}
+    <footer id="footer">
+            {% block footer %}
+                {% include "/_layouts/main/footer.html.twig"%}
+            {% endblock %}
+    </footer>
+    {# End Footer #}
+ </body>
+ <script>
+    respondToSizingMessage = function(e) {
+  if(e.origin == 'http://angularadmin.acendev') {
+    // e.data is the string sent by the origin with postMessage.
+    if(e.data == 'src?') {
+      e.source.postMessage(document.location.href, e.origin);
+    }
+  }
+}
+// we have to listen for 'message'
+window.addEventListener('message', respondToSizingMessage, false);
+
+</script>
+</html>

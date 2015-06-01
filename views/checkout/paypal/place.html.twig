@@ -1,0 +1,10 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% block content %}
+{% set expressdetails = api.get('/order/paypalExpressDetails/' ~ app.request.post.express.token) %}
+{% set request = {express:app.request.post.express,token:app.request.post.express.token,ip:app.request.ip,email:expressdetails.EMAIL} %}
+{% if app.user.id is not empty %}
+    {% set request = request + {customer_id:app.user.id} %}
+{% endif %}
+{% set response = api.post('/order/paypalExpressFinalize', request) %}
+{% include '/checkout/_partials/final.html.twig' %}
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "/_layouts/theme.html.twig" %}
+
+{% block title %}Return Created{% endblock %}
+
+{% block breadcrumb %}
+    {% if app.user.id is defined %}
+        {{ base.breadcrumbs({'Account':'/account','Returns':'/account/returns','Return Created':''}) }}
+    {% else %}
+        {{ base.breadcrumbs({'Returns':'/returns','Return Created':''}) }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<h1>Return Created</h1>
+
+{% set ids = app.request.get.ids|split(',') %}
+{% set returns = api.get('/orderreturn', {query:{id:{'$in':app.request.get.ids|split(',')}}}) %}
+{% set orderitem_ids = returns|values_in('item_id') %}
+{% set items = api.get('/orderitem', {query:{id:{'$in':orderitem_ids}}})|group_by('id') %}
+
+<p>You have successfully created a return and a copy of the return instructions below have been emailed to you. In order for us to process your return, your items must meet the following criteria:
+<ol>
+    <li>Items must be unused and returned with the original product tags.</li>
+    <li>Items must be returned in their original, undamaged packaging.</li>
+    <li>Please do not place shipping labels on product packaging, only place shipping labels on the cardboard shipping box.</li>
+</ol>
+What happens next: Print this page and cut on the dashed lines. Place the packing slip inside the box with the items you are returning. Affix the returns address label to the outside of your shipping box. Reprint as necessary for each package. If you do not currently have access to a printer, you can write your Return # and return shipping address on the shipping box. Please ship your items to the specified fulfillment center address below.
+</p>
+
+<p>
+Your RMA numbers and their products are:
+</p>
+{% for return in returns %}
+<p>
+RMA #: <b>{{ return.rma }}</b><br>
+Quantity: {{ return.quantity }}<br>
+Product Name: {{ items[return.item_id].0.name }}<br>
+Reason: {{ return.reason }}<br>
+</p>
+{% endfor %}
+
+<p>
+Please ship your returns to:
+</p>
+
+<p>
+<address>
+    <strong>{{ app.params['site']['title'] }}</strong><br>
+    {{ app.params['return_address']['street_line1'] }} {{ app.params['return_address']['street_line2'] }}<br>
+    {{ app.params['return_address']['city'] }}, {{ app.params['return_address']['state'] }} {{ app.params['return_address']['zip'] }}<br>
+    {% if app.params['information']['phone_number'] is defined %}
+        <abbr title="Phone">P:</abbr> {{ app.params['information']['phone_number'] }}
+    {% endif %}
+</address>
+</p>
+{% endblock %}

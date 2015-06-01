@@ -1,0 +1,102 @@
+
+{# set login_redirect_url if you want it to redirect somewhere else after successful login #}
+
+{% if app.request.post.login is not empty %}
+    {% set logindata = app.request.post.login %} 
+    {% set loginAttempts = app.user.incrementLoginAttempts(logindata.email) %}
+    {% do app.request.validateToken() %}
+
+    {% if loginAttempts > 3 %}
+        {% if app.form.validateCaptcha(app.request.ip,app.request.post.recaptcha_challenge_field,app.request.post.recaptcha_response_field) %}
+            {% set result = api.post('/customer/login', logindata ) %}
+        {% else %}
+            {% set captcha_failed = true %}
+        {% endif %}
+    {% else %}
+        {% set result = api.post('/customer/login', logindata ) %}    
+    {% endif %}
+
+    {% if result %}
+        {% set login_redirect_url = app.user.getState('login_referer') %}
+        {% do app.user.resetLoginAttempts(logindata.email) %}
+        {% if login_redirect_url %}
+            {% do app.redirect(login_redirect_url) %}
+        {% else %}
+            {% do app.redirect('/'~app.request.path) %}
+        {% endif %}
+    {% else %}
+        {% set form_errors = api.error() %}
+    {% endif %}
+{% else %}
+    {% set loginAttempts = app.user.incrementLoginAttempts() %}
+{% endif %}
+
+{{ forms.begin('login','','post', {class:'form-horizontal'}) }}
+    <fieldset>    
+        {# Begin email address #}
+        <div class="form-group">
+            <label class="control-label col-sm-3 col-md-3 col-lg-3" for="input2">Email<span class="text-danger">*</span>
+            </label>
+            <div class="col-sm-9 col-md-9 col-lg-9">
+                {{ forms.email('login[email]','', {class:'form-control parsley-validated', required:true, placeholder: "Email"}) }}
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-9 col-lg-offset-3">
+                <div class="validation">{{ forms.errorlist(form_errors, 'email') }}</div>
+            </div>
+        </div>
+        {# End email address #}
+        {# Begin password address #}
+        <div class="form-group" >
+            <label class="control-label col-sm-3 col-md-3 col-lg-3" for="input2">Password<span class="text-danger">*</span>
+            </label>
+            <div class="col-sm-9 col-md-9 col-lg-9">
+                {{ forms.password('login[password]','', {class:'form-control parsley-validated', required:true, placeholder: "Password"}) }}
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-9 col-lg-offset-3">
+                <div class="validation">{{ forms.errorlist(form_errors, 'password') }}</div>
+            </div>
+        </div>
+        {# End password address #}
+        {# Begin checkbox remember me #}
+        <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-9 col-lg-offset-3">
+                <div class="checkbox">
+                    <label>
+                        {{ forms.checkbox('login[remember_me]','', {}) }} Remember me
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-9 col-lg-offset-3">
+                <div class="validation">{{ forms.errorlist(form_errors, 'remember_me') }}</div>
+            </div>
+        </div>
+
+        {# End checkbox remember me #}
+
+        {# Begin recaptcha #}
+        {% if loginAttempts > 2 %}
+
+        <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-9 col-lg-offset-3">
+                {{ forms.captcha() }}
+            </div>            
+        </div>
+
+        {% endif %}
+
+        {# Begin login button #}
+        <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-9 col-lg-offset-3">
+                {{ forms.submit('login[login]', 'login', '<i class="fa fa-sign-in"></i>  Log In', {class:'btn btn-primary'})}}
+            </div>            
+        </div>
+        {# End login button #}
+        {# Begin password reset #}
+        <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-9 col-lg-offset-3">
+                <a href="{{ app.url }}/account/reset-password">Forgot your password?</a>
+            </div>
+        </div>
+        {# End password reset #}
+    </fieldset>
+{{ forms.end() }}

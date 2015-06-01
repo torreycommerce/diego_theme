@@ -1,0 +1,362 @@
+{% spaceless %}
+{#
+##
+##  Url Validation
+##
+#}
+{% if app.request.get.limit is not empty and app.request.get.limit is not integer  %}
+    {% do app.redirect('/' ~ app.request.url,{},'404') %}
+{% endif %}
+{% if app.request.get.page is not empty and app.request.get.page is not integer  %}
+    {% do app.redirect('/' ~ app.request.url,{},'404') %}
+{% endif %}
+
+
+{#
+##
+##  Default query and attribute filters
+##
+#}
+
+{% set default_attributes = default_attributes is not defined ? "color,category_id,brand,type,gender,size,price,review_score": default_attributes %}
+{% if category.facets is not empty %}
+    {% set default_attributes = category.facets %}
+{% endif %}
+{% set limit = app.request.get.limit|default(24) %}
+
+{#
+##
+##  Sort options
+##
+#}
+{% set sort_options = {
+    'Popularity':'product.variant.popularity:-1',
+    'Product Name':'name:1',
+    'Price: Lowest First':'product.variant.price:1',
+    'Price: Highest First':'product.variant.price:-1',
+    'Price: Savings %':'product.variant.save_percent:-1',
+    'Price: Savings $':'product.variant.save_price:-1',
+    'Best Rating':'product.review_score:-1',
+    'Color':'product.variant.color:1',
+} %}
+
+{% if app.request.get.s is not empty %}
+    {% set search_fields = ['name^2','type^2','color^2','brand^2','tags^2','keywords^2','_all'] %}
+    {% set sort_options = {'Search Relevance':'_score:-1,product.variant.popularity:-1'}|merge(sort_options) %}
+{% endif %}
+
+{% if app.request.get.sf is not empty %}
+    {% set search_fields = app.request.get.sf|split(',') %}
+{% endif %}
+
+{% set sortBy = sort_options[app.request.get.sort] is defined ? sort_options[app.request.get.sort] : sort_options|first %}
+{% set sortByTitle = sort_options[app.request.get.sort] is defined ? app.request.get.sort : sort_options|keys|first %}
+
+
+{#
+##
+##  Attribute filter GET parse
+##
+#}
+{% set filter_query = {} %}
+{% set filter_request = {} %}
+{% if app.request.get.f is defined %}
+    {% set filter_request = app.request.get.f %}
+    {% for name,action in app.request.get.f %}
+        {% if action.range is defined %}
+            {% set values = action.range|split(',') %}
+            {% if values|length > 1 %}
+                {% set value = {'$gte':values|first,'$lte':values|last} %}
+                {% set filter_query = filter_query|merge({(name): value})  %}
+            {% else %}
+                {% set value = {'$gte':values|first|number_format(0,'.','')} %}
+                {% set filter_query = filter_query|merge({(name): value})  %}
+            {% endif %}
+        {% elseif action|join() is not empty %}
+            {% do app.redirect('/' ~ app.request.url,{},'404') %}
+        {% else %}
+            {% set value = {'$in':action|keys} %}
+            {% set filter_query = filter_query|merge({(name): value})  %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{#
+##
+##  Product API query
+##
+#}
+{% set products = api.get('/catalog', {
+                            "query":default_query|merge(filter_query),
+                            "page":app.request.get.page,
+                            "limit":limit,
+                            "search":app.request.get.s,
+                            "search_in":search_fields,
+                            "sort":sortBy
+                      }) %}
+{#
+##
+##  Attribute filter API query
+##
+#}
+{% set filters = api.get('/catalog', {
+                            "query":default_query,
+                            "search":app.request.get.s,
+                            "search_in":search_fields,
+                            "attributes":default_attributes,
+                            "format":"attributes"
+                      }) %}
+
+{#
+##
+##  Redirection rules (if category or request is not found)
+##
+#}
+{% if products.num_total == 0 and app.request.get.f is not defined and app.request.get.s is not defined and category is not defined %}
+    {{app.redirect('/')}}
+{% endif %}
+
+<div class="container main-container">
+
+    <!-- Main component call to action -->
+{#
+##
+##  Begin Twig template
+##
+#}
+    <div class="row">
+    {# Begin category filters #}
+    <section class="category-filters">
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <div class="panel-group" id="accordionNo">
+                {% for name,filter_set in filters %}
+                    {% if filter_set|length > 1 %}
+                        {% set filter_count = filters %}
+                        {% if filter_set|length %}
+                            {% if filters|length %}
+                            {% if attribute(filter_query,name) is defined %}
+                                {% set current_filter_set = {} %}
+                                {% for key,value in filter_query %}
+                                    {% if key != name %}
+                                        {% set current_filter_set = current_filter_set|merge({(key):value}) %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% set current_filter_set = filter_query %}
+                            {% endif %}
+                            {% if current_filter_set is not empty %}
+                            {% set filter_count = api.get('/catalog', {
+                                        "query":current_filter_set|merge(default_query),
+                                        "search":app.request.get.s,
+                                        "attributes":name,
+                                        "format":"attributes",
+                                  }) %}
+                            {% endif %}
+                        {% endif %}
+                        <div class="filter">
+                            {# Seperating each custom left nav into it's own include, ie: color chips for colors, or stars for customer reviews #}
+                            {% include  '/category/_partials/filter-' ~ (name in ['color','price','review_score','category_id'] ? name : 'default') ~ '.html.twig' %}                    
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {# End category filters #}
+    <section class="product-grid">
+        <div class="col-lg-9 col-md-9 col-sm-12">
+            {# Begin category name #}
+            <div class="w100 clearfix category-top uppercase">
+                <h2>{{ name|default(category.name) }}</h2>
+            </div>
+             {# End category name #}
+               
+                {# Begin category description #}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section-description">
+                            <p class="hidden-xs">{{ description|default(category.description) }}</p>
+                        </div>
+                    </div>
+                </div>
+{# Begin category sorting #}
+                {# Sub Category grid #}
+                {% if categories is not empty %}
+                {% set items_per_row = 3 %}
+                <section class="products-category">
+                    <div class="row  categoryProduct xsResponse clearfix">
+                            {% for category in categories %}
+                            {# Begin category #}
+                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4  text-center ">
+                                    <div class="product thumbnail">
+                                        <div class="image">
+                                            <a href="{{app.url}}/category/{{category.slug}}">
+                                                <img clas="img-rounded"  onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{category.thumbnail|default(app.url_asset ~ "/images/product/image-250x250.jpg")}}" class="img-responsive" data-image-source="{{category.thumbnail|default(app.url_asset ~ "/images/product/image-250x250.jpg")}}">
+                                            </a>
+                                        </div>
+                                            <h4 class="subCategoryTitle"><a href="{{app.url}}/category/{{category.slug}}">{{ category.name }}</a></h4>
+                                    </div>
+                                </div>
+                            {# End category #}
+                            {% endfor %}
+                            <div class="clearfix"></div>
+                    </div>
+                </section>
+                {% endif %}
+                {# End Sub Category grid #}
+                {# End category description #}
+                <div class="w100 productFilter clearfix">
+                <div class="row">  
+                    <div class="col-lg-3 col-md-3 col-sm-3 hidden-xs"> 
+                    <p class="pull-left"> Showing <strong>{{ products.num_total }}</strong> products </p>
+                    </div>
+                    
+                    
+                    <div class="pull-right col-xs-12 col-sm-9 ">
+
+                       <div class="change-order pull-right">
+                       {# Begin paging #}
+                            <div class="pagination-top">
+                                {{ base.pagination(products.num_total,limit,5) }}
+                            </div>
+
+                        {# End paging #}
+                        {# Begin filters #}
+                            <div id="sort-by" class="btn-group form-inline">
+                                <form class="form-inline">
+                                    <span class="small">Sort By:&nbsp;</span>
+                                    <button class="btn btn-default-border dropdown-toggle" data-toggle="dropdown" href="#">
+                                        {{ sortByTitle }}&nbsp;
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu text-left pull-right">
+                                        {% for name,sort in sort_options %}
+                                        <li><a class="small" href="{{app.request.getUrl({'sort':name,'page':1})}}">{{name}}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </form>
+                            </div>
+                            <div id="items-per-page" class="btn-group">
+                                <form class="form-inline">
+                                    <span class="small">&nbsp;&nbsp;View:&nbsp;</span>
+                                    <button class="btn btn-default-border dropdown-toggle" data-toggle="dropdown" href="#">{{ limit }}&nbsp;
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right text-left">                                
+                                        <li><a href="{{app.request.getUrl({'limit':24,'page':1})}}">24</a></li>
+                                        <li><a href="{{app.request.getUrl({'limit':36,'page':1})}}">36</a></li>
+                                        <li><a href="{{app.request.getUrl({'limit':48,'page':1})}}">48</a></li>
+                                        <li><a href="{{app.request.getUrl({'limit':60,'page':1})}}">60</a></li>
+                                    </ul>
+                                </form>
+                            </div>                    
+                        {# End filters #}
+                        </div>
+                    </div>
+                </div>
+                {# End category sorting #}
+                </div>
+
+
+
+            
+            {# Category product grid #}
+            {% set items_per_row = 3 %}
+            <section class="products-category">
+                <div class="row">
+                    {% if products.num_total == 0 and categories is empty %}
+                    <div class="col-sm-12">
+                        No products found. <a href="{{app.url}}/{{ app.request.url}}">Go back</a>
+                    </div>
+                    {% endif %}
+                    {% set options = ['image'] %}
+                     {% for row,product in products if collection_ids[product.id] is empty and product_count < 13 %}
+                        {% if product.group == 'product' %}
+                            {% for id in product.product.collection_id %}
+                                {% set collection_ids = collection_ids|merge({(id):true}) %}
+                            {% endfor %}
+                        {% else %}
+                            {% set collection_ids = (collection_ids|default({}))|merge({(product.id):true}) %}
+                        {% endif %}
+                        {% set product_count = product_count + 1 %}
+                        {# Begin product #}
+                        {% set product =  product|merge({'variant':product.product|values_in('variant')}) %}
+                        {% set product =  product|merge({'attributes':product.variant|values_in(['price','compare_price','save_price','save_percent','color'])}) %}
+                            
+                       {% if 'image' in options %}
+                        {# Grab image based on color facets #}
+                        {% set img_url = product.thumbnail %}
+
+                        {% if product.attributes.color|length > 1 %}
+                            {% set current_colors = app.request.get.f.color|keys %}
+                            {% for variant in product.variant 
+                                if variant.status == 'active' and variant.color in current_colors and variant.images is not empty %}
+                                    {% set img_url = variant.thumbnail %}
+                            {% endfor %}
+                    {% endif %}
+
+                    {% set secure =  app.url_asset | slice(0,5)  %}
+                    {% if secure == 'https' %}
+                    {% set img_url = img_url | replace({'http:':'https:'}) %}
+                    {% endif %}
+                    {% endif %}
+                                {# Begin product #}
+                    <div class="col-md-{{12 / items_per_row}} col-sm-{{18 / items_per_row}} col-xs-{{ 36 / items_per_row }}">
+                                    <div class="item">
+                <div class="product">
+                    <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist"
+                       data-placement="left">
+                        <i class="glyphicon glyphicon-heart"></i>
+                    </a>
+
+
+                    <div class="image">
+                        {#<div class="quickview">
+                            <a title="Quick View" class="btn btn-xs  btn-quickview" data-target="#product-details-modal"
+                               data-toggle="modal"> Quick View </a>
+                        </div>#}
+                        <a href="{{ app.url }}/product/{{ product.slug }}"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" 
+                        src="{{ img_url }}" alt="img" class="img-responsive"></a>
+
+                        <div class="promotion">
+                            {#<span class="new-product"> NEW</span> #}
+                            {# <span class="discount">15% OFF</span>#}
+                        </div>
+                    </div>
+                    <div class="description">
+                        <h4><a href="{{ app.url }}/product/{{ product.slug }}">{{ product.title }} </a></h4>
+
+                        <p>{{ product.description|striptags|slice(0, 100) }}... </p>
+                        {# <span class="size">XL / XXL / S </span>#}</div>
+                    <div class="price"><span>
+                        {% if product.attributes.price %}
+                                {{ prod.price(product.attributes.price) }}
+                            <span class="price-standard">
+                                {{ prod.price(product.attributes.compare_price) }}
+                            </span>
+                        {% endif %}
+                    </span></div>
+                    <div class="action-control"><a class="btn btn-primary"> <span class="add2cart"><i
+                            class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
+                </div>
+            </div>
+                    </div>
+                    {# End product #}
+                    {% endfor %}
+                    <div class="clearfix"></div>
+                </div>
+                    {% if products|length == limit or app.request.get.page > 1 %}
+                        <div class="col-md-12">
+                            <div class="pagination-bottom">
+                                {{ base.pagination(products.num_total,limit,4) }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+            {# End Product list #}
+        </div>
+    </section>
+</div>
+</div>
+{% endspaceless %}

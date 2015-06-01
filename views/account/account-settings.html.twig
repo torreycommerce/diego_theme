@@ -1,0 +1,197 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% import "/account/_macros/base.html.twig" as account %}
+
+{# Redirect to the login page if user is not logged in. #}
+{% do account.login() %} 
+
+{# Set the page_name - used for the page title, heading, tab selection, and breadcrumb in this page. #}
+{% set page_name = 'account-settings' %}
+
+{# Set the html head title #}
+{% block title %}Account{% endblock %} 
+
+{# Load in the breadcrumbs positioned in /_layouts/main/base.html.twig #}
+{% block breadcrumb %}
+{#
+Passed into the macro is a array of key:value pairs as (title):(relative url)
+- The last link should not have a url, as it will be used as a 'you are here' 
+#}
+{{ base.breadcrumbs({'Account':'/account','Account Settings':''}) }}
+{% endblock %}
+
+{% block content %}
+<div class="container main-container">
+    <div class="row">
+    {# Begin account settings #}
+            <div class="col-sm-12 col-md-9 col-lg-10">
+            <h1 class="section-title-inner"><span><i class="fa fa-cog"></i> 
+                My account settings </span></h1>
+                <hr/>
+                <div class="row userInfo hidden-xs">
+                    <div class="col-xs-12 col-sm-12">
+                        {# Begin navigation #}
+                        <div class="navigation">
+                                {{account.navigation('account-settings')}}
+                        </div>
+                        {# End navigation #}
+                        <div class="clear clearfix"></div><hr/>
+                    </div>
+                </div>
+                <h2 class="block-title-2">Do you have a {{ app.params.site.title }} account?<p>To apply changes on this page you must provide your current password.</p></h2>
+        </div>
+    </div>
+    <div class="row userInfo">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            {% if app.request.post.change_password %}
+                {% if (api.post('/customer/'~ app.user.id ~'/validatepassword', {'password':app.request.post.change_password.current_password} )) %}
+                    {% if api.put('/customer/' ~ app.user.id ~ '/changepassword/', app.request.post.change_password ) == false %}
+                        {% set form_errors = api.error() %}
+                    {% else %}
+                        <div class="alert alert-success">Your new password has been saved.</div>
+                    {% endif %}
+                {% else %}
+                    {% set form_errors = api.error() %}
+                {% endif %}
+            {% endif %}
+
+            {% if app.request.post.account_settings %}
+                {% if api.put('/customer/' ~ app.user.id, app.request.post.account_settings ) == false %}
+                    {% set form_errors = api.error() %}
+                {% else %}
+                    {% do app.user.setFlash('Your contact information changes have been saved.') %}
+                    {% do app.redirect('/account/account-settings') %}
+                {% endif %}
+            {% endif %}
+
+            {{ forms.begin('account_settings','','post', {class:'form-horizontal'}) }}
+            <fieldset>
+                <legend>Contact Information</legend>
+                <div class="form-group">
+                    <label class="control-label col-sm-4 col-md-4 col-lg-3" for="account_settings[first_name]">
+                        First Name<span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-8 col-md-8 col-lg-5">
+                        {{ forms.text('account_settings[first_name]',app.user.first_name, {class:'form-control parsley-validated', required:true}) }}
+                    </div>
+                    <div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4 col-lg-4 col-lg-offset-0">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'first_name') }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4 col-md-4 col-lg-3" for="account_settings[last_name]">
+                        Last Name<span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-8 col-md-8 col-lg-5">
+                        {{ forms.text('account_settings[last_name]',app.user.last_name, {class:'form-control parsley-validated', required:true}) }}
+                    </div>
+                    <div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4 col-lg-4 col-lg-offset-0">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'last_name') }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4 col-md-4 col-lg-3" for="account_settings[phone_number]">
+                        Phone Number
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-8 col-md-8 col-lg-5">
+                        {{ forms.phone('account_settings[phone_number]',app.user.phone_number, {class:'form-control parsley-validated', required:true}) }}
+                    </div>
+                    <div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4 col-lg-4 col-lg-offset-0">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'phone_number') }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4 col-md-4 col-lg-3" for="account_settings[email]">Email<span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-8 col-md-8 col-lg-5">
+                        {{ forms.email('account_settings[email]', app.user.email, {class:'form-control parsley-validated', required:true, placeholder: "Email"}) }}
+                    </div>
+                    <div class="col-sm-8 col-sm-offset-3 col-md-8 col-md-offset-4 col-lg-4 col-lg-offset-0">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'email') }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4 col-md-4 col-lg-3" for="account_settings[confirm_email]">Retype Email<span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-8 col-md-8 col-lg-5">
+                        {{ forms.email('account_settings[confirm_email]', app.user.email, {class:'form-control parsley-validated', required:true, placeholder: "Email Confirmation"}) }}
+                    </div>
+                    <div class="col-sm-8 col-sm-offset-3 col-md-8 col-md-offset-4 col-lg-4 col-lg-offset-0">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'confirm_email') }}</div>
+                    </div>
+                </div>
+                {# Begin submit button #}
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4 col-lg-9 col-lg-offset-3">
+                        {{ forms.submit('account_settings[action]', 'save_changes', 'Save Changes', {class:'btn btn-primary'})}}
+                    </div>            
+                </div>
+                {# End submit button #}
+            </fieldset>
+            {{ forms.end() }}
+
+            {{ forms.begin('change_password','','post', {class:'form-horizontal'}) }}
+            <fieldset>
+                <legend>Authentication</legend>
+                {# Begin current password address #}
+                <div class="form-group">
+                    <label class="control-label col-sm-4 col-md-4 col-lg-3" for="change_password[current_password]">Current Password<span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-8 col-md-8 col-lg-5">
+                        {{ forms.password('change_password[current_password]','', {class:'form-control parsley-validated', required:true, placeholder: "Current Password"}) }}
+                    </div>
+                    <div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4 col-lg-4 col-lg-offset-0">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'current_password') }}</div>
+                    </div>
+                </div>
+                {# End current password address #}
+                {# Begin password address #}
+                <div class="form-group">
+                    <label class="control-label col-sm-4 col-md-4 col-lg-3" for="change_password[password]">New Password<span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-8 col-md-8 col-lg-5">
+                        {{ forms.password('change_password[password]', '', {class:'form-control parsley-validated', required:true, placeholder: "Password"}) }}
+                    </div>
+                    <div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4 col-lg-4 col-lg-offset-0">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'password') }}</div>
+                    </div>
+                </div>
+                {# End password address #}
+                {# Begin confirm_password address #}
+                <div class="form-group">
+                    <label class="control-label col-sm-4 col-md-4 col-lg-3" for="change_password[confirm_password]">Retype Password<span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-8 col-md-8 col-lg-5">
+                        {{ forms.password('change_password[confirm_password]', '', {class:'form-control parsley-validated', required:true, placeholder: "Password Confirmation"}) }}
+                    </div>
+                    <div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4 col-lg-4 col-lg-offset-0">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'confirm_password') }}</div>
+                    </div>
+                </div>
+                {# End confirm_password address #}
+                {# Begin submit button #}
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4 col-lg-9 col-lg-offset-3">
+                        {{ forms.submit('change_password[action]', 'save_changes', 'Save Changes', {class:'btn btn-primary'})}}
+                    </div>            
+                </div>
+                {# End submit button #}
+            </fieldset>
+            {{ forms.end() }}
+        </div>
+    </div>
+    {# End account settings #}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            <ul class="pager">
+                <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+                </li>
+                <li class="next pull-left"><a href="{{app.url}}/account/">&larr; Back to My Account</a></li>
+            </ul>
+        </div>
+    </div>
+<div style="clear:both"></div>
+</div>
+<div class="gap"></div>
+{% endblock %}

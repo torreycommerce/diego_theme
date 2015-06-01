@@ -1,0 +1,26 @@
+
+<div class="filter-navigation panel-group" id="filter-navigation-{{name}}">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a data-toggle="collapse" href="#filter-navigation-{{ name }}-items">
+                Customer Reviews
+                <i class="fa fa-caret-down"></i>
+            </a>
+        </div>
+        {% set selected = app.request.get.f.review_score.range|split(',')|last %}
+        <div id="filter-navigation-{{ name }}-items" class="panel-collapse collapse {% if selected is not empty %}in{% else %}out{% endif %}">
+            <div class="panel-body filter-stars">
+                <a href="{{app.request.getUrl({'page':1,'f':filter_request|merge({'review_score':{'range':'0.0,0.25'}})})}}" class="{% if selected >= 0.25 %}active{% endif %}"><span class="glyphicon glyphicon-star"></span></a>
+                <a href="{{app.request.getUrl({'page':1,'f':filter_request|merge({'review_score':{'range':'0.2,0.45'}})})}}" class="{% if selected >= 0.45 %}active{% endif %}"><span class="glyphicon glyphicon-star"></span></a>
+                <a href="{{app.request.getUrl({'page':1,'f':filter_request|merge({'review_score':{'range':'0.4,0.65'}})})}}" class="{% if selected >= 0.65 %}active{% endif %}"><span class="glyphicon glyphicon-star"></span></a>
+                <a href="{{app.request.getUrl({'page':1,'f':filter_request|merge({'review_score':{'range':'0.6,0.9'}})})}}" class="{% if selected >= 0.9 %}active{% endif %}"><span class="glyphicon glyphicon-star"></span></a>
+                <a href="{{app.request.getUrl({'page':1,'f':filter_request|merge({'review_score':{'range':'0.9,1'}})})}}" class="{% if selected == 1 %}active{% endif %}"><span class="glyphicon glyphicon-star"></span></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="filter-clear">
+{% if selected is not empty %}
+    <a href="{{app.request.getUrl({'page':1,'f':filter_request|merge({'review_score':null})})}}"><i class="fa fa-times"></i>Clear Review Stars</a>
+{% endif %}
+</div>

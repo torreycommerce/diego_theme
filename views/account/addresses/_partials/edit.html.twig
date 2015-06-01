@@ -1,0 +1,66 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/normalizer.html.twig" as normalizer %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% import "/account/_macros/base.html.twig" as account %}
+
+{# Redirect to the login page if user is not logged in. #}
+{% do account.login() %}
+
+{% set address = api.get('/customeraddress',{'query':{'customer_id':app.user.id}})[(id - 1)] %}
+{% if address.id is empty %}
+{% do app.redirect('/account/addresses') %}
+{% endif %}
+
+{% set page_name = 'address' %}
+{% block title %}Account - Edit address{% endblock %} 
+
+{% block breadcrumb %}
+{{ base.breadcrumbs({'Account':'/account','Addresses':'/account/addresses','Edit Address':''}) }}
+{% endblock %}
+
+{% block content %}
+<div class="container main-container">
+    <div class="row">
+        {# Begin content #}
+        <div class="customer-account-address-edit">
+            <div class="col-lg-9 col-md-9 col-sm-7">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="section-title-inner"><span><i class="fa fa-edit"></i> 
+                            Edit Address</span></h1>
+                            <p>Edit a previously stored address.</p>
+                            <hr/>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-7">           
+                {% if app.request.post.address is defined %}
+                    {% if app.request.post.address.make_default %}
+                        {% set result = api.post('/customeraddress/' ~ address.id ~ '/makeDefault') %}
+                        {% if result %}
+                            {% do app.user.setFlash('Your primary address has been successfully updated.', 'success') %}
+                        {% else %}
+                            {% set form_errors = api.error() %}
+                            {% set address = app.request.post.address %}
+                        {% endif %}
+                {% endif %}
+                {% if api.put('/customeraddress/' ~ address.id, app.request.post.address) %}
+                    {% do app.user.setFlash('Your address has been successfully saved.', 'success') %}
+                    {% do app.redirect('/account/addresses') %}
+                {% else %}
+                    {% set form_errors = api.error() %}
+                    {% endif %}
+                    {% endif %}
+                    {% include "/account/addresses/_partials/form.html.twig" %}
+                    <div class="col-lg-12 clearfix">
+                        <ul class="pager">
+                            <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+                            </li>
+                            <li class="next pull-left"><a href="{{app.url}}/account/addresses">&larr; Back to My Addresses</a></li>
+                        </ul>
+                    </div>
+                </div>{# End Columns for form #}
+            </div>{# End Columns #}
+        </div>{# End Customer-account-address-edit #}
+    </div> {# End Row #}
+</div>{# End Main #}
+{% endblock %}

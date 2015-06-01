@@ -1,0 +1,59 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/base.html.twig" as base %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+
+{% block title %}Create a Return{% endblock %} 
+
+{% block breadcrumb %}
+{{ base.breadcrumbs({'Create a Return':''}) }}
+{% endblock %}
+
+{% block content %}
+<div class="container main-container">
+    <div class="row">
+    {# Begin header #}
+        <div class="col-sm-12 col-md-9 col-lg-10">
+            <h1 class="section-title-inner"><span><i class="fa fa-plus-circle"></i> 
+                Create a Return</span>
+            </h1>
+            <h2 class="block-title-2">To return an item you've already received, please enter the following details:</h2>
+        </div>
+    {# End header #}
+    </div> <!-- /Row -->
+{{ forms.begin('guestreturn',app.url ~ '/return/create','post', {class:'form-horizontal'}) }}
+<div class="row">
+    <div class="col-md-8">
+        <fieldset>
+            <div class="form-group">
+                <label class="control-label col-sm-2 col-md-2 col-lg-2" for="input1">Email
+                    <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                    {{ forms.email('guestreturn[email]', form.email, {placeholder:'Email', class:'form-control parsley-validated', required:true}) }}
+                </div>
+                <div class="col-sm-5 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                    <div class="validation">{{ forms.errorlist(form_errors, 'email') }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2 col-md-2 col-lg-2" for="input1">Order ID
+                    <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                    {{ forms.text('guestreturn[order_id]', form.order_id, {placeholder:'Order ID', class:'form-control parsley-validated', required:true}) }}
+                </div>
+                <div class="col-sm-5 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                    <div class="validation">{{ forms.errorlist(form_errors, 'order_id') }}</div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2">
+                {{ forms.submit('guestreturn[action]', 'create', 'Create', {class:'btn btn-primary'}) }}
+            </div>
+        </div>
+    </div>
+</div>
+{{ forms.end() }}
+</div> <!-- /Main -->
+{% endblock %}

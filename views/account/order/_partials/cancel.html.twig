@@ -1,0 +1,11 @@
+{% set tmpid = api.get('/order',{'query':{'order_number':app.request.get.id}}) %}
+{% set order = api.get('/order/' ~ tmpid) %}
+{% if order.customer_id == app.user.id and order.status == 'pending' %}
+    {% set result = api.put('/order/' ~ tmpid, {'status':'cancelled'}) %}
+    {% if result %}
+        {% do app.user.setFlash('Order has been cancelled') %}
+    {% else %}
+        {% do app.user.setFlash('Order cancellation failed: ' ~ api.error, 'danger') %}
+    {% endif %}
+{% endif %}
+{% do app.redirect('/account/orders') %}

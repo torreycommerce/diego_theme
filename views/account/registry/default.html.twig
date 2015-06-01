@@ -1,0 +1,22 @@
+{% if not app.user.isLoggedIn() %}
+    {% do app.redirect('/account/login/'~app.request.url) %}
+{% endif %}
+
+{# Route logic, requires a url like /<id>/<action> #}
+{% set id     = app.request.path|split('/')|first|integer %}
+{% set action = app.request.path|split('/')|last %}
+
+{% if id is empty %}
+    {% do app.redirect('/account') %}
+{% endif %}
+
+{% set registry = api.get('/registry/' ~ id) %}
+{% if registry.customer_id != app.user.id %}
+    {% do app.redirect('/account') %}
+{% endif %}
+
+{% if action != id %}
+    {% include '/account/registry/_partials/' ~ action ~ '.html.twig' %}
+{% else %}
+    {% include '/account/registry/_partials/index.html.twig' %}
+{% endif %}

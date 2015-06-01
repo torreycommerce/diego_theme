@@ -1,0 +1,58 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% block title %}
+Order Status &amp; History
+{% endblock %}
+{% block breadcrumb %}
+    {{ base.breadcrumbs({'Order Status &amp; History':''}) }}
+{% endblock %}
+{% block content %}
+<div class="container main-container">
+    <div class="row">
+    {# Begin header #}
+        <div class="col-sm-12 col-md-9 col-lg-10">
+            <h1 class="section-title-inner"><span><i class="fa fa-history"></i> 
+                Order Status &amp; History</span>
+            </h1>
+            <h2 class="block-title-2">To view your current and past orders, please either <a href="{{app.url}}/account/login/">login to your account</a> or enter your information below.</h2>
+        </div>
+    {# End header #}
+    </div> <!-- /Row -->
+    <div class="row">
+        <div class="col-md-8">
+            {{ forms.begin('order','','post',{ class:'form-horizontal' }) }}
+
+            <div class="form-group">
+                <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input2">Email
+                    <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                    {{ forms.email('order[email]', '', {class:'form-control parsley-validated', required:true, placeholder: "Email"}) }}
+                </div>
+                <div class="col-sm-5 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                    <div class="validation">{{ forms.errorlist(form_errors, 'email') }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2 col-md-2 col-lg-2" for="input2">Order ID
+                    <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                    {{ forms.number('order[id]', '', {class:'form-control parsley-validated', required:true, placeholder: "OrderID"}) }}
+                </div>
+                <div class="col-sm-5 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                    <div class="validation">{{ forms.errorlist(form_errors, 'id') }}</div>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="row">
+            <div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2">
+                        {{ forms.submit('action', 'search', 'Submit', {class:'btn btn-primary'})}}
+                    </div>
+                </div>
+            </div>
+            {{ forms.end() }}
+        </div>
+    </div>
+</div><!-- /Main -->
+{% endblock %}

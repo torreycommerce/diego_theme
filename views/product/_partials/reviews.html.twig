@@ -1,0 +1,17 @@
+{% if reviews is empty %}                    
+    There are currently no reviews for this item.<br />
+    <a href="{{ app.url }}/review/id/{{product.id}}">Be the first to add one.</a>
+{% else %}
+    <h4>Product Reviews</h4>
+    <a href="{{ app.url }}/review/id/{{product.id}}">Submit a review</a>
+    <hr>
+        {% for review in reviews %}
+           <div>
+                {{ base.rating(review.score, {'id':'star-rating-' ~ loop.index}) }}<small> {{ review.first_name|title }}, {{review.city|title}} {{ review.state|upper }} <i> on {{ review.date_created|strtotime|date("m-d-Y") }} </i></small>
+                <h4 id="review-title">{{ review.title }}</h4>
+                <p>{{ review.comment|unescape }}</p>
+           </div>
+           <hr>
+        {% endfor %}
+
+{% endif %}

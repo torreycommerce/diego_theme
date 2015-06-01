@@ -1,0 +1,6 @@
+{% set notifications = api.get('/customernotification',{query:{id:{'$in':app.request.post.multi}}})  %}
+{% for notification in notifications %}
+    {% if notification.customer_id == app.user.id %}
+        {% do api.delete('/customernotification/' ~ notification.id) %}
+    {% endif %}
+{% endfor %}

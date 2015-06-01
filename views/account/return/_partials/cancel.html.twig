@@ -1,0 +1,5 @@
+{% set return = api.get('/orderreturn/' ~ id) %}
+{% if return.customer_id == app.user.id %}
+    {% set result = api.put('/orderreturn/' ~ id, {'status':'cancelled'}) %}
+{% endif %}
+{% do app.redirect('/account/returns') %}

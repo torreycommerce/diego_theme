@@ -1,0 +1,13 @@
+{
+    "rules": [
+        {
+            "first_name,last_name,street_line1,city,zip,state,phone_number,country": "required"
+        },
+        {
+            "company,street_line2,default": "safe"
+        },
+        {
+            "phone_number": "modules.store.components.validators.PhoneNumber"
+        }
+    ]
+}

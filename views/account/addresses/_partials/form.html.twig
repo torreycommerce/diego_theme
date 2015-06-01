@@ -1,0 +1,153 @@
+    {{ forms.begin('address','','post',{ class:'form-horizontal' }) }}
+        <fieldset>
+            <h2>Address Information</h2><hr/>
+            <div id="custom-address">
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">First Name
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ forms.text('address[first_name]', address.first_name, {class:'form-control parsley-validated', placeholder:"First Name", required:true}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'first_name') }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Last Name
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ forms.text('address[last_name]', address.last_name, {class:'form-control parsley-validated', placeholder:"Last Name", required:true}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'last_name') }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Company
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ forms.text('address[company]', address.company, {class:'form-control parsley-validated', placeholder:"Company"}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'company') }}</div>
+                    </div>
+                </div>
+                <div class="form-group normalizable">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Street line 1
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ forms.text('address[street_line1]', address.street_line1, {class:'form-control parsley-validated', placeholder:"Street line 1", required:true}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'street_line1') }}</div>
+                    </div>
+                </div>
+                <div class="form-group normalizable">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Street line 2
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ forms.text('address[street_line2]', address.street_line2, {class:'form-control parsley-validated', placeholder:"Street line 2"}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'street_line2') }}</div>
+                    </div>
+                </div>
+                <div class="form-group normalizable">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">City
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ forms.text('address[city]', address.city, {class:'form-control parsley-validated', placeholder:"City", required:true}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'city') }}</div>
+                    </div>
+                </div>
+                <div class="form-group normalizable">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Zip
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ forms.text('address[zip]', address.zip, {class:'form-control parsley-validated', placeholder:"Zip", required:true}) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'zip') }}</div>
+                    </div>
+                </div>
+                <div class="form-group normalizable">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">State/Province
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ forms.select('address[state]', address.state, {}, {required:true, class:'form-control parsley-validated', id:'state' }) }}
+                        {{ forms.hidden('address[state_select]', address.state) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'state') }}</div>
+                    </div>
+                </div>
+                <div class="form-group normalizable">
+                    <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Country
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-9 col-md-5 col-lg-5">
+                        {{ forms.select('address[country]', address.country, {}, {required:true, class:'form-control parsley-validated', id:'country'}) }}
+                        {{ forms.hidden('address[country_select]', address.country) }}
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                        <div class="validation">{{ forms.errorlist(form_errors, 'country') }}</div>
+                    </div>
+                </div>
+            </div>
+        </fieldset><br/>
+        <fieldset>
+            <h2>Contact Information</h2><hr/>
+            <div class="form-group">
+                <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Phone number
+                    <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-9 col-md-5 col-lg-5">
+                    {{ forms.phone('address[phone_number]', address.phone_number, {class:'form-control parsley-validated', placeholder:"Phone Number", required:true}) }}
+                </div>
+                <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+                    <div class="validation">{{ forms.errorlist(form_errors, 'phone_number') }}</div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2">								
+                    <div class="checkbox">
+                        <label class="control-label">
+                            {{ forms.checkbox('address[make_default]', 1) }}Make this your default address
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <legend></legend>
+            {{ normalizer.normalizer() }}
+        </fieldset>
+                                    {# Begin submit button #}
+        <div class="form-group">
+            <div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4 col-lg-9 col-lg-offset-2">
+                <div class="actions">
+                    {% if create %}
+                    {{ forms.submit('address[action]', 'create', 'Create', {class:'btn btn-primary'})}}
+                    {% else %}
+                    {{ forms.submit('address[action]', 'save', 'Save', {class:'btn btn-primary'})}}
+                    {% endif %}
+                </div>
+            </div>            
+        </div>
+        {# End submit button #}
+        </div>
+
+    {{ form.end() }}
+{% block js %}
+{{ app.asset.js(app.url_asset ~ '/js/account.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/region.js') }}
+{% endblock %}
+<div class="gap"></div>

@@ -1,0 +1,29 @@
+{% if app.request.post.action == 'update' %}
+    {% if app.user.id == wishlist.customer_id %}
+        {% for item, quantity in app.request.post.wishlistitem_quantity %}
+            {% set wishlist_item = api.get('/wishlistitem/' ~ item) %} {# Inefficient but secure #}
+            {% if wishlist_item.wishlist_id == wishlist.id %}
+                {% set result = api.put('/wishlistitem/' ~ item, {quantity:quantity}) %}
+            {% endif %}
+        {% endfor %}
+        {% for item, quantity_p in app.request.post.quantity_purchased %}
+            {% set wishlist_item = api.get('/wishlistitem/' ~ item) %} {# Inefficient but secure #}
+            {% if wishlist_item.wishlist_id == wishlist.id %}
+                {% set result = api.put('/wishlistitem/' ~ item, {quantity_purchased:quantity_p}) %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% set redirect = '/wishlist/' ~ wishlist.id %}
+{% elseif app.request.post.action|split('/')|first == 'add' %}
+    {% set wishlist_item = api.get('/wishlistitem/' ~ app.request.post.action|split('/')|last) %}
+    {% if wishlist_item.wishlist_id == wishlist.id %} {# prevent people hacking this from adding random wishlist items #}
+        {% set result = api.post('/sessioncartitem/', {product_id:wishlist_item.product_id, wishlist_id:wishlist_item.wishlist_id, quantity:app.request.post.add_to_cart[app.request.post.action|split('/')|last]}) %}
+    {% endif %}
+
+    {% set redirect = '/cart' %}
+{% endif %}
+
+{% if app.request.isAjaxRequest == false %}
+    {% do app.redirect(redirect) %}
+{% endif %}
+

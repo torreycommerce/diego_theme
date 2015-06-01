@@ -1,0 +1,339 @@
+<div class="container main-container">
+{# <pre>{{dump(product)}}</pre> #}
+{# <pre>{{dump(product)}}</pre> #}
+<script type="text/javascript">
+    var VariantsData = {isCollection: false, products: []}
+    VariantsData.products.push({{product.variant|json_encode}});
+</script>
+{% for variation in product.variant %}
+    <form method="post" id="productForm" action="{{ app.url }}/product/route">  
+    <div class="row transitionfx" id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
+        {# Begin product images #}
+        <div id="product-images" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            {# Begin main image #}
+            {% set main_image_id = variation.images.0.id is not empty ? variation.images.0.id : product.images.0.id %}
+            {% set main_image_id = main_image_id is empty ? 'default' : main_image_id %}
+            <div id="image-main">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="thumbnail">
+                            <span class="helper hidden-xs"></span>
+                            <div id="main-product-video" style="display:none"></div>
+                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" id="main-product-image" class="img-responsive" src="{{app.image.getImageUrl("product","standard",main_image_id) }}" data-image-zoom="{{app.image.getImageUrl("product","large",main_image_id) }}" alt="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {# Begin main image #}
+            {# Begin image carousel #}
+            {% if variation.images is not empty or variation.videos is not empty %}
+            <div id="image-carousel" class="hidden-xs row">
+                <div class="image-carousel">
+                    <div id="image-carousel-{{variation.id}}" class="carousel">
+                        <div>
+                            <div class="item active itemauto">
+                                {% for image in variation.images %}
+                                {% set name = image.name is not empty ? image.name : product.name %}
+                                <div class="col-sm-2">
+                                    <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
+                                        <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="" src="{{app.image.getImageUrl("product","thumbnail",image.id,secure) }}" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",image.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",image.id) }}" alt="" />
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% if variation.videos is not empty %}
+                                {% do app.asset.js(app.url_asset ~ '/js/video-player.js') %}
+                                {% for video in variation.videos %}
+                                <div class="col-sm-2">
+                                    <div class="thumbnail video" data-video-src="{{ video }}" data-tooltip="" data-toggle="tooltip" data-original-title="">
+                                        <i class="video-icon fa fa-play-circle"></i><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="">
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {# End image carousel #}
+        </div>
+        {# End product images #}
+
+
+        {# Begin Product Details #}
+        <div class="col-lg-6 col-md-6 col-sm-5"> 
+        {# Begin Product Heading Group #}
+            <div class="row no-margin" id="product-details">
+                <h1 class="product-title"> <a href="{{app.url}}/brand/{{product.brand|url_encode}}">{{product.brand}}</a></h1>
+                <h2 class="product-name">{{product.title}}</h2>
+                    {# End Product Heading Group #}
+                    {# Begin review stars #}
+                {% set review_score = product.product|average('review_score') %}
+                {% if review_score > 0 %}
+                <ul class="reviews">
+                    <li class="stars">
+                        <a onclick="$('.nav-tabs a:last').tab('show')" href="#reviews">{{ base.rating( review_score ) }}</a>
+                    </li>
+                    <li class="average">
+                        <a onclick="$('.nav-tabs a:last').tab('show')" href="#reviews">{{ (review_score * 5)|number_format(1) }} {% if reviews.num_total %}({{ reviews.num_total }}){% endif %}</a>
+                    </li>
+                    <li class="submit">
+                        <a href="{{ app.url }}/review/id/{{product.id}}">Write a review</a>
+                    </li>
+                </ul>
+                {% endif %}
+                {# End review #}
+            </div>
+               {# Begin Product Prices #}
+                {% if variation.price > 0 %}
+                    <div class="row no-margin">
+                        {% set stock_description = variation.inventory_quantity > 0 ? 'In Stock' :  variation.inventory_shipping_estimate is not empty ? variation.inventory_shipping_estimate : '' %}
+                        <div class="row no-padding">
+                            <div class="col-md-12">
+                                <div class="price-product"><span class="price-sales">{{ prod.price(variation.price) }}</span> 
+                                {# Begin regular price #}
+                                    {% if variation.price != variation.compare_price and variation.compare_price is not empty %}
+                                    <span class="price-standard">
+                                        {{ prod.price(variation.compare_price) }}
+                                    </span>
+                                    {% endif %}
+                                    {# End regular price #}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row no-margin">
+                    {# Begin pricing #}
+                        <ul class="pricing">
+                            {# Begin percent off #}
+                            {% if variation.save_price > 1 %}
+                            <li class="percent">
+                                Save up to {{ prod.saveprice(variation.save_price ) }} {{ prod.savepercent(variation.save_percent) }}
+                            </li>
+                            {% endif %}
+                            {# End percent off #}
+                            {# Begin price per month #}
+                            {% if variation.price >= 100 %}
+                            <li class="per-month">
+                                <span data-tooltip data-toggle="tooltip" data-original-title="Spread payments over six months by selecting &quot;Checkout with Paypal&quot; on the Shopping Cart page. Then log in and apply for a &quot;Bill Me Later&quot; account.">
+                                    {{ prod.billmelater(variation.price) }}
+                                </span>
+                            </li>
+                            {% endif %}
+                            {# End price per month #}
+                        </ul>
+                        {# End pricing #}
+                    </div>
+                {% endif %}
+                {# End Product Prices #}
+
+
+                {# Begin actions desktop #}
+                {% if app.user.id is not empty %}
+                    {% set registries = api.get('/registry', {query:{customer_id:app.user.id}}) %}
+                    {% if registries is not empty %}
+                        {% set registry_ids = [] %}
+                        {% for registry in registries %}
+                            {% set registry_ids = registry_ids|merge([registry.id]) %}
+                        {% endfor %}
+                        {% set items_in_registry = api.get('/registryitem', {query:{registry_id:{'$in':registry_ids},product_id:product.id}}) %}
+                    {% endif %}
+                    {% set wishlists = api.get('/wishlist', {query:{customer_id:app.user.id}}) %}
+                    {% if wishlists is not empty %}
+                        {% set wishlist_ids = [] %}
+                        {% for wishlist in wishlists %}
+                            {% set wishlist_ids = wishlist_ids|merge([wishlist.id]) %}
+                        {% endfor %}
+                        {% set items_in_wishlist = api.get('/wishlistitem', {query:{wishlist_id:{'$in':wishlist_ids},product_id:product.id}}) %}
+                    {% endif %}
+                {% endif %}
+
+                {% if product.variant[0].price > 0 %}
+
+                    {# <div id="variation-selector-{{product.id}}">
+                        <div class="row no-margin">
+                            <div class="color-details"><span class="selected-color"><strong>COLOR</strong></span>
+                                <ul class="swatches Color">
+                                    <li class="selected"><a style="background-color:#f1f40e"> </a></li>
+                                    <li class="notavailable-selected"><a class="" style="background-color:#adadad"> </a></li>
+                                    <li><a style="background-color:#4EC67F"></a></li>
+                                    <li><a style="background-color:#000"></a></li>
+                                    <li class="notavailable"><a style="background-color:#ff0000"> </a></li>
+                                    <li><a style="background-color:#e7e7e7"> </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--/.color-details-->
+                        <div class="row no-margin">
+                            <div class="size-details"><span class="selected-size"><strong>SIZE</strong></span>
+                                <ul class="swatches-size Size">
+                                    <li class="selected" data-tooltip="" data-toggle="tooltip" data-original-title="Spread payments over six months by "><a><p>9</p></a></li>
+                                    <li class="notavailable-selected"><a><p>10</p></a></li>
+                                    <li><a><p>11</p></a></li>
+                                    <li class="notavailable"><a><p>12</p></a></li>
+                                    <li class="notavailable"><a><p>13</p></a></li>
+                                    <li><a><p>14</p></a></li>
+                                    <li class="selected"><a><p>15</p></a></li>
+                                    <li class="notavailable"><a><p>16</p></a></li>
+                                    <li><a><p>17</p></a></li>
+                                    <li class="notavailable"><a><p>18</p></a></li>
+                                    <li class="notavailable"><a><p>19</p></a></li>
+                                    <li><a><p>20</p></a></li>
+                                    <li class="selected"><a><p>21</p></a></li>
+                                    <li class="notavailable"><a><p>22</p></a></li>
+                                    <li><a><p>23</p></a></li>
+                                    <li class="notavailable"><a><p>24</p></a></li>
+                                    <li class="notavailable"><a><p>25</p></a></li>
+                                    <li><a><p>26</p></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div> #}
+
+
+                    <div id="variation-selector-{{product.id}}">
+
+                    </div>
+
+                
+
+                    <!--/.size-details-->
+                    {# <form method="post" id="productForm" action="{{ app.url }}/product/route">   #}                      
+                       {% if variation['inventory_quantity'] is defined and variation['inventory_minimum_quantity'] is defined and
+                           variation['inventory_policy'] is defined and (variation['inventory_policy'] == 'continue' or
+                           variation['inventory_quantity'] > variation['inventory_minimum_quantity'] ) %}
+                               {# Begin product Size-Quantity #}
+
+
+                            <div class="row no-margin"> {# Begin Row#}
+                               <div class="productFilter productFilterLook2">
+                                   {# Begin product Quantity #}
+                                    <div class="input-group  col-md-3 col-sm-6 col-xs-6 no-padding-left">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]" type="text">
+                                        <div class="input-group-btn">
+                                        <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                               </div>
+                               {# End product quantity #}
+                            </div> {# End Row#}
+
+                            <div class="row no-margin"> {# Begin Row#}
+
+                               {# Begin add to cart button #}
+                                <div class="cart-actions">
+                                    <div class="addto">
+                                    <div class="col-sm-12 col-md-6 no-padding-side">
+                                        <button type="submit" class="button btn-cart btn-block cart first" name="action" value="cart">
+                                            <i class="fa fa-shopping-cart"></i>
+                                                <span>Add to Cart</span>
+                                        </button> 
+                                    </div>
+                                        <!--/.cart-actions-->
+                                       {% include "/product/_partials/list/actions-single.html.twig" %}
+                                    </div>
+                                    <div style="clear:both"></div>
+                                    {% if stock_description == 'In Stock'%}
+                                        <h3 class="incaps"><i class="fa fa fa-check-circle-o color-in"></i>{{stock_description}}</h3>
+                                    {% else %}
+                                        <h3 class="incaps"><i class="fa fa-minus-circle color-out"></i> Out of stock</h3>
+                                    {% endif %}
+                                    <h3 class="incaps"><i class="glyphicon glyphicon-lock"></i> Secure online ordering</h3>
+                                </div>
+                            </div> {# End Row#}
+
+                            <div style="clear:both"></div>
+                        {% endif %}
+                    {# </form> #}
+                {# End actions desktop #}
+                {# End product details #}
+
+
+                    {# Begin product tabs - desktop #}
+                    <div id="product-tabs">
+                        {# Begin tabs nav #}
+                        <div class="row no-margin">
+                                <div class="panel-tabs">
+                                    <ul class="nav nav-tabs">
+                                        {% if product.description is not empty %}
+                                        <li class="active">
+                                            <a href="#description-desktop" data-toggle="tab"><i class="fa fa-info"></i>  Description</a>
+                                        </li>
+                                        {% endif %}
+                                        <li {% if product.description is empty %}class="active"{% endif %}>
+                                            <a href="#reviews-desktop" data-toggle="tab"><i class="fa fa-comments"></i>Reviews</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                        </div>
+                        {# End tabs nav #}
+                        {# Begin tab pane #}
+                        <div class="row no-margin">
+                            <div class="tab-content">
+                                {# Begin product description #}
+                                {% if product.description is not empty %}
+                                {% set full_description = product.description != variation.description ? product.description ~ variation.description : variation.description %}
+                                <div id="description-desktop" class="tab-pane fade in active">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            {{full_description}}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {# Begin reviews #}
+                                <div id="reviews-desktop" class="tab-pane fade {% if variation.description is empty %}active{% else %}in{% endif %}">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            {% include "/product/_partials/reviews.html.twig" %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {# End reviews #}
+                                {# End product description #}
+                            </div>
+                        </div>
+                        {# End tab panel #}
+                    </div>
+                        {# End product tabs - desktop #}
+
+                {% endif %}
+                {# Begin social sharing #}
+                {% if app.params.social_settings is defined and app.params.social_settings is not empty and (
+                    app.params.social_settings["facebook"]["active_like"] == true or
+                    app.params.social_settings["facebook"]["active_share"] == true or
+                    app.params.social_settings["facebook"]["active_follow_page_button"] == true or
+                    app.params.social_settings["twitter"]["active_tweet"] == true or
+                    app.params.social_settings["twitter"]["active_follow_page_button"] == true or
+                    app.params.social_settings["pinterest"]["active_pin_it"] == true or
+                    app.params.social_settings["pinterest"]["active_follow_page_button"] == true or
+                    app.params.social_settings["google"]["active_plus_one"] == true or
+                    app.params.social_settings["google"]["active_follow_page_button"] == true
+                    ) %}
+                        <div style="clear:both"></div>
+
+                        <div class="row no-margin">{# Begin Row#}
+                            <div class="product-share clearfix">
+                                <p> SHARE </p>
+                                <div class="socialIcon">
+                                    {{ social.sharing_buttons(app.params.social_settings, product) }}
+                                </div>
+                            </div>
+                        </div>
+                {% endif %} {# End social sharing #}
+                             
+        </div>{# End Product Details #}
+    </div>{# End row transitionfx #}
+{% endfor %}
+</form>
+
+{% include "/_partials/promo/new_arrivals.html.twig" %}{# New Arrivals Part #}
+
+</div> {# End Main  #}
+

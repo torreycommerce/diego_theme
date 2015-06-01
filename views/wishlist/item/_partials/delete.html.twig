@@ -1,0 +1,7 @@
+{% set wishlist_item = api.get('/wishlistitem/' ~ id) %}
+{% set wishlist = api.get('/wishlist/' ~ wishlist_item.wishlist_id) %}
+{% if wishlist.customer_id != app.user.id %}
+    {% do app.redirect('/wishlist/' ~ wishlist.id) %}
+{% endif %}
+{% set result = api.delete('/wishlistitem/' ~ id) %}
+{% do app.redirect('/wishlist/' ~ wishlist_item.wishlist_id) %}

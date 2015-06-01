@@ -1,0 +1,118 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% import "/account/_macros/base.html.twig" as account %}
+
+{# Redirect to the login page if user is not logged in. #}
+{% do account.login() %} 
+
+{# Set the page_name - used for the page title, heading, tab selection, and breadcrumb in this page. #}
+{% set page_name = 'wishlists' %}
+
+{# Set the html head title #}
+{% block title %}Account - {{page_name|title}}{% endblock %} 
+
+{# Load in the breadcrumbs positioned in /_layouts/main/base.html.twig #}
+{% block breadcrumb %}
+{#
+Passed into the macro is a array of key:value pairs as (title):(relative url)
+- The last link should not have a url, as it will be used as a 'you are here'
+#}
+{{ base.breadcrumbs({'Account':'/account',(page_name|title):''}) }}
+{% endblock %}
+
+{% block content %}
+{% if app.request.post.wishlist.action is not empty %}
+{% set action = app.request.post.wishlist.action|split('/')|first %}
+{% set id = app.request.post.wishlist.action|split('/')|last %}
+
+{% if action != id %}
+{% set wishlist = api.get('/wishlist/' ~ id) %}
+    {% if wishlist.customer_id != app.user.id %}
+{% do app.redirect('/account/wishlists') %}
+{% endif %}
+{% endif %}
+
+{% if action == 'delete' %}
+{% include "/account/wishlist/_partials/delete.html.twig" %}
+{% elseif action == 'makeDefault' %}
+{% include "/account/wishlist/_partials/makeDefault.html.twig" %}
+{% endif %}
+{% endif %}
+<div class="container main-container">
+    <div class="row">
+    {# Begin wishlists #}
+        <div class="col-sm-12 col-md-9 col-lg-10">
+            {# Begin header #}
+            <h1 class="section-title-inner"><span><i class="fa fa-heart"></i> 
+                 Your Wishlists</span>
+            </h1><hr/>
+            <div class="row userInfo hidden-xs">
+                <div class="col-xs-12 col-sm-12">
+                    {# Begin navigation #}
+                    <div class="navigation">
+                    {{account.navigation('wishlists')}}
+                    </div>
+                    {# End navigation #}
+                    <div class="clear clearfix"></div><hr/>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /Row -->
+    {# End header #}
+    {# Begin wishlist #}
+    <div class="row userInfo">
+        <div class="w100 clearfix">
+            {{ forms.begin('wishlist','','post',{ class:'form-horizontal' }) }}
+            {% set wishlists = api.get('/wishlist',{query:{"customer_id":app.user.id}}) %}
+
+            {% if wishlists is empty %}
+            <div class="col-sm-12 col-md-9 col-lg-10">
+                <h2 class="block-title-2">Create a new wishlist.</h2>
+                There are no wishlists.
+            </div><div class="gap"></div>
+            {% else %}
+            {# Begin wishlists #}
+                {% for wishlist in wishlists %}
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <div class="panel panel-default panel-info ">
+                        <div class="panel-heading">
+                            <strong>{% if wishlist.default %}<i class="fa fa-star"></i> {% endif %}{{ wishlist.name }}</strong>
+                        </div>
+                        <div class="panel-body">
+                            <div class="item-count">{{ wishlist.item_count }} items</div>
+                            <div class="privacy">{{ wishlist.privacy }}</div>
+                            <div class="default">{% if wishlist.default %}default wishlist{% endif %}</div>
+                        </div>
+                        <div class="panel-footer">
+                            <a class="btn btn-neutral" href="{{app.url}}/wishlist/{{wishlist.id}}">View</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% endif %}
+            {{ forms.end() }}
+            {# End wishlists #}
+        </div>
+    </div> <!-- /Row -->   
+    {# Begin actions #}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            <a class="btn btn-primary" href="{{ app.request.base}}/account/wishlist/create"><i class="fa fa-plus"></i>&nbsp;Create a new wishlist</a>
+        </div>
+    </div>
+    {# End actions #}
+    {# Begin Button Group#}
+   <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            <ul class="pager">
+                <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+                </li>
+                <li class="next pull-left"><a href="{{app.url}}/account/">&larr; Back to My Account</a></li>
+            </ul>
+        </div>
+    </div>
+    {# End Button Group#}
+    <div style="clear:both"></div>
+</div>
+<div class="gap"></div>
+{% endblock %}

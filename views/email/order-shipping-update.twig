@@ -1,0 +1,34 @@
+{# Variables passed in: order_id, item_id #}
+{% set order = api.get('/order/' ~ order_id) %}
+{% set item = api.get('/orderitem/' ~ item_id) %}
+{% set product = api.get('/product/' ~ item.product_id) %}
+{% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
+
+Thank you again for your order from {{ app.params['site']['title'] }}.
+
+Order ID: {{ order.order_number }}
+
+The following item has shipped to:
+
+{{ order.shipping_first_name }} {{ order.shipping_last_name }}
+{% if order.giftlist_present is empty %}
+{{ order.shipping_street_line1}} {{ order.shipping_street_line2}}
+{{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_zip }}
+{{ order.shipping_country }}
+{{ order.shipping_phone_number }}
+{% endif %}
+
+using {{ shipping_method.name }}
+
+--------------------------------------------------------------------------
+Status: {{ item.status }}
+URL: {{app.url}}{{product.url}}
+SKU: {{item.sku}}
+Item name: {{ item.name }}
+Quantity: {{ item.quantity }}
+Tracking number: {{ item.tracking_number }}
+--------------------------------------------------------------------------
+
+Please Note:  If your order was placed after-hours or on the weekend your tracking number will not be active until the next business day when the package is picked up by the carrier.
+
+Thank you for shopping with us.

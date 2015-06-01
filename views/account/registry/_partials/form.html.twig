@@ -1,0 +1,199 @@
+{{ forms.begin('registry','','post', {class:'form-horizontal'}) }}
+{# Begin registry info #}
+<fieldset class="registry-info">
+    {# Begin registry name #}
+    <h2>Registry Info</h2><hr/>
+    <div class="form-group">
+        <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Event Name
+            <span class="text-danger">*</span>
+        </label>
+        <div class="col-sm-9 col-md-5 col-lg-5">
+            {{ forms.text('registry[name]',registry.name, {class:'form-control parsley-validated', placeholder:"Registry Name", required:true}) }}
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+            <div class="validation">{{ forms.errorlist(form_errors, 'name') }}</div>
+        </div>
+    </div>
+    {# End registry name #}    
+    {# Begin privacy modal #}
+    <div class="modal fade" id="modal-privacy" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                    <h4 class="modal-title" id="myModalLabel">Privacy</h4>
+                </div>
+                <div class="modal-body">
+                    <h5>Public registry</h5>
+                    Guests can search for your name to locate your registry.<br /><i>The registry is searchable and accessible to other guests.</i><br /><br />
+                    <h5>Unlisted registry</h5>
+                    Guests can see the registry if they have the link to it.<br /><i>The registry is not searchable but accessible to other guests.</i><br /><br />
+                    <h5>Private registry</h5>
+                    Only the guest who created the registry can access it.<br /><i>The registry is not searchable and not accessible to other guests.</i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-neutral" data-dismiss="modal" aria-hidden="true">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {# End privacy modal #}
+    {# Begin registry privacy #}
+    <div class="form-group">
+        <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input2">Privacy <b style="cursor: pointer;" data-target="#modal-privacy" data-toggle="modal"><i class="fa fa-question-circle"></i></b>
+            <span class="text-danger">*</span>
+        </label>
+        <div class="col-sm-9 col-md-5 col-lg-5">
+            {{ forms.select('registry[privacy]',registry.privacy, {'public':'Public','private':'Private','unlisted':'Unlisted'}, {class:'form-control parsley-validated', required:true}) }}
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+            <div class="validation">{{ forms.errorlist(form_errors, 'privacy') }}</div>
+        </div>
+    </div>
+    {# End registry privacy #}
+    {# Begin event date #}
+    <div class="form-group">
+        <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input3">Event Date
+            <span class="text-danger">*</span>
+        </label>
+        <div class="col-sm-9 col-md-5 col-lg-5">
+            {{ forms.date('registry[event_date]', registry.event_date,  {class:'form-control parsley-validated', placeholder:'Event Date', required:true}) }}
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+            <div class="validation">{{ forms.errorlist(form_errors, 'event_date') }}</div>
+        </div>
+    </div>
+    {# End event date #}
+</fieldset>
+{# End registry info #}
+{# Begin registrant info #}
+<fieldset class="registrant-info">
+    <h2>Registrant Info</h2><hr/>
+    <div class="form-group">
+        <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">First Name
+            <span class="text-danger">*</span>
+        </label>
+        <div class="col-sm-9 col-md-5 col-lg-5">
+            {{ forms.text('registry[first_name]',registry.first_name, {class:'form-control parsley-validated', placeholder:"Registrant First Name", required:true}) }}
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+            <div class="validation">{{ forms.errorlist(form_errors, 'first_name') }}</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Last Name
+            <span class="text-danger">*</span>
+        </label>
+        <div class="col-sm-9 col-md-5 col-lg-5">
+            {{ forms.text('registry[last_name]',registry.last_name, {class:'form-control parsley-validated', placeholder:"Registrant Last Name", required:true}) }}
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+            <div class="validation">{{ forms.errorlist(form_errors, 'last_name') }}</div>
+        </div>
+    </div>
+</fieldset>
+{# End registrant info #}
+{# Begin co-registrant info #}
+<fieldset class="co-registrant-info">
+    <h2>Co-registrant Info <small>(Optional)</small></h2><hr/>
+    <div class="form-group">
+        <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">First Name</label>
+        <div class="col-sm-9 col-md-5 col-lg-5">
+            {{ forms.text('registry[co_first_name]',registry.co_first_name, {class:'form-control parsley-validated', placeholder:"Co-Registrant Last Name"}) }}
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+            <div class="validation">{{ forms.errorlist(form_errors, 'co_first_name') }}</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-3 col-md-2 col-lg-2" for="input1">Last Name</label>
+        <div class="col-sm-9 col-md-5 col-lg-5">
+            {{ forms.text('registry[co_last_name]',registry.co_last_name, {class:'form-control parsley-validated', placeholder:"Co-Registrant Last Name"}) }}
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+            <div class="validation">{{ forms.errorlist(form_errors, 'co_last_name') }}</div>
+        </div>
+    </div>
+</fieldset>
+{# End co-registrant info #}
+{# Begin shopping info #}
+<fieldset class="shipping-info">
+    <h2>Shipping Info</h2><hr/>
+    <div class="form-group">
+        <label class="control-label col-sm-3 col-md-2 col-lg-2" for="registry_address_id">Address
+            <span class="text-danger">*</span>
+        </label>
+        <div class="col-sm-9 col-md-5 col-lg-5">
+            {% set address_select = {} %}
+            {% for address in addresses %}
+            {% set address_select = address_select + {(address.id):(address.one_line)} %}
+            {% endfor %}
+            {% if address_select is empty %}
+            <a href="{{app.url}}/account/addresses/new">Please create an address first</a>
+            {% else %}
+            {{ forms.select('registry[address_id]', registry.address_id, address_select, {class:'form-control parsley-validated', placeholder: 'Address', required:true}) }}
+            {% endif %}
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-5 col-md-offset-0 col-lg-5">
+            <div class="validation">{{ forms.errorlist(form_errors, 'address_id') }}</div>
+        </div>
+    </div>
+</fieldset>
+<fieldset class="settings">
+    <h2>Settings</h2><hr/>
+    <div class="form-group">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2">								
+            <div class="checkbox">
+                <label class="control-label">
+                    {{ forms.checkbox('registry[make_default]', 1) }}Make this your default registry
+                </label>
+            </div>
+        </div>
+    </div>
+</fieldset>
+{# End shopping info #}
+{# Begin actions #}
+<div class="actions">
+    <div class="row">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2">
+            {% if create %}
+            {{ forms.submit('registry[action]', 'create', 'Create', {class:'btn btn-primary'})}}
+            <a class="btn btn-neutral" href="{{ app.url }}/account/registries">Cancel</a>
+            {% else %}
+            {{ forms.submit('registry[action]', 'save', 'Save', {class:'btn btn-primary'})}}
+            <a class="btn btn-neutral" href="{{ app.url }}/account/registries">Cancel</a>
+            <a class="btn btn-link btn-link-nopadding" data-toggle="modal" data-target="#delete-modal">Delete this registry</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{# End actions #}
+{{ forms.end() }}
+{% if not create %}
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="delete-modal-label">Delete Registry</h4>
+            </div>
+            <div class="modal-body">Are you sure you want to delete "{{ registry.name }}"?</div>
+            <div class="modal-footer">
+                {{ forms.begin('registry') }}
+                <a class="btn btn-neutral" data-dismiss="modal">Cancel</a> 
+                <button type="submit" class="btn btn-danger" name="registry[action]" value="delete">Delete</button>
+                {{ forms.end() }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="gap"></div>
+<div class="col-lg-12 clearfix">
+<ul class="pager">
+    <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+    </li>
+    <li class="next pull-left"><a href="{{app.url}}/account/">&larr; Back to My Account</a></li>
+</ul>
+</div>
+<div class="gap"></div>

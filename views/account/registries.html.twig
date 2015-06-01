@@ -1,0 +1,116 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements.html.twig" as form %}
+{% import "/account/_macros/base.html.twig" as account %}
+
+{# Redirect to the login page if user is not logged in. #}
+{% do account.login() %} 
+
+{# Set the page_name - used for the page title, heading, tab selection, and breadcrumb in this page. #}
+{% set page_name = 'registries' %}
+
+{# Set the html head title #}
+{% block title %}Account - {{page_name|title}}{% endblock %} 
+
+{# Load in the breadcrumbs positioned in /_layouts/main/base.html.twig #}
+{% block breadcrumb %}
+{#
+Passed into the macro is a array of key:value pairs as (title):(relative url)
+- The last link should not have a url, as it will be used as a 'you are here' 
+#}
+{{ base.breadcrumbs({'Account':'/account',(page_name|title):''}) }}
+{% endblock %}
+
+{% block content %}
+{% if app.request.post.registry.action is not empty %}
+{% set action = app.request.post.registry.action|split('/')|first %}
+{% set id = app.request.post.registry.action|split('/')|last %}
+
+{% if action != id %}
+{% set registry = api.get('/registry/' ~ id) %}
+{% if registry.customer_id != app.user.id %}
+{% do app.redirect('/account/registries') %}
+{% endif %}
+{% endif %}
+
+{% endif %}
+<div class="container main-container">
+    <div class="row">
+        {# Begin registries #}
+        {# Begin header #}
+            <div class="col-sm-12 col-md-9 col-lg-10">
+                <h1 class="section-title-inner"><span><i class="fa fa-gift"></i> 
+                    New Registries</span>
+                </h1><hr/>
+                <div class="row userInfo hidden-xs">
+                    <div class="col-xs-12 col-sm-12">
+                        {# Begin navigation #}
+                        <div class="navigation">
+                        {{account.navigation('registries')}}
+                        </div>
+                        {# End navigation #}
+                        <div class="clear clearfix"></div><hr/>
+                    </div>
+                </div>
+            </div>
+    </div> <!-- /Row -->
+    {# End header #}
+    <div class="row userInfo">
+        <div class="col-sm-12 col-md-9 col-lg-10 no-padding-left clearfix">
+            {{ form.begin('registry') }}
+            {% set registries = api.get('/registry',{query:{"customer_id":app.user.id}}) %}
+            {% if registries is empty %}
+            <div class="col-sm-12 col-md-9 col-lg-10">
+            <h2 class="block-title-2">Create a new registries.</h2>
+            There are no registries.
+            </div><div class="gap"></div>
+            {% else %}
+            {% for registry in registries %}
+            {# Begin registry #}
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <div class="panel panel-default panel-info ">
+                        {# Begin registry details #}
+                        <div class="panel-heading">
+                            {% if registry.default %}<i class="fa fa-star"></i>{% endif %} <strong>{{ registry.name }}</strong>
+                        </div>
+                        <div class="panel-body">
+                            <div class="item-count">{{ registry.item_count }} item(s)</div>
+                            <div class="registry-privacy">{{ registry.privacy }}</div>
+                            <div class="privacy">{% if registry.default %}default registry{% endif %}</div>
+                        </div>
+                        {# End registry details #}
+                        {# Begin registry actions #}
+                        <div class="panel-footer">
+                            <a class="btn btn-neutral" href="{{app.url}}/registry/{{registry.id}}">View</a>
+                        </div>
+                        {# End registry actions #}
+                    </div>
+                </div>
+            {# End registry #}
+            {% endfor %}
+            {% endif %}
+            {{ form.end() }} 
+        </div> 
+    </div> <!-- /Row -->              
+    {# Registry Button #}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            <a class="btn btn-primary" href="{{app.url}}/account/registry/create"><i class="fa fa-plus"></i>Create a new registry</a>
+        </div>
+    </div>
+    {# End Registry Button #}
+    {# Begin bottom actions #}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            <ul class="pager">
+                <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+                </li>
+                <li class="next pull-left"><a href="{{app.url}}/account/">&larr; Back to My Account</a></li>
+            </ul>
+        </div>
+    </div> <!-- /Row -->
+    {# End bottom actions #}
+    {# End registries #}
+    <div style="clear:both"></div>
+</div> <!-- /Main Container -->
+<div class="gap"></div>
+{% endblock %}

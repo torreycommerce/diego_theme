@@ -1,0 +1,15 @@
+{% set return = api.get('/orderreturn/' ~ app.request.post.id) %}
+{% if return is empty or app.user.id is not defined or return.customer_id != app.user.id or return.status != 'pending' %}
+    {% do app.user.setFlash('Return not found', 'danger') %}
+    {% do app.redirect('/account/returns') %}
+{% else %}
+    {% if app.request.post.action == 'cancel' %}
+        {% set result = api.put('/orderreturn/' ~ return.id, {'status':'cancelled'}) %}
+        {% if result %}
+            {% do app.user.setFlash('Return has been cancelled') %}
+        {% else %}
+            {% do app.user.setFlash('Return cancellation failed: ' ~ api.error, 'danger') %}
+        {% endif %}
+    {% endif %}
+    {% do app.redirect('/account/returns') %}
+{% endif %}

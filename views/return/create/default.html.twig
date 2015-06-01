@@ -1,0 +1,26 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% block title %}Create a Return{% endblock %}
+{% block content %}
+{% if app.request.post.guestreturn is not empty or app.request.post.createreturn is not empty %}
+    {% do app.request.validateToken() %}
+    {% set form = app.request.post.guestreturn is null ? app.request.post.createreturn : app.request.post.guestreturn %}
+    {% set order = api.get('/order',{query:{email: form.email, order_number:form.order_id}})|first %}
+    {% if order is null %}
+        {% do app.user.setFlash('Order was not found.', 'danger') %}
+        {% do app.redirect('/return') %}
+    {% endif %}
+    {% set page_name = 'return' %}
+	{% set orderitems = api.get('/orderitem', {query:{order_id:order.id}}) %}
+	{% if order.date_created|strtotime > app.params.returnTime|strtotime %}
+    	{% do app.user.setFlash('Order is too old for returns.', 'danger') %}
+    	{% do app.redirect('/return') %}
+	{% else %}
+		{% include '/account/return/create/_partials/form.html.twig' %}
+	{% endif %}
+{% else %}
+	{% do app.user.setFlash('No query submitted.', 'danger') %}
+	{% do app.redirect('/return') %}
+{% endif %}
+
+{% endblock %}

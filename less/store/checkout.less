@@ -1,0 +1,169 @@
+
+//
+//  Checkout Page
+// --------------------------------------------------
+
+.orderStep {
+    clear: both;
+    display: inline-block;
+    height: auto;
+    padding: 0;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.orderStep li {
+    display: inline-block;
+    float: left;
+    height: auto;
+    margin: 0;
+    min-height: 55px;
+    padding: 0;
+    width: 20%;
+}
+
+.orderStep li.active a {
+    color: #fff;
+}
+
+.orderStep li.active a {
+    position: relative;
+}
+
+.orderStep li.active a:after {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(136, 183, 213, 0);
+    border-width: 10px;
+    margin-left: -10px;
+}
+
+.orderStep li a {
+    background: #EFF0F2;
+    display: inline-block;
+    font-size: 14px;
+    height: 100%;
+    line-height: normal;
+    padding: 20px 0 0;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.orderStep li a i {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.orderStep li.active a i {
+    background: rgba(0, 0, 0, 0.1);
+    color: #FFFFFF;
+}
+
+.orderStep li a i {
+    border-radius: 0;
+    display: block;
+    font-size: 20px;
+    height: auto;
+    left: 0;
+    line-height: 40px;
+    margin-top: -20px;
+    padding: 0;
+    text-align: center;
+    width: auto;
+    float: none !important;
+}
+
+.orderStep li a span {
+    display: block;
+    padding: 5px 0;
+}
+
+/* payment */
+
+.paymentBox {
+    margin-bottom: 30px;
+    display: block;
+}
+
+.checkoutReview .CartProductThumb a img, .checkoutReview .CartProductThumb a img {
+    width: 50px;
+}
+
+.paymentBox .panel {
+    box-shadow: none;
+}
+
+
+//
+//  Account// Address // Order //  Creation
+// --------------------------------------------------
+
+
+.myAccountList li {
+    text-align: center;
+}
+
+.myAccountList li a {
+    font-size: 14px;
+    display: block;
+}
+
+.myAccountList .thumbnail {
+    padding: 10px 0 0;
+}
+
+.myAccountList .thumbnail:hover {
+    background: #F5F5F5;
+}
+
+.myAccountList li a i {
+    display: block;
+    clear: both;
+    font-size: 44px;
+    margin-bottom: 10px;
+}
+
+h2.block-title-2, .formBox h3, .block-title-2 {
+    border-bottom: 1px solid #CECECE;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 0 0 15px;
+    padding: 10px 0 0;
+    position: relative;
+    text-transform: uppercase;
+}
+
+.panel-footer-address .btn {
+    margin-right: 5px;
+}
+
+//
+//  Cart & Wisth list
+// --------------------------------------------------
+
+
+.CartProductThumb a img, .CartProductThumb a img {
+    width: 86px;
+    max-width: 100%;
+}
+
+CartProduct {
+    border-bottom: 1px solid #E7E9EC;
+    padding: 10px 0;
+}
+
+/* mycart */
+
+.cartTableHeader {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 14px;
+}

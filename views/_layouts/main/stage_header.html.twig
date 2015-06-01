@@ -1,0 +1,23 @@
+<div class="flash-notifications-container row">
+  <div class="col-md-12">
+    {% for row,message in app.user.getFlashes() %}
+    <div class="alert alert-dismissable alert-block alert-{{row}} flash-notification flash-notification-{{row}}" id="flash-notification-{{row}}">
+     <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
+     {{message}}
+   </div>
+   {% endfor %}
+ </div>
+</div>
+{% if app.user.id > 0 and 'addresses' not in app.request.url %}
+  {% set invalid_addresses = api.get('/customeraddress', {query:{customer_id:app.user.id,verified:0,deleted:{'$ne':1}}}) %}
+  {% if invalid_addresses.num_total > 0 %}
+  <div class="import-address-notification row">
+    <div class="col-md-12">
+      <div class="alert alert-block alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
+        Some of your addresses are invalid and may need additional details. Please update your addresses at the <a class="btn btn-primary" href="{{app.url}}/account/addresses">customer address book</a>
+        </div>
+    </div>
+  </div>
+  {% endif %}
+{% endif %}

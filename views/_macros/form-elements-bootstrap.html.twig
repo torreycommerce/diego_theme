@@ -1,0 +1,257 @@
+{% macro _attrHtml(attributes) %}
+{% spaceless %}
+{% for key,value in attributes %} {{key}}="{{value|e}}"{% endfor %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro begin(name,action='',method='post',attributes=[]) %}
+{% spaceless %}
+    {% import _self as elements %}
+    <form name="{{name|e}}" novalidate parsley-validate action="{{action|e}}" method="{{method|upper}}" {% if method == 'post' %}enctype="multipart/form-data" {% endif %} {{ elements._attrHtml(attributes) }}>
+    {% if method == 'post'%}
+        <input type="hidden" name="request_token" value="{{ app.request.token() }}">
+    {% endif %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro input(type, name, value='', attributes=[], metatype="") %}
+{% spaceless %}
+    {% import _self as elements %}
+
+    <input type="{{ type }}" name="{{ name }}" value="{{ value }}" data-metatype="{{ metatype }}" data-tooltip="" data-placement="bottom" data-toggle="tooltip" data-trigger="manual" data-original-title="" {{ elements._attrHtml(attributes) }}>
+{% endspaceless %}
+{% endmacro %}
+
+{% macro textarea(name, value='', attributes=[]) %}
+{% spaceless %}
+    {# {{ element.textarea('textarea','my default value',{'title':'A Textarea','placeholder':'My Placeholder'}) }} #}
+    {% import _self as elements %}
+
+    <textarea data-tooltip="" data-placement="bottom" data-toggle="tooltip" data-trigger="manual" data-original-title="" name="{{ name }}" {{ elements._attrHtml(attributes) }}>{{ value }}</textarea>
+{% endspaceless %}
+{% endmacro %}
+
+{% macro select(name, value='', options=[], attributes=[]) %}
+{% spaceless %}
+    {# {{ element.select('test_select','default',{'test':'This is a test','default':'This is my default'}) }} #}
+    {% import _self as elements %}
+
+    <select data-tooltip="" data-placement="bottom" data-toggle="tooltip" data-trigger="manual" data-original-title="" name="{{ name }}" {{ elements._attrHtml(attributes) }}>
+        {% for key,item in options %}
+            <option value="{{key|e}}"{% if key == value %} selected="selected"{% endif %}>{{item}}</option>
+        {% endfor %}
+    </select>
+
+{% endspaceless %}
+{% endmacro %}
+
+{% macro multiselect(name, value='', options=[], attributes=[]) %}
+{% spaceless %}
+    {# {{ element.multiselect('test_multiselect', ['default','test'], {'test':'This is a test','default':'This is my default'}) }} #}
+    {% import _self as elements %}
+
+    <select data-tooltip="" data-placement="bottom" data-toggle="tooltip" data-trigger="manual" data-original-title="" multiple name="{{ name }}" {{ elements._attrHtml(attributes) }}>
+    {% for key,item in options %}
+        <option value="{{key|e}}"{% if key in value %} selected="selected"{% endif %}>{{ item }}</option>
+    {% endfor %}
+    </select>
+
+{% endspaceless %}
+{% endmacro %}
+
+{% macro radio(name, value='', attributes=[]) %}
+{% spaceless %}
+    {# {{ element.radio('radio','john',{'john':'This is john','bob':'This is bob'}) }} #}
+    {% import _self as elements %}
+
+    <input data-tooltip="" data-placement="bottom" data-toggle="tooltip" data-trigger="manual" data-original-title="" type="radio" name="{{ name }}" value="{{ key|e }}" {{ elements._attrHtml(attributes) }}>
+{% endspaceless %}
+{% endmacro %}
+
+{% macro checkbox(name, value=false, attributes=[], isChecked=false) %}
+{% spaceless %}
+    {% set check = (isChecked == true) ? ' checked' : '' %}
+    {# { element.checkbox('test_checkbox')}} #}
+    {% import _self as elements %}
+
+    <input type="hidden" name="{{ name }}" value="">
+    <input data-tooltip="" data-placement="bottom" data-toggle="tooltip" data-trigger="manual" data-original-title="" type="checkbox" name="{{ name }}" value="{{ value|default('1')|e }}" {{ elements._attrHtml(attributes) }}{{ check }}>
+{% endspaceless %}
+{% endmacro %}
+
+{% macro hidden(name, value='', attributes=[]) %}
+{% spaceless %}
+    {% import _self as elements %}
+    <input type="hidden" name="{{ name }}" value="{{ value }}" {{ elements._attrHtml(attributes) }}>
+{% endspaceless %}
+{% endmacro %}
+
+
+{% macro submit(name, value='', label='Submit', attributes=[]) %}
+{% spaceless %}
+    {# {{ element.submit('submit me'}) }} #}
+    {% import _self as elements %}
+
+    <button type="submit" name="{{ name }}" value="{{ value }}" {{ elements._attrHtml(attributes) }}>{{ label }}</button>
+{% endspaceless %}
+{% endmacro %}
+
+{% macro errorlist(list, name) %}
+{% spaceless %}
+{% if list[name] is defined %}
+<ul class="bg-danger">
+    {% for error in list[name] %}
+    <li>{{error}}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro errors() %}
+{% spaceless %}
+    {# print out all errors that were not assigned to a form field #}
+    {% set errors = app.form.error %}
+    {% if errors|length %}
+        <div class="col-md-offset-4 col-md-8 alert alert-danger">
+            {% for error in errors %}
+                {{error|join('<br />')}}<br />
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro text(name, value='', attributes=[]) %}
+    {# {{ element.text('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('text', name, value, attributes) }}
+{% endmacro %}
+
+{% macro document(name, value='', attributes=[]) %}
+    {% import _self as elements %}
+    {{ elements.textarea(name, value, attributes) }}
+{% endmacro %}
+
+{% macro number(name, value='', attributes=[]) %}
+    {# {{ element.number('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('number', name, value, attributes) }}
+{% endmacro %}
+
+{% macro money(name, value='', attributes=[]) %}
+    {# {{ element.number('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('number', name, value|number_format(2,'.',','), attributes + {'min':0, 'step':0.01}) }}
+{% endmacro %}
+
+{% macro date(name, value='', attributes=[]) %}
+    {# {{ element.date('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('text', name, value, attributes + {'datepicker':true}) }}
+{% endmacro %}
+
+{% macro time(name, value='', attributes=[]) %}
+    {# {{ element.datetime('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('time', name, value, attributes) }}
+{% endmacro %}
+
+{% macro datetime(name, value='', attributes=[]) %}
+    {# {{ element.date('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('datetime', name, value, attributes + {'datepicker':true, 'data-format':'MM/dd/yyyy HH:mm:ss PP'}) }}
+{% endmacro %}
+
+{% macro email(name, value='', attributes=[]) %}
+    {# {{ element.email('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('email', name, value, attributes) }}
+{% endmacro %}
+
+{% macro password(name, value='', attributes=[]) %}
+    {# {{ element.password('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {% set value = null %}
+    {% set attributes = attributes|merge({'autocomplete':'off'}) %}
+    {{ elements.input('password',name, value, attributes) }}
+{% endmacro %}
+
+{% macro phone(name, value='', attributes=[]) %}
+    {# {{ element.phonenumber('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('tel', name, value, attributes, "phone") }}
+{% endmacro %}
+
+{% macro phonenumber(name, value='', attributes=[]) %}
+    {# {{ element.phonenumber('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('tel', name, value, attributes) }}
+{% endmacro %}
+
+{% macro state(name, value='', attributes=[]) %}
+    {# {{ element.state('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('text', name, value, attributes) }}
+{% endmacro %}
+
+{% macro zipcode(name, value='', attributes=[]) %}
+    {# {{ element.zipcode('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('text', name, value, attributes|merge({"parsley-regexp": "^[1-9]{5}$"})) }}
+{% endmacro %}
+
+{% macro url(name, value='', attributes=[]) %}
+    {# {{ element.url('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('url', name, value, attributes) }}
+{% endmacro %}
+
+{% macro country(name, value='', attributes=[]) %}
+    {# {{ element.country('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('text', name, value, attributes) }}
+{% endmacro %}
+
+{% macro file(name, value='', attributes=[]) %}
+    {# {{ element.file('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('file', name, value, attributes) }}
+{% endmacro %}
+
+{% macro rating(name,score,glyph = 'glyphicon-star',attributes=[]) %}
+    {% import _self as elements %}
+    {% set field = app.form.getField('hidden',name,score,attributes) %}
+    {% set score = field.value %}
+    {% set num_active = (score*5)|round %}
+    <div id="{{id}}" class="star-rating star-rating-input">
+        {{ elements.hidden(name,score) }}
+        <div class="star-rating-stars">
+            {% for stars in 0..4 %}
+                {% if loop.index <= num_active %}
+                    {% set class = 'active-choosing'%}
+                {% else %}
+                    {% set class = 'disabled-choosing'%}
+                {% endif %}
+                <span id="rating-star-{{ loop.index }}" class="star-rating-star glyphicon {{glyph}} {{ class }}"></span>
+            {% endfor %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro captcha() %}
+{% spaceless %}
+    {% import _self as elements %}
+    <div class="captcha">
+        {{ app.form.captcha() }}
+    </div>
+
+{% endspaceless %}
+{% endmacro %}
+
+
+{% macro end() %}
+{% spaceless %}
+    </form>
+{% endspaceless %}
+{% endmacro %}

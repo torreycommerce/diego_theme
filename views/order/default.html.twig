@@ -1,0 +1,20 @@
+{% if (app.request.post.order.id is empty or app.request.post.order.email is empty) 
+    and (app.params.return.id is empty or app.params.return.email is empty) %}
+    {% include '/order/_partials/search.html.twig' %}
+{% else %}
+    {% if app.params.return %}
+        {% set order = api.get('/order', {query:{'order_number':app.params.return.id, 'email':app.params.return.email}})|first %}
+    {% else %}
+        {% set order = api.get('/order', {query:{'order_number':app.request.post.order.id, 'email':app.request.post.order.email}})|first %}
+    {% endif %}
+    {% if order is empty %}
+        {% do app.user.setFlash('Order not found', 'danger') %}
+        {% do app.redirect('/order') %}
+    {% else %}
+        {% if app.user.id is empty %}
+            {% include '/order/_partials/index.html.twig' %}
+        {% else %}
+            {% do app.redirect('/account/order/' ~ order.order_number) %}
+        {% endif %}
+    {% endif %}
+{% endif %}

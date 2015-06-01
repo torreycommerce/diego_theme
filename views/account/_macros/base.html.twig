@@ -1,0 +1,47 @@
+
+{% macro login() %}
+{% if not app.user.isLoggedIn() %}
+{% do app.redirect('/account/login/'~app.request.url) %}
+{% endif %}
+{% endmacro %}
+
+{% macro navigation(current_page = '') %}
+{% set tabs = {
+    '':'<i class="glyphicon glyphicon-user"></i>Account Center',
+    'notifications':'<i class="fa fa-exclamation-circle"></i>Notifications',
+    'addresses':'<i class="fa fa-map-marker"></i>Addresses',
+    'orders':'<i class="fa fa-calendar"></i>Orders',
+    'wishlists':'<i class="fa fa-heart"></i>Wishlists',
+    'registries':'<i class="fa fa-gift"></i>Registries',
+    'reviews':'<i class="fa fa-comments"></i>Reviews',
+    'returns':'<i class="fa fa-undo"></i>Returns',
+    'account-settings':'<i class="fa fa-cog"></i>Settings',
+} %}
+<div class="row userInfo">
+
+<!--     {# Begin mobile menu button #}
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#sidebar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    </div>
+    {# End mobile menu button #} -->
+    {# Begin menu #}
+        <div class="col-sm-12">
+            <ul class="myAccountList row">
+                {% for page,title in tabs %}
+                 <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 text-center ">     
+                     <div class="thumbnail">
+                        <li {% if current_page == page or page == '' and current_page not in tabs|keys %}class="active"{% endif %}><a href="{{app.url}}/account/{{page}}">{{title}}</a>
+                        </li>
+
+                    </div>            
+                </div>
+                {% endfor %}
+            </ul>     
+        </div>   
+    {# End menu #}
+</div>
+{% endmacro %}

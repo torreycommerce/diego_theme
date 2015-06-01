@@ -1,0 +1,99 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements.html.twig" as form %}
+{% import "/_macros/list.html.twig" as list %}
+{% import "/account/_macros/base.html.twig" as account %}
+
+{# Redirect to the login page if user is not logged in. #}
+{% do account.login() %}
+
+{# Set the page_name - used for the page title, heading, tab selection, and breadcrumb. #}
+{% set page_name = 'notifications' %}
+
+{# Set the html head title #}
+{% block title %}Account - {{page_name|title}}{% endblock %}
+
+{# Load in the breadcrumbs positioned in /_layouts/main/base.html.twig #}
+{% block breadcrumb %}
+{#
+Passed into the macro is a array of key:value pairs as (title):(relative url)
+- The last link should not have a url, as it will be used as a 'you are here'
+#}
+{{ base.breadcrumbs({'Account':'/account',(page_name|title):''}) }}
+{% endblock %}
+
+{# Load in the main content positioned in /_layouts/main/base.html.twig #}
+{% block content %}
+{#
+Load in the tabs for the page, pass in the name of this page, and make sure it's
+set in the array in /account/_macros/base.html.twig
+#}
+<div class="container main-container">
+    <div class="row">
+        {# Begin Notifications #}
+        {# Begin header #}
+        <div class="col-sm-12 col-md-9 col-lg-10">
+            <h1 class="section-title-inner"><span><i class="fa fa-exclamation-circle"></i> 
+                Your Notification </span>
+            </h1><hr/>
+            <div class="row userInfo hidden-xs">
+                <div class="col-xs-12 col-sm-12">
+                    {# Begin navigation #}
+                    <div class="navigation">
+                            {{account.navigation('notifications')}}
+                    </div>
+                    {# End navigation #}
+                    <div class="clear clearfix"></div><hr/>
+                </div>
+            </div>
+        </div>
+    </div><!-- /Row -->
+    {# End header #}
+    <div class="row userInfo">
+        <div class="col-sm-12 col-md-9 col-lg-10 no-padding-right clearfix">
+            {% set sort   = app.request.get.sort is defined ? app.request.get.sort : 'id:-1' %}
+            {% set search = app.request.get.s is defined ? app.request.get.s : '' %}
+            {% set query  = app.request.get.query is defined ? app.request.get.query : [] %}
+            {% set columns         = ['unread','subject','date_created'] %}
+            {% set limit = 64 %}
+            {# If the search contains special characters ':' or '=' assume the search is a query #}
+            {% if '=' in search or ':' in search %}
+            {% set query = search|replace({'=':':'}) %}
+            {% set search = '' %}
+            {% endif %}
+            {% set notifications = api.get('/customernotification',{'sort':sort,'page':app.request.get.page,'query':query + {customer_id:app.user.id},'search':search,'attributes':columns,'limit':  limit }) %}
+            <div class="col-md-4 col-md-offset-4">{{ base.pagination(notifications.num_total , limit ) }}</div>
+            <div class="search-within no-padding-left col-xs-12 col-sm-6 col-sm-offset-6 col-md-4 col-md-offset-8 col-lg-3 col-lg-offset-9">
+                <form method="get" class="input-group" onsubmit="document.location.href='{{app.request.getUrl({'page':1,'sort':(sort),'s':''})}}'+''+$('#searchlist').val();return false;">
+                    <input type="text" id="searchlist" name="s" value="{{app.request.get.s|e}}" class="form-control input-sm" placeholder="Search">
+                    <span class="input-group-btn"><button type="submit" class="btn btn-thin"><i class="fa fa-search"></i></button></span>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            <div class="panel">
+                {{ list.create(columns, notifications, '/account/notification/{id}', 'sort', {'unread':'boolean','date_created':'date'}, ['delete']) }}
+            </div>
+        </div>
+    </div>
+    {# End pagination #}
+    {# Begin bottom actions #}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            <ul class="pager">
+                <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+                </li>
+                <li class="next pull-left"><a href="{{app.url}}/account/">&larr; Back to My Account</a></li>
+            </ul>
+        </div>        
+    </div> <!-- /Row -->
+    {# End bottom actions #}
+    {# End Notifications #}
+    <div style="clear:both"></div>
+</div> <!-- /End Main Container -->
+<div class="gap"></div>
+{% endblock %}
+{% block js %}
+{{ app.asset.js(app.url_asset ~ '/js/account.js') }}
+{% endblock %}

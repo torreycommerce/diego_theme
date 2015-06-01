@@ -1,0 +1,11 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% import "/_macros/form-extras.html.twig" as extras %}
+{% block content %}
+{% set token = api.get('/order/paypalExpressToken') %}
+{% if token %}
+    {% do app.redirect('https://www.paypal.com/webscr?cmd=_express-checkout&token=' ~ token) %}
+{% endif %}
+<h1>PayPal Express Payment error</h1>
+{{api.error}}. Please <a href="{{app.url}}/cart">try again later</a>.
+{% endblock %}

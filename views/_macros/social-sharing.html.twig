@@ -1,0 +1,397 @@
+{% macro social_parseConfig(array_config) %}
+{% if array_config|length >= 1 and (array_config['facebook']['facebook_page'] is not empty or array_config['twitter']['twitter_page'] is not empty or array_config['pinterest']['pinterest_page'] is not empty or array_config['google']['google_page'] is not empty) %}
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="social list-unstyled list-inline">
+            {% for key, item in array_config %}
+              {% if item.active_follow_page_button is defined and item.active_follow_page_button == true
+                and item[key ~ '_page'] is defined and item[key ~ '_page'] is not empty %}
+                {% set social_url = item[key ~ '_page'] %}
+                {% if key == 'facebook' %}
+                  <li>
+                    <a class="facebook" href='{{ social_url }}' target="_blank">
+                      <i class="fa fa-facebook fa-2x"></i>
+                    </a>
+                  </li>
+                {% elseif key == 'twitter' %}
+                  <li>
+                    <a class="twitter" href='{{ social_url }}' target="_blank">
+                      <i class="fa fa-twitter fa-2x"></i>
+                    </a>
+                  </li>
+                {% elseif key == 'pinterest' %}
+                  <li>
+                    <a class="pinterest" href='{{ social_url }}' target="_blank">
+                      <i class="fa fa-pinterest fa-2x"></i>
+                    </a>
+                  </li>
+                {% elseif key == 'google' %}
+                  <li>
+                    <a class="google-plus" href='{{ social_url }}' target="_blank">
+                      <i class="fa fa-google-plus fa-2x"></i>
+                    </a>
+                  </li>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro get_metatags(array_config, seo) %}
+      {% if array_config|length >= 1 %}
+          {% for key, item in array_config %}
+            {% if item.active_metatags is defined and item.active_metatags == true %}
+              {%- import _self as base -%}
+                {% if key == 'facebook' %}
+                  {{ base.printFacebook_Metatags(item,seo) }}
+                {% elseif key == 'twitter' %}
+                  {{ base.printTwitter_Metatags(item,seo) }}
+                {% endif %}
+            {% endif %}
+          {% endfor %}
+      {% endif %}
+{% endmacro %}
+
+{#
+  Facebook
+#}
+{% macro printFacebook_Metatags(array_config, seo) %}
+  {# Check what page you are on and try to compile accurate metatags #}
+  {%- import _self as base -%}
+  {% spaceless %}
+      {% set type = app.request.url|split('/')|first %}
+      {% if type == "category" %}
+          {{ base.printFacebook_category_meta(array_config, seo) }}
+      {% elseif type == "product" %} {# Product and Collection #}
+          {{ base.printFacebook_product_meta(array_config, seo) }}
+      {% else %} {#  For now we use only one default set of metatags - "contact us" may need customized metatags #}
+          {{ base.printFacebook_default_meta(array_config, seo) }}
+      {% endif %}
+  {% endspaceless %}
+{% endmacro %}
+
+{#
+  Facebook page specific metatags
+#}
+{% macro printFacebook_default_meta(array_config, seo) %}
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="{{ app.params.site.title }} - {{ seo['title'] }}" />
+  <meta property="og:description" content="{{ seo['description'] }}" />
+  <meta property="og:site_name" content="{{ app.params.site.title }}"/>
+  <meta property="og:url" content="{{ app.url ~ "/" ~ app.request.url }}"/>
+  <meta property="og:image" content="{{ seo['img'] }}" />
+  {% if array_config.appId is defined and array_config.appId is not empty %}
+    <meta property="fb:app_id" content="{{ array_config.appId }}" />
+  {% endif %}
+{% endmacro %}
+
+{% macro printFacebook_category_meta(array_config, seo) %}
+  {% set category = api.get('/category',{"query":{"status":"active","slug":app.request.path}})|first %}
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="{{ app.params.site.title }} - {{ (category.name|title)|default(seo['title']) }}" />
+  {% set categ_description = category.meta_description|default(app.params.site.title ~ ' has a large selection of ' ~ category.name) %}
+  <meta property="og:description" content="{{ categ_description|trim }}" />
+  <meta property="og:site_name" content="{{ app.params.site.title }}"/>
+  <meta property="og:url" content="{{ app.url ~ "/" ~ app.request.url }}"/>
+  {% if category.thumbnail is defined and category.thumbnail is not empty %}
+    <meta property="og:image" content="{{ category.thumbnail }}" />
+  {% else %}
+    <meta property="og:image" content="{{ seo['img'] }}" />
+  {% endif %}
+
+  {% if array_config.appId is defined and array_config.appId is not empty %}
+    <meta property="fb:app_id" content="{{ array_config.appId }}" />
+  {% endif %}
+
+{% endmacro %}
+
+{% macro printFacebook_product_meta(array_config, seo) %}
+  {% set request = app.request.path | split('/') %}
+  {% set item_name = request.1 %}
+
+  {% if item_name | split('-') | last | integer %}
+    {% set item  = api.get('/catalog/' ~ item_name | split('-') | last ) %}
+  {% elseif app.request.path is integer %}
+    {% set item  = api.get('/catalog',{query:{id:app.request.path}})|first %}
+  {% else %}
+    {% set item  = api.get('/catalog', {query:{slug:app.request.path}})|first %}{% endif %}
+
+  <meta property="og:type" content="og:product" />
+  <meta property="og:title" content="{{ app.params.site.title }} - {{ (item.name|title)|default(seo['title']) }}" />
+  <meta property="og:description" content="{{ item.meta_description|default(seo['description']) }}" />
+  <meta property="og:site_name" content="{{ app.params.site.title }}"/>
+  <meta property="og:url" content="{{ app.url ~ "/" ~ app.request.url }}"/>
+
+  {% if item.group == "product" %}
+    {% set prices = (item.product|values_in('variant')|values_in(['price','compare_price','save_price','save_percent'])) %}
+    <meta property="product:price:amount" content="{{ prices.price.0 }}" />
+    <meta property="product:price:currency" content="USD" /> {# Should be dynamic #}
+  {% elseif item.group == "collection" %} {# Just in case we will have to change the price for the selection (price range) #}
+    {% set prices = (item.product|values_in('variant')|values_in(['price','compare_price','save_price','save_percent'])) %}
+    <meta property="product:price:amount" content="{{ prices.price.0 }}" />
+    <meta property="product:price:currency" content="USD" /> {# Should be dynamic #}
+  {% endif %}
+
+  {% set img_used = 0 %}
+  {% for img in item.images %}
+      {% if (img_used < 6) %}
+          <meta property="og:image" content="{{ app.image.getImageUrl('product','large',img.id) }}" />
+          {% set img_used = img_used + 1 %}
+      {% endif %}
+  {% endfor %}
+
+  {% for sub in item.product %}
+      {% for img in sub.images if img.id is not empty %}
+          {% if (img_used < 6) %}
+              <meta property="og:image" content="{{ app.image.getImageUrl('product','large',img.id) }}" />
+              {% set img_used = img_used + 1 %}
+          {% endif %}
+      {% endfor %}
+  {% endfor %}
+
+  {% if img_used == 0 %}
+      <meta property="og:image" content="{{ seo['img'] }}" />
+  {% endif %}
+
+  {% if array_config.appId is defined and array_config.appId is not empty %}
+    <meta property="fb:app_id" content="{{ array_config.appId }}" />
+  {% endif %}
+{% endmacro %}
+
+{#
+  Twitter
+#}
+{% macro printTwitter_Metatags(array_config, seo) %}
+  {# Check what page you are on and try to compile accurate metatags #}
+  {%- import _self as base -%}
+  {% spaceless %}
+      {% set type = app.request.url|split('/')|first %}
+      {% if type == "category" %}
+          {{ base.printTwitter_category_meta(array_config, seo) }}
+      {% elseif type == "product" %} {# Product and Collection #}
+          {{ base.printTwitter_product_meta(array_config, seo) }}
+      {% else %} {#  For now we use only one default set of metatags - "contact us" may need customized metatags #}
+          {{ base.printTwitter_default_meta(array_config, seo) }}
+      {% endif %}
+  {% endspaceless %}
+{% endmacro %}
+
+{#
+  Twitter page specific metatags
+#}
+{% macro printTwitter_default_meta(array_config, seo) %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:description" content="{{ seo['description'] }}" />
+
+  {% if array_config.twitter_account is defined and array_config.twitter_account is not empty %}
+    <meta name="twitter:site" content="@{{ array_config.twitter_account }}" />
+  {% endif %}
+
+  <meta name="twitter:title" content="{{ app.params.site.title }}" />
+  <meta name="twitter:image" content="{{ seo['img'] }}" />
+{% endmacro %}
+
+{% macro printTwitter_category_meta(array_config, seo) %}
+    {% set category = api.get('/category',{"query":{"status":"active","slug":app.request.path}})|first %}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:description" content="{{ category.meta_description|default(seo['description']) }}" />
+
+    {% if array_config.twitter_account is defined and array_config.twitter_account is not empty %}
+      <meta name="twitter:site" content="@{{ array_config.twitter_account }}" />
+    {% endif %}
+
+    <meta name="twitter:title" content="{{ app.params.site.title }} - {{ (category.name|title)|default(seo['title']) }}" />
+
+    {% if category.thumbnail is defined and category.thumbnail is not empty %}
+      <meta name="twitter:image" content="{{ category.thumbnail }}" />
+    {% else %}
+      <meta name="twitter:image" content="{{ seo['img'] }}" />
+    {% endif %}
+
+{% endmacro %}
+
+{% macro printTwitter_product_meta(array_config, seo) %}
+  {% set request = app.request.path | split('/') %}
+  {% set item_name = request.1 %}
+
+  {% if item_name | split('-') | last | integer %}
+    {% set item  = api.get('/catalog/' ~ item_name | split('-') | last ) %}
+  {% elseif app.request.path is integer %}
+    {% set item  = api.get('/catalog',{query:{id:app.request.path}})|first %}
+  {% else %}
+    {% set item  = api.get('/catalog', {query:{slug:app.request.path}})|first %}
+  {% endif %}
+
+  <meta name="twitter:card" content="product" />
+  <meta name="twitter:title" content="{{ app.params.site.title }} - {{ (item.name|title)|default(seo['title']) }}" />
+  <meta name="twitter:description" content="{{ item.meta_description|default(seo['description']) }}" />
+
+  {% if item.brand is defined and item.brand is not empty %}
+  <meta property="og:brand" content="{{ item.brand }}" />
+  {% endif %}
+
+  {% set prices = (item.product|values_in('variant')|values_in(['price','compare_price','save_price','save_percent'])) %}
+  {% if item.group == "product" %}
+    <meta name="twitter:label1" content="Price" />
+  {% else %}
+    <meta name="twitter:label1" content="Starting Price" />
+  {% endif %}
+  <meta name="twitter:data1" content="${{ prices.price.0 }}" />
+
+  {% set stock_description = item.product[0].variant[0].inventory_quantity > 0 ? 'In Stock' :
+                  item.product[0].variant[0].inventory_shipping_estimate is not empty
+                  ? item.product[0].variant[0].inventory_shipping_estimate : '' %}
+
+  {% if stock_description %}
+        <meta name="twitter:label2" content="Availability" />
+        <meta name="twitter:data2" content="{{ stock_description }}" />
+    {% elseif item.product[0].variant[0].gender %}
+        <meta name="twitter:label2" content="Gender" />
+        <meta name="twitter:data2" content="{{ item.product[0].variant[0].gender }}" />
+    {% elseif item.product[0].variant[0].color %}
+        <meta name="twitter:label2" content="Color" />
+        <meta name="twitter:data2" content="{{ item.product[0].variant[0].color }}" />
+  {% endif %}
+
+  {% set img_used = 0 %}
+  {% for img in item.images %}
+      {% if (img_used < 1) %}
+          <meta name="twitter:image" content="{{ app.image.getImageUrl('product','large',img.id) }}" />
+          {% set img_used = img_used + 1 %}
+      {% endif %}
+  {% endfor %}
+
+
+{% endmacro %}
+
+{# Begin social sharing buttons #}
+
+{# read Json Config File and display share buttons #}
+{% macro sharing_buttons(array_config, product) %}
+    {%- import _self as base -%}
+    {% for key, item in array_config %}
+      {% if key == 'facebook' %}
+        <div class="facebook">{{ base.display_facebook_button(item) }}</div>
+      {% elseif key == 'twitter' %}
+        <div class="twitter">{{ base.display_twitter_button(item) }}</div>
+      {% elseif key == 'pinterest' %}
+        <div class="pinterest">{{ base.display_pinterest_button(item, product) }}</div>
+      {% elseif key == 'google' %}
+        <div class="google-plus">{{ base.display_google_button(item) }}</div>
+      {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+{# "active_like":boolean, "active_share":boolean, "show_count":boolean, "like_type":"like"/"recommend", "appId": "XXXXXXX"#}
+
+{# Begin Facebook #}
+{% macro display_facebook_button(array_config) %}
+  {% if array_config.active_like is defined and array_config.active_like == true %}
+    {% if array_config.active_share is defined and array_config.active_share == true %}
+      {% set data_share = 'true' %}
+    {% else %}
+      {% set data_share = 'false' %}
+    {% endif %}
+
+    {% if array_config.show_count is defined and array_config.show_count == true %}
+      {% set data_layout = 'button' %}
+    {% else %}
+      {% set data_layout = 'standard' %}
+    {% endif %}
+
+    {% if array_config.like_type is defined and array_config.like_type == 'recommend' %}
+      {% set data_action = 'recommend' %}
+    {% else %}
+      {% set data_action = 'like' %}
+    {% endif %}
+
+    {% if array_config.appId is defined and array_config.appId is not empty %}
+      {% set FBappId = '&appId=' ~ array_config.appId %}
+    {% else %}
+      {% set FBappId = '' %}
+    {% endif %}
+
+    <div class="fb-like" data-href="{{ app.request.base ~ "/" ~ app.request.url }}" data-width="400" data-layout="{{ data_layout }}" data-action="{{ data_action }}" data-show-faces="true" data-share="{{ data_share }}"></div>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      {{ "js.src = '//connect.facebook.net/en_US/sdk.js#xfbml=1" ~ FBappId ~ "&version=v2.0'" }};
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+  {% endif %}
+{% endmacro %}
+{# End Facebook #}
+
+{# Begin Twitter #}
+{% macro display_twitter_button(array_config) %}
+  {% if array_config.active_tweet is defined and array_config.active_tweet == true %}
+    {% if array_config.add_acct_to_tweet is defined and array_config.add_acct_to_tweet == true and array_config.twitter_account is defined
+      and  array_config.twitter_account is not empty  %}
+      {% set twitter_account = ' data-via="' ~ array_config.twitter_account ~ '" ' %}
+    {% else %}
+      {% set twitter_account = '' %}
+    {% endif %}
+    <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" {{twitter_account}} >Tweet</a>
+    <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
+        if(!d.getElementById(id)) {
+          js=d.createElement(s);
+          js.id=id;
+          js.src=p+'://platform.twitter.com/widgets.js';
+          fjs.parentNode.insertBefore(js,fjs);
+        }
+      }(document, 'script', 'twitter-wjs');
+    </script>
+  {% endif %}
+{% endmacro %}
+{# End Twitter #}
+
+{# "show_count":boolean, #}
+
+{# Begin Pinterest #}
+{% macro display_pinterest_button(array_config, product) %}
+    {% if array_config.active_pin_it is defined and array_config.active_pin_it == true %}
+      {% set main_image_id = product.images.0.id is not empty ? product.images.0.id : parent.images.0.id %}
+      {% set main_image_id = main_image_id is empty ? 'default' : main_image_id %}
+      {% if array_config.show_count is defined and array_config.show_count == true %}
+        {% set pin_count = 'beside' %}
+      {% else %}
+        {% set pin_count = 'none' %}
+      {% endif %}
+      {% set pin_image = app.image.getImageUrl("product","large",main_image_id) %}
+      {% if pin_image is defined and pin_image is not empty %}
+        <a href="http://www.pinterest.com/pin/create/button/
+            ?url={{ (app.request.base ~ "/" ~ app.request.url)|url_encode }}
+            &media={{ (app.image.getImageUrl("product","large",main_image_id))|url_encode }}
+            &description={{ (product.brand ~ " - " ~ product.name)|url_encode }}"
+            data-pin-do="buttonPin"
+            data-pin-config="{{ pin_count }}">
+            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="//assets.pinterest.com/images/pidgets/pin_it_button.png" />
+        </a>
+        <script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
+      {% endif %}
+    {% endif %}
+{% endmacro %}
+{# End Pinterest #}
+
+{# Begin Google Plus #}
+{% macro display_google_button(array_config) %}
+    {% if array_config.active_plus_one is defined and array_config.active_plus_one == true %}
+      <div class="g-plusone" data-annotation="none" data-width="300"></div>
+      <script type="text/javascript">
+        (function() {
+          var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+          po.src = 'https://apis.google.com/js/platform.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+        })();
+      </script>
+    {% endif %}
+{% endmacro %}
+{# End Google Plus #}
+
+{# End social sharing buttons #}

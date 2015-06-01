@@ -1,0 +1,320 @@
+{% if (app.request.post and app.request.post.return) %}
+    {% if (api.put('/orderreturn/' ~ app.request.post.return, {query:{order_id:order.id}, status:'cancelled'})) %}
+        <div class="alert alert-dismissable alert-block alert-success flash-notification flash-notification-success" id="flash-notification-success">
+            <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
+            Return successfully cancelled
+        </div>
+    {% endif %}
+{% endif %}
+<div id="order">
+    <div class="container main-container">
+        {% if order.test_order %}
+        <div class="row">
+            <div class="alert alert-danger"><h1>This is a test order.</h1></div>
+        </div>
+        {% endif %}
+        <div class="col-sm-12 col-md-9 col-lg-10">
+            <div class="row">
+            {# Begin header #}
+                <div class="col-sm-12">
+                    <h1 class="section-title-inner"><span><i class="fa fa-history"></i> 
+                        Order Status & History</span>
+                    </h1>
+                    <h2 class="block-title-2">Your items for Order #{{ order.order_number }}</h2>
+                </div>
+            {# End header #}
+            </div> <!-- /Row -->
+            <div class="well">
+                <div class="row">
+                    {# Begin order details #}
+                    <div class="order-details col-sm-4 col-md-4 col-lg-3">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                {# Begin order details #}
+                                <div class="order-info">
+                                    <div><strong>Order Info</strong></div>
+                                    <div>Order #{{ order.order_number }}</div>
+                                    <div>{{ order.date_created }}</div>
+                                    <div>Order Total: ${{ order.total|replace({',':''})|number_format(2) }}</div>
+                                </div>
+                                {# End order details #}
+                            </div>         
+                            <div class="col-sm-12 col-md-12">
+                                {# Begin shipping Address #}
+                                <div class="shipping-address">
+                                    <div><strong>Shipping Address</strong></div>
+                                    <address>
+                                        <div>{{ order.shipping_first_name}} {{ order.shipping_last_name}}</div>
+                                        {% if order.giftlist_present is empty %}
+                                        <div>{{ order.shipping_street_line1}}</div>
+                                        {% if order.shipping_street_line2 is not empty %}
+                                        <div>{{ order.shipping_street_line2}}</div>
+                                        {% endif %}
+                                        <div>{{ order.shipping_city}}, {{ order.shipping_state}} {{ order.shipping_zip}}</div>
+                                        {% endif %}
+                                    </address>
+                                </div>
+                                {# End shipping Address #}
+                            </div>          
+                            <div class="col-sm-12 col-md-12">
+                                {# Begin shipment details #}
+                                <div class="shipping-method">
+                                    {% set method = api.get('/shippingmethod/' ~ order.shipping_method) %}
+                                    <div><strong>Shipping Method</strong></div>
+                                    <div>Shipping Method: ({{method.name}})</div>
+                                </div>
+                                {# End shipment details #}
+                            </div>
+                        </div>
+                        {#<a href="#" class="btn"><i class="icon-print"></i> Print</a>#}
+                        {# Begin order actions #}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="order-actions">
+                                    {% if order.status == 'pending' %}
+                                    <a class="btn btn-danger btn-mobile" data-toggle="modal" data-target="#cancel-modal"><i class="fa fa-minus-circle"></i> Cancel order</a>
+                                    <div class="modal fade" id="cancel-modal" tabindex="-1" role="dialog" aria-labelledby="cancel-modal-label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    <h4 class="modal-title" id="cancel-modal-label"><i class="fa fa-minus-circle"></i> CANCEL ORDER</h4>
+                                                </div>
+                                                <div class="modal-body">Are you sure you want to cancel this order?</div>
+                                                <div class="modal-footer">
+                                                    {{ form.begin('',app.url ~ '/order/actions') }}
+                                                    <a class="btn btn-default" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Back</a> 
+                                                    <button name="action" value="cancel" class="btn btn-danger"><i class="fa fa-minus-circle"></i> Cancel Order</button>
+                                                    <input type="hidden" name="email" value="{{order.email}}">
+                                                    <input type="hidden" name="id" value="{{order.order_number}}">
+                                                    {{ form.end() }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% if order.returnable_items > 0 %}
+                                        <div class="actions">
+                                            {% if order.customer_id is defined %}
+                                                <a class="btn btn-neutral btn-mobile" href="{{ app.url }}/account/return/create/{{ order.order_number }}">Return Item(s)</a>
+                                            {% else %}
+                                                {{ form.begin('',app.url ~ '/return') }}
+                                                    <input type="hidden" name='guestreturn[email]' value="{{app.request.post.order.email}}" />
+                                                    <input type="hidden" name='guestreturn[order_id]', value="{{app.request.post.order.id}}" />
+                                                    <input type="submit" name="guestreturn[action]" value="Return Item(s)" class="btn btn-primary" />
+                                                {{ form.end()}}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>  
+                        </div>
+                        {# End order actions #}
+                    </div>
+                    {# End order details #}
+                    <div class="order-items col-sm-8 col-md-8 col-lg-9">
+                        {# Begin order items #}
+                        {% set items = api.get('/orderitem', {query:{order_id:order.id}}) %}
+                        {% set product_ids = items|values_in('product_id') %}
+                        {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+                        {% if items is not empty %}
+                        {% set bill = 0 %}
+                        {% for item in items %}
+                        {% set bill = bill + (item.price * item.quantity) %}
+                        <div class="order-item">
+                            <div class="row">
+                                {# Begin product image #}
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-2">
+                                    <div class="thumbnail">
+                                        <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src='{{ products[item.product_id][0].thumbnail }}'>
+                                    </div>
+                                </div>
+                                {# End product image #}
+                                {# Begin product details #}
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-10">
+                                    <div class="row">
+                                        {# Begin wishlist #}
+                                        <div class="col-md-12 col-lg-12">
+                                            <a href="{{ app.url ~ products[item.product_id].0.url }}" target="_blank">{{ item.name }}</a>
+                                            {% if item.wishlist_id is not empty %}
+                                            (for wishlist)
+                                            {% endif %}
+                                        </div>
+                                        {# End wishlist #}                        
+                                        {# Begin item price #}
+                                        <div class="col-md-12 col-lg-3">
+                                            Price: ${{ item.price }}
+                                        </div>
+                                        {# End item price #}
+                                        {# Being item quantity #}
+                                        <div class="col-md-12 col-lg-2">                            
+                                            Qty: {{ item.quantity }}
+                                        </div>
+                                        {# End item quantity #}                        
+                                        {# Begin tracking number #}
+                                        <div class="col-md-12 col-lg-3">
+                                            {% if item.tracking_number is not empty %}
+                                            Tracking number: 
+                                            <a href="http://www.google.com/search?q={{ item.tracking_number }}">
+                                                {{ item.tracking_number }}
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                        {# End tracking number #}
+                                        {# Begin registry #}
+                                        {% if item.registry_id is not empty %}
+                                        <div class="col-md-12 col-lg-12">                            
+                                            (for registry)                       
+                                        </div>
+                                        {% endif %}
+                                        {# End registry #}
+                                    </div>
+                                </div>
+                                {# End product details #}
+                            </div>
+                            <hr>
+                        </div>
+                        {# End order items #}
+                        {% endfor %}                
+                        <div class="row">
+                            {# Begin billing address #}
+                            <div class="col-sm-6 col-md-4 col-lg-4">
+                                <div class="billing-address">
+                                    <div><strong>Billing Address</strong></div>
+                                    {% if order.transaction_type == 'PayPal' %}
+                                    <address>
+                                        <div>{{ order.billing_first_name}} {{ order.billing_last_name}}</div>
+                                        <div>{{ order.billing_street_line1}}</div>
+                                        <div>{% if order.billing_street_line2 is not empty %}
+                                        {{ order.billing_street_line2}}
+                                        {% endif %}
+                                        </div>
+                                        <div>{{ order.billing_city}}, {{ order.billing_state}} {{ order.billing_zip}}</div>
+                                    </address>
+                                    {% else %}
+                                    Express order
+                                    {% endif %}
+                                </div>
+                                <div class="billing-method">
+                                    <div><strong>Billing Method</strong></div>                        
+                                    {% if order.transaction_type == 'PayPal Express' %} {# Express order #}
+                                    <div>
+                                        PayPal Express
+                                    </div>
+                                    {% else %}
+                                    <div>
+                                        {{ order.card_type|capitalize }} x-{{ order.card_last4 }} Credit Card
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {# End billing address #}
+                            {# Begin order totals #}
+                            <div class="col-sm-6 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+                                <div class="order-totals">
+                                    <div class="shipping">
+                                        <div class="row">
+                                            <div class="col-md-6">Shipping:</div>
+                                            <div class="col-md-6">${{order.shipping_rate}}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">Subtotal:</div>
+                                            <div class="col-md-6">${{bill}}</div>
+                                        </div>
+                                    </div>
+                                    {# Begin coupons #}
+                                    <div class="coupon">
+                                        <div class="row">
+                                        {% set coupons = api.get('/ordercoupon', {query:{order_id:order.id}}) %}
+                                        {% if coupons is not empty %}
+                                            {% for coupon in coupons %}
+                                            <div class="col-md-6">Coupon Discount ({{ coupon.code }})</div><div class="col-md-6 discount-line-through">${{ coupon.discount }}</div>
+                                            {% endfor %}
+                                        {% endif %}
+                                        </div>
+                                    </div>
+                                    {# End coupons #}
+                                    <div class="sales-tax">
+                                        <div class="row">
+                                            <div class="col-md-6">Sales Tax:</div>
+                                            <div class="col-md-6">${{order.tax}}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">Total:</div>
+                                            <div class="col-md-6">${{order.total}}</div>
+                                        </div>
+                                    </div>
+                                </div>                    
+                            </div>
+                            {# End order totals #}
+                        {% endif %}            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {# Begin returns #}
+            {% set returns = api.get('/orderreturn', {query:{order_id:order.id}}) %}
+            {% if returns is not empty %}
+            <div class="returns">        
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <header>
+                                <h4>Returns</h4>
+                            </header>
+                        </div>
+                    </div>
+                    {% for return in returns %}
+                    {% set item = api.get('/orderitem/' ~ return.item_id) %}
+                    <div class="item">
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-2">
+                                <div>RMA: {{ return.rma }}</div>
+                            </div>
+                            <div class="col-sm-4 col-md-5 col-lg-6">
+                                <div>{{ item.name }}</div>
+                            </div>
+                            <div class="col-sm-1 col-md-1 col-lg-1">
+                                <div>QTY: {{ return.quantity }}</div>
+                            </div>
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <div>Status: {{ return.status }}</div>
+                            </div>
+                            {% if return.status =='pending' %}
+                            {# Begin actions #}
+                            <div class="col-sm-2 col-md-1 col-lg-1">
+                                <div class="actions">
+                                    {{ form.begin('cancel-return',app.request.path) }}
+                                        <input type="submit" name="cancel" value="Cancel" class="btn btn-danger btn-sm btn-block" />
+                                        <input type="hidden" name="id" value="{{item.id}}">
+                                        <input type="hidden" name="return" value="{{return.id}}">
+                                    {{ form.end() }}
+                                </div>
+                            </div>
+                            {# End actions #}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+            </div>
+            {% endif %}
+            {# End returns #}
+                                {# Begin Button Group
+                    <div class="row">
+                        <div class="col-sm-12 clearfix">
+                            <ul class="pager">
+                                <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+                                </li>
+                            {% if global_available > 0 %}
+                            {{ forms.submit('createreturn[action]','submit','Create',{class:'btn btn-primary'}) }}
+                            {% else %}
+                                <li class="next pull-left"><a href="javascript:history.go(-1)">&larr; Back to Order Status</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    End Button Group#}
+        </div>
+    </div>    
+</div>

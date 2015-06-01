@@ -1,0 +1,36 @@
+{% if not app.user.isLoggedIn() %}
+    {% do app.redirect('/account/login/'~app.request.url) %}
+{% endif %}
+
+{# Route logic, requires a url like /<id>/<action> #}
+{% set id     = app.request.path|split('/')|first|integer %}
+{% set action = app.request.path|split('/')|last %}
+
+{% if id is empty %}
+    {% do app.redirect('/account') %}
+{% endif %}
+
+{% set notification = api.get('/customernotification/' ~ id) %}
+{% if notification.customer_id != app.user.id %}
+    {% do app.redirect('/account/notifications') %}
+{% endif %}
+
+{% if app.request.post.action == 'delete' %}
+    {% set result = api.delete('/customernotification/' ~ id) %}
+    {% if result %}
+        {% do app.user.setFlash('Notification deleted successfully.') %}
+    {% else %}
+        {% do app.user.setFlash('Error deleting notification.', 'danger') %}
+    {% endif %}
+    {% do app.redirect('/account/notifications') %}
+{% elseif app.request.post.action == 'unread' %}
+    {% set result = api.put('/customernotification/' ~ id, {'date_viewed':''}) %}
+    {% if result %}
+        {% do app.user.setFlash('Notification marked as unread successfully.') %}
+    {% else %}
+        {% do app.user.setFlash('Error marking notification as unread.', 'danger') %}
+    {% endif %}
+    {% do app.redirect('/account/notifications') %}
+{% endif %}
+
+{% include '/account/notification/_partials/view.html.twig' %}

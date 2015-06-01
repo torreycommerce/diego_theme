@@ -1,0 +1,172 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/base.html.twig" as base %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% import "/account/_macros/base.html.twig" as account %}
+
+{# Redirect to the login page if user is not logged in. #}
+{% do account.login() %}
+
+{# Set the page_name - used for the page title, heading, tab selection, and breadcrumb in this page. #}
+{% set page_name = 'returns' %}
+{% set limit = app.request.get.limit|default(6) %}
+
+{# Set the html head title #}
+{% block title %}Account - {{page_name|title}}{% endblock %}
+
+{# Load in the breadcrumbs positioned in /_layouts/main/base.html.twig #}
+{% block breadcrumb %}
+    {#
+        Passed into the macro is a array of key:value pairs as (title):(relative url)
+            - The last link should not have a url, as it will be used as a 'you are here'
+    #}
+    {{ base.breadcrumbs({'Account':'/account',(page_name|title):''}) }}
+{% endblock %}
+
+{% block content %}
+<div class="container main-container">
+    <div class="row">
+    {# Begin header #}
+        <div class="col-sm-12 col-md-9 col-lg-10">
+            <h1 class="section-title-inner"><span><i class="fa fa-undo"></i> 
+                Your Returns</span>
+            </h1><hr/>
+            <div class="row userInfo hidden-xs">
+                <div class="col-xs-12 col-sm-12">
+                    {# Begin navigation #}
+                    <div class="navigation">
+                            {{account.navigation('returns')}}
+                    </div>
+                    {# End navigation #}
+                    <div class="clear clearfix"></div><hr/>
+                </div>
+            </div>
+        </div>
+    {# End header #}
+    </div> <!-- /Row -->
+    <div class="row">
+        {# Begin return filter #}
+        <div class="w100 clearfix">
+            <div class="col-sm-12 col-md-9 col-lg-10 no-padding-left  clearfix">
+                <div class="col-sm-4 col-md-4 col-lg-3 no-padding-right">
+                    <div class="return-filter">
+                        {{ forms.begin('returnsearch', app.url ~ '/account/returns', 'get') }}
+                        {{ forms.select('daterange', app.request.get.daterange|e, {'-6 months':'6 months ago', '-3 months' : '3 months ago', '-1 month' : '1 month ago', '-1 week' : '1 week ago', '-1 day' : '1 day ago', '' : 'All returns'}, {'class':'form-control input-sm'}) }}
+                    </div>
+                </div>
+                {# End return filter #}
+                {# Begin return search #}
+            <div class="search-within no-padding-right col-sm-6 col-sm-offset-2 col-md-4 col-md-offset-4 col-lg-3 col-lg-offset-6">
+                    <div class="search-within">
+                        <div class="input-group">
+                            <input type="text" id="searchlist" name="q" value="{{app.request.get.q|e}}" class="form-control input-sm" placeholder="Search" />
+                            <span class="input-group-btn"><button type="submit" class="btn btn-thin"><i class="fa fa-search"></i></button></span>
+                        </div>
+                    </div>
+                </div>
+                {# End return search #}
+                {{ forms.end() }}
+            </div>
+        </div>
+    </div>
+    {# Begin pagination #}
+    {% set query = {} %}
+    {% if app.request.get.returnsearch.daterange != '' %}
+        {% set query = {date_created:{'$gte':strtotime(app.request.get.daterange)|date('Y-m-d')}} %}
+    {% endif %}
+    {% set returns = api.get('/orderreturn', {query:{customer_id:app.user.id} + query,search:app.request.get.q,sort:'id:-1',limit:limit,page:app.request.get.page}) %}
+    <div class="row">
+        <div class="col-md-12">
+                {{ base.pagination(returns.num_total,limit) }}
+        </div>
+    </div>
+    {# End pagination #}
+    {% if returns is empty %}
+    There are no returns.
+    {% endif %}
+    {% for return in returns %}
+    {# Begin return #}
+    <div class="return">
+        <div class="well">
+            <div class="row">
+                {# Begin return details #}
+                <div class="return-details col-sm-4 col-md-4 col-lg-3">
+                    <div class="return-info">
+                        <div><strong>Return Information</strong></div>
+                        <div class="return-rma">RMA # {{ return.rma }}</div>
+                        <div class="return-date">Created on: {{ return.date_created }}</div>
+                        <div class="return-status">Status: {{ return.status }}</div>
+                    </div>
+                    {# Begin actions #}
+                    <div class="actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% if return.status == 'pending' %}
+                                {# FIXME: This should be a post request and a modal #}
+                                    <a class="btn btn-neutral btn-mobile" data-toggle="modal" data-target="#cancel-modal">Cancel return</a>
+                                    <div class="modal fade" id="cancel-modal" tabindex="-1" role="dialog" aria-labelledby="cancel-modal-label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    <h4 class="modal-title" id="cancel-modal-label">Cancel Return</h4>
+                                                </div>
+                                                <div class="modal-body">Are you sure you want to cancel this return?</div>
+                                                <div class="modal-footer">
+                                                    {{ forms.begin('return',app.url ~ '/return/actions','post') }}
+                                                    <a class="btn btn-default" data-dismiss="modal">Back</a>
+                                                    {{ forms.submit('action','cancel','Cancel', {class:'btn btn-danger'}) }}
+                                                    {{ forms.hidden('id',return.id) }}
+                                                    {{ forms.end() }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {# End return details #}
+                {# Begin return items #}
+                <div class="return-items col-sm-8 col-md-8 col-lg-9">
+                    {% set item = api.get('/orderitem/' ~ return.item_id) %}
+                    {% set product = api.get('/variant/' ~ item.product_id) %}
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4 col-md-3">
+                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="img-thumbnail" src='{{ product.thumbnail }}'>
+                        </div>
+                        <div class="col-xs-8 col-sm-8 col-md-9">
+                            <a href="{{ app.url ~ product.url }}">{{ item.name }}</a>
+                        </div>
+                    </div>
+                </div>
+                {# End return item #}
+            </div>
+        </div>
+    </div>
+    {# End order #}
+    {% endfor %}
+    {# Begin pagination #}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            {{ base.pagination(returns.num_total,limit) }}
+        </div>
+    </div>
+    {# End pagination #}
+    {# Begin Button Group#}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            <ul class="pager">
+                <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+                </li>
+                <li class="next pull-left"><a href="{{app.url}}/account/">&larr; Back to My Account</a></li>
+            </ul>
+        </div>
+    {# End Button Group#}
+    </div>
+</div>
+{# End returns #}
+{% endblock %}
+{% block js %}
+{{ app.asset.js(app.url_asset ~ '/js/returns.js') }}
+{% endblock %}

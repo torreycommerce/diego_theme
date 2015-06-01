@@ -1,0 +1,360 @@
+
+{% macro begin(name,action='',method='post',attributes=[]) %}
+{% spaceless %}
+    {% set error = attributes.error|default(api.error) %}
+    {% set data =  app.request.post[name]|default(attributes.data) %}
+    {% do app.form.set(name, action, method, attributes, data, error) %}
+
+    {% set defined_attributes = ['name','action','method','class','enctype','data','error'] %}
+    <form name="{{name|e}}" novalidate parsley-validate action="{{action|e}}" method="{{method|upper}}" class="form-horizontal {{attributes.class|e}}" {% if method == 'post' %}enctype="multipart/form-data" {% endif %}{% for key,value in attributes if key not in defined_attributes %} {{key}}="{{value|e}}"{% endfor %}>
+    {% if method == 'post'%}
+        <input type="hidden" name="request_token" value="{{ app.request.token() }}">
+    {% endif %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro input(type, name, value='', attributes=[]) %}
+{% spaceless %}
+    {# {{ element.input('text','user_name','my_value',{'class':'test'}) }} #}
+
+    {% import _self as elements %}
+    {% set field = app.form.getField(type,name,value,attributes) %}
+
+    {% if attributes.input_only != true %}
+    <div class="form-group{% if field.error %} has-error{% endif %}">
+        <label for="{{field.id}}" class="col-lg-4 control-label">{{field.label}}&nbsp;{% if field.required %}<span class="text-danger">*</span>{% endif %}</label>
+
+        <div class="col-lg-8">
+    {% endif %}
+            {% if attributes.before or attributes.after %}
+            <div class="input-group">
+            {% endif %}
+            {% if attributes.before %}
+            <span class="input-group-addon">{{ field.before }}</span>
+            {% endif%}
+            <input type="{{ field.type }}" id="{{ field.id }}" name="{{ field.name }}" value="{{ field.value }}" class="form-control {{ field.class }}" {{ field.attributes }} />
+            {% if attributes.after %}
+            <span class="input-group-addon">{{ field.after }}</span>
+            {% endif%}
+            {% if attributes.before or attributes.after %}
+            </div>
+            {% endif %}
+    {% if attributes.input_only != true %}
+        </div>
+    {% endif %}
+
+        {{ elements.field_extras(field) }}
+    {% if attributes.input_only != true %}
+    </div>
+    {% endif %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro textarea(name, value='', attributes=[]) %}
+{% spaceless %}
+    {# {{ element.textarea('textarea','my default value',{'title':'A Textarea','placeholder':'My Placeholder'}) }} #}
+
+    {% set field = app.form.getField('textarea',name,value,attributes) %}
+
+    <div class="form-group{% if field.error %} has-error{% endif %}">
+        <label for="{{ field.id }}" class="col-md-4 control-label">{{field.label}} {% if field.required %}<span class="text-danger">*</span>{% endif %}</label>
+        <div class="col-md-8">
+            <textarea id="{{ field.id }}" name="{{ field.name }}" class="form-control {{ field.class }}" {{ field.attributes }}>{{ field.value }}</textarea>
+        </div>
+        {{ elements.field_extras(field) }}
+    </div>
+{% endspaceless %}
+{% endmacro %}
+
+{% macro select(name, value='', selection=[], attributes=[]) %}
+{% spaceless %}
+    {# {{ element.select('test_select','default',{'test':'This is a test','default':'This is my default'}) }} #}
+
+    {% set field = app.form.getField('select',name,value,attributes) %}
+    
+    {% if attributes.input_only != true %}
+    <div class="form-group{% if field.error %} has-error{% endif %}">
+        <label for="{{ field.id }}" class="col-md-4 control-label">{{ field.label}} {% if field.required %}<span class="text-danger">*</span>{% endif %}</label>
+        <div class="col-md-8">
+    {% endif %}
+            <select id="{{ field.id }}" name="{{ field.name }}" class="form-control {{ field.class }}" {{ field.attributes }}>
+                {% for key,item in selection %}
+                    <option value="{{key|e}}"{% if key == field.value %} selected="selected"{% endif %}>{{item}}</option>
+                {% endfor %}
+            </select>
+    {% if attributes.input_only != true %}
+        </div>
+    {% endif %}
+        {{ elements.field_extras(field) }}
+    {% if attributes.input_only != true %}
+    </div>
+    {% endif %}
+
+{% endspaceless %}
+{% endmacro %}
+
+{% macro multiselect(name, value='', selection=[], attributes=[]) %}
+{% spaceless %}
+    {# {{ element.multiselect('test_multiselect', ['default','test'], {'test':'This is a test','default':'This is my default'}) }} #}
+
+    {% set field = app.form.getField('select',name,value,attributes) %}
+
+    <div class="form-group{% if field.error %} has-error{% endif %}">
+        <label for="{{ field.id }}" class="col-md-4 control-label">{{ field.label }} {% if field.required %}<span class="text-danger">*</span>{% endif %}</label>
+        <div class="col-md-8">
+            <select multiple id="{{ field.id }}" name="{{ field.name }}" class="form-control {{ field.class }}" {{ field.attributes }}>
+            {% for key,item in selection %}
+                <option value="{{key|e}}"{% if key in field.value %} selected="selected"{% endif %}>{{ item }}</option>
+            {% endfor %}
+            </select>
+        </div>
+        {{ elements.field_extras(field) }}
+    </div>
+
+{% endspaceless %}
+{% endmacro %}
+
+{% macro radio(name, value='', selection=[], attributes=[]) %}
+{% spaceless %}
+    {# {{ element.radio('radio','john',{'john':'This is john','bob':'This is bob'}) }} #}
+
+    {% set field = app.form.getField('radio',name,value,attributes) %}
+
+    <div class="form-group{% if field.error %} has-error{% endif %}">
+        {% for key,item in selection %}
+        {% set elm_counter = elm_counter + 1 %}
+
+        <div class="col-md-offset-4 col-md-8">
+            <div class="radio">
+                <label class="control-label">
+                    <input type="radio" id="{{ field.id }}" name="{{ field.name }}[]" value="{{ key|e }}" class="{{ field.class }}" {% if key in value %} checked="checked"{% endif %}/>
+                    {{ item }}</label>
+            </div>
+        </div>
+        {% endfor %}
+        {{ elements.field_extras(field) }}
+    </div>
+{% endspaceless %}
+{% endmacro %}
+
+{% macro checkbox(name,value=false, attributes=[]) %}
+{% spaceless %}
+    {# { element.checkbox('test_checkbox')}} #}
+
+    {% set field = app.form.getField('checkbox',name,value,attributes) %}
+
+    <div class="form-group{% if field.error %} has-error{% endif %}">
+        <div class="col-md-offset-4 col-md-8">
+            <div class="checkbox">
+                <label class="control-label">
+                    <input type="hidden" name="{{ field.name }}" value="" />
+                    <input type="checkbox" name="{{ field.name }}" value="{{ field.attributes.value|default('1')|e }}" class="{{ field.class }}" {% if field.value %} checked="checked"{% endif %}/>
+                    {{ field.label }}</label>
+            </div>
+        </div>
+        {{ elements.field_extras(field) }}
+    </div>
+{% endspaceless %}
+{% endmacro %}
+
+{% macro checkboxes(name,value='', selection=[], attributes=[]) %}
+{% spaceless %}
+    {# {{ element.radio('radio','john',{'john':'This is john','bob':'This is bob'}) }} #}
+
+    {% set field = app.form.getField('checkbox',name,value,attributes) %}
+
+    <div class="form-group{% if field.error %} has-error{% endif %}">
+        {% for key,item in selection %}
+        {% set elm_counter = elm_counter + 1 %}
+
+        <div class="col-md-offset-4 col-md-8">
+            <div class="checkbox">
+                <label class="control-label">
+                    <input type="checkbox" id="{{ field.id }}" name="{{ field.name }}[]" value="{{ key|e }}" class="{{ field.class }}" {% if key in field.value %} checked="checked"{% endif %}/>
+                    {{ item }}</label>
+            </div>
+        </div>
+        {% endfor %}
+        {{ elements.field_extras(field) }}
+    </div>
+{% endspaceless %}
+{% endmacro %}
+
+{% macro hidden(name, value='', attributes=[]) %}
+{% spaceless %}
+    {# {{ element.input('text','user_name','my_value',{'class':'test'}) }} #}
+    {% set field = app.form.getField('hidden',name,value,attributes) %}
+
+    <input type="hidden" name="{{ field.name }}" value="{{ field.value }}" {{ field.attributes }} />
+{% endspaceless %}
+{% endmacro %}
+
+
+{% macro submit(name, value='', attributes=[]) %}
+{% spaceless %}
+    {# {{ element.submit('submit me'}) }} #}
+
+    {% import _self as elements %}
+    {% set field = app.form.getField('button',name,value,attributes) %}
+
+    {{ elements.errors() }}
+    <div class="form-group">
+        <div class="col-md-offset-4 col-md-8">
+            <button type="submit" id="{{ field.id }}" name="{{ field.name }}" value="{{ field.value }}" class="btn btn-default {{field.class}}" {{field.attributes}} >{{ field.label }}</button>
+        </div>
+        {{ elements.field_extras(field) }}
+    </div>
+{% endspaceless %}
+{% endmacro %}
+
+{% macro errors() %}
+{% spaceless %}
+    {# print out all errors that were not assigned to a form field #}
+    {% set errors = app.form.error %}
+    {% if errors|length %}
+        <div class="col-md-offset-4 col-md-8 alert alert-danger">
+            {% for error in errors %}
+                {{error|join('<br />')}}<br />
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro field_extras(field) %}
+{% spaceless %}
+    {% if field.error %}
+    <div class="col-md-offset-4 col-md-8">
+        <span class="text-danger">{{field.error}}</span>
+    </div>
+    {% endif %}
+
+    {% if field.help %}
+    <div class="col-md-offset-4 col-md-8">
+        <p class="help-block">{{field.help}}</p>
+    </div>
+    {% endif %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro text(name, value='', attributes=[]) %}
+    {# {{ element.text('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('text', name, value, attributes) }}
+{% endmacro %}
+
+{% macro document(name, value='', attributes=[]) %}
+    {% import _self as elements %}
+    {{ elements.textarea(name, value, attributes) }}
+{% endmacro %}
+
+{% macro number(name, value='', attributes=[]) %}
+    {# {{ element.number('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('number', name, value, attributes) }}
+{% endmacro %}
+
+{% macro money(name, value='', attributes=[]) %}
+    {# {{ element.number('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('number', name, value|number_format(2,'.',','), attributes + {'min':0, 'step':0.01}) }}
+{% endmacro %}
+
+{% macro date(name, value='', attributes=[]) %}
+    {# {{ element.date('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('text', name, value, attributes + {'datepicker':true}) }}
+{% endmacro %}
+
+{% macro time(name, value='', attributes=[]) %}
+    {# {{ element.datetime('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('time', name, value, attributes) }}
+{% endmacro %}
+
+{% macro datetime(name, value='', attributes=[]) %}
+    {# {{ element.date('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('datetime', name, value, attributes + {'datepicker':true, 'data-format':'MM/dd/yyyy HH:mm:ss PP'}) }}
+{% endmacro %}
+
+{% macro email(name, value='', attributes=[]) %}
+    {# {{ element.email('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('email', name, value, attributes) }}
+{% endmacro %}
+
+{% macro password(name, value='', attributes=[]) %}
+    {# {{ element.password('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {% set value = null %}
+    {% set attributes = attributes|merge({'autocomplete':'off'}) %}
+    {{ elements.input('password',name, value, attributes) }}
+{% endmacro %}
+
+{% macro phone(name, value='', attributes=[]) %}
+    {# {{ element.phonenumber('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('tel', name, value, attributes) }}
+{% endmacro %}
+
+{% macro phonenumber(name, value='', attributes=[]) %}
+    {# {{ element.phonenumber('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('tel', name, value, attributes) }}
+{% endmacro %}
+
+{% macro state(name, value='', attributes=[]) %}
+    {# {{ element.state('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('text', name, value, attributes) }}
+{% endmacro %}
+
+{% macro zipcode(name, value='', attributes=[]) %}
+    {# {{ element.zipcode('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('text', name, value, attributes) }}
+{% endmacro %}
+
+{% macro url(name, value='', attributes=[]) %}
+    {# {{ element.url('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('url', name, value, attributes) }}
+{% endmacro %}
+
+{% macro country(name, value='', attributes=[]) %}
+    {# {{ element.country('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('text', name, value, attributes) }}
+{% endmacro %}
+        
+{% macro file(name, value='', attributes=[]) %}
+    {# {{ element.file('field_name','default_value',{'placeholder':'Name','class':'some-style'}) }} #}
+    {% import _self as elements %}
+    {{ elements.input('file', name, value, attributes) }}
+{% endmacro %}
+
+{% macro rating(name,score,glyph = 'glyphicon-star',attributes=[]) %}
+    {% import _self as elements %}
+    {% set field = app.form.getField('hidden',name,score,attributes) %}    
+    {% set score = field.value %}
+    {% set num_active = (score*5)|round %}  
+    <div id="{{id}}" class="star-rating star-rating-input">
+        {{ elements.hidden(name,score) }}
+        <div class="star-rating-stars">
+            {% for stars in 0..4 %}
+                {% if loop.index <= num_active %}
+                    {% set class = 'active-choosing'%}
+                {% else %} 
+                    {% set class = 'disabled-choosing'%}
+                {% endif %}            
+                <span id="rating-star-{{ loop.index }}" class="star-rating-star glyphicon {{glyph}} {{ class }}"></span>
+            {% endfor %}
+        </div>            
+    </div>
+{% endmacro %}
+
+
+{% macro end() %}
+    </form>
+{% endmacro %}

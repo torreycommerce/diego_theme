@@ -1,0 +1,33 @@
+{
+    "rules": [
+        {
+            "email,confirm_email": "required"
+        },
+        {
+            "email": "length",
+            "max": 100
+        },
+        {
+            "email": "email"
+        },
+        {
+            "confirm_email": "required",
+            "message": "Email confirmation cannot be blank."
+        },
+        {
+            "confirm_email": "compare",
+            "compareAttribute": "email",
+            "message": "Email Address must be repeated exactly."
+        },
+        {
+            "password": "length",
+            "max": 255,
+            "min": 6
+        },
+        {
+            "confirm_password": "compare",
+            "compareAttribute": "password",
+            "message": "Password must be repeated exactly."
+        }
+    ]
+}

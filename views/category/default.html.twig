@@ -1,0 +1,40 @@
+{% extends "/_layouts/theme.html.twig" %}
+
+{% set category = api.get('/category',{"query":{"status":"active","slug":app.request.path}})|first %}
+{% if category is empty %}
+    {% do app.user.setFlash('Sorry, the category you requested is unavailable.','danger') %}
+    {% do app.redirect('/') %}
+{% endif %}
+
+{% set categories = api.get('/category/' ~ category.id ~ '/children') %}
+
+{% if category.query is not empty and category.selection == 'automatic' %}
+    {% set default_query = category.query %}
+{% endif %}
+
+{% set default_query = default_query is not defined ? {"status":"active","category_id":category.id}: default_query %}
+
+{% set title = 'Browse' %}
+
+{% block breadcrumb %}
+    {% set categories = app.request.path|split('/') %}
+    {% set category_crumbs = [] %}
+    {% for category in categories %}
+        {% set category_link = category_link ~ '/' ~ category %}
+        {% set category_title = category|replace('-',' ')|title %}
+        {% set category_crumbs = category_crumbs|merge({(category_title):('/category' ~ category_link)})%}
+    {% endfor %}
+    {{ base.breadcrumbs(category_crumbs) }}
+{% endblock %}
+
+{% block content %}
+{% include "/category/_partials/base.html.twig" %}
+{% endblock %}
+
+{% block title %}{{ (category.name|default(title))|default(seo_title) }}{% endblock %}
+{% block meta_keywords %}{{ category.keywords|join(',')|default(seo_keywords) }}{% endblock %}
+{% set image = app.url ~ '/../../..' ~ category.thumbnail|default(app.url ~ '/../../..' ~ category.thumbnail) %}
+{% set meta_description = category.meta_description|default(category.meta_description) %}
+{% block meta_description %}{{ meta_description|default(seo_description) }}{% endblock %}
+{% block image %}{{ image|default(seo_image) }}{% endblock %}
+{% block meta_type %}{{ "website" }}{% endblock %}

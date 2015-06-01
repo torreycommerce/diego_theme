@@ -1,0 +1,65 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/account/_macros/base.html.twig" as account %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+
+{% do account.login() %}
+
+{% block title %}Account - Edit Registry{% endblock %} 
+
+{% block breadcrumb %}
+{{ base.breadcrumbs({'Account':'/account','Registries':'/account/registries','Edit Registry':''}) }}
+{% endblock %}
+
+{% block content %}
+{% if app.request.post.registry is not empty %}
+    {% set registrydata = app.request.post.registry %}
+    {# We're deleting this registry #}
+    {% if registrydata.action|split('/')|first == 'delete' %}
+        {% set result = api.delete('/registry/' ~ registry.id) %} 
+        {% if result %}
+            {% do app.user.setFlash('Registry deleted successfully') %}
+            {% do app.redirect('/account/registries') %}
+        {% else %}
+            {% do app.user.setFlash('Registry could not be deleted', 'danger') %}
+        {% endif %}
+    {% else %}
+        {# Make registry the default if the default checkbox is checked #}
+        {% if registrydata.make_default %}
+            {% do api.post('/registry/' ~ registry.id ~ '/makeDefault') %}
+        {% endif %}
+        {% set result = api.put('/registry/' ~ registry.id, registrydata) %}
+        {% if result %}
+            {% do app.user.setFlash('Registry edited successfully') %}
+            {% do app.redirect('/account/registries') %}
+        {% else %}
+            {% set form_errors = api.error() %}
+            {% set registry = app.request.post.registry %}
+        {% endif %}
+    {% endif %}
+{% endif %}
+{% set addresses = api.get('/customeraddress', {query:{deleted:{'$ne':1},verified:1,customer_id:app.user.id}}) %}
+<div class="container main-container">
+    <div id="registry-edit">
+        <div class="row">
+            {# Begin content #}    
+            <div class="col-lg-9 col-md-9 col-sm-7">
+                <header>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="section-title-inner"><span><i class="fa fa-edit"></i> 
+                            Edit {{ registry.name }}</span></h1>
+                            <hr/>
+                        </div>
+                    </div>
+                </header>
+                <div class="row">
+                    <div class="col-md-12">
+                        {% include '/account/registry/_partials/form.html.twig' %}
+                    </div>
+                </div>
+            </div>    
+            {# End content #}
+        </div>
+    </div>
+</div>{# End Main #}
+{% endblock %}

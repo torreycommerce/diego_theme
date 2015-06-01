@@ -1,0 +1,53 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/account/_macros/base.html.twig" as account %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+
+{% do account.login() %}
+
+{% block title %}Account - Registry{% endblock %} 
+
+{% block breadcrumb %}
+    {{ base.breadcrumbs({'Account':'/account','Registries':'/account/registries','Registry':''}) }}
+{% endblock %}
+
+{% block content %}
+<div class="container main-container">
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10">
+            <h1 class="section-title-inner"><span><i class="fa fa-edit"></i> 
+                View Registry of {{ registry.name }}</span>
+                </h1><hr/>
+                {# Begin navigation #}
+                <div class="row userInfo hidden-xs">
+                    <div class="col-xs-12 col-sm-12">
+                        {# Begin navigation #}
+                        <div class="navigation">
+                        {{account.navigation('registries')}}
+                        </div>
+                        {# End navigation #}
+                        <div class="clear clearfix"></div><hr/>
+                    </div>
+                </div>
+        {# End navigation #}
+        </div>
+    </div>
+    {# Begin content #}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            {% include '/registry/_partials/list.html.twig' %}
+        </div>
+    </div>
+    {# Begin bottom actions #}
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+            <ul class="pager">
+                <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+                </li>
+                <li class="next pull-left"><a href="{{app.url}}/account/">&larr; Back to My Account</a></li>
+            </ul>
+        </div>
+    </div> <!-- /Row -->
+    {# End bottom actions #}
+<div class="gap"></div>
+</div>
+{% endblock %}

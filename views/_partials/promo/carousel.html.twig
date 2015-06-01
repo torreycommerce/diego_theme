@@ -1,0 +1,47 @@
+
+	{# Begin Parallax #}
+	<div class="banner">
+    <div class="full-container">
+        <div class="slider-content">
+            <ul id="pager2" class="container">
+            </ul>
+            {#prev/next links#}
+            {% set widget = api.get('widget/render', {'slug' : 'default-carousel'}) %}
+            {% if widget is not empty and app.params.carousel is not empty %}
+                {{ widget }}
+            {% elseif app.params.carousel is not empty %}
+	            <span class="prevControl sliderControl"> <i class="fa fa-angle-left fa-3x "></i></span> <span
+	                class="nextControl sliderControl"> <i class="fa fa-angle-right fa-3x "></i></span>
+
+	            <div class="slider slider-v1"
+	                 data-cycle-swipe=true
+	                 data-cycle-prev=".prevControl"
+	                 data-cycle-next=".nextControl" data-cycle-loader="wait">
+	                {% for slide in app.params.carousel %}
+	                	{% set slide_img = app.image.getImageUrl('carousel','original',slide.id) %}
+		                <div class="slider-item slider-item-img">
+ 						<div class="sliderInfo">
+	                        <div class="container">
+	                            <div class="col-lg-5 col-md-4 col-sm-6 col-xs-8   pull-left  sliderTextFull hidden-xs">
+	                                <div class="inner dark maxwidth500 text-center animated topAnima">
+	                                    <div class=" ">
+	                                        <h1 class="uppercase xlarge"> {{ slide.name }}</h1>
+	                                    </div>
+	                                    <a class="btn btn-danger btn-lg uppercase" href="{{ slide.link }}">SHOP NOW ON {% block title %}{{ app.params.site.title }}{% endblock %} <span
+	                                            class="arrowUnicode">►</span></a></div>
+	                            </div>
+	                        </div>
+	                    </div>
+		                	<img src="{{ slide_img }}" alt="{{ slide.alt }}"
+							class="img-responsive parallaximg sliderImg">
+		                </div>
+		             {% endfor %}
+            {% endif %}
+            {#slider#}
+        </div>
+        {#slider-content#}
+    </div>
+    {#full-container#}
+</div>
+{# End Parallax #}
+</div>

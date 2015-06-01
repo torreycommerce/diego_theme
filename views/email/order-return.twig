@@ -1,0 +1,30 @@
+{# Variables passed in: order_id, return_id #}
+{% set return = api.get('/orderreturn/' ~ return_id) %}
+{% set item = api.get('/orderitem/' ~ return.item_id) %}
+
+{{ app.params['site']['title'] }}
+
+You have successfully created a return and a copy of the return instructions below have been emailed to you. In order for us to process your return, your items must meet the following criteria:
+
+- Items must be unused and returned with the original product tags.
+- Items must be returned in their original, undamaged packaging.
+- Please do not place shipping labels on product packaging, only place shipping labels on the cardboard shipping box.
+
+What happens next: Print this page and cut on the dashed lines. Place the packing slip inside the box with the items you are returning. Affix the returns address label to the outside of your shipping box. Reprint as necessary for each package. If you do not currently have access to a printer, you can write your Return # and return shipping address on the shipping box. Please ship your items to the specified fulfillment center address below.
+
+Your RMA number and other information for this return is:
+
+Item name: {{item.name}}
+Quantity: {{return.quantity}}
+RMA#: {{return.rma}}
+Reason: {{return.reason}}
+
+Please ship your returns to:
+
+Address: {{ app.params['return_address']['street_line1'] }} {{ app.params['return_address']['street_line2'] }}
+City: {{ app.params['return_address']['city'] }}
+State: {{ app.params['return_address']['state'] }}
+Zip: {{ app.params['return_address']['zip'] }}
+{% if app.params['information']['phone_number'] is defined %}
+    P: {{ app.params['information']['phone_number'] }}
+{% endif %}

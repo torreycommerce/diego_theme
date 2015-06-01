@@ -1,0 +1,21 @@
+{# Route logic, requires a url like /<id>/<action> #}
+{% set id     = app.request.path|split('/')|first|integer %}
+{% set action = app.request.path|split('/')|last %}
+
+{% if action|integer == id %}
+    {% set action = 'index' %}
+{% endif %}
+
+{% if id == 0 %}
+    {% if app.user.id is empty %}
+        {% do app.redirect('/account/login/registry') %}
+    {% endif %}
+    {% set registry = api.get('/registry',{query:{customer_id:app.user.id, default:true}})|first %} {# default registry #}
+{% else %}
+    {% set registry = api.get('/registry/' ~ id) %}
+{% endif %}
+
+{% if app.user.id == registry.customer_id and action == 'index' %}
+    {% do app.redirect('/account/registry/' ~ registry.id) %}
+{% endif %}
+{% include '/registry/_partials/' ~ action ~ '.html.twig' %}

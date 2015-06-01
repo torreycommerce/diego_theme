@@ -1,0 +1,306 @@
+{% set categories = api.get('/category/tree') %}
+{#
+<pre>
+{{ dump(categories) }}
+</pre>
+#}
+<!-- Navbar start -->
+<div class="navbar navbar-ashop navbar-fixed-top megamenu" role="navigation">
+    <div class="navbar-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+                    <div class="pull-left ">
+                        <ul class="userMenu ">
+                            <li> <a href="{{app.url}}/contact"><span class="hidden-xs">Contact</span><i
+                                    class="glyphicon glyphicon-map-marker hide visible-xs "></i> </a></li>
+                            <li class="phone-number"><a href="callto:{{ app.params.information['phone_number'] }}"> <span> <i
+                                    class="glyphicon glyphicon-phone-alt "></i></span> <span class="hidden-xs"
+                                    style="margin-left:5px">{{ app.params.information['phone_number'] }}</span>
+                            </a></li>
+                            <li>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 no-margin no-padding">
+                    <div class="pull-right">
+                        <ul class="userMenu">
+                            {% if app.user.id != '' %}
+                            <li>
+                                <a href="{{app.url}}/account/orders"><span class="hidden-xs hidden-sm">Order Status</span> 
+                                    <i class="glyphicon glyphicon-user hide hidden-xs "></i>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li>
+                                <a href="{{app.url}}/order"><span class="hidden-xs hidden-sm">Order Status</span> 
+                                    <i class="glyphicon glyphicon-user hide hidden-xs "></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% if app.user.id != '' %}
+                            <li>
+                                <a href="{{app.url}}/account/returns"><span class="hidden-xs hidden-sm">Easy Returns</span> 
+                                    <i class="glyphicon glyphicon-user hide hidden-xs "></i>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li>
+                                <a href="{{app.url}}/return"><span class="hidden-xs hidden-sm">Easy Returns</span> 
+                                    <i class="glyphicon glyphicon-user hide hidden-xs "></i>
+                                </a>
+                            </li>
+                            {% endif %}     
+                            <li>
+                                <a href="{{ app.url }}/account/registries"><span class="hidden-xs hidden-sm">Gift Registry</span> 
+                                    <i class="glyphicon glyphicon-user hide hidden-xs "></i>
+                                </a>
+                            </li>
+                            {% if app.user.id is null %}
+                            {#Begin login button#}
+                            <li>
+                                <a href="{{app.url}}/account/login"><span class="hidden-xs">Log in</span> <i
+                                    class="glyphicon glyphicon-log-in hide visible-xs "></i>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li>
+                                <a href="{{app.url}}/account/login"><span class="hidden-xs">Your account</span> <i
+                                    class="glyphicon glyphicon-user hide visible-xs "></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% if app.user.id is null %}
+                            {#Begin create account button#}
+                            <li>
+                                <a href="{{app.url}}/account/create"><span class="hidden-xs">Create Account</span><i
+                                    class="glyphicon glyphicon-user hide visible-xs "></i>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li>
+                                <a href="{{app.url}}/account/logout"><span class="hidden-xs">Logout</span>
+                                <i class="fa fa-sign-out hide visible-xs "></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                            {# End login button#} 
+                        </ul>
+                    </div>
+                </div>
+            </div><!--/.row-->
+        </div><!--/.container-->
+    </div><!--/.navbar-top-->
+    <div class="container">
+        <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only"> Toggle navigation </span> <span class="icon-bar"> </span> 
+                    <span class="icon-bar"> </span> <span class="icon-bar"> </span>
+                </button>
+                <div class="navbar-brand">
+                    {% if app.params.logoimages is not empty %}
+                        {% set logo_info = app.params.logoimages | first %}
+                        {% set logo = app.image.getImageUrl('logo','thumbnail',logo_info.id) %}
+                    {% endif %}
+                    {% if logo is not empty %}
+                        <a href="{{app.url}}/" style="background-image: url({{ logo }});background-position: 0 0; background-repeat: no-repeat; display: block; height:27px; width:125px; background-size: contain;"></a>
+                    {% else %}
+                        <div id="logo-txt"><a href="{{app.url}}/">{{ app.params.site.title }}</a></div>
+                    {% endif %}
+                 </div><!--/. Navbar-brand -->
+            <!-- for mobile part -->
+            <div class="search-box hidden-lg hidden-md hidden-sm">
+                <div class="input-group">
+                    <button class="btn btn-nobg getFullSearch" type="button"><i class="fa fa-search"> </i></button>
+                </div>
+                <!-- /input-group -->
+            </div>
+            <!-- duplicated from cartMenu for mobile -->
+            <div class="navbar-cart hidden-sm hidden-md hidden-lg pull-right">
+               <div class="dropdown cartMenu navbar-cart">
+                    <ul class="">
+                        <li class="cart"  data-content="" data-html="true" data-placement='bottom' rel='popover' data-viewport="#content">
+                            {# Begin ajax cart popover #}
+                            <div class="ajaxcart" style="display:none">
+                                {# Begin Popover products #}
+                                <section class="ajaxcart-products">
+                                    {# Begin product #}
+                                    <div class="ajaxcart-product productCart">
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <div class="thumbnail" style="margin: 5px;">
+                                                    <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="product-image" src="">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-5">
+                                                <div class="name">
+                                                    <span class="product-name"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="price" style="font-size: 12px;">$<span class="product-price" style="font-size:12px;"></span></div>
+                                                <div class="quantity" style="font-size: 12px;">Qty:<span class="product-quantity" style="font-size:12px;"></span></div>
+                                            </div>
+                                        </div>
+                                    </div><!--/.ajaxcart-product-->
+                                    {# Begin product #}
+                                </section><!--/.ajaxcart-products section-->
+                                {# End Popover products #}
+                                {# Begin popover cart totals #}
+                                <div class="row">
+                                    <div class="miniCartFooter text-right">
+                                        <div class="cart-totals">
+                                            <div class="total">Subtotal: $<span class="subtotal">0.00</span></div>
+                                        </div>
+                                        {# End popover cart totals #}                               
+                                            <a href="{{ app.url }}/cart" class="btn btn-sm btn-danger"> <i class="fa fa-shopping-cart"> </i> VIEW CART </a> 
+                                            <a href="{{ app.url }}/checkout"  class="btn btn-sm btn-primary"> CHECKOUT </a>
+                                    </div>
+                                <!--/.miniCartFooter-->
+                                </div><!--/.row-->
+                            </div>
+                            {# End ajax cart popover #}
+                            {# Begin cart button #}
+                            <div class="cartMenubtn">
+                                <a class="dropdown-toggle" style="background: none; padding: 15px 0 15px 0;" href="{{app.url}}/cart">
+                                    <div class="text class="dropdown-toggle""><i class="fa fa-shopping-cart"></i><span class="cartRespons"> ({{ api.get('/sessioncart').item_count }})</span><b class="caret"> </b></div>
+                                </a>
+                            </div>
+                            {# End cart button #}
+                        </li>
+                    </ul>
+                {# End cart section #}
+                </div><!--/.dropdown cartMenu-->
+            </div><!--/.navbar-cart-->
+        </div><!--/.navbar-header-->
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <!-- <li class="active"><a href="{{ app.url }}/"> Home </a></li> -->
+                {% for main_category,items in categories if main_category != "clearance" %}
+                    {% if items|length %}
+                    {# Begin dropdown #}
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown " href="{{app.url}}/category/{{main_category}}">{{main_category|replace('-',' ')|title}}
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul id="category_item" class="dropdown-menu">
+                            {% for category,subitems in items %}
+                            {% set i = i + 1 %}
+                            <li>
+                                <a tabindex="-1" href="{{app.url}}/category/{{category}}">{{category|replace('-',' ')|title}}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {# End dropdown #}
+                    {% else %}
+                    <li>
+                        <a href="{{app.url}}/category/{{main_category}}">{{main_category|replace('-',' ')|title}}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                <div style="clear: both"></div>
+                {% if app.user.id %}
+                <li class="dropdown hidden-sm hidden-md hidden-lg">
+                    <a href="{{ app.url }}/account/" id="acc_btn" class="dropdown-toggle"><i class="fa fa-user"></i> My Account</a>
+                    <ul id="account category_item">
+                        <li class="dropdown-acnt"><a href="{{ app.url }}/account/notifications"><i class="fa fa-bell"></i> Notifications</a></li>
+                        <li class="dropdown-acnt"><a href="{{ app.url }}/account/addresses"><i class="fa fa-truck"></i> Addresses</a></li>
+                        <li class="dropdown-acnt"><a href="{{ app.url }}/account/orders"><i class="fa fa-credit-card"></i> Orders</a></li>
+                        <li class="dropdown-acnt"><a href="{{ app.url }}/account/wishlists"><i class="fa fa-check-square-o"></i> Wishlists</a></li>
+                        <li class="dropdown-acnt"><a href="{{ app.url }}/account/registries"><i class="fa fa-book"></i> Registries</a></li>
+                        <li class="dropdown-acnt"><a href="{{ app.url }}/account/reviews"><i class="fa fa-comments"></i> Reviews</a></li>
+                        <li class="dropdown-acnt"><a href="{{ app.url }}/account/returns"><i class="fa fa-exchange"></i> Returns</a></li>
+                        <li class="dropdown-acnt"><a href="{{ app.url }}/account/account-settings"><i class="fa fa-cogs"></i> Settings</a></li>
+                        <li class="dropdown-acnt"><a href="{{ app.url }}/account/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="hidden-sm hidden-md hidden-lg">
+                    <a href="{{app.url}}/account/login" id="acc_btn"><i class="glyphicon glyphicon-log-in"></i> Log in</a>
+                </li>
+                <li class="hidden-sm hidden-md hidden-lg">
+                    <a href="{{app.url}}/account/create" id="acc_btn"><i class="glyphicon glyphicon-user"></i> Create an account</a>
+                </li>
+                {% endif %}
+            </ul><!--/.nav navbar-nav-->
+            <!-- Start Acenda Cart  -->
+            {# Begin cart section #}
+            <div class="nav navbar-nav navbar-right hidden-xs">
+                <div class="dropdown cartMenu  ">
+                    <ul class="">
+                        <li class="cart"  data-content="" data-html="true" data-placement='bottom' rel='popover'>
+                            {# Begin ajax cart popover #}
+                            <div class="ajaxcart" style="display:none">
+                                {# Begin Popover products #}
+                                <section class="ajaxcart-products">
+                                    {# Begin product #}
+                                    <div class="ajaxcart-product productCart">
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <div class="thumbnail" style="margin: 5px;">
+                                                    <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="product-image" src="">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-5">
+                                                <div class="name">
+                                                    <span class="product-name"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="price" style="font-size: 12px;">$<span class="product-price" style="font-size:12px;"></span></div>
+                                                <div class="quantity" style="font-size: 12px;">Qty:<span class="product-quantity" style="font-size:12px;"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {# Begin product #}
+                                </section>
+                                {# End Popover products #}
+                                {# Begin popover cart totals #}
+                                <div class="row">
+                                    <div class="miniCartFooter text-right">
+                                        <div class="cart-totals">
+                                            <div class="total">Subtotal: $<span class="subtotal">0.00</span></div>
+                                        </div>
+                                        {# End popover cart totals #}                               
+                                        <a href="{{ app.url }}/cart" class="btn btn-sm btn-danger"> <i class="fa fa-shopping-cart"> </i> VIEW CART </a> 
+                                        <a href="{{ app.url }}/checkout"  class="btn btn-sm btn-primary"> CHECKOUT </a>
+                                    </div>
+                                <!--/.miniCartFooter-->
+                                </div>
+                            </div>
+                            {# End ajax cart popover #}
+                            {# Begin cart button #}
+                            <div class="cartMenubtn">
+                                <a class="dropdown-toggle" href="{{app.url}}/cart">
+                                    <div class="text class="dropdown-toggle""><i class="fa fa-shopping-cart"></i><span class="cartRespons"> Cart ({{ api.get('/sessioncart').item_count }})</span><b class="caret"> </b></div>
+                                </a>
+                            </div>
+                            {# End cart button #}
+                        </li>
+                    </ul>
+                    {# End cart section #}
+                </div><!--/.dropdown cartMenu-->
+                    <div class="search-box">
+                        {# Begin search bar#}
+                        <div class="input-group">
+                            <button class="btn btn-nobg getFullSearch" type="button"><i class="fa fa-search"> </i></button>
+                        </div>
+                        <!-- /input-group -->
+                    </div>
+                    <!--/.search-box -->
+            </div><!--/.navbar-nav hidden-xs-->
+        </div><!--/.nav-collapse -->
+    </div><!--/.container -->
+    <div class="search-full text-right"><a class="pull-right search-close"> <i class=" fa fa-times-circle"> </i> </a>
+        <div class="searchInputBox pull-right">
+            <form action="/search" type="GET" >
+            <input type="search" data-searchurl="search?=" name="s" placeholder="start typing and hit enter to search"
+                   class="search-input">
+            <button class="btn-nobg search-btn" type="submit"><i class="fa fa-search"> </i></button>
+            </form>
+        </div>
+    </div>
+    <!--/.search-full-->
+</div><!-- /.End navbar  -->

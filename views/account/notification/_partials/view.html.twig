@@ -1,0 +1,102 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements.html.twig" as form %}
+{% import "/account/_macros/base.html.twig" as account %}
+
+{# Redirect to the login page if user is not logged in. #}
+{% do account.login() %}
+
+{# Set the page_name - used for the page title, heading, tab selection, and breadcrumb. #}
+{% set page_name = 'notifications' %}
+
+{# Set the html head title #}
+{% block title %}Account - {{page_name|title}}{% endblock %} 
+
+{# Load in the breadcrumbs positioned in /_layouts/main/base.html.twig #}
+{% block breadcrumb %}
+{#
+Passed into the macro is a array of key:value pairs as (title):(relative url)
+- The last link should not have a url, as it will be used as a 'you are here'
+#}
+{{ base.breadcrumbs({'Account':'/account','Notifications':'/account/notifications','Notification':''}) }}
+{% endblock %}
+{# Load in the main content positioned in /_layouts/main/base.html.twig #}
+{% block content %}
+{# 
+Load in the tabs for the page, pass in the name of this page, and make sure it's
+set in the array in /account/_macros/base.html.twig
+#}
+<div class="container main-container">
+    <div class="row">
+        {# Begin Notifications #}
+        {# Begin header #}
+        <div class="col-sm-12 col-md-9 col-lg-10">
+            <h1 class="section-title-inner"><span><i class="fa fa-exclamation-circle"></i> 
+                Your Notification </span>
+            </h1><hr/>
+            <div class="row userInfo hidden-xs">
+                <div class="col-xs-12 col-sm-12">
+                    {# Begin navigation #}
+                    <div class="navigation">
+                            {{account.navigation('notifications')}}
+                    </div>
+                    {# End navigation #}
+                    <div class="clear clearfix"></div><hr/>
+                </div>
+            </div>
+        </div>
+    </div><!-- /Row -->
+    {# End header #}
+        {# Begin notification #}
+        <div id="customer-notification">
+            <div class="col-sm-12 col-md-9 col-lg-10">
+                {% set notification = api.get('/customernotification/' ~ id) %}
+                {% if notification.date_viewed == '' %}
+                {% set result = api.put('/customernotification/' ~ id, {'date_viewed':'now'|date("Y-m-d H:i:s")}) %}
+                {% endif %}
+                {{ form.begin('notification') }}
+                    {# Begin header actions #}
+                    <div class="actions-header">
+                        <div class="row">
+                            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                <a href="{{app.url}}/account/notifications" class="btn btn-default btn-block"><i class="fa fa-arrow-left"></i>&nbsp;Back</a>
+                            </div>
+                            <div class="col-xs-5 col-sm-4 col-sm-offset-2 col-md-3 col-md-offset-3 col-lg-2 col-lg-offset-6">
+                                <button type="submit" class="btn btn-default btn-block" name="action" value="unread">Mark as Unread</button>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-2">
+                                <button type="submit" class="btn btn-danger btn-block" name="action" value="delete">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    {# End header actions #}
+                    {# Begin notification #}
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>{{ notification.subject }}</h3>                    
+                                {{ notification.message }}
+                            </div>
+                        </div>
+                    </div>
+                    {# End notification #}
+                    {# Begin footer actions #}
+                    <div class="actions-footer">
+                        <div class="row">
+                            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                <a href="{{app.url}}/account/notifications" class="btn btn-default btn-block"><i class="fa fa-arrow-left"></i>&nbsp;Back</a>
+                            </div>
+                            <div class="col-xs-5 col-sm-4 col-sm-offset-2 col-md-3 col-md-offset-3 col-lg-2 col-lg-offset-6">
+                                <button type="submit" class="btn btn-default btn-block" name="action" value="unread">Mark as Unread</button>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-2">
+                                <button type="submit" class="btn btn-danger btn-block" name="action" value="delete">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    {# End footer actions #}
+                {{ form.end() }}
+            </div>
+        </div>
+        {# End notification #}
+    </div>
+{% endblock %}

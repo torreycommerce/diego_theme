@@ -1,0 +1,7 @@
+{% set result = api.delete('/wishlist/' ~ wishlist.id) %}
+{% if result %}
+    {% do app.user.setFlash('Deleted wishlist successfully.') %}
+{% else %}
+    {% do app.user.setFlash('Error deleting wishlist.', 'danger') %}
+{% endif %}
+{% do app.redirect('/account/wishlists') %}

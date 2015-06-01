@@ -1,0 +1,44 @@
+{% set prices = ['10','20','40','60','100','200','400','600','1000','2000','3000','4000','5000','8000','10000'] %}
+{% set deselect = '' %}
+<div class="filter-navigation panel-group" id="filter-navigation-{{name}}">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title"><a data-toggle="collapse" href="#filter-navigation-{{ name }}-items" class="collapseWill">
+            <span class="pull-left"> <i class="fa fa-caret-right"></i></span> Price </a></h4>
+        </div>
+        <div id="filter-navigation-{{ name }}-items" class="panel-collapse collapse in">
+            <div class="panel-body price-range">
+                <ul class="list-unstyled">
+                    {% set last_price = 0 %}
+                    {% set selected_first = app.request.get.f.price.range|split(',')|first %}
+                    {% set selected_last = app.request.get.f.price.range|split(',')|last %}
+                    {% for price in prices %}
+                        {% set total = 0 %}
+                        {% for item,count in filter_set if item <= price and item >= last_price %}
+                            {% set total = total + count %}
+                        {% endfor %}
+
+                        {% set link = app.request.getUrl({'page':1,'f':filter_request|merge({'price':{'range': (last_price) ~ ',' ~ (price)}})}) %}
+                        {% if selected_first == last_price and selected_last == price %}
+                            {% set selected = true %}
+                            {% set link = app.request.getUrl({'page':1,'f':filter_request|merge({'price':null})}) %}
+                            {% set deselect %}
+                                    <a href="{{ link }}"><i class="fa fa-times"></i>${{last_price|number_format(2)}} - ${{price|number_format(2)}}</a>
+                            {% endset %}
+                        {% endif %}
+                        {% if total > 0 %}
+                            {% set current_count = filter_count[name][item] %}
+                            <li class="{% if selected %}active{% endif %}">
+                                <a class="{% if selected %}active{% endif %}" href="{{ link }}">${{last_price|number_format(2)}} - ${{price|number_format(2)}} ({{total}})</a>
+                            </li>
+                        {% endif %}
+                        {% set last_price = price %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="filter-clear">
+    {{ deselect }}
+</div>

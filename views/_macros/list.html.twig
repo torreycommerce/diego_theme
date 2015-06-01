@@ -1,0 +1,100 @@
+
+{% macro create(columns, data, item_link = '/items/{id}', sort_link = 'sort',column_format = [], options = []) %}
+    {% import _self as list %}
+    <form method="POST" action="{{item_link|replace({'{id}':''})}}edit.html">
+    <div class="table-responsive">
+        <div id="actions" style="display:none">
+            {% for option in options %}
+                {% if option == 'edit' %}
+                    <button class="btn btn-default btn-edit">Edit</button>
+                {% elseif option == 'delete' %}
+                    <a class="btn btn-danger btn-{{option}}">{{option|capitalize}}</a>
+                {% endif %}
+            {% endfor %}
+            <input type="hidden" id="item_link" name="item_link" value="{{app.url}}{{item_link}}">
+        </div>
+      <table class="table table-hover table-striped tablesorter">
+        <thead>
+          <tr>
+              <td></td>
+            {% for column in columns %}
+                {% set direction = app.request.get[(sort_link)] == column ~ ':1' ? '-1' : '1' %}
+                <th onclick="window.location='{{ app.request.url({(sort_link):column ~ ':' ~ direction,'page':1}) }}'"><small>{{column|replace({'_':'&nbsp;'})|title}}</small>&nbsp;<i class="fa fa-sort"></i></th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+        
+        {% for row in data %}
+          <tr onclick="window.location='{{ app.url ~ item_link|replace({'{id}':row.id}) }}'" style="cursor:pointer">
+            <td><input type="checkbox" class="multi-select" name="{{row.id}}"></td>
+            {% for column in columns %}
+                {% set data = row[column] %}
+                {% set extras = null %}
+                {% if data is iterable and data|length > 1 %}
+                    {% set extras %}
+                        {% for i in data %}
+                            {{ list.format_field(i, column_format[column]) }}{%- if loop.last == false -%}, {%- endif -%}
+                        {% endfor %}
+                    {% endset %}
+                {% endif %}
+                <td>
+                    
+                    {% if extras is not empty %}
+                        <span data-tooltip="" data-toggle="tooltip" data-original-title="{{extras}}">{{list.format_field(row[column], column_format[column])}} <i class="fa fa-info-circle"></i></span>
+                    {% else %}
+                        {{list.format_field(row[column], column_format[column])}}
+                    {% endif %}
+
+                </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    </form>
+{% endmacro %}
+
+{% macro format_field(value, type = null, column) %}
+{% spaceless %}
+    {% if type is empty %}
+        {{ value }}
+    {% elseif type == 'money' %}
+        ${{ value|number_format(2,'.',',') }}
+    {% elseif type == 'yes-no' %}
+        {% if value %}
+            Yes
+        {% else %}
+            No
+        {% endif %}
+    {% elseif type == 'date' %}
+        <span data-tooltip="" data-toggle="tooltip" data-original-title="{{ value|date("F jS g:ia") }}">{{ value|date("m/d/Y") }} <i class="fa fa-clock-o"></i></span>
+    {% elseif type == 'boolean' %}
+        {% if value %}
+            <i class="fa fa-check"></i>
+        {% endif %}
+    {% elseif type == 'contact-subject' %}
+        {% set subjects = {
+                            'status' : 'Order Status',
+                            'shipping' : 'Shipping / Tracking Info',
+                            'cancel' : 'Cancel an Item / Order',
+                            'return' : 'Return and Item / Order',
+                            'product' : 'Product Question',
+                            'website' : 'Website Comment',
+                            'store' : 'Store Comment',
+                            'registry' : 'Gift Registry Comment',
+                            'other' : 'Other'
+                        }
+        %}
+        {% set found = false %}
+        {% for key, subject in subjects %}
+            {% if key == value %}
+                {{ subject }}
+                {% set found = true %}
+            {% endif %}
+        {% endfor %}
+        {% if not found %}{{ value }}{% endif %}
+    {% endif %}
+{% endspaceless %}
+{% endmacro %}

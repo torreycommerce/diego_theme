@@ -1,0 +1,141 @@
+<div id="estimator-error"></div>
+{#<div class="title">Shipping and Tax Estimator</div>#}
+<form class="form-horizontal" role="form">        
+    <div class="form-group">
+        {% set methods = api.get('/shippingmethod', {query:{status:'active'}}) %}
+        {% set m = {} %}
+        {% for method in methods %}
+        {% set m = m + {(method.id):method.name} %}
+        {% endfor %}
+        {# Begin zip code #}
+        <label class="control-label col-sm-3 col-md-3 col-lg-3" for="input2">Shipping details: </label>
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            {{ forms.text('cart[zip_code]', '', {placeholder: "Zip Code", class:'form-control', id:'cart_zip_code'}) }}
+        </div>            
+        {# End zip code #}
+        {# Begin shipping method #}
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            {{ forms.select('cart[method]', '', m, {class:'form-control', id:'cart_shipping_method'}) }}
+        </div>
+        {# End shipping method #}
+        {# Begin estimate button #}
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            {{ forms.submit('cart[Estimate]', '', 'Estimate', {'class':'btn btn-default btn-block', id: 'cart_Estimate'}) }}
+        </div>
+        {# End estimate button #}
+        {# Begin zip code validation #}
+        <div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4 col-lg-5">
+            <div class="validation">{{ forms.errorlist(form_errors, 'zip_code') }}</div>
+        </div>
+        {# End zip code validation #}
+        {# Begin shipping method validation #}
+        <div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4 col-lg-5">
+            <div class="validation">{{ forms.errorlist(form_errors, 'method') }}</div>
+        </div>
+        {# End shipping method validation #}
+    </div>
+</form>
+{# Begin estimates #}
+<div id="estimate" style="display:none">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="well">
+               {# Begin shipping rate modal #}
+               <div class="modal fade" id="modal-shipping-rate" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                            <h4 class="modal-title" id="myModalLabel">Shipping Rate</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Shipping estimates are based on shipping costs to an address within the ZIP Code displayed.
+                                Exact shipping cost will be calculated during checkout.</p>                        
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-neutral" data-dismiss="modal" aria-hidden="true">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {# End shipping rate modal #}
+                {# Begin shipping rate #}
+                <div class="rate">
+                    <div class="row">
+                        <div class="col-sm-4 col-md-4">
+                            <b style="cursor: pointer;" data-target="#modal-shipping-rate" data-toggle="modal">Estimated Shipping Rate <i class="fa fa-question-circle"></i></b>
+                        </div>
+                        <div class="col-sm-8 col-md-8">
+                            <span id="rate-estimate"></span>
+                        </div>
+                    </div>
+                </div>
+                {# End shipping rate #}
+                {# Begin arrival modal #}
+               <div class="modal fade" id="modal-arrival-date" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                            <h4 class="modal-title" id="myModalLabel">Estimated Arrival</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>These dates are based on carrier shipping practices, destination and the items you order. (Expected delivery dates are estimates. Orders can be delayed due to verification or time of order being placed. Items that are not regularly stocked cannot be held to the expected delivery dates.)</p>                       
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-neutral" data-dismiss="modal" aria-hidden="true">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {# End arival modal #}
+                {# Begin arrival date #}
+                <div class="arrival">
+                    <div class="row">
+                        <div class="col-sm-4 col-md-4">
+                            <b style="cursor: pointer;" data-target="#modal-arrival-date" data-toggle="modal">Arrives <i class="fa fa-question-circle"></i></b>
+                        </div>
+                        <div class="col-sm-8 col-md-8">
+                            <span id="date-estimate"></span>&nbsp;(for in stock products)
+                        </div>
+                    </div>
+                </div>
+                {# End arrival date #}
+                {# Begin estimated tax #}
+                <div class="tax">
+                    <div class="row">
+                        <div class="col-sm-4 col-md-4">
+                            <b>Estimated Sales Tax</b>
+                        </div>
+                        <div class="col-sm-8 col-md-8">
+                            <span id="tax-estimate"></span>
+                        </div>
+                    </div>
+                </div>
+                {# End estimated tax #}
+                {# Begin estimated total #}
+                <div class="total">
+                    <div class="row">
+                        <div class="col-sm-4 col-md-4">
+                            <b>Estimated Total</b>
+                        </div>
+                        <div class="col-sm-8 col-md-8">
+                            <span id="total-estimate"></span>
+                        </div>
+                    </div>
+                </div>
+                {# End estimated total #}
+                {# Begin estimator actions #}
+                <div class="actions">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ forms.submit('cart[ClearEstimate]', '', 'Clear Estimate', {'class':'btn btn-default btn-mobile', id: 'cart_ClearEstimate'}) }}
+                        </div>
+                    </div>
+                </div>
+                {# End estimator actions #}
+            </div>
+        </div>
+    </div>
+</div>
+{# End estimates #}

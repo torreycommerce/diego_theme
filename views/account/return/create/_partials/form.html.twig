@@ -1,0 +1,139 @@
+{% if app.request.post.createreturn is not empty %}
+    {% set quantity = app.request.post.createreturn.quantity %}
+    {% set reason = app.request.post.createreturn.reason %}
+    {% set results = [] %}
+    {% for key, value in quantity %}
+        {% if quantity[key] > 0 %}
+            {% set result = api.post('/orderreturn', {order_id:order.id, item_id:key, customer_id:app.user.id, quantity:quantity[key], reason:reason[key], status:'pending'}) %}
+            {% set results = results|merge([result]) %}
+        {% endif %}
+    {% endfor %}
+    {% if results is not empty %}
+        {% do app.redirect('/return/success?ids=' ~ results|join(',')) %}
+    {% else %}
+        {% set form_error = api.error %} 
+    {% endif %}
+{% endif %}
+{% block breadcrumb %}
+{{ base.breadcrumbs({'Create a Return':''}) }}
+{% endblock %}
+
+<div id="return-create">
+    <div class="container main-container">
+        <div class="row">
+            {# Begin returns #}
+            <div class="col-sm-12 col-md-9 col-lg-10">
+                <div class="row">
+                {# Begin header #}
+                    <div class="col-sm-12 col-md-9 col-lg-10">
+                        <h1 class="section-title-inner"><span><i class="fa fa-plus-circle"></i> 
+                            Create a Return</span>
+                        </h1>
+                        <h2 class="block-title-2">Return items for Order #{{ order.order_number }}</h2>
+                    </div>
+                {# End header #}
+                </div> <!-- /Row -->
+                    {{ forms.begin('createreturn', app.url ~ '/account/return/create/' ~ order.order_number, 'post', {class:''}) }}
+                    {% set global_available = order.returnable_items %}
+                    {{ forms.hidden('createreturn[email]', form.email) }}
+                    {{ forms.hidden('createreturn[order_id]', form.order_id) }}
+                    {% set product_ids = orderitems|values_in('product_id') %}
+                    {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+                    
+                    {% for item in orderitems %}
+                    {% set available = item.returnable_quantity %}
+                    <div class="row">
+                        {# Begin item thumbnail #}
+                        <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2">
+                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="img-thumbnail" src="{{ products[item.product_id][0].thumbnail }}">
+                        </div>
+                        {# End item thumbnail #}
+                        {# Begin item details #}
+                        <div class="col-xs-8 col-sm-8 col-md-4 col-lg-5">
+                            <a href="{{ app.url ~ products[item.product_id][0].url }}">{{ item.name }}</a>
+                            <p class="help-block">{{ available }} available for return</p>
+                        </div>
+                        {# End item detials #}
+                        {# Begin return form #}
+                        {% if available > 0 %}
+                        <div class="col-xs-8 col-sm-8 col-md-6 col-lg-5">                        
+                            <fieldset>
+                                <div class="row">
+                                    {# Begin return quantity #}
+                                    <div class="col-md-4 col-lg-4">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="control-label col-md-12 col-lg-12" for="input2">Qty
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-md-12 col-lg-12">
+                                                    <div class="quantity">
+                                                        {{ forms.select('createreturn[quantity][' ~ item.id ~ ']', '0', range(0,available), {class:'form-control parsley-validated',label:'Quantity', required:true, 'parsley-min':0,'parsley-max':available}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-lg-12">
+                                                    <div class="validation">{{ forms.errorlist(form_errors, 'quantity[' ~ item.id ~ ']') }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {# End return quantity #}
+                                    {# Begin return reason #}
+                                    <div class="col-md-8 col-lg-8">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="control-label col-md-12 col-lg-12" for="input2">Reason
+                                                </label>
+                                                <div class="col-md-12 col-lg-12">
+                                                    {{ forms.select('createreturn[reason][' ~ item.id ~ ']', '', {'': 'Please select',
+                                                    'Decided to buy elsewhere' : 'Decided to buy elsewhere',
+                                                    'Chose a newer product' : 'Chose a newer product',
+                                                    'Thought the delivery time was too long' : 'Thought the delivery time was too long',
+                                                    'Did not like the price' : 'Did not like the price',
+                                                    'Made a mistake' : 'Made a mistake',
+                                                    'Changed my mind' : 'Changed my mind',
+                                                    'Product is defective' : 'Product is defective',
+                                                    'Product damaged during shipment' : 'Product damaged during shipment',
+                                                    'Received incorrect product' : 'Received incorrect product',
+                                                    'Product is missing parts/accessories' : 'Product is missing parts/accessories'}, {class:'form-control parsley-validated'}) }}
+                                                </div>
+                                                <div class="col-md-12 col-lg-12">
+                                                    <div class="validation">{{ forms.errorlist(form_errors, 'reason[' ~ item.id ~ ']') }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {# End return quantity #}
+                                </div>
+                            </fieldset>                        
+                        </div>
+                        {# end return form #}
+                        {% endif %}                    
+                    </div> 
+                    <div class="row">
+                        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+                            <hr>
+                        </div>
+                    </div>               
+                    {% endfor %}
+                    {# Begin Button Group#}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
+                            <ul class="pager">
+                                <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
+                                </li>
+                            {% if global_available > 0 %}
+                            {{ forms.submit('createreturn[action]','submit','Create',{class:'btn btn-primary'}) }}
+                            {% else %}
+                                <li class="next pull-left"><a href="javascript:history.go(-1)">&larr; Back to Return</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    {# End Button Group#}
+
+                    {{ forms.end() }}
+                
+            </div>
+        </div>
+    </div>
+</div>

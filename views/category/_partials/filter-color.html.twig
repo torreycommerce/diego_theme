@@ -1,0 +1,28 @@
+<div class="filter-navigation panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title"><a data-toggle="collapse" href="#collapseOne" class="collapseWill">
+            <span class="pull-left"> <i class="fa fa-caret-right"></i></span> Color </a></h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body color-chips">
+                {% for item,count in filter_set %}
+                    {% set current_count = filter_count[name][item] %}
+                    {% set selected = item in filter_query[name]['$in'] ? 1 : 0 %}
+                    {% set link = selected == 1 ? {(item):null} : {(item):''} %}
+                    {% if filter_request[(name)] is defined %}
+                        {% set link = filter_request|merge({(name):app.request.get.f[(name)]|merge(link)}) %}
+                    {% else %}
+                        {% set link = filter_request|merge({(name):link}) %}
+                    {% endif %}
+
+                    <a class="btn btn-small color-chip {{ item|replace({' ':'-'})|lower }} {% if selected %}active{% endif %} {% if current_count == 0 %}disabled{% endif %}" href="{{app.request.getUrl({'page':1,'f':link})}}" data-tooltip data-toggle="tooltip" data-original-title="{{item|title}}">
+                        {% if current_count == 0 %}<i class="fa fa-times"></i>{% elseif selected %}
+                        <i class="fa fa-check"></i>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,247 @@
+{% set registry_items = api.get('/registryitem', {query:{'registry_id': registry.id}}) %}
+{% if (registry_items is empty) %}
+<div class="row">
+    <div class="col-md-12">
+        <i>There are no items in this registry.</i><br />
+        <i>Please browse the store to add more items.</i><br /><br />  
+<!--         <a class="btn btn-primary" href="{{app.url}}">Continue Shopping</a>
+ -->        {% if registry.customer_id == app.user.id %}
+        <a class="btn btn-default btn-edit editregistryLink" href="{{ app.url }}/account/registry/{{ registry.id }}/edit">Manage registry</a>
+        {% endif %}
+    </div>
+</div>
+{% else %}
+<section id="registry">
+    <div class="row">
+        <div class="col-md-12">
+            <header>
+                <hgroup>
+                    <h2 class="registry-name">{{ registry.name }}</h2>
+                </hgroup>
+            </header>
+        </div>
+    </div>
+    {{ forms.begin('registry-form', app.url ~ '/registry/' ~ registry.id ~ '/route') }}   
+    {% set product_ids = registry_items|values_in('product_id') %}
+    {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+
+    {# Remove products that were disabled or removed #}
+    {% set items_deleted = false %}
+    {% for item in registry_items %}
+        {% set product = products[item.product_id][0] %}
+        {% if product.status != 'active' %}
+            {% do api.delete('/registryitem/' ~ item.id) %}
+            {% if registry.customer_id == app.user.id %}
+                {# FIXME: These flash messages don't work sometimes #}
+                {% if product.title is defined %}
+                    {# This product is disabled or removed #}
+                    {% do app.user.setFlash(product.title ~ ' is no longer available.', 'info') %}
+                {% else %}
+                    {# This product doesn't exist anymore (deleted) #}
+                    {% do app.user.setFlash('A product you have selected is no longer available.', 'info') %}
+                {% endif %}
+            {% endif %}
+            {% set items_deleted = true %}
+        {% endif %}
+        {% if items_deleted %}
+            {% do app.redirect(app.request.url) %}
+        {% endif %}
+    {% endfor %}
+    {# Begin registry menu #}
+    <div class="actions">
+        <div class="row">
+            <div class="col-md-12 text-right">
+                {% if registry.privacy == 'public' or registry.privacy == 'unlisted' %}
+                <a class="btn btn-default" id="btn-share" href="#" data-placement="top" data-content="A link to this registry has been copied to the clipboard." data-clipboard-text="{{ app.url}}/registry/{{registry.id}}"><i class="fa fa-share"></i> Share this registry</a>
+                {% endif %}
+                {% if registry.customer_id == app.user.id %}
+                <a class="btn btn-default btn-edit editregistryLink" href="{{ app.url }}/account/registry/{{ registry.id }}/edit">Manage registry</a>
+                {% endif %}
+            </div>
+        </div>       
+    </div>
+    {# End registry menu #}
+    {% for item in registry_items %}
+        {% set left = item.quantity - item.quantity_purchased < 0 ? 0 : item.quantity - item.quantity_purchased %}
+        {% set product = products[item.product_id][0] %}
+        {# Begin product #}
+            <div class="product">
+                <div class="row">
+                    {# Begin product header - Mobile #}
+                    <div class="col-xs-12 col-sm-12 hidden-md hidden-lg">
+                        <header class="mobile">
+                            <div class="name"><a href="{{app.url}}{{ product.url }}">{{ product.title }}</a></div>
+                        </header>
+                    </div>
+                    {# End product header - Mobile #}
+                    {# Begin product image #}
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
+                        <div class="images globalPadding10">
+                            <div class="thumbnail">
+                                <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ product.thumbnail }}" />
+                            </div>
+                        </div>
+                    </div>
+                    {# End product image #}
+                    {# Begin product details #}
+                    <div class="col-xs-12 col-sm-3 col-md-5 col-lg-5">
+                        {# Begin desktop product header#}
+                        <header class="desktop hidden-xs hidden-sm">
+                            <div class="name"><a href="{{app.url}}{{ product.url }}">{{ product.title }}</a></div>
+                        </header>
+                        {# End desktop product header #}
+                        {# Begin pricing #}
+                        <div class="pricing">
+                            <div class="price">
+                                <span class="sale">Sale:</span>&nbsp;<span class="dollar-sign">$</span><span class="amount">{{ product.price }}</span><span class="cents"></span>
+                            </div>
+                            <div class="stock">In Stock</div>                            
+                            {% if product.compare_price %}
+                            <div class="price-regular">
+                                <span class="regular">Reg:</span>&nbsp;<span class="dollar-sign">$</span><span class="amount">{{ product.compare_price }}</span><span class="cents"></span>
+                            </div>
+                            {% endif %}                            
+                        </div>
+                        {# End pricing #}
+                        {# Begin quantities #}
+                        <div class="quantities">
+                            <div class="qty-wanted">
+                                <div class="{{ left ? "fg-green" : "fg-red" }}">
+                                    {% if left <= 0 %}
+                                        <span class="purchased">This item is purchased</span>
+                                    {% else %}
+                                        <span class="purchased">Wanted:</span>&nbsp;<span class="qty">{{ left }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if registry.customer_id == app.user.id %}
+                            <div class="qty-update">
+                                <a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_{{ product.id }}">Update Quantity</a>
+                            </div>
+                            {# Begin quantity modal #}
+                            <div class="modal fade modal_list_quantity" id="modal_{{ product.id }}">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">Update your quantities</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="quantity-input-group">
+                                                    <div class="col-md-12">
+                                                        <h5>Quantity Purchased</h5>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="quantity">
+                                                            <div class="input-group">
+                                                                <div class="input-group-btn">
+                                                                    <button class="btn btn-neutral btn-remove" type="button"><i class="fa fa-minus"></i></button>
+                                                                </div>
+                                                                <input class="form-control quantity-selector" type="text" value="{{ item.quantity_purchased }}" maxlength="2" placeholder="1" data-id="{{item.id}}" name="quantity_purchased[{{ item.id }}]">
+                                                                <div class="input-group-btn">
+                                                                    <button class="btn btn-neutral btn-add" type="button"><i class="fa fa-plus"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <hr>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="quantity-input-group">
+                                                    <div class="col-md-12">
+                                                        <h5>Quantity Wanted</h5>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="quantity">
+                                                            <div class="input-group">
+                                                                <div class="input-group-btn">
+                                                                    <button class="btn btn-neutral btn-remove" type="button"><i class="fa fa-minus"></i></button>
+                                                                </div>
+                                                                <input class="form-control quantity-selector" type="text" value="{{ item.quantity }}" maxlength="2" placeholder="1" data-id="{{item.id}}" name="registryitem_quantity[{{ item.id }}]">
+                                                                <div class="input-group-btn">
+                                                                    <button class="btn btn-neutral btn-add" type="button"><i class="fa fa-plus"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {# End quantity modal #}                                        
+                            {% endif %}
+                            {% if registry.customer_id == app.user.id %}
+                            <a class="btn btn-default btn-xs"  data-toggle="modal" data-target="#modal_remove_{{ product.id }}" href="#">Remove</a>
+                            {# Begin remove modal #}
+                            <div class="modal fade modal_list_quantity" id="modal_remove_{{ product.id }}">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title">Delete this item?</h4>
+                                        </div>
+                                        <div class="modal-body">                                            
+                                            <P>Remove this item from your Registry?</P>
+                                            <b>{{ product.title }}</b>                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="" class="btn btn-neutral" data-dismiss="modal">Cancel</a>
+                                            <a href="{{app.url}}/registry/item/{{ item.id }}/delete" class="btn btn-danger">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {# End remove modal #}
+                            {% endif %}
+                        </div>
+                        {# End quantities #}
+                    </div>
+                    {# End product details #}
+                    {# Begin product quantity and actions #}
+                    <div class="col-xs-6 col-xs-offset-3 col-sm-6 col-sm-offset-0 col-md-2 col-lg-2">
+                        <div class="actions">
+                            <div class="btn-toolbar">
+                                <div class="quantity-input-group quantity">
+                                    <label for="quantity-selector" class="control-label">QTY</label>
+                                    {# Begin product Quantity #}
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input class="form-control quantity-selector quanitySniper" value="0" maxlength="2" placeholder="0" name="add_to_cart[{{ item.id }}]" type="text">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="actions">
+                            <div class="row">
+                                {# Begin add to cart button #}
+                                <div class="col-xs-12 col-sm-6 col-md-2 col-md-offset-1 col-lg-2">
+                                    <div class="add-to-cart globalPaddingTopBottom20">
+                                        <button class="btn btn-primary btn-add-to-cart" name="action" value="add/{{ item.id }}"><i class="glyphicon glyphicon-shopping-cart"> </i>  Add to Cart </button>
+                                    </div>                                    
+                                </div>
+                                {# End add to cart button #}
+                            </div>
+                        </div> 
+                    {# End product quantity and actions #}    
+                </div>
+            </div>
+    {% endfor %}
+    {{ forms.end() }}
+</section>
+{% endif %}

@@ -1,0 +1,11 @@
+{% for item, quantity in app.request.post.cart.quantity %}
+    {% if quantity == 0 %}
+        {% set result = api.delete('/sessioncartitem/' ~ item) %}
+    {% else %}
+        {% set result = api.put('/sessioncartitem/' ~ item, {quantity:quantity}) %}
+    {% endif %}
+{% endfor %}
+{% if app.request.post.cart.coupon_code is not empty %}
+    {% set result = api.post('/sessioncartcoupon', {code:app.request.post.cart.coupon_code}) %}
+{% endif %}
+{% do app.redirect('/cart') %}

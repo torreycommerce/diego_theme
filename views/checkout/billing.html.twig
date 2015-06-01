@@ -1,0 +1,269 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% import "/_macros/form-extras.html.twig" as extras %}
+{% import "/_macros/normalizer.html.twig" as normalizer %}
+{% block breadcrumb %}
+{{ base.breadcrumbs({'billing':''}) }}
+{% endblock %}
+{% set step = 'billing' %}
+{% set cart = api.get('/sessioncart') %}
+{% block content %}
+{% if app.request.get.clear == "same" %}
+    {% do app.user.setState('shipping_same_as_billing', null) %}
+    {% do app.user.setState('billing_same_as_billing', null) %}
+{% endif %}
+{% if app.user.getState('shipping_address_id') is null and app.user.getState('shipping_first_name') is null %}
+    {{ app.redirect('/checkout') }}
+{% endif %}
+{% if cart.items is empty %}
+    {{ app.redirect('/') }}
+{% endif %}
+    <div class="container main-container">
+        <section id="checkout">
+            <div class="row">
+                <div class="col-lg-9 col-md-9 col-sm-7">
+                    <h1 class="section-title-inner"><span><i
+                            class="fa fa-money"></i> Checkout: Billing </span></h1>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-5 rightSidebar">
+                    <h4 class="caps"><a href="{{ app.url }}/"><i class="fa fa-chevron-left"></i> Back to shopping </a></h4>
+                </div>
+            </div>
+            <!--/.row-->
+                <div class="cartFooter w100">
+                    <div class="box-footer">
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"><i class="fa fa-credit-card"></i> <span>CREDIT CARD INFORMATION</span></div>
+                    </div>
+                </div>
+            <!--/ cartTop -->
+    <div class="row">
+        <div class="col-md-12">
+            <div id="fade-container">
+                {{ forms.begin('checkout', app.url ~ '/checkout/place', 'post', { class:'form-horizontal' }) }}
+                {% if app.user.getState('test_order') %}
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="alert alert-danger">You are placing a test order. Test orders will not be processed or fulfilled.</div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% set giftlist_present = false %}
+                {% set shipping_address %}
+                    {% if app.user.getState('shipping_address_id') is not empty %}
+                        {% if giftlist_present == true %}
+                        {% else %}
+                            {% set shipping = api.get('/customeraddress', {query:{customer_id:app.user.id, id:app.user.getState('shipping_address_id')}}).0 %}
+                            {% if shipping == false %}
+                                {% set shipping = api.get('/customeraddress', {query:{id:app.user.getState('shipping_address_id')}}).0 %}
+                                {# It must be a registry or wishlist #}
+                                Ships to:<br>
+                                <b>{{ shipping.first_name }} {{ shipping.last_name }}</b><br>
+                                (full address hidden for privacy)
+                            {% else %}
+                                {{ shipping.street_line1 }}<br />
+                                {% if shipping.street_line2 %}{{ shipping.street_line2 }}<br />{% endif %}
+                                {% if shipping.company %}{{ shipping.company }}<br />{% endif %}
+                                {{ shipping.city }}, {{ shipping.state }} {{ shipping.zip }}<br />
+                                {{ shipping.country }}<br />
+                                {% if shipping.street_line2 == '' %}<br />{% endif %}
+                                {% if shipping.company == '' %}<br />
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                    {% else %}
+                        {% if app.user.getState('shipping_street_line1') %}{{ app.user.getState('shipping_street_line1') }}<br />{% endif %}
+                        {% if app.user.getState('shipping_street_line2') %}{{ app.user.getState('shipping_street_line2') }}<br />{% endif %}
+                        {% if app.user.getState('shipping_company') %}{{ app.user.getState('shipping_company') }}<br />{% endif %}
+                        {{ app.user.getState('shipping_city') }}, {{ app.user.getState('shipping_state') }} {{ app.user.getState('shipping_zip') }}<br />
+                        {{ app.user.getState('shipping_country') }}<br />
+                        {% if app.user.getState('shipping_street_line2') == '' %}<br />{% endif %}
+                        {% if app.user.getState('shipping_company') == '' %}<br />{% endif %}
+                    {% endif %}
+                {% endset %}
+                <div class="row">
+                    <div class="col-sm-8 col-md-8 col-lg-8">
+                        <fieldset>
+                            <div class="form-group">
+                                <div class="col-sm-9 col-sm-offset-3">
+                                    <img src="{{app.url_asset}}/images/creditcards/visa.png" class="cc-visa">
+                                    <img src="{{app.url_asset}}/images/creditcards/mastercard.png" class="cc-mastercard">
+                                    <img src="{{app.url_asset}}/images/creditcards/amex.png" class="cc-amex">
+                                    <img src="{{app.url_asset}}/images/creditcards/discover.png" class="cc-discover">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3 col-md-3 col-lg-3" for="input1">Card Number
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-sm-9 col-md-9 col-lg-5">
+                                    {{ forms.text('checkout[card_number]', checkout.card_number, {id:'checkout_card_number',class:'form-control parsley-validated', placeholder:"Card Number", required:true, 'parsley-luhn': true, 'parsley-type': 'number'}) }}
+                                </div>
+                                <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-4">
+                                    <div class="validation">{{ forms.errorlist(form_errors, 'card_number') }}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3 col-md-3 col-lg-3" for="input1">CVV2
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-sm-9 col-md-9 col-lg-5">
+                                    {{ forms.text('checkout[card_cvv2]', checkout.card_cvv2, {class:'form-control parsley-validated', placeholder:"CVV2", required:true, 'pattern':'^[0-9]{3,4}$'}) }}
+                                </div>
+                                <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-4">
+                                    <div class="validation">{{ forms.errorlist(form_errors, 'card_cvv2') }}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3 col-md-3 col-lg-3" for="input1">Expiration Month
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-sm-9 col-md-9 col-lg-5">
+                                    {% set months = {} %}
+                                    {% for i in range(1,12) %}
+                                        {% set month = "%02d"|format(i) %}
+                                        {% set months = months + {(month):month} %}
+                                    {% endfor %}
+                                    {{ forms.select('checkout[card_exp_month]', checkout.card_exp_month, months, {class:'form-control parsley-validated'}) }}
+                                </div>
+                                <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-4">
+                                    <div class="validation">{{ forms.errorlist(form_errors, 'card_exp_month') }}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3 col-md-3 col-lg-3" for="input1">Expiration Year
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-sm-9 col-md-9 col-lg-5">
+                                    {% set years = {} %}
+                                    {% for i in range(now|date('Y'),now|date('Y')+15) %}
+                                        {% set years = years + {(i):i} %}
+                                    {% endfor %}
+                                    {{ forms.select('checkout[card_exp_year]', checkout.card_exp_year, years, {class:'form-control parsley-validated'}) }}
+                                </div>
+                                <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-4">
+                                    <div class="validation">{{ forms.errorlist(form_errors, 'card_exp_year') }}</div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="cartFooter w100">
+                            <div class="box-footer">
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"><i class="fa fa-map-marker "></i> <span>BILLING ADDRESS</span></div>
+                            </div>
+                            {% if app.user.getState('shipping_same_as_billing') is empty %}{% endif %}
+                            </div>
+                            <!--/ cartTop -->
+                            {% if app.user.getState('shipping_same_as_billing') is empty %}
+                                {% if app.user.id is not empty %}
+                                    {% set addresses = api.get('/customeraddress', {query:{deleted:{'$ne':1}, verified:1, customer_id:app.user.id}}) %}
+                                    {% set address_select = {'':'Use address below'} %}
+                                    {% for address in addresses %}
+                                        {% set address_select = address_select + {(address.id):address.one_line} %}
+                                    {% endfor %}
+                                    {% if address_select|length > 1 %}
+
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3 col-md-3 col-lg-3" for="input1"></label>
+                                            <div class="col-sm-9 col-md-9 col-lg-5">
+                                                {{ forms.select('checkout[billing_address_id]', app.user.getState('billing_address_id'), address_select, {class:'form-control parsley-validated', id: 'checkout_billing_address_id'}) }}
+                                            </div>
+                                            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-4">
+                                                <div class="validation">{{ forms.errorlist(form_errors, 'billing_address_id') }}</div>
+                                            </div>
+                                        </div>
+
+                                    {% endif %}
+                                {% endif %}
+
+                                <div id="custom-address">
+                                    <div id="address-fields">
+                                        {% set addr = {} %}
+                                        {% if selected_address == '' %}
+                                            {% set addr = app.user.getCheckoutStates('billing') %}
+                                        {% endif %}
+                                        {{ extras.address('checkout','billing', addr) }}
+                                    </div>
+                                    {% if app.user.id is not empty %}
+                                        <div class="form-group">
+                                            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-5 col-lg-offset-3">
+                                                {% set checked = {} %}
+                                                {% if app.user.getState('billing_save') == '1' %}{% set checked = {'checked': 'checked'} %}{% endif %}
+                                                <div class="checkbox">
+                                                    <label>{{ forms.checkbox('checkout[billing_save]', false, checked) }} Save billing address</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-4">
+                                                <div class="validation">{{ forms.errorlist(form_errors, 'billing_save') }}</div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <div id="row">
+                                    <div class="col-sm-offset-3 checkout-display-address" style="border: 2px dashed #ccc; padding: 10px;" id="display_billing_address">
+                                        <a href="{{ app.url }}/checkout/billing?clear=same">
+                                            <span class="badge pull-right">Change my address</span>
+                                        </a>
+                                        {{ shipping_address }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </fieldset>
+                        <fieldset>
+                        <div class="cartFooter w100">
+                            <div class="box-footer">
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"><i class="fa fa-map-marker "></i> <span>SHIPPING ADDRESS</span></div>
+                            </div>
+                            </div>
+                                <div id="row">
+                                    <div class="col-sm-offset-3 checkout-display-address" id="display_shipping_address">
+                                        <a href="{{ app.url }}/checkout">
+                                            <span class="badge pull-right">Change my address</span>
+                                        </a>
+                                        {{ shipping_address }}
+                                    </div>
+                                </div>
+                        </fieldset>
+                        {{ normalizer.normalizer() }}
+                        <div class="row">
+                            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-3 col-lg-10 col-lg-offset-3">
+                                <div class="actions">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <section id="order-summary" class="col-sm-4">
+                        <div class="well">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Order Summary</h3>
+                                </div>
+                            </div>
+                            {% include "/checkout/_partials/summary.html.twig" %}
+                        </div>
+                    </section>
+                    <div class="cartFooter w100">
+                        <div class="box-footer actions">
+                            <div class="pull-left"><a href="{{app.url}}/checkout" class="btn btn-default"> <i
+                                    class="fa fa-arrow-left"></i> &nbsp; Back to Shipping </a></div>
+                                    <div class="actions pull-right">{{ forms.hidden('shipping[test_order]', app.request.get.test_order) }}
+                                    <input type="hidden" name="step" value="billing">
+                                    {% set works = {} %}
+                                    {% if app.user.getState('order_sent') == true %} {% set works = {'disabled': true } %} {% endif %}
+                                    {{ forms.submit('place_order', '', 'Place Your Order <i class="fa fa-check-circle-o"></i>', {'class':'btn btn-primary'}|merge(works)) }}</div>
+                        </div>
+                    </div>
+                </div>
+                {{ forms.end() }}
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+<div class="gap"></div>
+{% endblock %}
+{% block js %}
+{{ app.asset.js(app.url_asset ~ '/js/checkout.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/region.js') }}
+{% endblock %}

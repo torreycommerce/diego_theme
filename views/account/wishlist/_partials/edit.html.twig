@@ -1,0 +1,58 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/account/_macros/base.html.twig" as account %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+
+{% do account.login() %}
+
+{% block title %}Account - Edit Wishlist{% endblock %} 
+
+{% block breadcrumb %}
+    {{ base.breadcrumbs({'Account':'/account','Wishlists':'/account/wishlists','Edit Wishlist':''}) }}
+{% endblock %}
+
+{% block content %}
+{% if app.request.post.wishlist is not empty %}
+    {% set wishlistdata = app.request.post.wishlist %}
+    {# We're deleting this wishlist #}
+    {% if wishlistdata.action|split('/')|first == 'delete' %}
+        {% set result = api.delete('/wishlist/' ~ wishlist.id) %} 
+        {% if result %}
+            {% do app.user.setFlash('Wishlist deleted successfully') %}
+        {% else %}
+            {% do app.user.setFlash('Wishlist could not be deleted', 'danger') %}
+        {% endif %}
+        {% do app.redirect('/account/wishlists') %}
+    {% else %}
+        {# Make wishlist the default if the default checkbox is checked #}
+        {% if wishlistdata.make_default %}
+            {% do api.post('/wishlist/' ~ wishlist.id ~ '/makeDefault') %}
+        {% endif %}
+        {% set result = api.put('/wishlist/' ~ wishlist.id, wishlistdata) %}
+        {% if result %}
+            {% do app.user.setFlash('Wishlist edited successfully') %}
+            {% do app.redirect('/account/wishlists') %}
+        {% else %}
+            {% set form_errors = api.error() %}
+            {% set wishlist = app.request.post.wishlist %}
+        {% endif %}
+    {% endif %}
+{% endif %}
+{% set addresses = api.get('/customeraddress', {query:{deleted:{'$ne':1},verified:1,customer_id:app.user.id}}) %}
+<div class="container main-container">
+    <div class="row transitionfx">
+        <div class="col-lg-9 col-md-9 col-sm-7">
+            {# Begin header #}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="section-title-inner"><span><i class="fa fa-edit"></i>
+                        Edit Wishlist {{ wishlist.name }} </span></h1>
+                </div>
+            </div>
+            {# End header #}
+            <div id="wishlist-edit">
+                {% include '/account/wishlist/_partials/form.html.twig' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% if app.request.path is not empty %}
+	{% if 'http://' not in app.request.path and 'https://' not in app.request.path %}
+		{% do app.user.setState('login_referer', app.request.path) %}
+	{% endif %}
+	{% do app.redirect('/account/login',{'error': 'You must be logged in to perform this action.'}) %}
+{% endif %}
+{% if app.request.post is not empty and app.request.post.login is empty %}
+	{% do app.redirect('/account/login',{'error': 'You must be logged in to perform this action.'}) %}
+{% endif %}
+{% if app.user.isLoggedIn() %}
+    {% set login_redirect_url = app.user.getState('login_referer') %}
+    {% if login_redirect_url is not empty %}
+    	{% do app.redirect(login_redirect_url) %}
+    {% else %}
+		{% do app.redirect('/account') %}
+    {% endif %}
+{% endif %}
+
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% extends "/_layouts/theme.html.twig" %}
+
+{% set title = 'Account login' %}
+
+{% block title %}{{title}}{% endblock %}
+
+
+{% block breadcrumb %}
+    {{ base.breadcrumbs({'Account':'/account'}) }}
+{% endblock %}
+
+
+{% block content %}
+<div class="container main-container">
+	{# Begin page header #}
+	<div class="row">
+		<div class="col-lg-9 col-md-9 col-sm-7">
+			<header>
+				<h1 class="section-title-inner"><span><i class="fa fa-lock"></i> {{ title|title }}</span></h1>
+			</header>
+		</div>
+	</div>
+	{# End page header #}
+	<div class="row">		
+		<div class="col-md-6 col-lg-6">
+			<div class="well">
+				{# Begin Login #}
+				<div class="account-login">
+					<h2 class="block-title-2">Do you have a {{ app.params.site.title }} account?</h2>
+					{% include "/account/login/_partials/form.html.twig" %}
+				</div>
+				{# End Login #}
+			</div>
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<div class="well">
+				{# Begin create account #}
+				<div class="account-create">
+					<h2 class="block-title-2">Create a new account</h2>
+					<p>Create an account and you'll be able to place orders, create registries, create wishlists, check the status of your orders, write reviews, and more. </p>
+					<a class="btn btn-primary" href="{{app.url}}/account/create/{{ app.request.path }}"><i class="fa fa-user"></i> Create Account</a>
+				</div>
+				{# End create account #}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="gap"></div>
+{% endblock %}

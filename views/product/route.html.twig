@@ -1,0 +1,73 @@
+{% set action = app.request.post.action|split('/')|first %}
+{% set id = app.request.post.action|split('/')|last %}
+{% set result_add = {} %}
+{% set redirect = 'cart' %}
+{% if action == '' %}
+    {# Add items to the cart #}
+    {% for item, quantity in app.request.post.items %}
+        {% if quantity is empty %}
+            {% set quantity = 1 %}
+        {% endif %}
+        {% if quantity > 0 %}
+            {% set result = api.post('/sessioncartitem', {"product_id":item, "quantity":quantity}) %}
+            {% set result_add = result_add + {(item):result} %}
+        {% endif %}
+    {% endfor %}
+{% elseif action == 'wishlist' %}
+    {# Check for default wishlist, otherwise add to wishlist with specified id #}
+    {% if id == 0 %}
+        {% set wishlist = api.get('/wishlist', {query:{"default":true, "customer_id":app.user.id}}).0 %}
+        {% set redirect = 'wishlist' %}
+    {% else %}
+        {% set wishlist = api.get('/wishlist/' ~ id) %}
+        {% set redirect = 'wishlist/' ~ id %}
+    {% endif %}
+    {# This user has no wishlists; store items in holding #}
+    {% if wishlist == false %}
+        {% do app.user.setFlash('Please create a wishlist first.', 'danger') %}
+        {% do app.user.setState('wishlist', app.request.post.items) %}
+        {% do app.redirect('/account/wishlists') %}
+    {% endif %}
+    {# This wishlist isn't for the current user #}
+    {% if wishlist.customer_id != app.user.id %}
+        {% do app.redirect('/account/login') %} {# FIXME: needs to save items to session #}
+    {% endif %}
+    {# Add items to wishlist #}
+    {% for item, quantity in app.request.post.items %}
+        {% if quantity is empty %}
+            {% set quantity = 1 %}
+        {% endif %}
+        {% if quantity > 0 %}
+            {% set result = api.post('/wishlistitem', {"wishlist_id":wishlist.id, "product_id":item, "quantity":quantity}) %}
+        {% endif %}
+    {% endfor %}
+{% elseif action == 'registry' %}
+    {% if id == 0 %}
+        {% set registry = api.get('/registry', {query:{"default":true, "customer_id":app.user.id}}).0 %}
+        {% set redirect = 'registry' %}
+    {% else %}
+        {% set registry = api.get('/registry/' ~ id) %}
+        {% set redirect = 'registry/' ~ id %}
+    {% endif %}
+    {% if registry == false %}
+        {% do app.user.setFlash('Please create a registry first.', 'danger') %}
+        {% do app.user.setState('registry', app.request.post.items) %}
+        {% do app.redirect('/account/registry/create') %}
+    {% endif %}
+    {% if registry.customer_id != app.user.id %}
+        {% do app.redirect('/account/login') %} {# FIXME: needs to save items to session #}
+    {% endif %}
+    {% for item, quantity in app.request.post.items %}
+        {% if quantity is empty %}
+            {% set quantity = 1 %}
+        {% endif %}
+        {% if quantity > 0 %}
+            {% set result = api.post('/registryitem', {"registry_id":registry.id, "product_id":item, "quantity":quantity}) %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{% if app.request.isAjaxRequest == false %}
+    {% do app.redirect(redirect) %}
+{% else %}
+    {{ result_add|json_encode }}
+{% endif %}

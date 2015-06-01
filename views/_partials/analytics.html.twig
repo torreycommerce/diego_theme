@@ -1,0 +1,65 @@
+<!-- Google Analytics -->
+<script>
+{% if app.params.seo.google_analytics is defined %}
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', '{{ app.params.seo.google_analytics }}', 'auto');  // Replace with your property ID.
+    ga('require', 'displayfeatures'); // Enable demographics
+    ga('send', 'pageview');
+    {% if final_order is defined %}
+    ga('require', 'ecommerce', 'ecommerce.js');   // Load the ecommerce plug-in.
+    ga('ecommerce:addTransaction', {
+            'id': '{{final_order.order_number}}',                     // Transaction ID. Required
+            'affiliation': 'BabyViva',   // Affiliation or store name
+            'revenue': '{{final_order.total}}',               // Grand Total
+            'shipping': '{{final_order.shipping_rate}}',                  // Shipping
+            'tax': '{{final_order.tax}}'                     // Tax
+            });
+    {% for item in items %}
+    ga('ecommerce:addItem', {
+            'id': '{{final_order.order_number}}',                     // Transaction ID. Required
+            'name': '{{ item.name }}',                // Product name. Required
+            'sku': '{{ products[item.product_id].0.sku }}',                    // SKU/code
+            //'category': 'Green Medium',       // Category or variation
+            'price': '{{ item.price }}',                 // Unit price
+            'quantity': '{{ item.quantity }}'                   // Quantity
+            });
+    {% endfor %}
+    ga('ecommerce:send');      // Send transaction and item data to Google Analytics.
+    {% endif %}
+{% endif %}
+
+</script>
+<!-- End Google Analytics -->
+
+{% if final_order is defined %}
+<!-- Google Code for Sale Transaction Conversion Page -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1037227909;
+var google_conversion_language = "en_US";
+var google_conversion_format = "1";
+var google_conversion_color = "ffffff";
+var google_conversion_label = "vZOxCL3QZBCFr8vuAw";
+var google_conversion_value = {{final_order.subtotal}};
+var google_remarketing_only = false;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+<div style="display:inline;">
+    <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/1037227909/?value={{final_order.subtotal}}&amp;label=vZOxCL3QZBCFr8vuAw&amp;guid=ON&amp;script=0"/>
+</div>
+</noscript>
+
+{# Bing ads #}
+<script type="text/javascript">
+if (!window.mstag) mstag = {loadTag : function(){},time : (new Date()).getTime()};</script>
+<script id="mstag_tops" type="text/javascript" src="//flex.msn.com/mstag/site/20a20b15-e765-4e25-b842-5e217bf606e1/mstag.js"></script>
+<script type="text/javascript"> mstag.loadTag("analytics", {dedup:"1",domainId:"1074848",type:"1",revenue:"{{final_order.subtotal}}",actionid:"18866"})</script>
+<noscript> <iframe src="//flex.msn.com/mstag/tag/20a20b15-e765-4e25-b842-5e217bf606e1/analytics.html?dedup=1&domainId=1074848&type=1&revenue={{final_order.subtotal}}&actionid=18866" frameborder="0" scrolling="no" width="1" height="1" style="visibility:hidden;display:none"> </iframe> </noscript>
+{% endif %}

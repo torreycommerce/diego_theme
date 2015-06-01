@@ -1,0 +1,29 @@
+{% if app.request.post.action == 'update' %}
+    {% if app.user.id == registry.customer_id %}
+        {% for item, quantity in app.request.post.registryitem_quantity %}
+            {% set registry_item = api.get('/registryitem/' ~ item) %} {# Inefficient but secure #}
+            {% if registry_item.registry_id == registry.id %}
+                {% set result = api.put('/registryitem/' ~ item, {quantity:quantity}) %}
+            {% endif %}
+        {% endfor %}
+        {% for item, quantity_p in app.request.post.quantity_purchased %}
+            {% set registry_item = api.get('/registryitem/' ~ item) %} {# Inefficient but secure #}
+            {% if registry_item.registry_id == registry.id %}
+                {% set result = api.put('/registryitem/' ~ item, {quantity_purchased:quantity_p}) %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% set redirect = '/registry/' ~ registry.id %}
+{% elseif app.request.post.action|split('/')|first == 'add' %}
+    {% set registry_item = api.get('/registryitem/' ~ app.request.post.action|split('/')|last) %}
+    {% if registry_item.registry_id == registry.id %} {# prevent people hacking this from adding random registry items #}
+        {% set result = api.post('/sessioncartitem/', {product_id:registry_item.product_id, registry_id:registry_item.registry_id, quantity:app.request.post.add_to_cart[app.request.post.action|split('/')|last]}) %}
+        {{ dump(result) }}
+    {% endif %}
+    {% set redirect = '/cart' %}
+{% endif %}
+
+{% if app.request.isAjaxRequest == false %}
+    {% do app.redirect(redirect) %}
+{% endif %}
+

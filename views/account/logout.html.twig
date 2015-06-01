@@ -1,0 +1,7 @@
+{% set result = api.post('/customer/logout') %}
+{% if result %}
+    {% do app.user.setFlash('You\'ve successfully logged out.', 'success') %}
+{% else %}
+    {% do app.user.setFlash('There was a problem logging you out; please try again.', 'danger') %}
+{% endif %}
+{% do app.redirect('/') %}

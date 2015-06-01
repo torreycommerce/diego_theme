@@ -1,0 +1,14 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements.html.twig" as forms %}
+{% block title %}
+{{ wishlist.name }}
+{% endblock %}
+{% block breadcrumb %}
+{{ base.breadcrumbs({'Wishlist':''}) }}
+{% endblock %}
+{% block content %}
+{% if wishlist.privacy == 'private' and app.user.id != wishlist.customer_id %}
+{% do app.redirect('/account/login/wishlist/' ~ app.request.path) %} 
+{% endif %}
+{# include '/wishlist/_partials/list.html.twig' #}
+{% endblock %}

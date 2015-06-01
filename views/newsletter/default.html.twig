@@ -1,0 +1,11 @@
+{% if app.request.post.email %}
+	{% do app.request.validateToken() %}
+	{% set response = api.post('email',{'email':app.request.post.email }) %}
+	{% if response %}
+		{% do app.redirect(app.url, {'success':'You have been subscribed to our newsletter'}) %}
+    {% else %}
+        {% do app.redirect(app.url, {'error':api.error.email.0}) %}
+	{% endif %}
+{% else %}
+	{% do app.redirect(app.url, {'error':'Email address must not be empty.'}) %}
+{% endif %}

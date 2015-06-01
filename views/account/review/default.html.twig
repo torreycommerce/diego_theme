@@ -1,0 +1,66 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% import "/account/_macros/base.html.twig" as account %}
+
+{# Redirect to the login page if user is not logged in. #}
+{% do account.login() %} 
+
+{# Set the page_name - used for the page title, heading, tab selection, and breadcrumb in this page. #}
+{% set page_name = 'reviews' %}
+
+{# Set the html head title #}
+{% block title %}Account - {{page_name|title}}{% endblock %} 
+
+{# Load in the breadcrumbs positioned in /_layouts/main/base.html.twig #}
+{% block breadcrumb %}
+{#
+Passed into the macro is a array of key:value pairs as (title):(relative url)
+- The last link should not have a url, as it will be used as a 'you are here' 
+#}
+{{ base.breadcrumbs({'Account':'/account',(page_name|title):''}) }}
+{% endblock %}
+
+{# Load in the main content positioned in /_layouts/main/base.html.twig #}
+{% block content %}
+{# 
+Load in the tabs for the page, pass in the name of this page, and make sure it's
+set in the array in /account/_macros/base.html.twig
+#}
+<div class="container main-container">
+    <!-- Main component call to action -->
+    <div id="review-edit">
+        <div class="row transitionfx">
+            {% set id = app.request.path|split('/')|first|integer %}
+            {% set action = app.request.path|split('/')|last %}
+
+            {% set reviews = api.get('/productreview',{'query':{'customer_id':app.user.id,'id':id}}) %}
+            {% set review = reviews.0 %}
+            {% if id == 0 or action not in ['edit','delete','default'] or review.id is not defined %}
+            {% do app.redirect('/account/reviews') %}
+            {% endif %}
+
+            {% if action == 'delete' %}
+            {% do api.delete('/productreview/' ~ review.id) %}
+            {% do app.redirect('/account/reviews') %}
+            {% endif %}
+
+            {% if app.request.post.review is defined %}
+            {% if api.put('/productreview/' ~ review.id, app.request.post.review) %}
+            {% do app.redirect('/account/reviews') %}
+            {% endif %}
+            {% endif %}
+
+            <div class="col-lg-9 col-md-9 col-sm-7">          
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="section-title-inner"><span><i class="fa fa-star"></i>
+                            Edit Review</span></h1>
+                    </div>
+                </div>
+                {% include "/account/review/_form.html.twig" %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
