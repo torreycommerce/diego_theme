@@ -48,6 +48,7 @@ $(document).ready(function() {
          }
     })
     $('.star-rating-input .star-rating-star').click(function(e) {
+        console.log("1");
         var elem =  $(this).parents('.star-rating-input');
         $(elem).data('chosen',true); 
         $(elem).find('.active-choosing').removeClass('choosing');  

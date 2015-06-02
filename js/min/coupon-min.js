@@ -1,1 +1,0 @@
-$("#generate").click(function(){var r="",e=$("#coupon_number").val();1>e&&(e=1);for(var n=0;e>n;n++){n>0&&(r+=", ");var t=Math.random(),a=("0000"+t.toString(36).replace(".","")).substr(-12).toUpperCase();a+=a.split("").reduce(function(r,e,n,t){return(r+parseInt(e,36)*n)%10},0),r+=a}return $("#coupon_codes").val(r),!1});
