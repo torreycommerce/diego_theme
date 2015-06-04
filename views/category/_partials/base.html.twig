@@ -1,4 +1,4 @@
-{% spaceless %}
+   {% spaceless %}
 {#
 ##
 ##  Url Validation
@@ -114,19 +114,246 @@
 {% if products.num_total == 0 and app.request.get.f is not defined and app.request.get.s is not defined and category is not defined %}
     {{app.redirect('/')}}
 {% endif %}
+      <!-- Intro Block
+      ============================================-->
+      <section class="intro-block intro-page boxed-section page-bg overlay-dark-m">
+      
+        <!-- Container -->
+        <div class="container">     
+          <!-- Section Title -->
+          <div class="section-title invert-colors no-margin-b">
+            <h2>{{ name|default(category.name) }}</h2>
+            <p class="hidden-xs">{{ description|default(category.description) }}</p>
+          </div>
+          <!-- /Section Title -->
+        </div>
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Intro Block
+      ============================================-->
+      
+      <!-- Page Info Block
+      ============================================-->
+      <section class="page-info-block boxed-section">
+      
+        <!-- Container -->
+        <div class="container cont-pad-x-15"> 
 
-<div class="container main-container">
+          <!-- Breadcrumb -->
+          <ol class="breadcrumb pull-left">
+            <li><a href="#"><i class="ti ti-home"></i></a></li>
+            <li><a href="#">Pages</a></li>
+            <li class="active">features</li>
+          </ol>
+          <!-- /Breadcrumb --> 
 
-    <!-- Main component call to action -->
-{#
-##
-##  Begin Twig template
-##
-#}
-    <div class="row">
-    {# Begin category filters #}
-    <section class="category-filters">
-        <div class="col-lg-3 col-md-3 col-sm-12">
+          <!-- hlinks -->
+          <ul class="page-links pull-right hlinks hlinks-icons color-icons-borders color-icons-bg-hovered">
+            <li><a href="#"><i class="icon fa fa-facebook"></i></a></li>
+            <li><a href="#"><i class="icon fa fa-twitter"></i></a></li>
+            <li><a href="#"><i class="icon fa fa-rss"></i></a></li>
+          </ul>
+          <!-- /hlinks -->
+
+        </div>
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Page Info  Block
+      ============================================-->
+      
+      <!-- Content Block
+      ============================================ -->
+      <section class="content-block default-bg">
+      
+        <!-- Container -->
+        <div class="container cont-main no-pad-t">
+        
+          <!-- Row -->
+          <div class="row">
+
+            <!-- Main Col -->
+            <div class="main-col col-sm-9 col-md-9">
+            
+              <!-- Products Filter -->
+              <div class="products-filter clearfix">
+                <!-- <div class="display">
+                  <span class="show-list" onclick="changeView('list')"><span class="text hidden-xs">List</span><i class="icon fa fa-th-list"></i></span>
+                  <span class="show-grid" onclick="changeView('grid')"><span class="text hidden-xs">Grid</span><i class="icon fa fa-th"></i></span>
+                </div> -->
+                <div class="col-lg-3 col-md-3 col-sm-3 hidden-xs"> 
+                    <p class="pull-left"> Showing <strong>{{ products.num_total }}</strong> products </p>
+                </div>
+                {# Begin paging #}
+                <div class="pagination-top">
+                    {{ base.pagination(products.num_total,limit,5) }}
+                </div>
+                {# End paging #}
+                       {# Begin filters #}
+
+                            <div id="items-per-page" class="filter">
+                                <form class="form-inline">
+                                    <span class="small">&nbsp;&nbsp;View:&nbsp;</span>
+                                    <button class="btn btn-default-border dropdown-toggle" data-toggle="dropdown" href="#">{{ limit }}&nbsp;
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right text-left">                                
+                                        <li><a href="{{app.request.getUrl({'limit':24,'page':1})}}">24</a></li>
+                                        <li><a href="{{app.request.getUrl({'limit':36,'page':1})}}">36</a></li>
+                                        <li><a href="{{app.request.getUrl({'limit':48,'page':1})}}">48</a></li>
+                                        <li><a href="{{app.request.getUrl({'limit':60,'page':1})}}">60</a></li>
+                                    </ul>
+                                </form>
+                            </div>   
+                            <div id="sort-by" class="filter form-inline">
+                                <form class="form-inline">
+                                    <span class="small">Sort By:&nbsp;</span>
+                                    <button class="btn btn-default-border dropdown-toggle" data-toggle="dropdown" href="#">
+                                        {{ sortByTitle }}&nbsp;
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu text-left pull-right">
+                                        {% for name,sort in sort_options %}
+                                        <li><a class="small" href="{{app.request.getUrl({'sort':name,'page':1})}}">{{name}}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </form>
+                            </div>                 
+                        {# End filters #}
+              </div>
+              <!-- /Products Filter -->
+            
+              <!-- Row -->
+              <div class="product-grid row grid-20 mgb-20">
+            {# Category product grid #}
+            {% set items_per_row = 3 %}
+            <section class="products-category">
+            <div class="row">
+            {% if products.num_total == 0 and categories is empty %}
+            <div class="col-sm-12">
+                    No products found. <a href="{{app.url}}/{{ app.request.url}}">Go back</a>
+                </div>
+                {% endif %}
+                {% set options = ['image'] %}
+                 {% for row,product in products if collection_ids[product.id] is empty and product_count < 13 %}
+                    {% if product.group == 'product' %}
+                        {% for id in product.product.collection_id %}
+                            {% set collection_ids = collection_ids|merge({(id):true}) %}
+                        {% endfor %}
+                    {% else %}
+                        {% set collection_ids = (collection_ids|default({}))|merge({(product.id):true}) %}
+                    {% endif %}
+                    {% set product_count = product_count + 1 %}
+                    {# Begin product #}
+                    {% set product =  product|merge({'variant':product.product|values_in('variant')}) %}
+                    {% set product =  product|merge({'attributes':product.variant|values_in(['price','compare_price','save_price','save_percent','color'])}) %}
+                        
+                   {% if 'image' in options %}
+                    {# Grab image based on color facets #}
+                    {% set img_url = product.thumbnail %}
+
+                    {% if product.attributes.color|length > 1 %}
+                        {% set current_colors = app.request.get.f.color|keys %}
+                        {% for variant in product.variant 
+                            if variant.status == 'active' and variant.color in current_colors and variant.images is not empty %}
+                                {% set img_url = variant.thumbnail %}
+                        {% endfor %}
+                {% endif %}
+
+                {% set secure =  app.url_asset | slice(0,5)  %}
+                {% if secure == 'https' %}
+                {% set img_url = img_url | replace({'http:':'https:'}) %}
+                {% endif %}
+                {% endif %}
+                </div>
+                {# Begin product #}
+                <!-- Col -->
+                <div class="col-sm-6 col-md-4">
+                <div class="item">
+                  <!-- product -->
+                  <div class="product clearfix">
+                  
+                    <!-- Image -->
+                    <div class="image"> 
+                      <a href="{{ app.url }}/product/{{ product.slug }}"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ img_url }}" alt="img" class="img-responsive"></a>
+                      <ul class="additional">
+                        <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                        <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                        <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                        <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                      </ul>
+                    </div>
+                    <!-- Image -->
+                    
+                    <span class="label label-sale">sale</span>
+                    
+                    <!-- Details -->
+                    <div class="details">
+                    
+                      <a class="title" href="{{ app.url }}/product/{{ product.slug }}">{{ product.title }} </a>
+                      
+                      <!-- rating -->
+                      <ul class="hlinks hlinks-rating">
+                        <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                      </ul>
+                      <!-- /rating -->
+                      
+                      <p class="desc">{{ product.description|striptags|slice(0, 100) }}... </p>
+                      
+                      <!-- Price Box -->
+                      <div class="price-box">
+                        <span class="price">{% if product.attributes.price %}
+                                {{ prod.price(product.attributes.price) }}</span>
+                                <span class="price price-old">${{ prod.price(product.attributes.compare_price) }}</span>
+                                {% endif %}
+                      </div>
+                      <!-- /Price Box -->
+                      
+                      <!-- buttons -->
+                      <div class="btn-group">
+                        <a class="btn btn-outline btn-base-hover" href="{{ app.url }}/product/{{ product.slug }}">add to cart</a>  
+                        <a class="btn btn-outline btn-default-hover" href="{{ app.url }}/product/{{ product.slug }}"><i class="icon fa fa-heart"></i></a>
+                      </div> 
+                      <!-- /buttons -->
+                      
+                    </div>
+                    <!-- /Details -->
+                    
+                  </div>
+                  <!-- /product -->
+                  </div>  <!-- /item -->
+                {% endfor %}
+
+                </div>
+                <!-- /Col -->
+                
+              </div>
+              <!-- /Row -->
+              
+              <!-- Pagination -->
+                {% if products|length == limit or app.request.get.page > 1 %}
+                    <div class="col-md-12">
+                        <div class="pagination-bottom">
+                            {{ base.pagination(products.num_total,limit,4) }}
+                        </div>
+                    </div>
+                {% endif %}
+              <!-- /Pagination -->
+              
+            </div>
+            <!-- /Main Col -->
+            
+            <!-- Side Col -->
+            <div class="side-col col-sm-3 col-md-3">
+
+              <!-- Side Widget -->
+              <div class="side-widget no-margin-l">
+              
             <div class="panel-group" id="accordionNo">
                 {% for name,filter_set in filters %}
                     {% if filter_set|length > 1 %}
@@ -160,203 +387,59 @@
                     {% endif %}
                 {% endfor %}
             </div>
-        </div>
-    </section>
-    {# End category filters #}
-    <section class="product-grid">
-        <div class="col-lg-9 col-md-9 col-sm-12">
-            {# Begin category name #}
-            <div class="w100 clearfix category-top uppercase">
-                <h2>{{ name|default(category.name) }}</h2>
+          
+              </div>
+              <!-- /Side Widget -->
+
             </div>
-             {# End category name #}
-               
-                {# Begin category description #}
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="section-description">
-                            <p class="hidden-xs">{{ description|default(category.description) }}</p>
-                        </div>
-                    </div>
-                </div>
-{# Begin category sorting #}
-                {# Sub Category grid #}
-                {% if categories is not empty %}
-                {% set items_per_row = 3 %}
-                <section class="products-category">
-                    <div class="row  categoryProduct xsResponse clearfix">
-                            {% for category in categories %}
-                            {# Begin category #}
-                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4  text-center ">
-                                    <div class="product thumbnail">
-                                        <div class="image">
-                                            <a href="{{app.url}}/category/{{category.slug}}">
-                                                <img clas="img-rounded"  onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{category.thumbnail|default(app.url_asset ~ "/images/product/image-250x250.jpg")}}" class="img-responsive" data-image-source="{{category.thumbnail|default(app.url_asset ~ "/images/product/image-250x250.jpg")}}">
-                                            </a>
-                                        </div>
-                                            <h4 class="subCategoryTitle"><a href="{{app.url}}/category/{{category.slug}}">{{ category.name }}</a></h4>
-                                    </div>
-                                </div>
-                            {# End category #}
-                            {% endfor %}
-                            <div class="clearfix"></div>
-                    </div>
-                </section>
-                {% endif %}
-                {# End Sub Category grid #}
-                {# End category description #}
-                <div class="w100 productFilter clearfix">
-                <div class="row">  
-                    <div class="col-lg-3 col-md-3 col-sm-3 hidden-xs"> 
-                    <p class="pull-left"> Showing <strong>{{ products.num_total }}</strong> products </p>
-                    </div>
-                    
-                    
-                    <div class="pull-right col-xs-12 col-sm-9 ">
+            <!-- /Side Col -->
 
-                       <div class="change-order pull-right">
-                       {# Begin paging #}
-                            <div class="pagination-top">
-                                {{ base.pagination(products.num_total,limit,5) }}
-                            </div>
-
-                        {# End paging #}
-                        {# Begin filters #}
-                            <div id="sort-by" class="btn-group form-inline">
-                                <form class="form-inline">
-                                    <span class="small">Sort By:&nbsp;</span>
-                                    <button class="btn btn-default-border dropdown-toggle" data-toggle="dropdown" href="#">
-                                        {{ sortByTitle }}&nbsp;
-                                        <i class="fa fa-caret-down"></i>
-                                    </button>
-                                    <ul class="dropdown-menu text-left pull-right">
-                                        {% for name,sort in sort_options %}
-                                        <li><a class="small" href="{{app.request.getUrl({'sort':name,'page':1})}}">{{name}}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </form>
-                            </div>
-                            <div id="items-per-page" class="btn-group">
-                                <form class="form-inline">
-                                    <span class="small">&nbsp;&nbsp;View:&nbsp;</span>
-                                    <button class="btn btn-default-border dropdown-toggle" data-toggle="dropdown" href="#">{{ limit }}&nbsp;
-                                        <i class="fa fa-caret-down"></i>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right text-left">                                
-                                        <li><a href="{{app.request.getUrl({'limit':24,'page':1})}}">24</a></li>
-                                        <li><a href="{{app.request.getUrl({'limit':36,'page':1})}}">36</a></li>
-                                        <li><a href="{{app.request.getUrl({'limit':48,'page':1})}}">48</a></li>
-                                        <li><a href="{{app.request.getUrl({'limit':60,'page':1})}}">60</a></li>
-                                    </ul>
-                                </form>
-                            </div>                    
-                        {# End filters #}
-                        </div>
-                    </div>
-                </div>
-                {# End category sorting #}
-                </div>
-
-
-
-            
-            {# Category product grid #}
-            {% set items_per_row = 3 %}
-            <section class="products-category">
-                <div class="row">
-                    {% if products.num_total == 0 and categories is empty %}
-                    <div class="col-sm-12">
-                        No products found. <a href="{{app.url}}/{{ app.request.url}}">Go back</a>
-                    </div>
-                    {% endif %}
-                    {% set options = ['image'] %}
-                     {% for row,product in products if collection_ids[product.id] is empty and product_count < 13 %}
-                        {% if product.group == 'product' %}
-                            {% for id in product.product.collection_id %}
-                                {% set collection_ids = collection_ids|merge({(id):true}) %}
-                            {% endfor %}
-                        {% else %}
-                            {% set collection_ids = (collection_ids|default({}))|merge({(product.id):true}) %}
-                        {% endif %}
-                        {% set product_count = product_count + 1 %}
-                        {# Begin product #}
-                        {% set product =  product|merge({'variant':product.product|values_in('variant')}) %}
-                        {% set product =  product|merge({'attributes':product.variant|values_in(['price','compare_price','save_price','save_percent','color'])}) %}
-                            
-                       {% if 'image' in options %}
-                        {# Grab image based on color facets #}
-                        {% set img_url = product.thumbnail %}
-
-                        {% if product.attributes.color|length > 1 %}
-                            {% set current_colors = app.request.get.f.color|keys %}
-                            {% for variant in product.variant 
-                                if variant.status == 'active' and variant.color in current_colors and variant.images is not empty %}
-                                    {% set img_url = variant.thumbnail %}
-                            {% endfor %}
-                    {% endif %}
-
-                    {% set secure =  app.url_asset | slice(0,5)  %}
-                    {% if secure == 'https' %}
-                    {% set img_url = img_url | replace({'http:':'https:'}) %}
-                    {% endif %}
-                    {% endif %}
-                                {# Begin product #}
-                    <div class="col-md-{{12 / items_per_row}} col-sm-{{18 / items_per_row}} col-xs-{{ 36 / items_per_row }}">
-                                    <div class="item">
-                <div class="product">
-                    <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist"
-                       data-placement="left">
-                        <i class="glyphicon glyphicon-heart"></i>
-                    </a>
-
-
-                    <div class="image">
-                        {#<div class="quickview">
-                            <a title="Quick View" class="btn btn-xs  btn-quickview" data-target="#product-details-modal"
-                               data-toggle="modal"> Quick View </a>
-                        </div>#}
-                        <a href="{{ app.url }}/product/{{ product.slug }}"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" 
-                        src="{{ img_url }}" alt="img" class="img-responsive"></a>
-
-                        <div class="promotion">
-                            {#<span class="new-product"> NEW</span> #}
-                            {# <span class="discount">15% OFF</span>#}
-                        </div>
-                    </div>
-                    <div class="description">
-                        <h4><a href="{{ app.url }}/product/{{ product.slug }}">{{ product.title }} </a></h4>
-
-                        <p>{{ product.description|striptags|slice(0, 100) }}... </p>
-                        {# <span class="size">XL / XXL / S </span>#}</div>
-                    <div class="price"><span>
-                        {% if product.attributes.price %}
-                                {{ prod.price(product.attributes.price) }}
-                            <span class="price-standard">
-                                {{ prod.price(product.attributes.compare_price) }}
-                            </span>
-                        {% endif %}
-                    </span></div>
-                    <div class="action-control"><a class="btn btn-primary"> <span class="add2cart"><i
-                            class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
-                </div>
-            </div>
-                    </div>
-                    {# End product #}
-                    {% endfor %}
-                    <div class="clearfix"></div>
-                </div>
-                    {% if products|length == limit or app.request.get.page > 1 %}
-                        <div class="col-md-12">
-                            <div class="pagination-bottom">
-                                {{ base.pagination(products.num_total,limit,4) }}
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
-            </section>
-            {# End Product list #}
+          </div>
+          <!-- /Row -->
+        
         </div>
-    </section>
-</div>
-</div>
+        <!-- /Container -->
+        
+      </section>
+      <!-- /Content Block
+      ============================================-->
+
+      <!-- Newsletter Block
+      ============================================ -->
+      <div class="newsletter-block boxed-section overlay-dark-m cover-2-bg">
+      
+        <!-- Container -->
+        <div class="container">
+          <form>
+            <!-- Row -->
+            <div class="row grid-10">
+              <!-- Col -->
+              <div class="col-sm-3 col-md-2">
+                <span class="case-c">get newsletter</span>
+              </div>
+              <!-- Col -->
+              
+              <!-- Col -->
+              <div class="col-sm-6 col-md-8">
+                  <input class="form-control" type="text" placeholder="Enter your email address" />
+              </div>
+              <!-- Col -->
+              
+              <!-- Col -->
+              <div class="col-sm-3 col-md-2">
+                <button class="btn btn-block btn-color yellow-bg"><i class="icon-left fa fa-envelope"></i>subscribe</button>
+              </div>
+              <!-- /Col -->
+              
+            </div>
+            <!-- /Row -->
+          </form>
+        </div>
+        <!-- /Container -->
+      
+      </div>
+      <!-- /Newsletter Block
+      =================================================== -->
+
+
 {% endspaceless %}

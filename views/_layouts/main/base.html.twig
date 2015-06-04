@@ -92,16 +92,14 @@
 </div>
 <![endif]-->
     {# Begin Header #}
-    <header id="main">
+    <header id="main" class="header-block line-top" >
         {# avoiding the display of the menu when we're in the store-protected template #}
         {% if app.request.url != "store-protected" %}
             {# Begin Toolbar #}
             <section id="toolbar">
-                <div class="container">
                     {% block header %}
                         {%include "/_layouts/main/toolbar.html.twig"%}
                     {% endblock %}
-                </div>
             </section>
             {# End Toolbar #}
         {% endif %}

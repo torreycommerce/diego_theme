@@ -1,20 +1,18 @@
 {% macro breadcrumbs(crumbs=[]) %}
-<div class="container headerOffset">
-    <div class="row ">
-        <div class="col-md-12 breadcrumbDiv ">
-            <ul class="breadcrumb">
-                <li><a href="{{app.url}}"><span class="glyphicon glyphicon-home"></span> <span class="visually-hidden">Home</span></a></li>
+<section class="page-info-block page-info-alt  boxed-section">
+    <div class="container cont-pad-x-15">
+        <ol class="breadcrumb pull-left">
+            <li><a href="{{app.url}}"><span class="glyphicon glyphicon-home"></span> <span class="visually-hidden">Home</span></a></li>
                 {% for name,link in crumbs %}
-                    {% if link is empty %}
-                        <li class="active">{{name}}</li>
-                    {% else %}
-                        <li><a href="{{app.url}}{{link}}">{{ name }}</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </div>
+                {% if link is empty %}
+                    <li class="active">{{name}}</li>
+                {% else %}
+                    <li><a href="{{app.url}}{{link}}">{{ name }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ol>
     </div>
-</div>
+</section>
 {% endmacro %}
 
 {% macro pagination(number_items, items_per_page = 12, number_pages_displayed = 8, current_page = '', page_key = 'page' ) %}

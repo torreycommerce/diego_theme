@@ -1,13 +1,13 @@
 <div class="filter-navigation panel-group" id="filter-navigation-{{name}}">
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title"><a data-toggle="collapse" href="#filter-navigation-{{ name }}-items" class="collapseWill">
-            <span class="pull-left"> <i class="fa fa-caret-right"></i></span> {% set title = name[:6] == 'group_' ? name[6:] : name %}
-            {{ title|replace({'_':' '})|title }} </a></h4>
+        <div class="boxed-title">
+            <h5 class="boxed-title"><a data-toggle="collapse" href="#filter-navigation-{{ name }}-items" class="collapseWill">
+            {% set title = name[:6] == 'group_' ? name[6:] : name %}
+            {{ title|replace({'_':' '})|title }} </a></h5>
         </div>
         <div id="filter-navigation-{{ name }}-items" class="panel-collapse collapse in">
             <div class="panel-body">
-                <ul class="list-unstyled">                    
+                <ul class="ul-toggle font-size-sm">                    
                     {% for item,count in filter_set %}
                         {% set selected = item in filter_request[(name)]|keys ? 1 : 0 %}
                         {% set link = selected == true ? [] : {(item):''} %}

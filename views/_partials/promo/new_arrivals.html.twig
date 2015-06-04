@@ -1,210 +1,1599 @@
-<div class="container main-container">
+      
+      <!-- Content Block
+      ============================================ -->
+      <div class="content-block">
+      
+        <!-- Container -->
+        <div class="container no-pad-t">
 
-    <!-- Main component call to action -->
-    {% set items_per_row = 4 %}
-    {% set collection_ids = [] %}
-    {% set product_count = 1 %}
-    {% set products = api.get('/catalog', {sort:"product.variant.popularity:-1",limit:20}) %}
-    <div class="row featuredPostContainer globalPadding style2">
-        <h3 class="section-title style2 text-center"><span>NEW ARRIVALS</span></h3>
+          <!-- Product Tabs -->
+          <div class="product-tabs">
 
-        <div id="productslider" class="owl-carousel owl-theme">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs nav-tabs-line-bottom line-pcolor nav-tabs-center case-u" role="tablist">
+              <li class="active"><a href="#tab-latest" data-toggle="tab">latest</a></li>
+              <li><a href="#tab-featured" data-toggle="tab">featured</a></li>
+              <li><a href="#tab-trending" data-toggle="tab">trending</a></li>
+            </ul>
+            <!-- /Nav Tabs -->
 
-            {% set options = ['image'] %}
-            {% for row,product in products if collection_ids[product.id] is empty and product_count < 13 %}
-            {% if product.group == 'product' %}
-                {% for id in product.product.collection_id %}
-                    {% set collection_ids = collection_ids|merge({(id):true}) %}
-                {% endfor %}
-            {% else %}
-                {% set collection_ids = collection_ids|merge({(product.id):true}) %}
-            {% endif %}
-            {% set product_count = product_count + 1 %}
-            {# Begin product #}
-            {% set product =  product|merge({'variant':product.product|values_in('variant')}) %}
-            {% set product =  product|merge({'attributes':product.variant|values_in(['price','compare_price','save_price','save_percent','color'])}) %}
+            <!-- Tab panes -->
+            <div class="tab-content tab-no-borders">
+            
+              <!-- Tab Latest -->
+              <div class="tab-pane active" id="tab-latest">
+              
+                <!-- Row -->
+                <div class="row">
                 
-           {% if 'image' in options %}
-            {# Grab image based on color facets #}
-            {% set img_url = product.thumbnail %}
-
-            {% if product.attributes.color|length > 1 %}
-                {% set current_colors = app.request.get.f.color|keys %}
-                {% for variant in product.variant 
-                    if variant.status == 'active' and variant.color in current_colors and variant.images is not empty %}
-                        {% set img_url = variant.thumbnail %}
-                {% endfor %}
-            {% endif %}
-
-            {% set secure =  app.url_asset | slice(0,5)  %}
-            {% if secure == 'https' %}
-            {% set img_url = img_url | replace({'http:':'https:'}) %}
-            {% endif %}
-            {% endif %}
-            <div class="item itemauto">
-                <div class="product">
-                    {#<a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist"
-                       data-placement="left">
-                        <i class="glyphicon glyphicon-heart"></i>
-                    </a>#}
-                    <div class="image">
-                    {#<div class="quickview">
-                    <a title="Quick View" class="btn btn-xs  btn-quickview" data-target="#product-details-modal"
-                   data-toggle="modal"> Quick View </a>
-                    </div>#}
-                    <a href="{{ app.url }}/product/{{ product.slug }}"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ img_url }}" alt="img" class="img-responsive"></a>
-                    <div class="promotion">
-                        <span class="new-product"> NEW</span> 
-                        {# <span class="discount">15% OFF</span>#}
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product1.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="{{ app.url_asset }}/images/diego/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                          <li><a href="{{ app.url_asset }}/images/diego/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                          <li><a href="{{ app.url_asset }}/images/diego/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                          <li><a href="{{ app.url_asset }}/images/diego/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="{{ app.url_asset }}/images/diego/products/product1.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <span class="label label-sale">sale</span>
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Grey winter jacket</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price price-old">$2350</span><span class="price">$1500</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
                     </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product2.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="{{ app.url_asset }}/images/diego/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                          <li><a href="{{ app.url_asset }}/images/diego/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="{{ app.url_asset }}/images/diego/products/product2.jpg" alt=""></a></li>
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="{{ app.url_asset }}/images/diego/products/product2.jpg" alt=""></a></li>
+                          <li><a href="{{ app.url_asset }}/images/diego/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="{{ app.url_asset }}/images/diego/products/product2.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Black lase blouse</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$2600</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
                     </div>
-                    <div class="description">
-                        <h4><a href="{{ app.url }}/product/{{ product.slug }}">{{ product.title|striptags|slice(0, 50) }} </a></h4>
-
-                        <p>{{ product.description|striptags|slice(0, 60) }}... </p>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product3.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product3.jpg" data-gal="prettyPhoto[gallery 3]" title="Product Name"><img src="images/products/product3.jpg" alt=""></a></li>
+                          <li><a href="images/products/product3.jpg" data-gal="prettyPhoto[gallery 3]" title="Product Name"><img src="images/products/product3.jpg" alt=""></a></li>
+                          <li><a href="images/products/product3.jpg" data-gal="prettyPhoto[gallery 3]" title="Product Name"><img src="images/products/product3.jpg" alt=""></a></li>
+                          <li><a href="images/products/product3.jpg" data-gal="prettyPhoto[gallery 3]" title="Product Name"><img src="images/products/product3.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <span class="label label-hot">popular</span>
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Chinese style coat</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$840</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
                     </div>
-                    <div class="price">
-                        <span>
-                            {% if product.attributes.price %}
-                                    {{ prod.price(product.attributes.price) }}
-                                {% if product.attributes.compare_price[0] is not empty %}
-                                    <span class="price-standard">
-                                        {{ prod.price(product.attributes.compare_price) }}
-                                    </span>
-                                {% endif %}
-                            {% endif %}
-                        </span>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product4.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product4.jpg" data-gal="prettyPhoto[gallery 4]" title="Product Name"><img src="images/products/product4.jpg" alt=""></a></li>
+                          <li><a href="images/products/product4.jpg" data-gal="prettyPhoto[gallery 4]" title="Product Name"><img src="images/products/product4.jpg" alt=""></a></li>
+                          <li><a href="images/products/product4.jpg" data-gal="prettyPhoto[gallery 4]" title="Product Name"><img src="images/products/product4.jpg" alt=""></a></li>
+                          <li><a href="images/products/product4.jpg" data-gal="prettyPhoto[gallery 4]" title="Product Name"><img src="images/products/product4.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Long striped dress</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$1820</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
                     </div>
-                    <div class="action-control"><a class="btn btn-primary"> <span class="add2cart"><i
-                            class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product5.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product5.jpg" data-gal="prettyPhoto[gallery 5]" title="Product Name"><img src="images/products/product5.jpg" alt=""></a></li>
+                          <li><a href="images/products/product5.jpg" data-gal="prettyPhoto[gallery 5]" title="Product Name"><img src="images/products/product5.jpg" alt=""></a></li>
+                          <li><a href="images/products/product5.jpg" data-gal="prettyPhoto[gallery 5]" title="Product Name"><img src="images/products/product5.jpg" alt=""></a></li>
+                          <li><a href="images/products/product5.jpg" data-gal="prettyPhoto[gallery 5]" title="Product Name"><img src="images/products/product5.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Srapless night dress</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$675</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
                     </div>
-                </div> <!--/.End Product-->
-            </div> <!--/.End Item Itemauto-->
-            {# End product #}
-            {% endfor %}
-        </div><!--/.End productslider-->
-    </div> <!--/.End row featuredPostContainer-->
-    {#
-    <!-- Product Details Modal  -->
-    <div class="modal fade" id="product-details-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <button aria-hidden="true" data-dismiss="modal" class="close" type="button"> ×</button>
-                <div class="col-lg-5 col-md-5 col-sm-5  col-xs-12">
-
-                    <!-- product Image -->
-
-                    <div class="main-image  col-lg-12 no-padding style3">
-                        <a class="product-largeimg-link" href="product-details.html"><img src="images/zoom/zoom1.jpg"
-                                                                                          class="img-responsive product-largeimg"
-                                                                                          alt="img">
-                        </a>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product6.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product6.jpg" data-gal="prettyPhoto[gallery 6]" title="Product Name"><img src="images/products/product6.jpg" alt=""></a></li>
+                          <li><a href="images/products/product6.jpg" data-gal="prettyPhoto[gallery 6]" title="Product Name"><img src="images/products/product6.jpg" alt=""></a></li>
+                          <li><a href="images/products/product6.jpg" data-gal="prettyPhoto[gallery 6]" title="Product Name"><img src="images/products/product6.jpg" alt=""></a></li>
+                          <li><a href="images/products/product6.jpg" data-gal="prettyPhoto[gallery 6]" title="Product Name"><img src="images/products/product6.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <span class="label label-sale">sale</span>
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Gold detailed dress</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price price-old">$1550</span><span class="price">$1220</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
                     </div>
-                    <!--/.main-image-->
-
-                    <div class="modal-product-thumb">
-                        <a class="thumbLink selected"><img data-large="images/zoom/zoom1.jpg" alt="img"
-                                                           class="img-responsive" src="images/zoom/zoom1.jpg">
-                        </a>
-                        <a class="thumbLink"><img data-large="images/zoom/zoom2.jpg" alt="img" class="img-responsive"
-                                                  src="images/zoom/zoom2.jpg">
-                        </a>
-                        <a class="thumbLink"><img data-large="images/zoom/zoom3.jpg" alt="img" class="img-responsive"
-                                                  src="images/zoom/zoom3.jpg">
-                        </a>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product7.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product7.jpg" data-gal="prettyPhoto[gallery 7]" title="Product Name"><img src="images/products/product7.jpg" alt=""></a></li>
+                          <li><a href="images/products/product7.jpg" data-gal="prettyPhoto[gallery 7]" title="Product Name"><img src="images/products/product7.jpg" alt=""></a></li>
+                          <li><a href="images/products/product7.jpg" data-gal="prettyPhoto[gallery 7]" title="Product Name"><img src="images/products/product7.jpg" alt=""></a></li>
+                          <li><a href="images/products/product7.jpg" data-gal="prettyPhoto[gallery 7]" title="Product Name"><img src="images/products/product7.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      
+                      <span class="label label-sale">sale</span>
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">One pice business suit</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price price-old">$3350</span><span class="price">$2050</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
                     </div>
-                    <!--/.modal-product-thumb-->
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product8.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product8.jpg" data-gal="prettyPhoto[gallery 8]" title="Product Name"><img src="images/products/product8.jpg" alt=""></a></li>
+                          <li><a href="images/products/product8.jpg" data-gal="prettyPhoto[gallery 8]" title="Product Name"><img src="images/products/product8.jpg" alt=""></a></li>
+                          <li><a href="images/products/product8.jpg" data-gal="prettyPhoto[gallery 8]" title="Product Name"><img src="images/products/product8.jpg" alt=""></a></li>
+                          <li><a href="images/products/product8.jpg" data-gal="prettyPhoto[gallery 8]" title="Product Name"><img src="images/products/product8.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Premium fur jacket</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$8400</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="product.html">add to cart</a> 
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                
                 </div>
-                <!--/ product Image-->
-
-
-                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 modal-details no-padding">
-                    <div class="modal-details-inner">
-                        <h1 class="product-title"> asddsaasd</h1>
-
-                        <h3 class="product-code">Product Code : DEN1098</h3>
-
-                        <div class="product-price"><span class="price-sales"> $70</span> <span
-                                class="price-standard">$95</span></div>
-                        <div class="details-description">
-                            <p>In scelerisque libero ut elit porttitor commodo Suspendisse laoreet magna. </p>
+                <!-- /Row -->
+              
+              </div>
+              <!-- /Tab Latest -->
+              
+              <!-- Tab Featured -->
+              <div class="tab-pane" id="tab-featured">
+              
+                <!-- Row -->
+                <div class="row">
+                
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product5.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product5.jpg" data-gal="prettyPhoto[gallery 5]" title="Product Name"><img src="images/products/product5.jpg" alt=""></a></li>
+                          <li><a href="images/products/product5.jpg" data-gal="prettyPhoto[gallery 5]" title="Product Name"><img src="images/products/product5.jpg" alt=""></a></li>
+                          <li><a href="images/products/product5.jpg" data-gal="prettyPhoto[gallery 5]" title="Product Name"><img src="images/products/product5.jpg" alt=""></a></li>
+                          <li><a href="images/products/product5.jpg" data-gal="prettyPhoto[gallery 5]" title="Product Name"><img src="images/products/product5.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Srapless night dress</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$675</span>
                         </div>
-                        <div class="color-details"><span class="selected-color"><strong>COLOR</strong></span>
-                            <ul class="swatches Color">
-                                <li class="selected">
-                                    <a style="background-color:#f1f40e"> </a>
-                                </li>
-                                <li>
-                                    <a style="background-color:#adadad"> </a>
-                                </li>
-                                <li>
-                                    <a style="background-color:#4EC67F"> </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!--/.color-details-->
-
-                        <div class="productFilter productFilterLook2">
-                            <div class="filterBox">
-                                <select>
-                                    <option value="strawberries" selected>Quantity</option>
-                                    <option value="mango">1</option>
-                                    <option value="bananas">2</option>
-                                    <option value="watermelon">3</option>
-                                    <option value="grapes">4</option>
-                                    <option value="oranges">5</option>
-                                    <option value="pineapple">6</option>
-                                    <option value="peaches">7</option>
-                                    <option value="cherries">8</option>
-                                </select>
-                            </div>
-                            <div class="filterBox">
-                                <select>
-                                    <option value="strawberries" selected>Size</option>
-                                    <option value="mango">XL</option>
-                                    <option value="bananas">XXL</option>
-                                    <option value="watermelon">M</option>
-                                    <option value="apples">L</option>
-                                    <option value="apples">S</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- productFilter -->
-
-                        <div class="cart-actions">
-                            <div class="addto">
-                                <button onclick="productAddToCartForm.submit(this);" class="button btn-cart cart first"
-                                        title="Add to Cart" type="button">Add to Cart
-                                </button>
-                                <a class="link-wishlist wishlist">Add to Wishlist</a></div>
-                        </div>
-                        <!--/.cart-actions-->
-
-                        <div class="product-share clearfix">
-                            <p> SHARE </p>
-
-                            <div class="socialIcon">
-                                <a href="#"> <i class="fa fa-facebook"></i>
-                                </a>
-                                <a href="#"> <i class="fa fa-twitter"></i>
-                                </a>
-                                <a href="#"> <i class="fa fa-google-plus"></i>
-                                </a>
-                                <a href="#"> <i class="fa fa-pinterest"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <!--/.product-share-->
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
                     </div>
-                    <!--/.modal-details-inner-->
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product6.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product6.jpg" data-gal="prettyPhoto[gallery 6]" title="Product Name"><img src="images/products/product6.jpg" alt=""></a></li>
+                          <li><a href="images/products/product6.jpg" data-gal="prettyPhoto[gallery 6]" title="Product Name"><img src="images/products/product6.jpg" alt=""></a></li>
+                          <li><a href="images/products/product6.jpg" data-gal="prettyPhoto[gallery 6]" title="Product Name"><img src="images/products/product6.jpg" alt=""></a></li>
+                          <li><a href="images/products/product6.jpg" data-gal="prettyPhoto[gallery 6]" title="Product Name"><img src="images/products/product6.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <span class="label label-sale">sale</span>
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Gold detailed dress</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price price-old">$1550</span><span class="price">$1220</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product7.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product7.jpg" data-gal="prettyPhoto[gallery 7]" title="Product Name"><img src="images/products/product7.jpg" alt=""></a></li>
+                          <li><a href="images/products/product7.jpg" data-gal="prettyPhoto[gallery 7]" title="Product Name"><img src="images/products/product7.jpg" alt=""></a></li>
+                          <li><a href="images/products/product7.jpg" data-gal="prettyPhoto[gallery 7]" title="Product Name"><img src="images/products/product7.jpg" alt=""></a></li>
+                          <li><a href="images/products/product7.jpg" data-gal="prettyPhoto[gallery 7]" title="Product Name"><img src="images/products/product7.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      
+                      <span class="label label-sale">sale</span>
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">One pice business suit</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price price-old">$3350</span><span class="price">$2050</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product8.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product8.jpg" data-gal="prettyPhoto[gallery 8]" title="Product Name"><img src="images/products/product8.jpg" alt=""></a></li>
+                          <li><a href="images/products/product8.jpg" data-gal="prettyPhoto[gallery 8]" title="Product Name"><img src="images/products/product8.jpg" alt=""></a></li>
+                          <li><a href="images/products/product8.jpg" data-gal="prettyPhoto[gallery 8]" title="Product Name"><img src="images/products/product8.jpg" alt=""></a></li>
+                          <li><a href="images/products/product8.jpg" data-gal="prettyPhoto[gallery 8]" title="Product Name"><img src="images/products/product8.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Premium fur jacket</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$8400</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="product.html">add to cart</a> 
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product1.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                          <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                          <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                          <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <span class="label label-sale">sale</span>
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Grey winter jacket</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price price-old">$2350</span><span class="price">$1500</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product2.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Black lase blouse</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$2600</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product3.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product3.jpg" data-gal="prettyPhoto[gallery 3]" title="Product Name"><img src="images/products/product3.jpg" alt=""></a></li>
+                          <li><a href="images/products/product3.jpg" data-gal="prettyPhoto[gallery 3]" title="Product Name"><img src="images/products/product3.jpg" alt=""></a></li>
+                          <li><a href="images/products/product3.jpg" data-gal="prettyPhoto[gallery 3]" title="Product Name"><img src="images/products/product3.jpg" alt=""></a></li>
+                          <li><a href="images/products/product3.jpg" data-gal="prettyPhoto[gallery 3]" title="Product Name"><img src="images/products/product3.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <span class="label label-hot">popular</span>
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Chinese style coat</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$840</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product4.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product4.jpg" data-gal="prettyPhoto[gallery 4]" title="Product Name"><img src="images/products/product4.jpg" alt=""></a></li>
+                          <li><a href="images/products/product4.jpg" data-gal="prettyPhoto[gallery 4]" title="Product Name"><img src="images/products/product4.jpg" alt=""></a></li>
+                          <li><a href="images/products/product4.jpg" data-gal="prettyPhoto[gallery 4]" title="Product Name"><img src="images/products/product4.jpg" alt=""></a></li>
+                          <li><a href="images/products/product4.jpg" data-gal="prettyPhoto[gallery 4]" title="Product Name"><img src="images/products/product4.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Long striped dress</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$1820</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                
                 </div>
-                <!--/.modal-details-->
-                <div class="clear"></div>
+                <!-- /Row -->
+              
+              </div>
+              <!-- /Tab Featured -->
+            
+              <!-- Tab Trending -->
+              <div class="tab-pane" id="tab-trending">
+              
+                <!-- Row -->
+                <div class="row">
+                
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product2.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Black lase blouse</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$2600</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product3.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product3.jpg" data-gal="prettyPhoto[gallery 3]" title="Product Name"><img src="images/products/product3.jpg" alt=""></a></li>
+                          <li><a href="images/products/product3.jpg" data-gal="prettyPhoto[gallery 3]" title="Product Name"><img src="images/products/product3.jpg" alt=""></a></li>
+                          <li><a href="images/products/product3.jpg" data-gal="prettyPhoto[gallery 3]" title="Product Name"><img src="images/products/product3.jpg" alt=""></a></li>
+                          <li><a href="images/products/product3.jpg" data-gal="prettyPhoto[gallery 3]" title="Product Name"><img src="images/products/product3.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <span class="label label-hot">popular</span>
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Chinese style coat</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$840</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product4.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product4.jpg" data-gal="prettyPhoto[gallery 4]" title="Product Name"><img src="images/products/product4.jpg" alt=""></a></li>
+                          <li><a href="images/products/product4.jpg" data-gal="prettyPhoto[gallery 4]" title="Product Name"><img src="images/products/product4.jpg" alt=""></a></li>
+                          <li><a href="images/products/product4.jpg" data-gal="prettyPhoto[gallery 4]" title="Product Name"><img src="images/products/product4.jpg" alt=""></a></li>
+                          <li><a href="images/products/product4.jpg" data-gal="prettyPhoto[gallery 4]" title="Product Name"><img src="images/products/product4.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Long striped dress</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$1820</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product7.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product7.jpg" data-gal="prettyPhoto[gallery 7]" title="Product Name"><img src="images/products/product7.jpg" alt=""></a></li>
+                          <li><a href="images/products/product7.jpg" data-gal="prettyPhoto[gallery 7]" title="Product Name"><img src="images/products/product7.jpg" alt=""></a></li>
+                          <li><a href="images/products/product7.jpg" data-gal="prettyPhoto[gallery 7]" title="Product Name"><img src="images/products/product7.jpg" alt=""></a></li>
+                          <li><a href="images/products/product7.jpg" data-gal="prettyPhoto[gallery 7]" title="Product Name"><img src="images/products/product7.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      
+                      <span class="label label-sale">sale</span>
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">One pice business suit</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price price-old">$3350</span><span class="price">$2050</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product8.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product8.jpg" data-gal="prettyPhoto[gallery 8]" title="Product Name"><img src="images/products/product8.jpg" alt=""></a></li>
+                          <li><a href="images/products/product8.jpg" data-gal="prettyPhoto[gallery 8]" title="Product Name"><img src="images/products/product8.jpg" alt=""></a></li>
+                          <li><a href="images/products/product8.jpg" data-gal="prettyPhoto[gallery 8]" title="Product Name"><img src="images/products/product8.jpg" alt=""></a></li>
+                          <li><a href="images/products/product8.jpg" data-gal="prettyPhoto[gallery 8]" title="Product Name"><img src="images/products/product8.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Premium fur jacket</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$8400</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="product.html">add to cart</a> 
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product1.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                          <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                          <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                          <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <span class="label label-sale">sale</span>
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Grey winter jacket</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price price-old">$2350</span><span class="price">$1500</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="{{ app.url_asset }}/images/diego/products/product5.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product5.jpg" data-gal="prettyPhoto[gallery 5]" title="Product Name"><img src="images/products/product5.jpg" alt=""></a></li>
+                          <li><a href="images/products/product5.jpg" data-gal="prettyPhoto[gallery 5]" title="Product Name"><img src="images/products/product5.jpg" alt=""></a></li>
+                          <li><a href="images/products/product5.jpg" data-gal="prettyPhoto[gallery 5]" title="Product Name"><img src="images/products/product5.jpg" alt=""></a></li>
+                          <li><a href="images/products/product5.jpg" data-gal="prettyPhoto[gallery 5]" title="Product Name"><img src="images/products/product5.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Srapless night dress</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">$675</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="product.html" class="main"><img src="images/products/product6.jpg" alt=""></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product6.jpg" data-gal="prettyPhoto[gallery 6]" title="Product Name"><img src="images/products/product6.jpg" alt=""></a></li>
+                          <li><a href="images/products/product6.jpg" data-gal="prettyPhoto[gallery 6]" title="Product Name"><img src="images/products/product6.jpg" alt=""></a></li>
+                          <li><a href="images/products/product6.jpg" data-gal="prettyPhoto[gallery 6]" title="Product Name"><img src="images/products/product6.jpg" alt=""></a></li>
+                          <li><a href="images/products/product6.jpg" data-gal="prettyPhoto[gallery 6]" title="Product Name"><img src="images/products/product6.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      
+                      <span class="label label-sale">sale</span>
+                      
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="product.html">Gold detailed dress</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price price-old">$1550</span><span class="price">$1220</span>
+                        </div>
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="cart.html">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="product.html"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->
+                  
+
+                
+                </div>
+                <!-- /Row -->
+              
+              </div>
+              <!-- /Tab Trending -->
             </div>
-            <!--/.modal-content-->
+            <!-- /Tab Panes -->
+            
+          </div>
+          <!-- /Product Tabs -->
+          
         </div>
-        <!--/.modal-content-->
-    </div>
-    <!-- End Modal -->
-    #}
-</div> <!--./ End Container Main container -->
+        <!-- /Container -->
+        
+      </div>
+      <!-- /Content Block
+      ============================================ -->
+      
+      <!-- Content Block
+      ============================================ -->
+      <div class="content-block boxed-section cover-3-bg overlay-dark-m" >
+      
+        <!-- Container -->
+        <div class="container cont-lg">
+        
+          <!-- Promo Text -->
+          <div class="promo-text">
+            <h5>from 5th March - 26 March</h5>
+            <h1 class="boxed">dont miss the great summer sale</h1>
+            <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet consectetur veli.</p>
+            <a class="btn btn-primary btn-borderless">shop now</a>
+          </div>
+          <!-- Promo Text -->
+        
+        </div>
+        <!-- /Container -->
+        
+      </div>  
+      <!-- /Content Block
+      ============================================ -->
+ 
+      <!-- Content Block
+      ============================================ -->
+      <div class="content-block" >
+      
+        <!-- Container -->
+        <div class="container cont-md">
+        
+          <!-- Section Title -->
+          <div class="section-title line-pcolor">
+            <h2>all premium brands</h2>
+            <p>Helena is a freelance fashion designer who specialises in print designs and combining fabrics. My designs have been sold all over the world.</p>
+          </div>
+          <!-- /Section Title -->
+          
+          <!-- Slider Wrapper -->
+          <div class="brand-slider">
+          
+            <!-- BxSlider -->
+            <div class="bxslider" data-call="bxslider" data-options="{pager:false, slideMargin:20}" data-breaks="[{screen:0, slides:2}, {screen:460, slides:3}, {screen:768, slides:5}]">
+              
+              <!-- Slide -->
+              <div class="slide">
+                <img class="img-main" src="{{ app.url_asset }}/images/diego/company1.jpg" alt=""/>
+              </div>
+              <!-- /Slide -->
+
+              <!-- Slide -->
+              <div class="slide">
+                <img class="img-main" src="{{ app.url_asset }}/images/diego/company1.jpg" alt=""/>
+              </div>
+              <!-- /Slide -->
+              
+              <!-- Slide -->
+              <div class="slide">
+                <img class="img-main" src="{{ app.url_asset }}/images/diego/company1.jpg" alt=""/>
+              </div>
+              <!-- /Slide -->
+              
+              <!-- Slide -->
+              <div class="slide">
+                <img class="img-main" src="{{ app.url_asset }}/images/diego/company1.jpg" alt=""/>
+              </div>
+              <!-- /Slide -->
+              
+              <!-- Slide -->
+              <div class="slide">
+                <img class="img-main" src="{{ app.url_asset }}/images/diego/company1.jpg" alt=""/>
+              </div>
+              <!-- /Slide -->
+              
+              <!-- Slide -->
+              <div class="slide">
+                <img class="img-main" src="{{ app.url_asset }}/images/diego/company1.jpg" alt=""/>
+              </div>
+              <!-- /Slide -->
+              
+              <!-- Slide -->
+              <div class="slide">
+                <img class="img-main" src="{{ app.url_asset }}/images/diego/company1.jpg" alt=""/>
+              </div>
+              <!-- /Slide -->
+            </div>
+            <!-- /BxSlider -->
+            
+          </div>
+          <!-- Slider Wrapper -->
+        </div>
+        <!-- /Container -->
+      
+      </div>
+      <!-- Content Block
+      ============================================ -->
+
+      <!-- Newsletter Block
+      ============================================ -->
+      <div class="newsletter-block boxed-section overlay-dark-m cover-2-bg">
+      
+        <!-- Container -->
+        <div class="container">
+          <form>
+            <!-- Row -->
+            <div class="row grid-10">
+              <!-- Col -->
+              <div class="col-sm-3 col-md-2">
+                <span class="case-c">get newsletter</span>
+              </div>
+              <!-- Col -->
+              
+              <!-- Col -->
+              <div class="col-sm-6 col-md-8">
+                  <input class="form-control" type="text" placeholder="Enter your email address" />
+              </div>
+              <!-- Col -->
+              
+              <!-- Col -->
+              <div class="col-sm-3 col-md-2">
+                <button class="btn btn-block btn-color yellow-bg"><i class="icon-left fa fa-envelope"></i>subscribe</button>
+              </div>
+              <!-- /Col -->
+              
+            </div>
+            <!-- /Row -->
+          </form>
+        </div>
+        <!-- /Container -->
+      
+      </div>
+      <!-- /Newsletter Block
+      =================================================== -->

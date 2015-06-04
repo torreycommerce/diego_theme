@@ -5,9 +5,7 @@
 </pre>
 #}
      <!-- Header Block
-      ============================================== -->
-      <header class="header-block line-top">
-      
+      ============================================== -->      
         <!-- Main Header
         ............................................ -->
         <div class="main-header container">
@@ -56,72 +54,33 @@
                     
                       <!-- Nav Right -->
                       <ul class="nav navbar-nav navbar-right case-u active-bcolor navbar-center-xs">
+                        {% if app.user.id is null %}
                         <li class="dropdown has-panel">
-                          <a aria-expanded="false" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-left ti ti-user"></i><span class="hidden-sm">sign in</span><i class="fa fa-angle-down toggler hidden-xs"></i></a>
-                          
-                          <!-- Dropdown Panel -->
-                          <div class="dropdown-menu dropdown-panel arrow-top dropdown-left-xs" data-keep-open="true">
-                            <fieldset>
-                              <form>
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                                    <input class="form-control" placeholder="Email" type="email">
-                                  </div>
-                                </div>
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-lock"></i></div>
-                                    <input class="form-control" placeholder="Password" type="password">
-                                  </div>
-                                </div>
-                                <div class="form-group">
-                                  <label class="checkbox-inline"><input value="" type="checkbox">Remember me </label>
-                                </div>
-                                <button class="btn btn-primary btn-block">sign in</button>
-                              </form>
-                            </fieldset>
-                          </div>
-                          <!-- /Dropdown Panel -->
-                          
+                          <a aria-expanded="false" href="{{app.url}}/account/login" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-left ti ti-user"></i><span class="hidden-sm">sign in</span></a>                          
                         </li>
-                        
-                        <li class="dropdown has-panel">
-                          <a aria-expanded="false" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-left ti ti-pencil-alt"></i><span class="hidden-sm">sign up</span><i class="fa fa-angle-down toggler hidden-xs"></i></a>
-                          
-                          <!-- Dropdown Panel -->
-                          <div class="dropdown-menu dropdown-panel arrow-top" data-keep-open="true">
-                            <fieldset>
-                              <form>
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                                    <input class="form-control" placeholder="Email" type="email">
-                                  </div>
-                                </div>
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-lock"></i></div>
-                                    <input class="form-control" placeholder="Password" type="password">
-                                  </div>
-                                </div>
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-lock"></i></div>
-                                    <input class="form-control" placeholder="Repeat Password" type="password">
-                                  </div>
-                                </div>
-                                <div class="form-group">
-                                  <label class="checkbox-inline"><input value="" type="checkbox">I accept the terms and conditions.</label>
-                                </div>
-                                
-                                <button class="btn btn-primary btn-block">sign up</button>
-                              </form>
-                            </fieldset>
-                          </div>
-                          <!-- /Dropdown Panel -->
-                          
+                          <li class="dropdown has-panel">
+                          <a aria-expanded="false" href="{{app.url}}/account/login" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-left ti ti-pencil-alt"></i><span class="hidden-sm">sign up</span></a>                       
                         </li>
+                        {# End login button #}
+                        {% else %}
+                        {% set customer = api.get('/customer/' ~ app.user.id) %}
+                        <li>
+                            <div class="btn-group my-account">
+                                <a type="button" id="dropdown-account" class="btn dropdown-toggle" data-toggle="dropdown">
+                                    <i class="icon-left ti ti-user"></i>{{ customer.first_name }} {{ customer.last_name}} <span class="fa fa-angle-down"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{app.url}}/account">My Account</a></li>
+                                    <li><a href="{{app.url}}/account/orders">Orders</a></li>
+                                    <li><a href="{{app.url}}/account/wishlists">Wishlists</a></li>
+                                    <li><a href="{{app.url}}/account/registries">Registries</a></li>
+                                    <li><div class="divider"></div></li>
+                                    <li><a href="{{app.url}}/account/logout">Not {{ customer.first_name}}? Logout</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {# End my account button #}                        
                       </ul>
                       <!-- /Nav Right-->
 
@@ -190,37 +149,33 @@
             <!-- Collapse -->
             <div class="collapse navbar-collapse navbar-absolute">
             
-              <!-- Navbar Center -->
-              <ul class="nav navbar-nav navbar-center line-top line-pcolor case-c">
-                <li class="active"><a href="{{ app.url }}/">home</a></li>
-                {% for main_category,items in categories if main_category != "clearance" %}
-                {% if items|length %}
-                {# Begin dropdown #}
-                <li class="dropdown dropdown-mega"><a class="dropdown-toggle" data-toggle="dropdown" href="{{app.url}}/category/{{main_category}}">{{main_category|replace('-',' ')|title}}<i class="fa fa-angle-down toggler"></i></a>
-                  <!-- Mega Menu -->
-                  <div class="mega-menu dropdown-menu">
-                    <!-- Row -->
-                    <ul id="category_item" class="dropdown-menu">
-                        {% for category,subitems in items %}
-                        {% set i = i + 1 %}
-                        <li>
-                            <a tabindex="-1" href="{{app.url}}/category/{{category}}">{{category|replace('-',' ')|title}}</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    <!-- /Row -->
-                  </div>
-                  <!-- /Mega Menu -->
-                </li>
-                {% else %}
-                <li>
-                    <a href="{{app.url}}/category/{{main_category}}">{{main_category|replace('-',' ')|title}}</a>
-                </li>
+                <!-- Navbar Center -->
+                <ul class="nav navbar-nav navbar-center line-top line-pcolor case-c">
+                    <li class="active"><a href="{{ app.url }}/">home</a></li>
+                    {% for main_category,items in categories if main_category != "clearance" %}
+                        {% if items|length %}
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="{{app.url}}/category/{{main_category}}">{{main_category|replace('-',' ')|title}}
+                            <i class="fa fa-angle-down toggler"></i>
+                        </a>
+                        <ul id="category_item" class="dropdown-menu">
+                            {% for category,subitems in items %}
+                            {% set i = i + 1 %}
+                            <li>
+                                <a tabindex="-1" href="{{app.url}}/category/{{category}}">{{category|replace('-',' ')|title}}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {# End dropdown #}
+                    {% else %}
+                    <li>
+                        <a href="{{app.url}}/category/{{main_category}}">{{main_category|replace('-',' ')|title}}</a>
+                    </li>
                 {% endif %}
                 {% endfor %}
-                <div style="clear: both"></div>
-              </ul>
-              <!-- /Navbar Center -->
+                </ul>
+                <!-- /Navbar Center -->
               
             </div>
             <!-- /Collapse -->
@@ -359,6 +314,3 @@
         <!-- /Nav Bottom
         .............................................. -->
         
-      </header>
-      <!-- /Header Block
-      ============================================== -->

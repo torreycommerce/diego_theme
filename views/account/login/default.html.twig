@@ -25,27 +25,37 @@
 
 
 {% block breadcrumb %}
+      <!-- Intro Block
+      ============================================-->
+      <section class="intro-block intro-page boxed-section cover-4 overlay-dark-m">
+      
+        <!-- Container -->
+        <div class="container">     
+          <!-- Section Title -->
+          <div class="section-title invert-colors no-margin-b">
+            <h2><i class="fa fa-lock"></i> {{ title|title }}</h2>
+            <p class="hidden-xs"></p>
+          </div>
+          <!-- /Section Title -->
+        </div>
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Intro Block
+      ============================================-->
     {{ base.breadcrumbs({'Account':'/account'}) }}
 {% endblock %}
 
 
 {% block content %}
+
 <div class="container main-container">
-	{# Begin page header #}
-	<div class="row">
-		<div class="col-lg-9 col-md-9 col-sm-7">
-			<header>
-				<h1 class="section-title-inner"><span><i class="fa fa-lock"></i> {{ title|title }}</span></h1>
-			</header>
-		</div>
-	</div>
-	{# End page header #}
 	<div class="row">		
 		<div class="col-md-6 col-lg-6">
 			<div class="well">
 				{# Begin Login #}
 				<div class="account-login">
-					<h2 class="block-title-2">Do you have a {{ app.params.site.title }} account?</h2>
+					<h4>Do you have a {{ app.params.site.title }} account?</h4>
 					{% include "/account/login/_partials/form.html.twig" %}
 				</div>
 				{# End Login #}
@@ -55,7 +65,7 @@
 			<div class="well">
 				{# Begin create account #}
 				<div class="account-create">
-					<h2 class="block-title-2">Create a new account</h2>
+					<h4>Create a new account</h4>
 					<p>Create an account and you'll be able to place orders, create registries, create wishlists, check the status of your orders, write reviews, and more. </p>
 					<a class="btn btn-primary" href="{{app.url}}/account/create/{{ app.request.path }}"><i class="fa fa-user"></i> Create Account</a>
 				</div>
