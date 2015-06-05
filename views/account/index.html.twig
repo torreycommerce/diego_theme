@@ -23,8 +23,8 @@ Passed into the macro is a array of key:value pairs as (title):(relative url)
 Load in the tabs for the page, pass in the name of this page, and make sure it's
 set in the array in /account/_macros/base.html.twig
 #}
-<div id="customer-account" class="container main-container">
-    <div class="row">
+<div id="customer-account" class="content-block default-bg ">
+    <div class="container cont-main no-pad-t">
         {# Begin account center #}
         {# Begin page header #}    
         <div class="col-sm-12 col-md-9 col-lg-10">
@@ -45,6 +45,6 @@ set in the array in /account/_macros/base.html.twig
             </div>
         </div>      
     </div>
-</div><div class="gap"></div>
+</div>
 {# End account center #}
 {% endblock %}

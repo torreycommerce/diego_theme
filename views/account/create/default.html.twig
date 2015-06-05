@@ -27,13 +27,58 @@
 {% endblock %}
 
 {% block content %}
-<div id="account" class="container main-container">
-<div class="row">
-    <div class="col-lg-9 col-md-9 col-sm-7">
-                <header>
-                    <h1 class="section-title-inner"><span><i class="fa fa-users"></i> {{ title|title }}</span></h1>
-                    <h2 class="block-title-2"><span>New to {{ app.params.site.title }}? Create an account by filling out the form below.</span></h2>
-                </header>
+
+      <!-- Intro Block
+      ============================================-->
+      <section class="intro-block intro-page boxed-section page-bg overlay-dark-m">
+      
+        <!-- Container -->
+        <div class="container">     
+          <!-- Section Title -->
+          <div class="section-title invert-colors no-margin-b">
+            <h2><i class="fa fa-users"></i> {{ title|title }}</h2>
+            <p class="hidden-xs">New to {{ app.params.site.title }}? Create an account by filling out the form below.</p>
+          </div>
+          <!-- /Section Title -->
+        </div>
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Intro Block
+      ============================================-->
+            <!-- Page Info Block
+      ============================================-->
+      <section class="page-info-block boxed-section">
+      
+        <!-- Container -->
+        <div class="container cont-pad-x-15"> 
+
+          <!-- Breadcrumb -->
+          <ol class="breadcrumb pull-left">
+            <li><a href="#"><i class="ti ti-home"></i></a></li>
+            <li><a href="#">Pages</a></li>
+            <li class="active">features</li>
+          </ol>
+          <!-- /Breadcrumb --> 
+
+          <!-- hlinks -->
+          <ul class="page-links pull-right hlinks hlinks-icons color-icons-borders color-icons-bg-hovered">
+            <li><a href="#"><i class="icon fa fa-facebook"></i></a></li>
+            <li><a href="#"><i class="icon fa fa-twitter"></i></a></li>
+            <li><a href="#"><i class="icon fa fa-rss"></i></a></li>
+          </ul>
+          <!-- /hlinks -->
+
+        </div>
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Page Info  Block
+      ============================================-->
+<section id="account" class="content-block default-bg ">
+<!-- Container -->
+    <div class="container cont-main no-pad-t">     
+        <div class="col-lg-9 col-md-9 col-sm-7">
         {{ forms.begin('create','','post', {class:'form-horizontal'}) }}
         <div class="well">
         <fieldset>
@@ -147,6 +192,5 @@
         </div>
     </div>
 </div>
-</div>
-<div class="gap"></div>
+</section>
 {% endblock %}
