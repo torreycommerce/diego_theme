@@ -4,6 +4,24 @@
 {% import "/_macros/normalizer.html.twig" as normalizer %}
 {% block breadcrumb %}
 {{ base.breadcrumbs({'checkout':''}) }}
+      <!-- Intro Block
+      ============================================-->
+      <section class="intro-block intro-page boxed-section page-bg overlay-dark-m">
+      
+        <!-- Container -->
+        <div class="container">     
+          <!-- Section Title -->
+          <div class="section-title invert-colors no-margin-b">
+            <h2><i class="glyphicon glyphicon-shopping-cart"></i> checkout</h2>
+            <p class="hidden-xs">Helena is a freelance fashion house specialiasing in print designs and combining fabrics. Our stores can be found all over the world.</p>
+          </div>
+          <!-- /Section Title -->
+        </div>
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Intro Block
+      ============================================-->
 {% endblock %}
 {% set step = 'shipping' %}
 {% set methods = api.get('/shippingmethod', {query:{status:'active'}}) %}
@@ -18,24 +36,46 @@
         {% do app.redirect(app.url ~ '/checkout/billing') %}
     {% endif %}
 {% endif %}
-<div class="container main-container">
-<section id="checkout">
-    <div class="row">
-        <div class="col-lg-9 col-md-9 col-sm-7">
-            <h1 class="section-title-inner"><span><i
-                    class="glyphicon glyphicon-shopping-cart"></i> Checkout </span></h1>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-5 rightSidebar">
-            <h4 class="caps"><a href="{{ app.url }}/"><i class="fa fa-chevron-left"></i> Back to shopping </a></h4>
-        </div>
+  <!-- Page Info Block
+  ============================================-->
+  <section class="page-info-block boxed-section">
+  
+    <!-- Container -->
+    <div class="container cont-pad-x-15"> 
+
+      <!-- Breadcrumb -->
+      <ol class="breadcrumb pull-left">
+        <li><a href="#"><i class="ti ti-home"></i></a></li>
+        <li><a href="#">Pages</a></li>
+        <li><a href="#">other</a></li>
+        <li class="active">blog</li>
+      </ol>
+      <!-- /Breadcrumb --> 
+
+      <!-- hlinks -->
+      <ul class="page-links pull-right hlinks hlinks-icons color-icons-borders color-icons-bg-hovered">
+        <li><a href="#"><i class="icon fa fa-facebook"></i></a></li>
+        <li><a href="#"><i class="icon fa fa-twitter"></i></a></li>
+        <li><a href="#"><i class="icon fa fa-rss"></i></a></li>
+      </ul>
+      <!-- /hlinks -->
+
     </div>
-    <!--/.row-->
+    <!-- /Container -->
+  
+  </section>
+  <!-- /Page Info  Block
+  ============================================-->
+  <section class="content-block default-bg">
+  
+    <!-- Container -->
+    <div class="container cont-pad-t-sm">
     <div class="cartFooter w100">
         <div class="box-footer">
             <div class="col-xs-12"><i class="fa fa-map-marker "></i> <span>SHIPPING ADDRESS</span></div>
         </div>
     </div>
-    <!--/ cartTop -->
+<!--/ cartTop -->
     <div class="row">
         <div class="col-md-12">
             <div id="fade-container">
@@ -194,9 +234,7 @@
                 </div>
                 
             </div>
-        </div>
-    </div>
-</section>
+
                     <div class="cartFooter w100">
                         <div class="box-footer">
                             <div class="pull-left"><a href="{{app.url}}/cart" class="btn btn-default"> <i
@@ -209,7 +247,7 @@
                     {{ forms.end() }}
                     <!--/ cartFooter -->
         </div>
-<div class="gap"></div>
+        </section>
 {% endblock %}
 {% block js %}
 {{ app.asset.js(app.url_asset ~ '/js/checkout.js') }}

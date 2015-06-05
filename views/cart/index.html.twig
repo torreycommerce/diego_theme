@@ -3,7 +3,26 @@
 
 {% block breadcrumb %}
 {{ base.breadcrumbs({'Cart':''}) }}
+      <!-- Intro Block
+      ============================================-->
+      <section class="intro-block intro-page boxed-section page-bg overlay-dark-m">
+      
+        <!-- Container -->
+        <div class="container">     
+          <!-- Section Title -->
+          <div class="section-title invert-colors no-margin-b">
+            <h2><i class="glyphicon glyphicon-shopping-cart"></i> cart</h2>
+            <p class="hidden-xs">Helena is a freelance fashion house specialiasing in print designs and combining fabrics. Our stores can be found all over the world.</p>
+          </div>
+          <!-- /Section Title -->
+        </div>
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Intro Block
+      ============================================-->
 {% endblock %}
+
 {% block content %}
 {% for item, quantity in app.request.post.cart.quantity %}
 {% if quantity <= 0 %}
@@ -21,42 +40,66 @@
 {% if app.request.post.cart.coupon_code is not empty %}
 {% set result = api.post('/sessioncartcoupon', {code:app.request.post.cart.coupon_code}) %}
 {% endif %}
-<div class="container main-container">
-{% if api.error is not empty %}
-<div class="alert alert-warning">{{ api.error }}</div>
-{% endif %}
-{% do api.post('/sessioncartcoupon/refreshCoupons') %}
-{% set cart = api.get('/sessioncart') %}
-{% set cart_coupon = api.get('/sessioncartcoupon') %}
-{% set shipping_methods = api.get('/shippingmethod',{query:{status:'active'}}) %}
-{% if shipping_methods is empty %}
-<div class="row">
-    <div class="col-md-12">
-        Acenda is not properly set up for checkout. Please add an active shipping method.
-    </div>
-</div>
-{% else %}
-{% if (cart.items is empty) %}
-<div class="row">
-    <div class="col-md-12">
-        <i>The cart is empty.</i><br /><br />
-        <a class="btn btn-primary" href="{{app.url}}">Back to Shopping</a>
-    </div>
-</div>
-{% else %}
-<section id="shopping-cart">
+      <!-- Page Info Block
+      ============================================-->
+      <section class="page-info-block boxed-section">
+      
+        <!-- Container -->
+        <div class="container cont-pad-x-15"> 
 
-    <div class="row">
-        <div class="col-lg-9 col-md-9 col-sm-7">
-            <h1 class="section-title-inner"><span><i
-                    class="glyphicon glyphicon-shopping-cart"></i> Shopping cart </span></h1>
+          <!-- Breadcrumb -->
+          <ol class="breadcrumb pull-left">
+            <li><a href="#"><i class="ti ti-home"></i></a></li>
+            <li><a href="#">Pages</a></li>
+            <li><a href="#">other</a></li>
+            <li class="active">blog</li>
+          </ol>
+          <!-- /Breadcrumb --> 
+
+          <!-- hlinks -->
+          <ul class="page-links pull-right hlinks hlinks-icons color-icons-borders color-icons-bg-hovered">
+            <li><a href="#"><i class="icon fa fa-facebook"></i></a></li>
+            <li><a href="#"><i class="icon fa fa-twitter"></i></a></li>
+            <li><a href="#"><i class="icon fa fa-rss"></i></a></li>
+          </ul>
+          <!-- /hlinks -->
+
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-5 rightSidebar">
-            <h4 class="caps"><a href="{{ app.url }}/"><i class="fa fa-chevron-left"></i> Back to shopping </a></h4>
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Page Info  Block
+      ============================================-->
+            <!-- Content Block
+      ============================================-->
+      <section class="content-block default-bg">
+      
+        <!-- Container -->
+        <div class="container cont-pad-t-sm">
+    {% if api.error is not empty %}
+    <div class="alert alert-warning">{{ api.error }}</div>
+    {% endif %}
+    {% do api.post('/sessioncartcoupon/refreshCoupons') %}
+    {% set cart = api.get('/sessioncart') %}
+    {% set cart_coupon = api.get('/sessioncartcoupon') %}
+    {% set shipping_methods = api.get('/shippingmethod',{query:{status:'active'}}) %}
+    {% if shipping_methods is empty %}
+    <div class="row">
+        <div class="col-md-12">
+            Acenda is not properly set up for checkout. Please add an active shipping method.
         </div>
     </div>
-    <!--/.row-->
-    <div class="hidden-xs hidden-sm">
+    {% else %}
+    {% if (cart.items is empty) %}
+    <div class="row">
+        <div class="col-md-12">
+            <i>The cart is empty.</i><br /><br />
+            <a class="btn btn-primary" href="{{app.url}}">Back to Shopping</a>
+        </div>
+    </div>
+    {% else %}
+    <section id="shopping-cart">
+        <div class="hidden-xs hidden-sm">
     <div class="cartFooter w100">
         <div class="box-footer">
             <div class="col-xs-4 col-sm-6 col-md-4 col-lg-4 text-center"><i class="fa fa-info-circle"></i> PRODUCT DETAIL</div>
@@ -120,7 +163,7 @@
 
 
                         
-                        <div class="remove"><button class="glyphicon glyphicon-trash fa-2x" type="submit" name="cart[action]" value="remove/{{ id }}"></button></div>
+                        <div class="remove"><button class="glyphicon glyphicon-trash" type="submit" name="cart[action]" value="remove/{{ id }}"></button></div>
                     </div>
                     {# Begin item prices #}
                     <div class="col-md-3 col-lg-3">
@@ -301,13 +344,13 @@
     </div>
     {# Begin third party payments #}
     {{ forms.end() }}
-
-    <div class="gap"></div>
         
-    </div>
     {# End third party payments #}
     {% endif %}
     {% endif %}
+
+    </div>
+    </section>
     {% endblock %}
     {% block js %}
     {{ app.asset.js(app.url ~ '/js/estimator.js') }}

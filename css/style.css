@@ -2042,30 +2042,31 @@ input[type="checkbox"] {
   transform: rotate(135deg);
 }
 
-section#toolbar .btn-group.my-account a {
+.btn-group.my-account a {
   background-color: none;
   border-radius: 0;
   color: #666b76 ;
   font-size: 13px;
 }
-section#toolbar .btn-group.my-account a i {
+.btn-group.my-account a i {
   padding-right: 0px;
 }
-section#toolbar .btn-group.my-account a span.caret {
+.btn-group.my-account a span.caret {
   border-top-color: #ffffff ;
   border-bottom-color: #ffffff ;
   margin-left: 10px;
 }
-section#toolbar .btn-group.my-account a:active,
-section#toolbar .btn-group.my-account a:focus,
-section#toolbar .btn-group.my-account a:hover {
-  background-color: none;
+.btn-group.my-account a:active,
+.btn-group.my-account a:focus,
+.btn-group.my-account a:hover,
+.btn-group.my-account a:visited {
+  background-color: 0 none !important;
   color: #333 ;
 }
-section#toolbar .btn-group.my-account .dropdown-menu li {
+.btn-group.my-account .dropdown-menu li {
   padding: 0;
 }
-section#toolbar .btn-group.my-account .dropdown-menu li a {
+.btn-group.my-account .dropdown-menu li a {
   background-color: 0 none;
   color: #666b76;
   text-align: left;
@@ -2075,13 +2076,14 @@ section#toolbar .btn-group.my-account .dropdown-menu li a {
   -o-border-radius: 0px;
   border-radius: 0px;
 }
-section#toolbar .btn-group.my-account .dropdown-menu li a:active,
-section#toolbar .btn-group.my-account .dropdown-menu li a:focus,
-section#toolbar .btn-group.my-account .dropdown-menu li a:hover {
+.btn-group.my-account .dropdown-menu li a:active,
+.btn-group.my-account .dropdown-menu li a:focus,
+.btn-group.my-account .dropdown-menu li a:hover,
+.btn-group.my-account .dropdown-menu li a:visited {
   background-color: 0 none;
   color: #666666;
 }
-section#toolbar .btn-group.my-account .dropdown-menu li .divider {
+.btn-group.my-account .dropdown-menu li .divider {
   margin: 0;
 }
 
@@ -5905,6 +5907,31 @@ ul.tags li a:hover {
   padding: 15px 0;
   float: right;
   margin-left: 20px;
+}
+
+.cartFooter {
+    padding: 20px;
+    border-top: solid 1px #eee;
+    background: #EBEDEF;
+    display: inline-block;
+    width: 100%;
+}
+
+.width100, .w100 {
+    width: 100%;
+}
+
+
+@media (max-width: 400px) {
+    .cartFooter .box-footer div {
+        width: 100%;
+        text-align: center;
+        padding-bottom: 5px;
+    }
+
+    .cartFooter {
+        padding: 5px 0;
+    }
 }
 
 /* CART CONTENTS

@@ -66,7 +66,7 @@
                         {% set customer = api.get('/customer/' ~ app.user.id) %}
                         <li>
                             <div class="btn-group my-account">
-                                <a type="button" id="dropdown-account" class="btn dropdown-toggle" data-toggle="dropdown">
+                                <a href="{{app.url}}/account" type="button" id="dropdown-account" class="btn dropdown-toggle" data-toggle="dropdown">
                                     <i class="icon-left ti ti-user"></i>{{ customer.first_name }} {{ customer.last_name}} <span class="fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu">

@@ -252,20 +252,24 @@
 
                   <!-- Col -->
                   <div class="col-md-6">
-                    <div class="form-group">
-                      <!-- Input Group -->
-                      <div class="input-group">
-                        <div class="input-group-addon"><i class="icon fa fa-calculator"></i></div>
-                        <select class="form-control">
-                          <option>Select Quantity</option>
-                          <option value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]">2</option>
-                          <option value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]">3</option>
-                          <option value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]">4</option>
-                          <option value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]">5</option>
-                        </select>
-                      </div>
-                      <!-- /Input Group -->
-                    </div>
+                            <div class="row no-margin"> {# Begin Row#}
+                               <div class="productFilter productFilterLook2">
+                                   {# Begin product Quantity #}
+                                    <div class="input-group  col-md-3 col-sm-6 col-xs-6 no-padding-left">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]" type="text">
+                                        <div class="input-group-btn">
+                                        <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                               </div>
+                               {# End product quantity #}
+                            </div> {# End Row#}
+
                     <!-- /Form Group -->
                     
                     <!-- /Form Group -->
