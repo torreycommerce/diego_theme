@@ -27,8 +27,9 @@ Passed into the macro is a array of key:value pairs as (title):(relative url)
 Load in the tabs for the page, pass in the name of this page, and make sure it's
 set in the array in /account/_macros/base.html.twig
 #}
-<div class="container main-container">
-    <div class="row">
+<div id="notifications" class="content-block default-bg ">
+    <div class="container cont-main no-pad-t">
+        <div class="row">
         {# Begin Notifications #}
         {# Begin header #}
         <div class="col-sm-12 col-md-9 col-lg-10">
@@ -90,9 +91,8 @@ set in the array in /account/_macros/base.html.twig
     </div> <!-- /Row -->
     {# End bottom actions #}
     {# End Notifications #}
-    <div style="clear:both"></div>
+    </div>
 </div> <!-- /End Main Container -->
-<div class="gap"></div>
 {% endblock %}
 {% block js %}
 {{ app.asset.js(app.url_asset ~ '/js/account.js') }}

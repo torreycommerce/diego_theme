@@ -2479,6 +2479,44 @@ input[type="checkbox"] {
   line-height: 34px;
 }
 
+
+
+/* ACCOUNT NAVIGATION
+-------------------------------------------------- */
+
+.myAccountList li {
+    text-align: center;
+    list-style-type: none;
+}
+
+.myAccountList li a {
+    font-size: 14px;
+    display: block;
+    color: #42464d;
+}
+
+.myAccountList .thumbnail li{
+    padding: 10px 0 0 0;
+    min-height: 105px;
+}
+
+.myAccountList .thumbnail:hover {
+    background: #F5F5F5;
+}
+
+.myAccountList li a i {
+    display: block;
+    clear: both;
+    font-size: 44px;
+    margin-bottom: 10px;
+}
+
+.navigation .myAccountList .thumbnail > li.active > a {
+    color: #E7214C;
+    min-height: 100%;
+}
+
+
 /* BOXED LAYOUT
 -------------------------------------------------- */
 .boxed-wrapper {

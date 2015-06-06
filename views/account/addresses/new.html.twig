@@ -26,41 +26,42 @@ Passed into the macro is a array of key:value pairs as (title):(relative url)
 {% block content %}
 {# Load in the tabs for the page, pass in the name of this page, and make sure it's
 set in the array in /account/_macros/base.html.twig #}
-<div class="container main-container">
-    <div class="row">
+<div id="nre address" class="content-block default-bg">
+    <div class="container cont-main no-pad-t">
+        <div class="row">
         {# Begin content #}
-        <div class="customer-account-address-new">
-            <div class="col-lg-9 col-md-9 col-sm-7">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h1 class="section-title-inner"><span><i class="fa fa-edit"></i> 
-                            New Address</span></h1>
-                            <p>Create a new address.</p>
-                            <hr/>
+            <div class="customer-account-address-new">
+                <div class="col-lg-9 col-md-9 col-sm-7">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="section-title-inner"><span><i class="fa fa-edit"></i> 
+                                New Address</span></h1>
+                                <p>Create a new address.</p>
+                                <hr/>
+                        </div>
                     </div>
-                    </div>
-                        <div class="col-lg-9 col-md-9 col-sm-7">
-                            {% if app.request.post.address is defined %}
-                                {% set post_data = app.request.post.address|merge( {'customer_id':app.user.id} ) %}
-                                {% set result = api.post('/customeraddress', post_data) %}
-                                {% if result %}
-                                    {% do app.user.setFlash('A new address has been created.', 'success') %}
-                                    {% if post_data.make_default %}
-                                        {% set result = api.post('/customeraddress/' ~ result ~ '/makeDefault') %}
-                                        {% if result %}
-                                            {% do app.user.setFlash('Your primary address has been successfully updated.', 'success') %}
-                                        {% else %}
-                                            {% set form_errors = api.error() %}
-                                            {% set address = app.request.post.address %}
-                                        {% endif %}
+                    <div class="col-lg-9 col-md-9 col-sm-7">
+                        {% if app.request.post.address is defined %}
+                            {% set post_data = app.request.post.address|merge( {'customer_id':app.user.id} ) %}
+                            {% set result = api.post('/customeraddress', post_data) %}
+                            {% if result %}
+                                {% do app.user.setFlash('A new address has been created.', 'success') %}
+                                {% if post_data.make_default %}
+                                    {% set result = api.post('/customeraddress/' ~ result ~ '/makeDefault') %}
+                                    {% if result %}
+                                        {% do app.user.setFlash('Your primary address has been successfully updated.', 'success') %}
+                                    {% else %}
+                                        {% set form_errors = api.error() %}
+                                        {% set address = app.request.post.address %}
                                     {% endif %}
-                                    {% do app.redirect('/account/addresses') %}
-                                {% else %}
-                                    {% set form_errors = api.error() %}
                                 {% endif %}
+                                {% do app.redirect('/account/addresses') %}
+                            {% else %}
+                                {% set form_errors = api.error() %}
                             {% endif %}
-                            {% include "/account/addresses/_partials/form.html.twig" %}
-                            <div class="col-lg-12 clearfix">
+                        {% endif %}
+                        {% include "/account/addresses/_partials/form.html.twig" %}
+                        <div class="col-lg-12 clearfix">
                             <ul class="pager">
                                 <li class="previous pull-right"><a href="{{app.url}}/"> <i class="fa fa-home"></i> Go to Shop </a>
                                 </li>
@@ -73,6 +74,7 @@ set in the array in /account/_macros/base.html.twig #}
         </div>
         {# End content #}
     </div>
+</div>
 {% endblock %}
 {% block js %}
 {{ app.asset.js(app.url_asset ~ '/js/account.js') }}

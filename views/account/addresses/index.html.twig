@@ -43,7 +43,8 @@ Passed into the macro is a array of key:value pairs as (title):(relative url)
 Load in the tabs for the page, pass in the name of this page, and make sure it's
 set in the array in /account/_macros/base.html.twig
 #}
-<div class="container main-container">
+<div id="my addresses" class="content-block default-bg">
+    <div class="container cont-main no-pad-t">
     <div class="row">
     {# Begin Address #}
     {# Begin header #}
@@ -77,7 +78,8 @@ set in the array in /account/_macros/base.html.twig
         <div class="w100 clearfix">
                 {% set addresses = api.get('/customeraddress',{'query':{'customer_id':app.user.id}}) %}
                 {% if addresses is empty %}
-                There are no addresses.
+                <div class="col-xs-12 col-sm-12"><p>There are no addresses.</p>
+                </div>
                 {% else %}
                     {% for row,address in addresses %}
                     <div class="col-xs-12 col-sm-6 col-md-4">
