@@ -67,7 +67,7 @@
 
 
             {# Begin product #}
-            <div class="product">
+            <div class="product product-list">
                 <div class="row">
                     {# Begin product header - Mobile #}
                     <div class="col-xs-12 col-sm-12 hidden-md hidden-lg">
@@ -118,7 +118,7 @@
                             </div>
                             {% if wishlist.customer_id == app.user.id %}
                                 <div class="qty-update">
-                                    <a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_{{ product.id }}">Update Quantity</a>
+                                    <a href="#" class="btn btn-base btn-sm" data-toggle="modal" data-target="#modal_{{ product.id }}"><i class="fa fa-refresh"></i> Update Quantity</a>
                                 </div>
                                 {# Begin quantity modal #}
                                 <div class="modal fade modal_list_quantity" id="modal_{{ product.id }}">
@@ -182,7 +182,7 @@
                             {# End quantity modal #}
                             {% if wishlist.customer_id == app.user.id %}
                                 <div class="qty-remove">
-                                    <a class="btn btn-default btn-xs"  data-toggle="modal" data-target="#modal_remove_{{ product.id }}" href="#">Remove</a>
+                                    <a class="btn"  data-toggle="modal" data-target="#modal_remove_{{ product.id }}" href="#">Remove</a>
                                 </div>
                                 {# Begin remove modal #}
                                 <div class="modal fade modal_list_quantity" id="modal_remove_{{ product.id }}">

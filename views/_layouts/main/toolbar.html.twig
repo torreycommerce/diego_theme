@@ -25,7 +25,7 @@
                         {% set logo = app.image.getImageUrl('logo','thumbnail',logo_info.id) %}
                     {% endif %}
                     {% if logo is not empty %}
-                        <a href="{{app.url}}/" style="background-image: url({{ logo }});background-position: 0 0; background-repeat: no-repeat; display: block; height:27px; width:125px; background-size: contain;"></a>
+                        <a href="{{app.url}}/" class="img-responsive" style="background-image: url({{ logo }}); background-position: 30% 20%;  background-repeat: no-repeat; display: block; height:110px; background-size: contain;"></a>
                     {% else %}
                         <div id="logo-txt"><a href="{{app.url}}/">{{ app.params.site.title }}</a></div>
                     {% endif %}
@@ -143,12 +143,12 @@
                 <i class="fa fa-navicon"></i>
               </button>
 
-                                  {% if app.params.logoimages is not empty %}
+                  {% if app.params.logoimages is not empty %}
                         {% set logo_info = app.params.logoimages | first %}
                         {% set logo = app.image.getImageUrl('logo','thumbnail',logo_info.id) %}
                     {% endif %}
                     {% if logo is not empty %}
-                        <a class="navbar-brand visible-xs" href="{{app.url}}/" style="background-image: url({{ logo }});background-position: 0 0; background-repeat: no-repeat; display: block; height:27px; width:125px; background-size: contain;"></a>
+                        <a class="navbar-brand img-responsive visible-xs " href="{{app.url}}/" style="background-image: url({{ logo }}); background-position: 0 10px; background-repeat: no-repeat; display: block;  width: 90px; background-size: contain;"></a>
                     {% else %}
                         <div id="logo-txt"><a class="navbar-brand visible-xs" href="{{app.url}}/">{{ app.params.site.title }}</a></div>
                     {% endif %}
@@ -202,9 +202,22 @@
                   
                   <!-- Dropdown Menu -->
                   <ul class="dropdown-menu">
-                    <li><a href="#">account home</a></li>
-                    <li><a href="#">order history</a></li>
-                     <li><a href="#">profile</a></li>
+                    <li><a href="{{app.url}}/contact">Contact Us</a></li>
+                  {% if app.user.id != '' %}
+                      <li><a href="{{app.url}}/account/orders">Order Status</a></li>
+                    {% else %}
+                      <li><a href="{{app.url}}/order">Order Status</a></li>
+                    {% endif %}
+                    {% if app.user.id != '' %}
+                      <li><a href="{{app.url}}/account/returns">Easy Returns</a></li>
+                    {% else %}
+                      <li><a href="{{app.url}}/return">Easy Returns</a></li>
+                    {% endif %}
+                    {% if app.user.id != '' %}   
+                      <li><a href="{{app.url}}/account/registries">Gift Registry</a></li>
+                    {% else %}
+                      <li><a href="{{app.url}}/registry/search">Gift Registry</a></li>
+                    {% endif %}
                   </ul>
                   <!-- /Dropdown Menu -->
                   

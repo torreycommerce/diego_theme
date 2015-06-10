@@ -953,6 +953,15 @@ pre.no-breaks, pre.no-breaks > code {
 .panel > .panel-heading {
   padding: 15px 30px;
 }
+
+.panel-collection {
+  height: 80px !important;
+}
+@media (max-width: 767px) {
+.panel-collection {
+  height: 100px !important;
+}
+}
 .panel > .panel-heading.heading-iconed {
   padding: 15px;
 }
@@ -2043,10 +2052,22 @@ input[type="checkbox"] {
 }
 
 .btn-group.my-account a {
-  background-color: none;
+  background-color: none !important;
   border-radius: 0;
   color: #666b76 ;
   font-size: 13px;
+  border-color: none !important;
+}
+
+.btn-group.my-account a:active, 
+.btn-group.my-account a:focus, 
+.btn-group.my-account a:hover, 
+.btn-group.my-account a:visited {
+  background-color: none !important;
+  border-radius: 0;
+  color: #666b76 ;
+  font-size: 13px;
+  border-color: none;
 }
 .btn-group.my-account a i {
   padding-right: 0px;
@@ -3325,6 +3346,20 @@ body {
   position: absolute;
   right: 0;
   top: 0;
+}
+
+.btn-search {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+legend {
+
+  font-size: 18px;
+  line-height: 1.32222em;
+  margin: 23px 0 23px 0;
+
 }
 @media (max-width: 991px) {
   .header-search {
@@ -5410,7 +5445,12 @@ ul.tags li a:hover {
     -o-transition: all 0.3s ease 0s;
     -ms-transition: all 0.3s ease 0s;
     margin-bottom: 15px;
-    height: 420px;
+    height: 480px;
+}
+
+.itemauto {
+    height: auto;
+    max-height: none;
 }
 
 .product {
@@ -5420,9 +5460,17 @@ ul.tags li a:hover {
   margin: 15px 0;
   padding: 0 0 15px 0;
 }
+
+.product-list {
+  border-bottom: 1px solid #ccc;
+  padding: 0 0 10px 0;
+}
+
 .product .title, .product .label {
   display: block;
 }
+
+
 .product .label {
   position: absolute;
   left: 0;
@@ -5432,6 +5480,8 @@ ul.tags li a:hover {
   font: normal 11px/1 "Roboto";
   padding: 10px 13px;
 }
+
+
 .product .label.label-sale {
   background: #E95144;
 }
@@ -5507,10 +5557,20 @@ ul.tags li a:hover {
   color: #E7214C;
   margin: 0 5px;
 }
-.product .price.price-old {
+.product .price .price-old {
   color: rgba(0, 0, 0, 0.4);
   text-decoration: line-through;
 }
+
+.price-old {
+  color: rgba(0, 0, 0, 0.4) !important;
+  text-decoration: line-through;
+}
+
+.price-standard {
+    text-decoration: line-through;
+}
+
 .product .btn {
   font: 400 11px "Roboto Condensed";
   text-transform: uppercase;
@@ -5612,6 +5672,127 @@ ul.tags li a:hover {
   display: inline-block;
 }
 
+/***  -------  Product Collection Page  ------- ***/
+
+#collection {
+  margin-top: 40px;
+}
+#collection .estimated-time {
+  color: #000;
+  font-size: 12px;
+}
+#collection .tab-content {
+  padding: 0;
+}
+#collection .tab-content .panel .panel-heading .btn-toolbar {
+  margin-left: 0;
+}
+#collection .tab-content .panel .panel-heading .btn-toolbar .actions {
+  margin-bottom: 0;
+}
+#collection .tab-content .panel .panel-heading .btn-toolbar .btn {
+  padding: 6px 6px;
+}
+#collection .tab-content .panel .panel-heading .btn-toolbar .btn i {
+  display: none;
+}
+@media (min-width: 768px) {
+  #collection .tab-content .panel .panel-heading .btn-toolbar {
+    text-align: right;
+  }
+  #collection .tab-content .panel .panel-heading .btn-toolbar .btn {
+    padding: 6px 12px;
+  }
+  #collection .tab-content .panel .panel-heading .btn-toolbar .btn i {
+    display: inline-block;
+  }
+}
+@media (max-width: 767px) {
+  #collection .tab-content .panel .panel-heading .btn-toolbar .btn-cart {
+    margin-bottom: 10px;
+  }
+}
+
+#collection .tab-content .panel .product .image img {
+  border: 0;
+}
+#collection .tab-content .panel .product .details .name {
+  margin-bottom: 10px;
+  margin-top: 0px;
+}
+#collection .tab-content .panel .product .details .variation-selection {
+  margin-bottom: 10px;
+}
+#collection .tab-content .panel .product .details .color {
+  color: #666666;
+  font-size: 12px;
+}
+#collection .tab-content .panel .product .details .price {
+  margin-bottom: 5px;
+}
+#collection .tab-content .panel .product .details .stock {
+  color: #666666;
+  font-size: 12px;
+}
+#collection .tab-content .panel .product .details .model {
+  color: #666666;
+  font-size: 12px;
+}
+#collection .tab-content .panel .product ul.pricing {
+  margin-left: 0;
+  padding-left: 0;
+}
+#collection .tab-content .panel .product ul.pricing li {
+  color: #737373;
+  font-size: 12px;
+  display: inline-block;
+  list-style-type: none;
+  padding: 0;
+  margin-right: 10px;
+}
+#collection .tab-content .panel .product ul.shipping {
+  padding-left: 0;
+}
+#collection .tab-content .panel .product ul.shipping li {
+  color: #737373;
+  font-size: 12px;
+  display: inline-block;
+  list-style-type: none;
+  padding: 0;
+  margin-right: 10px;
+}
+#collection .tab-content .panel .product ul.tags {
+  padding-left: 0;
+}
+#collection .tab-content .panel .product ul.tags li {
+  color: #737373;
+  font-size: 12px;
+  display: inline-block;
+  list-style-type: none;
+  padding: 0;
+  margin-right: 10px;
+}
+#collection .tab-content .panel .product .actions {
+  margin: 10px 0 0 0;
+}
+@media (min-width: 991px) {
+  #collection .tab-content .panel .product .actions {
+    float: right;
+    margin: 0;
+  }
+}
+
+.collection-dropdown{
+  margin: 2px 0 0 15px;
+}
+
+@media (max-width: 768px) {
+    .collection-dropdown{
+      margin: 0;
+    }
+    
+}
+
 /* misc */
 .reset-col {
   width: 100% !important;
@@ -5653,7 +5834,7 @@ ul.tags li a:hover {
   text-transform: uppercase;
   font-size: 11px;
 }
-.product-details .product-price {
+.product-details .product-price, .price-sales {
   font: 700 25px "Roboto Condensed";
   color: #E7214C;
   margin: 0 0 10px 0;
@@ -5774,10 +5955,6 @@ ul.tags li a:hover {
 
 /* IMAGE HOVER */
 
-.itemauto {
-    height: auto;
-    max-height: none;
-}
 
 .imageHover {
     display: block;
@@ -5892,6 +6069,11 @@ ul.tags li a:hover {
     padding: 0 0 0 10px;
 }
 
+.cart-actions button,
+.cart-actions .btn-cart,
+.cart-actions .btn-cntr {
+    padding: 14px 10px;
+}
 /* Action BTN custom css */
 .no-padding-left {
     padding-left: 0 !important;

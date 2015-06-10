@@ -12,7 +12,7 @@
           <!-- Section Title -->
           <div class="section-title invert-colors no-margin-b">
             <h2><i class="glyphicon glyphicon-shopping-cart"></i> cart</h2>
-            <p class="hidden-xs">Helena is a freelance fashion house specialiasing in print designs and combining fabrics. Our stores can be found all over the world.</p>
+            <p class="hidden-xs">Your cart</p>
           </div>
           <!-- /Section Title -->
         </div>
@@ -76,282 +76,276 @@
       
         <!-- Container -->
         <div class="container cont-pad-t-sm">
-    {% if api.error is not empty %}
-    <div class="alert alert-warning">{{ api.error }}</div>
-    {% endif %}
-    {% do api.post('/sessioncartcoupon/refreshCoupons') %}
-    {% set cart = api.get('/sessioncart') %}
-    {% set cart_coupon = api.get('/sessioncartcoupon') %}
-    {% set shipping_methods = api.get('/shippingmethod',{query:{status:'active'}}) %}
-    {% if shipping_methods is empty %}
-    <div class="row">
-        <div class="col-md-12">
-            Acenda is not properly set up for checkout. Please add an active shipping method.
-        </div>
-    </div>
-    {% else %}
-    {% if (cart.items is empty) %}
-    <div class="row">
-        <div class="col-md-12">
-            <i>The cart is empty.</i><br /><br />
-            <a class="btn btn-primary" href="{{app.url}}">Back to Shopping</a>
-        </div>
-    </div>
-    {% else %}
+            {% if api.error is not empty %}
+            <div class="alert alert-warning">{{ api.error }}</div>
+            {% endif %}
+            {% do api.post('/sessioncartcoupon/refreshCoupons') %}
+            {% set cart = api.get('/sessioncart') %}
+            {% set cart_coupon = api.get('/sessioncartcoupon') %}
+            {% set shipping_methods = api.get('/shippingmethod',{query:{status:'active'}}) %}
+            {% if shipping_methods is empty %}
+            <div class="row">
+                <div class="col-md-12">
+                    Acenda is not properly set up for checkout. Please add an active shipping method.
+                </div>
+            </div>
+            {% else %}
+            {% if (cart.items is empty) %}
+            <div class="row">
+                <div class="col-md-12">
+                    <i>The cart is empty.</i><br><br>
+                    <a class="btn btn-primary" href="{{app.url}}">Back to Shopping</a>
+                </div>
+            </div>
+            {% else %}
     <section id="shopping-cart">
         <div class="hidden-xs hidden-sm">
-    <div class="cartFooter w100">
-        <div class="box-footer">
-            <div class="col-xs-4 col-sm-6 col-md-4 col-lg-4 text-center"><i class="fa fa-info-circle"></i> PRODUCT DETAIL</div>
-            <div class="col-xs-4 col-sm-6 col-md-3 col-lg-3 text-center"><i class="fa fa-money"></i> PRICE DETAIL</div>
-            <div class="col-xs-4 col-sm-6 col-md-3 col-lg-3 text-center"><i class="fa fa-heart"></i>
- WISHLIST/REGISTRY</div> 
-            <div class="col-xs-4 col-sm-6 col-md-2 col-lg-2 text-right"><i class="fa fa-plus"></i> QUANTITY</div>
-        </div>
-    </div>
-    <!--/ cartTop -->
-    </div>    
-    {{ forms.begin('cart','','post', {class:'form-horizontal'}) }}
-    {% set product_ids = cart.items|values_in('product_id') %}
-    {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
-
-    {# Remove products that were disabled or removed #}
-    {# TODO: We should probably do this outside of the template for orders #}
-    {% set items_deleted = false %}
-    {% for id, item in cart.items %}
-    {% set product = products[item.product_id].0 %}
-    {% if product.status != 'active' %}
-    {% do api.delete('/sessioncartitem/' ~ id) %}
-    {% if product.title is defined %}
-    {# This product is disabled or removed #}
-    {% do app.user.setFlash(product.title ~ ' is no longer available.', 'info') %}
-    {% else %}
-    {# This product doesn't exist anymore (deleted) #}
-    {% do app.user.setFlash('A product you have selected is no longer available.', 'info') %}
-    {% endif %}
-    {% set items_deleted = true %}
-    {% endif %}
-    {% if items_deleted %}
-    {% do app.redirect(app.request.url) %}
-    {% endif %}
-    {% endfor %}
-
-    {% for id, item in cart.items %}
-    {% set product = products[item.product_id].0 %}
-        <div class="row userInfo">
-            {# Begin item image #}
-            <div class="col-xs-4 col-sm-6 col-md-2 col-lg-2">
-                <div class="thumbnail">
-                    <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ product.thumbnail }}" />
+            <div class="cartFooter w100">
+                <div class="box-footer">
+                    <div class="col-xs-4 col-sm-6 col-md-4 col-lg-4 text-center"><i class="fa fa-info-circle"></i> PRODUCT DETAIL</div>
+                    <div class="col-xs-4 col-sm-6 col-md-3 col-lg-3 text-center"><i class="fa fa-money"></i> PRICE DETAIL</div>
+                    <div class="col-xs-4 col-sm-6 col-md-3 col-lg-3 text-center"><i class="fa fa-heart"></i>
+                    WISHLIST/REGISTRY</div> 
+                    <div class="col-xs-4 col-sm-6 col-md-2 col-lg-2 text-right"><i class="fa fa-plus"></i> QUANTITY</div>
                 </div>
             </div>
-            {# End item image #}
-            {# Begin item details #}
-            <div class="details col-xs-8 col-sm-6 col-md-10 col-lg-10">
-                <div class="row">
-                    <div class="col-md-4 col-lg-4">
-                        <div class="name"><h4><a href="{{ app.url ~ product.url }}">{{ product.title }}</a></h4></div>
-                        <div class="availability">
-                            {% if product.inventory_quantity > product.inventory_minimum_quantity %}
-                                In Stock
-                            {% elseif variation.inventory_shipping_estimate is not empty %}
-                            <span class="text-danger">
-                                {{ variation.inventory_shipping_estimate }}
-                            </span>
-                            {% endif %}
-                        </div>
+        <!--/ cartTop -->
+        </div>    
+        {{ forms.begin('cart','','post', {class:'form-horizontal'}) }}
+        {% set product_ids = cart.items|values_in('product_id') %}
+        {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
 
+        {# Remove products that were disabled or removed #}
+        {# TODO: We should probably do this outside of the template for orders #}
+        {% set items_deleted = false %}
+        {% for id, item in cart.items %}
+        {% set product = products[item.product_id].0 %}
+        {% if product.status != 'active' %}
+        {% do api.delete('/sessioncartitem/' ~ id) %}
+        {% if product.title is defined %}
+        {# This product is disabled or removed #}
+        {% do app.user.setFlash(product.title ~ ' is no longer available.', 'info') %}
+        {% else %}
+        {# This product doesn't exist anymore (deleted) #}
+        {% do app.user.setFlash('A product you have selected is no longer available.', 'info') %}
+        {% endif %}
+        {% set items_deleted = true %}
+        {% endif %}
+        {% if items_deleted %}
+        {% do app.redirect(app.request.url) %}
+        {% endif %}
+        {% endfor %}
 
-                        
-                        <div class="remove"><button class="glyphicon glyphicon-trash" type="submit" name="cart[action]" value="remove/{{ id }}"></button></div>
+        {% for id, item in cart.items %}
+        {% set product = products[item.product_id].0 %}
+            <div class="row userInfo">
+                {# Begin item image #}
+                <div class="col-xs-4 col-sm-6 col-md-2 col-lg-2">
+                    <div class="thumbnail">
+                        <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ product.thumbnail }}">
                     </div>
-                    {# Begin item prices #}
-                    <div class="col-md-3 col-lg-3">
-                        <div class="pricing">
-                            <div class="regular">
-                                {% if product.compare_price is not empty %}
-                                <strike>
-                                    <div class="item-label">Reg:</div>
-                                    <span class="dollar-sign">$</span><span class="amount"><span class="dollars">{{ product.compare_price|number_format(2)|split('.')|first }}</span>.<span class="cents">{{ product.compare_price|number_format(2)|split('.')|last }}</span></span>
-                                </strike>
-                                {% else %}
-                                <div class="item-label">Price:</div>
-                                <span class="dollar-sign">$</span><span class="amount"><span class="dollars">{{ product.price|number_format(2)|split('.')|first }}</span>.<span class="cents">{{ product.price|number_format(2)|split('.')|last }}</span></span>
+                </div>
+                {# End item image #}
+                {# Begin item details #}
+                <div class="details col-xs-8 col-sm-6 col-md-10 col-lg-10">
+                    <div class="row">
+                        <div class="col-md-4 col-lg-4">
+                            <div class="name"><h4><a href="{{ app.url ~ product.url }}">{{ product.title }}</a></h4></div>
+                            <div class="availability">
+                                {% if product.inventory_quantity > product.inventory_minimum_quantity %}
+                                    In Stock
+                                {% elseif variation.inventory_shipping_estimate is not empty %}
+                                <span class="text-danger">
+                                    {{ variation.inventory_shipping_estimate }}
+                                </span>
                                 {% endif %}
                             </div>
-                            {% if product.compare_price is not empty %}
-                            <div class="sale">
-                                <div class="item-label">Sale:</div>
-                                <span class="dollar-sign">$</span><span class="amount"><span class="dollars">{{ product.price|number_format(2)|split('.')|first }}</span>.<span class="cents">{{ product.price|number_format(2)|split('.')|last }}</span></span>
+                            <div class="remove"><button class="glyphicon glyphicon-trash" type="submit" name="cart[action]" value="remove/{{ id }}"></button></div>
+                        </div>
+                        {# Begin item prices #}
+                        <div class="col-md-3 col-lg-3">
+                            <div class="pricing">
+                                <div class="regular">
+                                    {% if product.compare_price is not empty %}
+                                    <strike>
+                                        <div class="item-label">Reg:</div>
+                                        <span class="dollar-sign">$</span><span class="amount"><span class="dollars">{{ product.compare_price|number_format(2)|split('.')|first }}</span>.<span class="cents">{{ product.compare_price|number_format(2)|split('.')|last }}</span></span>
+                                    </strike>
+                                    {% else %}
+                                    <div class="item-label">Price:</div>
+                                    <span class="dollar-sign">$</span><span class="amount"><span class="dollars">{{ product.price|number_format(2)|split('.')|first }}</span>.<span class="cents">{{ product.price|number_format(2)|split('.')|last }}</span></span>
+                                    {% endif %}
+                                </div>
+                                {% if product.compare_price is not empty %}
+                                <div class="sale">
+                                    <div class="item-label">Sale:</div>
+                                    <span class="dollar-sign">$</span><span class="amount"><span class="dollars">{{ product.price|number_format(2)|split('.')|first }}</span>.<span class="cents">{{ product.price|number_format(2)|split('.')|last }}</span></span>
+                                </div>
+                                {% endif %}
+                                <div class="price">
+                                    {% set price = product.price * item.quantity %}
+                                    <div class="item-label">Total:</div>
+                                    <span class="dollar-sign float-left">$</span><span class="amount"><span class="dollars">{{ price|number_format(2)|split('.')|first }}.{{ price|number_format(2)|split('.')|last }}</span></span>
+                                </div>
+                                <div class="error alert alert-danger" style="display:none">
+                                </div>
+                            </div>
+                        </div>
+                        {# End item prices #}
+                        {# Begin wishlist / registry #}
+                        <div class="col-md-3 col-lg-3">
+                            {# Begin wishlist #}
+                            {% if (item.wishlist_id is not empty) %}
+                            {% set wishlist = api.get('/wishlist/' ~ item.wishlist_id) %}
+                            <div class="wishlist">
+                                <a href="{{ app.url }}/wishlist/{{ wishlist.id }}"><i class="fa fa-list"></i> For {{ wishlist.name }}</a>
                             </div>
                             {% endif %}
+                            {# End wishlist #}
+                            {# Begin registry #}
+                            {% if (item.registry_id is not empty) %}
+                            {% set registry = api.get('/registry/' ~ item.registry_id) %}
+                            <div class="registry">
+                                <a href="{{ app.url }}/registry/{{ registry.id }}"><i class="fa fa-gift"></i> For {{ registry.name}}</a>
+                            </div>
+                            {% endif %}
+                            {# End registry #}
+                        </div>
+                        {# End wishlist / registry #}
+                        {# Begin quantity #}
+                        <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
+                            <div class="quantity">
+                                <div class="quantity-input-group">
+                                    {#<label for="quantity-selector" class="control-label">Qty</label>#}
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-remove btn btn-link bootstrap-touchspin-down"><i class="fa fa-minus"></i></button>
+                                        </div>
+                                        <input type="text" class="form-control quantity-selector quanitySniper" data-id="{{id}}" data-model="sessioncartitem" name="cart[quantity][{{ id }}]" value="{{ item.quantity }}">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-add btn btn-link bootstrap-touchspin-up"><i class="fa fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {# End quantity #}
+                    </div>
+                </div>
+                {# End item details #}
+            </div><hr>
+        {% endfor %}
+        {{ forms.end() }}
+        {{ forms.begin('cart','','post', {class:'form-horizontal'}) }}
+        <div class="row">
+            <div class="col-md-9">
+                {# Begin subtotal / checkout #}
+                <div id="coupon-code">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-11 col-lg-10">
+                            {# Begin coupon code #}
+                                {#<div class="title">Coupon Code</div>#}
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-3 col-md-3 col-lg-3" for="input2">Enter coupon code:</label>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                        {{ forms.text('cart[coupon_code]', coupon_code, {class:'form-control parsley-validated', placeholder: "Coupon Code"}) }}
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                        {{ forms.submit('cart[action]', 'enter_coupon', 'Apply', {class:'btn btn-default btn-block', id: 'cart_Enter Coupon'})}}
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="validation">{{ forms.errorlist(form_errors, 'coupon_code') }}</div>
+                                    </div>
+                                </div>
+                                {# Begin coupon code messages #}
+                                {% for id, coupon in cart.coupons %}
+                                <div class="discount">
+                                    <div class="well">
+                                        <div class="row">
+                                            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                                                {{ coupon.code }} used for ${{coupon.discount}} off
+                                            </div>
+                                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                                {{ forms.submit('cart[action]', "removecoupon/" ~ id, 'Remove', {class:'btn-link btn-block', id: 'cart_Enter Coupon'})}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% for id, global in cart.globals %}
+                                <div class="discount">
+                                    <div class="well">
+                                        <div class="row">
+                                            <div class="col-sm-9 col-md-9 col-lg-9">
+                                                Global discount {{ global.code.0 }} used for ${{global.discount}} off
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {# End coupon code messages #}
+                            {# End coupon code #}
+                        </div>
+                    </div>
+                </div>
+                {# End subtotal / checkout #}
+                {# Begin shipping estimator #}
+                <div id="shipping-estimator">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-11 col-lg-10">
+                            {% include "/cart/_partials/estimator.html.twig" %}
+                        </div>
+                    </div>
+                </div>
+                {# End shipping estimator #}
+            </div>
+            <div class="col-md-3">
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-12">
                             <div class="price">
-                                {% set price = product.price * item.quantity %}
-                                <div class="item-label">Total:</div>
-                                <span class="dollar-sign float-left">$</span><span class="amount"><span class="dollars">{{ price|number_format(2)|split('.')|first }}.{{ price|number_format(2)|split('.')|last }}</span></span>
-                            </div>
-                            <div class="error alert alert-danger" style="display:none">
+                                Subtotal:&nbsp;<span class="amount" id="total-price"><span class="dollars"><span class="dollar-sign float-left">$</span>{{ cart.subtotal|number_format(2)|split('.')|first }}.{{ cart.subtotal|number_format(2)|split('.')|last }}</span></span>
                             </div>
                         </div>
-                    </div>
-                    {# End item prices #}
-                    {# Begin wishlist / registry #}
-                    <div class="col-md-3 col-lg-3">
-                        {# Begin wishlist #}
-                        {% if (item.wishlist_id is not empty) %}
-                        {% set wishlist = api.get('/wishlist/' ~ item.wishlist_id) %}
-                        <div class="wishlist">
-                            <a href="{{ app.url }}/wishlist/{{ wishlist.id }}"><i class="fa fa-list"></i> For {{ wishlist.name }}</a>
-                        </div>
-                        {% endif %}
-                        {# End wishlist #}
-                        {# Begin registry #}
-                        {% if (item.registry_id is not empty) %}
-                        {% set registry = api.get('/registry/' ~ item.registry_id) %}
-                        <div class="registry">
-                            <a href="{{ app.url }}/registry/{{ registry.id }}"><i class="fa fa-gift"></i> For {{ registry.name}}</a>
-                        </div>
-                        {% endif %}
-                        {# End registry #}
-                    </div>
-                    {# End wishlist / registry #}
-                    {# Begin quantity #}
-                    <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
-                        <div class="quantity">
-                            <div class="quantity-input-group">
-                                {#<label for="quantity-selector" class="control-label">Qty</label>#}
-                                <div class="input-group">
-                                    <div class="input-group-btn">
-                                        <button type="button" class="btn btn-remove btn btn-link bootstrap-touchspin-down"><i class="fa fa-minus"></i></button>
-                                    </div>
-                                    <input type="text" class="form-control quantity-selector quanitySniper" data-id="{{id}}" data-model="sessioncartitem" name="cart[quantity][{{ id }}]" value="{{ item.quantity }}">
-                                    <div class="input-group-btn">
-                                        <button type="button" class="btn btn-add btn btn-link bootstrap-touchspin-up"><i class="fa fa-plus"></i></button>
-                                    </div>
-                                </div>
+                        <div class="col-md-12">
+                            <div id="proceed-to-checkout">
+                                <a class="btn btn-primary btn-lg btn-block" style="margin:20px 0" href="{{ app.url }}/checkout">Proceed To Checkout
+                                <i class="fa fa-arrow-right"></i></a>
                             </div>
                         </div>
-                    </div>
-                    {# End quantity #}
-                </div>
-            </div>
-            {# End item details #}
-        </div><hr/>
-    {% endfor %}
-    {{ forms.end() }}
-    {{ forms.begin('cart','','post', {class:'form-horizontal'}) }}
-    <div class="row">
-        <div class="col-md-9">
-            {# Begin subtotal / checkout #}
-            <div id="coupon-code">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-11 col-lg-10">
-                        {# Begin coupon code #}
-                            {#<div class="title">Coupon Code</div>#}
-                            <div class="form-group">
-                                <label class="control-label col-xs-12 col-sm-3 col-md-3 col-lg-3" for="input2">Enter coupon code:</label>
-                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                    {{ forms.text('cart[coupon_code]', coupon_code, {class:'form-control parsley-validated', placeholder: "Coupon Code"}) }}
-                                </div>
-                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                                    {{ forms.submit('cart[action]', 'enter_coupon', 'Apply', {class:'btn btn-default btn-block', id: 'cart_Enter Coupon'})}}
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div class="validation">{{ forms.errorlist(form_errors, 'coupon_code') }}</div>
-                                </div>
+                        <div class="col-md-12">
+                            <div id="paypal">
+                                <a href="{{ app.url }}/checkout/paypal"><img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"></a>
                             </div>
-                            {# Begin coupon code messages #}
-                            {% for id, coupon in cart.coupons %}
-                            <div class="discount">
-                                <div class="well">
-                                    <div class="row">
-                                        <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
-                                            {{ coupon.code }} used for ${{coupon.discount}} off
-                                        </div>
-                                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                            {{ forms.submit('cart[action]', "removecoupon/" ~ id, 'Remove', {class:'btn-link btn-block', id: 'cart_Enter Coupon'})}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                            {% for id, global in cart.globals %}
-                            <div class="discount">
-                                <div class="well">
-                                    <div class="row">
-                                        <div class="col-sm-9 col-md-9 col-lg-9">
-                                            Global discount {{ global.code.0 }} used for ${{global.discount}} off
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                            {# End coupon code messages #}
-                        {# End coupon code #}
+                        </div>
                     </div>
                 </div>
             </div>
-            {# End subtotal / checkout #}
-            {# Begin shipping estimator #}
-            <div id="shipping-estimator">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-11 col-lg-10">
-                        {% include "/cart/_partials/estimator.html.twig" %}
-                    </div>
-                </div>
-            </div>
-            {# End shipping estimator #}
-        </div>
-        <div class="col-md-3">
-            <div class="well">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="price">
-                            Subtotal:&nbsp;<span class="amount" id="total-price"><span class="dollars"><span class="dollar-sign float-left">$</span>{{ cart.subtotal|number_format(2)|split('.')|first }}.{{ cart.subtotal|number_format(2)|split('.')|last }}</span></span>
+            <div class="col-md-12">
+                        <div class="cartFooter w100">
+                            <div class="box-footer">
+                                <div class="pull-left"><a href="index.html" class="btn btn-default"> <i
+                                        class="fa fa-arrow-left"></i> &nbsp; Continue shopping </a></div>
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-undo"></i> &nbsp; Update
+                                        cart
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div id="proceed-to-checkout">
-                            <a class="btn btn-primary btn-lg btn-block" style="margin:20px 0" href="{{ app.url }}/checkout">Proceed To Checkout
-                            <i class="fa fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div id="paypal">
-                            <a href="{{ app.url }}/checkout/paypal"><img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"></a>
-                        </div>
-                    </div>
-                </div>
+                        <!--/ cartFooter -->
             </div>
         </div>
-        <div class="col-md-12">
-                    <div class="cartFooter w100">
-                        <div class="box-footer">
-                            <div class="pull-left"><a href="index.html" class="btn btn-default"> <i
-                                    class="fa fa-arrow-left"></i> &nbsp; Continue shopping </a></div>
-                            <div class="pull-right">
-                                <button type="submit" class="btn btn-default"><i class="fa fa-undo"></i> &nbsp; Update
-                                    cart
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <!--/ cartFooter -->
-        </div>
-    </div>
-    </section>
-    </div>
-    </div>
-    {# Begin third party payments #}
-    {{ forms.end() }}
-        
-    {# End third party payments #}
-    {% endif %}
-    {% endif %}
+        {# Begin third party payments #}
+        {{ forms.end() }}
+            
+        {# End third party payments #}
+        {% endif %}
+        {% endif %}
 
-    </div>
-    </section>
-    {% endblock %}
-    {% block js %}
-    {{ app.asset.js(app.url ~ '/js/estimator.js') }}
-    {% endblock %}
+        </div> {# End container cont-pad-x-15 #}
+        </section> {# End content-block default-bg #}
+        {% endblock %}
+        {% block js %}
+        {{ app.asset.js(app.url ~ '/js/estimator.js') }}
+        {% endblock %}

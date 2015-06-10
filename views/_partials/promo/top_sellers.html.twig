@@ -1,11 +1,7 @@
-<!--/ Top Sellers -->
-<div class="container main-container">
-    <!-- Demo Features Content start -->
-    <div class="morePost row featuredPostContainer style2 globalPaddingTop ">
-        <!-- this div is for demo || Please remove it when use this page -->
-        <h3 class="section-title style2 text-center"><span>TOP SELLERS</span></h3>
-        <div class="container">
-            <div class="row xsResponse categoryProduct">
+              <!-- Tab Trending -->
+              
+                <!-- Row -->
+                <div class="row">
                 {#
                 Products to display:
                 1528, 12458, 14097, 21032
@@ -14,9 +10,9 @@
                 {% set collection_ids = [] %}
                 {% set product_count = 1 %}
                 {% set options = ['image'] %}
-                {% set products = api.get('/catalog', {sort:"product.variant.popularity:-1",limit:4}) %}
+                {% set products = api.get('/catalog', {sort:"product.variant.popularity:-1",limit:8}) %}
                 {% set product_counter = 0 %}
-                {% for row,product in products if collection_ids[product.id] is empty and product_count < 5 %}
+                {% for row,product in products if collection_ids[product.id] is empty and product_count < 8 %}
                     {% if product.group == 'product' %}
                         {% for id in product.product.collection_id %}
                             {% set collection_ids = collection_ids|merge({(id):true}) %}
@@ -54,95 +50,65 @@
                         {% set variant_images = product.images %}
                     {% endif %}
                 {% endif %}
-                {# Begin product 
-                    {{ prod.gridproduct(product, ['image','details']) }}#}
-                 <div class="item itemauto col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                    <div class="product">
-                        {% if variant_images|length > 1 %}
-                            <div class="imageHover">
-                                <div id="carousel-id-{{ product_counter }}" class="carousel slide carousel-fade" data-ride="carousel">
-                                    <!-- Indicators -->
-                                    <ol class="carousel-indicators">
-                                        {% set counter = 0 %}
-                                        {% for images in variant_images %}
-                                            {% if counter == 0 %}
-                                                <li data-target="#carousel-id-{{ product_counter }}" data-slide-to="{{ counter }}" class="active"></li>
-                                            {% else %}
-                                                <li data-target="#carousel-id-{{ product_counter }}" data-slide-to="{{ counter }}"></li>
-                                            {% endif %}
-                                            {% set counter = counter + 1 %}
-                                        {% endfor %}
-                                    </ol>
-                                        <!-- Wrapper for slides -->
-                                    <div class="carousel-inner" role="listbox">
-                                            {% set counter = 0 %}
-                                            {% for image in variant_images %}
-                                                {% set image_url = app.image.getImageUrl('product','thumbnail', image.id) %}
-                                                {% if counter == 0 %}
-                                                    <div class="item active"><a href="{{ app.url }}/product/{{ product.slug }}"> 
-                                                        <img src="{{ image_url }}" alt="img" class="img-responsive "></a>
-                                                    </div>
-                                                {% else %}
-                                                    <div class="item">
-                                                        <a href="{{ app.url }}/product/{{ product.slug }}"> <img src="{{ image_url }}" alt="img" class="img-responsive "></a>
-                                                    </div>
-                                                {% endif %}
-                                                {% set counter = counter + 1 %}
-                                            {% endfor %}
-                                    </div>
-                                    <!-- Controls -->
-                                    <a class="left carousel-control" href="#carousel-id-{{ product_counter }}" role="button" data-slide="prev">
-                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="right carousel-control" href="#carousel-id-{{ product_counter }}" role="button" data-slide="next">
-                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                    <div class="promotion">
-                                        <span class="discount">BEST SELLERS</span> 
-                                    </div> <!--./ End Promotion -->
-                                </div> <!--./ carousel -->
-                            </div> <!--./ End ImageHover -->
-                        {% else %}
-                        {% set image_url = app.image.getImageUrl('product','thumbnail', variant_images[0].id) %}
-                        <div class="image">
-                            <a href="{{ app.url }}/product/{{ product.slug }}">
-                                <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" 
-                                    src="{{ image_url }}" alt="img" class="img-responsive">
-                            </a>
-                            <div class="promotion">
-                                <span class="top-sellers">POPULAR</span> 
-                            </div>
-                        </div> <!--./ End Image -->
-                        {% endif %}
-                        <div class="description">
-                            <h4><a href="{{ app.url }}/product/{{ product.slug }}">{{ product.title }} </a></h4>
-                            <p>{{ product.description|striptags|slice(0, 40) }}... </p>
-                        </div><!-- End Description -->
-                        <div class="price">
-                            <span>
-                                {% if product.attributes.price %}
-                                    {{ prod.price(product.attributes.price) }}
-                                    {% if product.attributes.compare_price[0] is not empty %}
-                                        <span class="price-standard">
-                                            {{ prod.price(product.variant[0].compare_price) }}
-                                        </span>
-                                    {% endif %}
-                                {% endif %}
-                            </span>
-                        </div><!--./ End price -->
-                        <div class="action-control"><a class="btn btn-primary"> <span class="add2cart"><i
-                            class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
+                  <!-- Col -->
+                  <div class="col-sm-6 col-md-3">
+                  
+                    <!-- product -->
+                    <div class="product clearfix">
+                    
+                      <!-- Image -->
+                      <div class="image"> 
+                        <a href="{{ app.url }}/product/{{ product.slug }}" class="main"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ img_url }}" alt="img" class="img-responsive"></a>
+                        <ul class="additional">
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                          <li><a href="images/products/product2.jpg" data-gal="prettyPhoto[gallery 2]" title="Product Name"><img src="images/products/product2.jpg" alt=""></a></li>
+                        </ul>
+                      </div>
+                      <!-- Image -->
+                      <span class="label label-hot">popular</span>
+                      <!-- Details -->
+                      <div class="details">
+                      
+                        <a class="title" href="{{ app.url }}/product/{{ product.slug }}">{{ product.title|striptags|slice(0, 45) }}</a>
+                        
+                        <!-- rating -->
+                        <ul class="hlinks hlinks-rating">
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        </ul>
+                        <!-- /rating -->
+                        
+                        <p class="desc">{{ product.description|striptags|slice(0, 60) }}...</p>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                          <span class="price">{% if product.attributes.price %} {{ prod.price(product.attributes.price) }} {% if product.attributes.compare_price[0] is not empty %}</span><span class="price price-old">{{ prod.price(product.variant[0].compare_price) }}</span>
+                          {% endif %}
+                          {% endif %}
                         </div>
-                    </div><!-- End Product -->
-                </div> <!-- End Item Itemauto-->
-                {# End product #}
-                {% set product_counter = product_counter + 1 %}
+                        <!-- /Price Box -->
+                        
+                        <!-- buttons -->
+                        <div class="btn-group">
+                          <a class="btn btn-outline btn-base-hover" href="{{ app.url }}/product/{{ product.slug }}">add to cart</a>  
+                          <a class="btn btn-outline btn-default-hover" href="{{ app.url }}/product/{{ product.slug }}"><i class="icon fa fa-heart"></i></a>
+                        </div> 
+                        <!-- /buttons -->
+                        
+                      </div>
+                      <!-- /Details -->
+                      
+                    </div>
+                    <!-- /product -->
+                  
+                  </div>
+                  <!-- /Col -->             
                 {% endfor %}
-            </div><!-- End Row xsResponse -->
-        </div> <!-- End Container -->
-    </div> <!-- End MorePost wor featuredPostContainer  -->
-</div>
-    <!-- End Features Content end -->
-
+                </div>
+                <!-- /Row -->
+              <!-- /Tab Trending -->

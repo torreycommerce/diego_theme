@@ -2,7 +2,7 @@
 {% if array_config|length >= 1 and (array_config['facebook']['facebook_page'] is not empty or array_config['twitter']['twitter_page'] is not empty or array_config['pinterest']['pinterest_page'] is not empty or array_config['google']['google_page'] is not empty) %}
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <ul class="social list-unstyled list-inline">
+          <ul class="hlinks hlinks-icons color-icons-borders color-icons-bg color-icons-hovered">
             {% for key, item in array_config %}
               {% if item.active_follow_page_button is defined and item.active_follow_page_button == true
                 and item[key ~ '_page'] is defined and item[key ~ '_page'] is not empty %}
@@ -10,25 +10,25 @@
                 {% if key == 'facebook' %}
                   <li>
                     <a class="facebook" href='{{ social_url }}' target="_blank">
-                      <i class="fa fa-facebook fa-2x"></i>
+                      <i class="icon fa fa-facebook fa-2x"></i>
                     </a>
                   </li>
                 {% elseif key == 'twitter' %}
                   <li>
                     <a class="twitter" href='{{ social_url }}' target="_blank">
-                      <i class="fa fa-twitter fa-2x"></i>
+                      <i class="icon fa fa-twitter fa-2x"></i>
                     </a>
                   </li>
                 {% elseif key == 'pinterest' %}
                   <li>
                     <a class="pinterest" href='{{ social_url }}' target="_blank">
-                      <i class="fa fa-pinterest fa-2x"></i>
+                      <i class="icon fa fa-pinterest fa-2x"></i>
                     </a>
                   </li>
                 {% elseif key == 'google' %}
                   <li>
                     <a class="google-plus" href='{{ social_url }}' target="_blank">
-                      <i class="fa fa-google-plus fa-2x"></i>
+                      <i class="icon fa fa-google-plus fa-2x"></i>
                     </a>
                   </li>
                 {% endif %}

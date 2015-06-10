@@ -29,14 +29,12 @@
                   <h5>About us</h5>
                   <p>Diego is a freelance fashion designer who specialises in print designs and combining fabrics. My designs have been sold all over the world.</p>
                     <!-- hlinks -->
-                    <ul class="hlinks hlinks-icons color-icons-borders color-icons-bg color-icons-hovered">
-                      <li><a href="#"><i class="icon fa fa-facebook"></i></a></li>
-                      <li><a href="#"><i class="icon fa fa-twitter"></i></a></li>
-                      <li><a href="#"><i class="icon fa fa-rss"></i></a></li>
-                      <li><a href="#"><i class="icon fa fa-google-plus"></i></a></li>
-                      <li><a href="#"><i class="icon fa fa-instagram"></i></a></li>
-                      <li><a href="#"><i class="icon fa fa-youtube"></i></a></li>
-                    </ul>
+                    {# Social Network Icons if found in config file #}
+                    {# if social settings is not set in the config file, just do nothing #}
+                    {% if app.params.social_settings is defined and app.params.social_settings is not empty %}
+                      {{ social.social_parseConfig(app.params.social_settings) }}
+                    {% endif %}
+                    {# End Social Network Icons #}
                     <!-- /hlinks -->              
                 </div>
                 <!-- /Col -->

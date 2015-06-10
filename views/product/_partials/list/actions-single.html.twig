@@ -26,9 +26,9 @@
         {% endif %}
         <span>Add to Registry</span>
     </button>
-    <ul class="dropdown-menu action-drop-registry" role="menu">
+    <ul class="dropdown-menu action-drop-registry" style="margin-left:10px;" role="menu">
         {% for registry in registries %}
-        <li><button type="submit" class="btn btn-block btn-default btn-bigger" name="action" value="registry/{{registry.id}}">Add to '{{registry.name}}'</button></li>
+        <li><button type="submit" class="btn btn-block btn-default btn-sm" name="action" value="registry/{{registry.id}}">Add to '{{registry.name}}'</button></li>
         {% endfor %}
     </ul>
 </div>
@@ -61,9 +61,9 @@
         {% endif %}
         <span>Add to Wishlist</span>
     </button>
-    <ul class="dropdown-menu action-drop" role="menu">
+    <ul class="dropdown-menu action-drop" style="margin-left:10px;" role="menu">
         {% for wishlist in wishlists %}
-        <li><button type="submit" class="btn btn-block btn-default btn-bigger" name="action" value="wishlist/{{wishlist.id}}">Add to '{{wishlist.name}}'</button></li>
+        <li><button type="submit" class="btn btn-block btn-default btn-sm" name="action" value="wishlist/{{wishlist.id}}">Add to '{{wishlist.name}}'</button></li>
         {% endfor %}
     </ul>
 </div>

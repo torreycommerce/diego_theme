@@ -27,138 +27,203 @@ Contact Us
         {% do app.redirect('/', {'success':'Your comment has been submitted. Thank you.'}) %}
     {% endif %}
 {% endif %}
-<div class="parallaxOffset no-padding fixedContent contact-intro">
-    <div class="w100 map">
-        <iframe width="100%" height="550" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
-                src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=+&amp;q={{ app.params['business-info']['business-street-address'] }}+{{ app.params['business-info']['business-complementary-address'] }}+{{ app.params['business-info']['business-city'] }}+{{ app.params['business-info']['business-state'] }}&amp;t=m&amp;z=14&amp;output=embed">
-        </iframe>
-    </div>
-</div>
-<!--/.contact-intro || map end-->
+      <!-- Intro Block
+      ============================================-->
+      <section class="intro-block intro-page boxed-section page-bg overlay-dark-m">
+      
+        <!-- Container -->
+        <div class="container">     
+          <!-- Section Title -->
+          <div class="section-title invert-colors no-margin-b">
+            <h2>Contact Us</h2>
+            <p class="hidden-xs">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac augue at erat hendrerit
+            dictum. Praesent porta, purus eget sagittis imperdiet, nulla mi ullamcorper metus, id
+            hendrerit metus diam vitae est. Class aptent taciti sociosqu ad litora torquent per conubia
+            nostra, per inceptos himenaeos.</p>
+          </div>
+          <!-- /Section Title -->
+        </div>
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Intro Block
+      ============================================-->
+      
+      <!-- Page Info Block
+      ============================================-->
+      <section class="page-info-block boxed-section">
+      
+        <!-- Container -->
+        <div class="container cont-pad-x-15"> 
 
-<div class="wrapper whitebg contact-us">
-    <div class="container main-container ">
-        <div class="row innerPage">
-            <div class="col-lg-12 col-md-12 col-sm-12">
+          <!-- Breadcrumb -->
+          <ol class="breadcrumb pull-left">
+            <li><a href="#"><i class="ti ti-home"></i></a></li>
+            <li><a href="#">Pages</a></li>
+            <li><a href="#">other</a></li>
+            <li class="active">blog</li>
+          </ol>
+          <!-- /Breadcrumb --> 
 
-                <div class="row userInfo">
+          <!-- hlinks -->
+          <ul class="page-links pull-right hlinks hlinks-icons color-icons-borders color-icons-bg-hovered">
+            <li><a href="#"><i class="icon fa fa-facebook"></i></a></li>
+            <li><a href="#"><i class="icon fa fa-twitter"></i></a></li>
+            <li><a href="#"><i class="icon fa fa-rss"></i></a></li>
+          </ul>
+          <!-- /hlinks -->
 
-                    <div class="col-xs-12 col-sm-12">
+        </div>
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Page Info  Block
+      ============================================-->
+     <!-- Content Block
+      ============================================-->
+      <section class="content-block default-bg">
+        <!-- Container -->
+        <div class="container no-pad-t">
 
-                        <h1 class="title-big text-center section-title-style2">
-                            <span> Contact us </span>
-                        </h1>
+          <!-- Row -->
+          <div class="row">
 
-                        <p class="lead text-center">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac augue at erat hendrerit
-                            dictum. Praesent porta, purus eget sagittis imperdiet, nulla mi ullamcorper metus, id
-                            hendrerit metus diam vitae est. Class aptent taciti sociosqu ad litora torquent per conubia
-                            nostra, per inceptos himenaeos.
-                        </p>
-
-                        <hr>
-
-                        <div class="row">
-
-                           <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
-
-                                <h3 class="block-title-5">
-                                    We are here to help
-                                </h3>
-                                    <p>For questions or comments, please complete the form below.</p>
-                                    <hr>
-                                    {{ forms.begin('contact','','post',{ class:'form-horizontal' }) }}
-                                    
-                                        {# Begin name field #}
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label" for="input1">Name*</label>
-
-                                            <div class="col-md-9">
-                                                {{ forms.text('contact[name]', contact.name|default(app.user.full_name), {class:'form-control parsley-validated', placeholder:"Name", required:true}) }}
-                                            </div>
-                                                <div class="col-md-9">
-                                                    <div class="validation">{{ forms.errorlist(form_errors, 'name') }}</div>
-                                                </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label" for="input1">Email*</label>
-
-                                            <div class="col-md-9">
-                                                {{ forms.email('contact[email]', contact.email|default(app.user.email), {class:'form-control parsley-validated', placeholder:"Email", required:true}) }}
-                                            </div>
-                                            <div class="col-md-9">
-                                                <div class="validation">{{ forms.errorlist(form_errors, 'email') }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label" for="input1">Subject*</label>
-
-                                            <div class="col-md-9">
-                                                {{ forms.select('contact[subject]', contact.subject, subjects, {class:'form-control parsley-validated', placeholder:"Subject", required:true}) }}
-                                            </div>
-                                            <div class="col-md-9">
-                                                <div class="validation">{{ forms.errorlist(form_errors, 'subject') }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label" for="input1">Message*</label>
-
-                                            <div class="col-md-9">
-                                                {{ forms.textarea('contact[message]', contact.message, {class:'form-control parsley-validated', placeholder:"Message", required:true}) }}
-                                            </div>
-                                                <div class="col-md-9">
-                                                    <div class="validation">{{ forms.errorlist(form_errors, 'message') }}</div>
-                                                </div>
-                                        </div>
-                                        {# End message field #}
-                                        {# Begin actions #}
-                                        <div class="row">
-                                            <div class="col-xs-10 col-sm-5 col-sm-offset-2">
-                                                <div class="actions">
-                                                    {{ forms.submit('submit', 'create', 'Send request', {class:'btn btn-primary'})}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {# End actions #}
-                            </div>
-                            <div class="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-1 outer">
-                                <div class="inner">
-                                    <h3 class="block-title-5">
-                                        {{ app.params.site.title }}
-                                    </h3>
-                                    <hr>
-                                    <p>
-                                        {{ app.params['business-info']['business-street-address'] }} {{ app.params['business-info']['business-complementary-address'] }}<br>{{ app.params['business-info']['business-city'] }} 
-                                        {{ app.params['business-info']['business-state'] }} {{ app.params['business-info']['business-zip'] }}
-                                        <br>
-                                        <strong>
-                                            Phone number
-                                        </strong>
-                                        : {{ app.params.information['phone_number'] }}
-                                        <br>
-                                        <strong>
-                                            Email us
-                                        </strong>
-                                        : {{ app.params['contact-us']['to'] }}
-                                    </p>
-                                </div>
+            <!-- Main Col -->
+            <div id="main-col" class="col-sm-8 col-md-8 mgb-30-xs">
+ 
+                <h4 class="case-c">message form</h4>
+                
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+                
+                <!-- Comment Form -->
+                <div class="contact-form">
+                  <form>
+                    <!-- Row -->
+                    <div class="row">
+                    {{ forms.begin('contact','','post',{ class:'form-horizontal' }) }}
+                      <!-- Col -->
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          {{ forms.text('contact[name]', contact.name|default(app.user.full_name), {class:'form-control parsley-validated', placeholder:"Name", required:true}) }}
+                          <div class="validation">{{ forms.errorlist(form_errors, 'name') }}</div>
+                        </div>
+                      </div>
+                      <!-- /Col -->
+                      <!-- Col -->
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          {{ forms.email('contact[email]', contact.email|default(app.user.email), {class:'form-control parsley-validated', placeholder:"Email", required:true}) }}
+                          <div class="validation">{{ forms.errorlist(form_errors, 'email') }}</div>
+                        </div>
+                      </div>
+                      <!-- /Col -->
+                      <!-- Col -->
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          {{ forms.select('contact[subject]', contact.subject, subjects, {class:'form-control parsley-validated', placeholder:"Subject", required:true}) }}
+                          <div class="validation">{{ forms.errorlist(form_errors, 'subject') }}</div>
+                        </div>
+                      </div>
+                      <!-- /Col -->
+                    </div>
+                    <!-- /Row -->
+                    
+                    <div class="form-group">
+                     {{ forms.textarea('contact[message]', contact.message, {class:'form-control parsley-validated', placeholder:"Message", required:true}) }}
+                     <div class="validation">{{ forms.errorlist(form_errors, 'message') }}</div>
+                    </div>
+                   
+                    {# Begin actions #}
+                    <div class="row">
+                        <div class="col-xs-10 col-sm-5">
+                            <div class="actions">
+                                {{ forms.submit('submit', 'create', 'Submit Request', {class:'btn btn-default'})}}
                             </div>
                         </div>
-                        <!--/.row-->
-                         <div style="clear:both"></div>
                     </div>
-
-
+                    {# End actions #}
+                  </form>
                 </div>
-                <!--/.row  ||  -->
-
+                <!-- /Contact Form -->
+                
             </div>
+            <!-- /Main Col -->
+            
+            <!-- Side Col -->
+            <div class="col-sm-4 col-md-4">
+
+              <!-- Side Widget -->
+              <div class="side-widget">
+              
+                <h5 class="boxed-title">Our location</h5>
+                
+                <!-- fader -->
+                <div class="fader mgb-20">
+                  <img src="{{ app.url_asset }}/images/map.jpg" alt="">
+                  <!-- hidden -->
+                  <div class="fader-hidden pcolor-bg white">
+                    <!-- stuff to be revealed here ! -->
+                    <div class="vcenter align-center">
+                      <div class="vcenter-this">
+                        <a href="#" data-toggle="modal" data-target="#map-modal"><span class="white">VIEW MAP</span></a>
+                      </div>
+                    </div>
+                    <!-- /stuff to be revealed here ! -->
+                  </div>
+                  <!-- /hidden-->
+                </div>
+                <!-- /fader -->
+                
+                <!-- vlinks -->
+                <ul class="vlinks vlinks-iconed vlinks-ruled-dots">
+                  <li><i class="icon fa fa-home"></i>{{ app.params['business-info']['business-street-address'] }} {{ app.params['business-info']['business-complementary-address'] }}<br>{{ app.params['business-info']['business-city'] }} {{ app.params['business-info']['business-state'] }} {{ app.params['business-info']['business-zip'] }}</li>
+                  <li class="centered"><i class="icon fa fa-laptop"></i>{{ app.params['contact-us']['to'] }}</li>
+                  <li class="centered"><i class="icon fa fa-user"></i>{{ app.params.information['phone_number'] }}</li>
+                </ul>
+                <!-- /vlinks -->
+                
+              </div>
+              <!-- /Side Widget -->
+              
+            </div>
+            <!-- /Side Col -->
+
+          </div>
+          <!-- /Row -->
+        
         </div>
-        <!--/row || innerPage end-->
-        <div style="clear:both"></div>
+        <!-- /Container -->
+    </section>
+    <!-- /Content Block
+    ============================================-->
+    
+    <!-- Map Modal -->
+    <div id="map-modal" class="modal fade map-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <!-- Modal Dialog -->
+      <div class="modal-dialog">
+      
+        <div class="modal-content">
+        
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Our Map Location</h4>
+          </div>
+          
+          <div class="modal-body">
+            <iframe style="width:100%; height: 350px" id="gmap" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=+&amp;q={{ app.params['business-info']['business-street-address'] }}+{{ app.params['business-info']['business-complementary-address'] }}+{{ app.params['business-info']['business-city'] }}+{{ app.params['business-info']['business-state'] }}&amp;t=m&amp;z=14&amp;output=embed"></iframe>
+            <script type="text/javascript">
+              // Delay loading iframe for better performance
+              var iframe = document.getElementById('gmap');
+              var src = iframe.src;
+              iframe.src = '';
+              window.onload =  function(){ iframe.src = src; }
+            </script>
+          </div>
+        </div>
+        
+      </div>
+      <!-- /Modal Dialog -->
     </div>
-    <!-- ./main-container -->
-    <div class="gap"></div>
-</div>
-<!-- /main-container -->
-{% endblock %}
+    <!-- /Map Modal -->
+    {% include "/_partials/promo/newsletter-box.html.twig" %}
+    {% endblock %}

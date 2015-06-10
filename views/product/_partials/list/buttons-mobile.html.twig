@@ -7,7 +7,7 @@
     {% set added = true %}
     {% endif %}
     {% if registries is empty %}
-    <button type="submit" name="action" value="registry" class="btn btn-block btn-registry wishlist">
+    <button type="submit" name="action" value="registry" class="btn btn-block btn-default btn-sm">
         {% if added %}
         <i class="fa fa-check"></i>&nbsp;
         {% else %}
@@ -17,7 +17,7 @@
     </button>
     {% else %}
     <div class="btn-group btn-block">
-        <button type="submit" name="action" value="registry" class="btn btn-block btn-registry wishlist dropdown-toggle text-right" data-toggle="dropdown">
+        <button type="submit" name="action" value="registry" class="btn btn-block btn-default btn-sm dropdown-toggle text-right" data-toggle="dropdown">
             <i class="fa fa-gift"></i>&nbsp;<span>Add to Registry</span>
         </button>
         <ul class="dropdown-menu collection-dropdown" role="menu">
@@ -37,12 +37,12 @@
     {% set added = true %}
     {% endif %}
     {% if wishlists is empty %}
-    <button type="submit" name="action" value="wishlist" class="btn btn-block btn-wishlist wishlist">
+    <button type="submit" name="action" value="wishlist" class="btn btn-block btn-default btn-sm">
         <i class="fa fa-plus"></i>&nbsp;<span>Add to Wishlist</span>
     </button>
     {% else %}
     <div class="btn-group btn-block">
-        <button type="submit" name="action" value="wishlist" class="btn btn-block btn-wishlist wishlist dropdown-toggle" data-toggle="dropdown">
+        <button type="submit" name="action" value="wishlist" class="btn btn-block btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
             {% if added %}
             <i class="fa fa-check"></i>&nbsp;
             {% else %}

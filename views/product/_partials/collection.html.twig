@@ -1,178 +1,178 @@
 <div class="container main-container">
     <div class="row transitionfx">
-        {# Beging product images #}
-        <div id="product-images" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-            {# Begin main image #}
-            {% set main_image_id = product.images.0.id is not empty ? product.images.0.id : product.product|values_in('images')[0]['id'] %}
-            {% set main_image_id = main_image_id is empty ? 'default' : main_image_id %}
-            <div id="image-main">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="thumbnail">
-                            <span class="helper hidden-xs"></span>
-                            <div id="main-product-video" style="display:none"></div>
-                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" id="main-product-image" class="img-responsive" src="{{app.image.getImageUrl("product","standard",main_image_id) }}" data-image-zoom="{{app.image.getImageUrl("product","large",main_image_id) }}" alt="" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {# End main image #}
-            {# Begin image carousel #}
-            <div id="image-carousel" class="hidden-xs row">
-                <div class="image-carousel">
-                    <div id="image-carousel-{{product.id}}" class="carousel">
-                        <div>
-                            <div class="item active itemauto">
-                                {% for image in product.images %}
-                                {% set name = image.name is not empty ? image.name : product.name %}
-                                <div class="col-sm-2">
-                                    <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
-                                        <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="" src="{{app.image.getImageUrl("product","thumbnail",image.id) }}" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",image.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",image.id) }}" alt="" />
-                                    </div>
+        <!-- Container -->
+        <div class="container no-pad-t">
+            <!-- Product Row -->
+            <div class="row product-details">
+                {# Beging product images #}
+                <div id="product-images" class="col-md-5 mgb-30-xs">
+                    {# Begin main image #}
+                    {% set main_image_id = product.images.0.id is not empty ? product.images.0.id : product.product|values_in('images')[0]['id'] %}
+                    {% set main_image_id = main_image_id is empty ? 'default' : main_image_id %}
+                    <div id="image-main">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="thumbnail">
+                                    <span class="helper hidden-xs"></span>
+                                    <div id="main-product-video" style="display:none"></div>
+                                    <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="{{app.image.getImageUrl("product","standard",main_image_id) }}" data-image-zoom="{{app.image.getImageUrl("product","large",main_image_id) }}" alt="" />
                                 </div>
-                                {% endfor %}
-                                {% set items = product.product %}
-                                {% for item in items %}
-                                {% for image in item.images if image.id is not empty %}
-                                {% set name = image.name is not empty ? image.name : item.name %}
-                                <div class="col-sm-2">
-                                    <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
-                                        <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="" src="{{app.image.getImageUrl("product","thumbnail",image.id) }}" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",image.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",image.id) }}" alt="" />
-                                    </div>
-                                </div>
-                                {% endfor %}
-                                {% endfor %}
-                                {% if product.videos is not empty %}
-                                {% do app.asset.js(app.url_asset ~ '/js/video-player.js') %}
-                                {% for video in product.videos %}
-                                <div class="col-sm-2">
-                                    <div class="thumbnail video" data-video-src="{{ video }}" data-tooltip="" data-toggle="tooltip" data-original-title="">
-                                        <i class="video-icon fa fa-play-circle"></i><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="">
-                                    </div>
-                                </div>
-                                {% endfor %}
-                                {% endif %}
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            {# End image carousel #}
-        </div>
-            {# End product images #}
-            {# Begin Product Details #}
-        <div class="col-lg-6 col-md-6 col-sm-5">
-            {# Begin product header #}
-            <div class="row">
-                <div class="col-xs-12">
-                        <h1 class="product-title"> <a href="{{app.url}}/brand/{{product.brand|url_encode}}">{{product.brand}}</a></h1>
-                        <h2 class="product-name">{{product.title}}</h2>
-                </div>
-            </div>
-            {# End product header #}
-            {# Begin review stars #}
-            {% set review_score = product.product|values_in('review_score')|merge([product.review_score])|average() %}
-            {% if review_score > 0 %}
-                <div class="row">
-                    <div class="col-md-12">
-                        <ul class="reviews">
-                            <li class="stars">
-                                <a onclick="$('.nav-tabs a:last').tab('show')" href="#reviews">{{ base.rating( review_score ) }}</a>
-                            </li>
-                            <li class="average">
-                                <a onclick="$('.nav-tabs a:last').tab('show')" href="#reviews">{{ (review_score * 5)|number_format(1) }} {% if reviews.num_total %}({{ reviews.num_total }}){% endif %}</a>
-                            </li>
-                            <li class="submit">
-                                <a href="{{ app.url }}/review/id/{{product.id}}">Write a Review</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            {% endif %}
-            {# End review stars #}
-            {# Begin product prices #}
-            {% set prices =  product.product|values_in('variant')|values_in(['price','compare_price','save_price','save_percent']) %}
-            {% if prices.price|first > 0 %}
-                <div class="pricing">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="price-product"><span class="price-sales">{{ prod.price(prices.price) }}</span></div>
+                    {# End main image #}
+                    {# Begin image carousel #}
+                    <div id="image-carousel" class="hidden-xs row">
+                        <div class="image-carousel">
+                            <div id="image-carousel-{{product.id}}" class="carousel">
+                                <div>
+                                    <div class="item active itemauto">
+                                        {% for image in product.images %}
+                                        {% set name = image.name is not empty ? image.name : product.name %}
+                                        <div class="col-sm-2">
+                                            <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
+                                                <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="" src="{{app.image.getImageUrl("product","thumbnail",image.id) }}" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",image.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",image.id) }}" alt="" />
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        {% set items = product.product %}
+                                        {% for item in items %}
+                                        {% for image in item.images if image.id is not empty %}
+                                        {% set name = image.name is not empty ? image.name : item.name %}
+                                        <div class="col-sm-2">
+                                            <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
+                                                <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="" src="{{app.image.getImageUrl("product","thumbnail",image.id) }}" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",image.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",image.id) }}" alt="" />
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        {% endfor %}
+                                        {% if product.videos is not empty %}
+                                        {% do app.asset.js(app.url_asset ~ '/js/video-player.js') %}
+                                        {% for video in product.videos %}
+                                        <div class="col-sm-2">
+                                            <div class="thumbnail video" data-video-src="{{ video }}" data-tooltip="" data-toggle="tooltip" data-original-title="">
+                                                <i class="video-icon fa fa-play-circle"></i><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="">
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="product-price-details">
-                                {% if (prices.compare_price is not empty and prices.compare_price != prices.price) or (prices.save_price is not empty and prices.save_percent is not empty) %}
-                                <ul class="list-unstyled list-inline">
-                                    {% if prices.compare_price is not empty and prices.compare_price != prices.price %}
-                                    <li class="price-standard">
-                                        Compare at {{ prod.price(prices.compare_price) }}
+                    {# End image carousel #}
+                </div>
+                    {# End product images #}
+                    {# Begin Product Details #}
+                <div class="col-md-7">
+                    {# Begin product header #}
+                    <h2 class="product-title"> <a href="{{app.url}}/brand/{{product.brand|url_encode}}">{{product.brand}}</a></h2>
+                    {# Begin review stars #}
+                    {% set review_score = product.product|values_in('review_score')|merge([product.review_score])|average() %}
+                    {% if review_score > 0 %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul class="reviews">
+                                    <li class="stars">
+                                        <a onclick="$('.nav-tabs a:last').tab('show')" href="#reviews">{{ base.rating( review_score ) }}</a>
                                     </li>
-                                    {% endif %}
-                                    {% if prices.save_price is not empty and prices.save_percent is not empty %}
-                                    <li class="percent">
-                                        Save up to {{ prod.saveprice(prices.save_price) }} {{ prod.savepercent(prices.save_percent) }}
+                                    <li class="average">
+                                        <a onclick="$('.nav-tabs a:last').tab('show')" href="#reviews">{{ (review_score * 5)|number_format(1) }} {% if reviews.num_total %}({{ reviews.num_total }}){% endif %}</a>
                                     </li>
-                                    {% endif %}
+                                    <li class="submit">
+                                        <a href="{{ app.url }}/review/id/{{product.id}}">Write a Review</a>
+                                    </li>
                                 </ul>
-                                {% endif %}
                             </div>
                         </div>
-                    </div>
-                </div>
-            {% endif %}
-            {# End product prices #}
-            {# Begin add to cart / actions area #}
-            {% if prices.price is not empty %}
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="btn-toolbar">
-                            <a class="btn btn-primary" href="#collection">
-                                <i class="fa fa-shopping-cart"></i>&nbsp;<span class="text">Add to Cart Below</span>
-                            </a>
+                    {% endif %}
+                    {# End review stars #}
+                    <h2 class="product-title">{{product.title}}</h2>
+                    {# End product header #}
+                    {# Begin product prices #}
+                    {% set prices =  product.product|values_in('variant')|values_in(['price','compare_price','save_price','save_percent']) %}
+                    {% if prices.price|first > 0 %}
+                        <div class="pricing">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="price-product"><span class="price-sales">{{ prod.price(prices.price) }}</span></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="product-price-details">
+                                        {% if (prices.compare_price is not empty and prices.compare_price != prices.price) or (prices.save_price is not empty and prices.save_percent is not empty) %}
+                                        <ul class="list-unstyled list-inline">
+                                            {% if prices.compare_price is not empty and prices.compare_price != prices.price %}
+                                            <li class="price-standard">
+                                                Compare at {{ prod.price(prices.compare_price) }}
+                                            </li>
+                                            {% endif %}
+                                            {% if prices.save_price is not empty and prices.save_percent is not empty %}
+                                            <li class="percent">
+                                                Save up to {{ prod.saveprice(prices.save_price) }} {{ prod.savepercent(prices.save_percent) }}
+                                            </li>
+                                            {% endif %}
+                                        </ul>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            {% endif %}
-            {# End add to cart / actions area #}
-            {# Begin short description #}
-            {% if product.description is not empty %}
-                {% set description = product.description|slice(0,300) %}
-                <section id="collection-short-description-desktop" class="hidden-xs">
-                    <div class="description-content">
-                        {{ description }}{% if product.description|length > 300 %}... <a href="javascript: void(0);" class="read-more">(Read more)</a>{% endif %}
-                    </div>
-                </section>
-            {% endif %}
-            {# End short description #}
+                    {% endif %}
+                    {# End product prices #}
+                    {# Begin add to cart / actions area #}
+                    {% if prices.price is not empty %}
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="btn-toolbar">
+                                    <a class="btn btn-primary" href="#collection">
+                                        <i class="fa fa-shopping-cart"></i>&nbsp;<span class="text">Add to Cart Below</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {# End add to cart / actions area #}
+                    {# Begin short description #}
+                    {% if product.description is not empty %}
+                        {% set description = product.description|slice(0,300) %}
+                        <section id="collection-short-description-desktop" class="hidden-xs">
+                            <div class="description-content">
+                                {{ description }}{% if product.description|length > 300 %}... <a href="javascript: void(0);" class="read-more">(Read more)</a>{% endif %}
+                            </div>
+                        </section>
+                    {% endif %}
+                    {# End short description #}
 
 
-            {# Begin social sharing #}
-            {% if app.params.social_settings is defined and app.params.social_settings is not empty and (
-                app.params.social_settings["facebook"]["active_like"] == true or
-                app.params.social_settings["facebook"]["active_share"] == true or
-                app.params.social_settings["facebook"]["active_follow_page_button"] == true or
-                app.params.social_settings["twitter"]["active_tweet"] == true or
-                app.params.social_settings["twitter"]["active_follow_page_button"] == true or
-                app.params.social_settings["pinterest"]["active_pin_it"] == true or
-                app.params.social_settings["pinterest"]["active_follow_page_button"] == true or
-                app.params.social_settings["google"]["active_plus_one"] == true or
-                app.params.social_settings["google"]["active_follow_page_button"] == true
-                ) %}
-                <div style="clear:both"></div>
-                <div class="row no-margin">{# Begin Row#}
-                    <div class="product-share clearfix">
-                        <p> SHARE </p>
-                        <div class="socialIcon">
-                            {{ social.sharing_buttons(app.params.social_settings, product) }}
+                    {# Begin social sharing #}
+                    {% if app.params.social_settings is defined and app.params.social_settings is not empty and (
+                        app.params.social_settings["facebook"]["active_like"] == true or
+                        app.params.social_settings["facebook"]["active_share"] == true or
+                        app.params.social_settings["facebook"]["active_follow_page_button"] == true or
+                        app.params.social_settings["twitter"]["active_tweet"] == true or
+                        app.params.social_settings["twitter"]["active_follow_page_button"] == true or
+                        app.params.social_settings["pinterest"]["active_pin_it"] == true or
+                        app.params.social_settings["pinterest"]["active_follow_page_button"] == true or
+                        app.params.social_settings["google"]["active_plus_one"] == true or
+                        app.params.social_settings["google"]["active_follow_page_button"] == true
+                        ) %}
+                        <div style="clear:both"></div>
+                        <div class="row no-margin">{# Begin Row#}
+                            <div class="product-share clearfix">
+                                <p> SHARE </p>
+                                <div class="socialIcon">
+                                    {{ social.sharing_buttons(app.params.social_settings, product) }}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            {% endif %} {# End social sharing #}
-        </div>{# End Product Details #}
+                    {% endif %} {# End social sharing #}
+                </div>{# End Product Details #}
+            </div>
+        </div>
     </div>
-
-    <div class="gap"></div>
     {% if product.description is not empty %}
         <section id="collection-short-description-mobile" class="hidden-sm hidden-md hidden-lg">
             <div class="row">
@@ -239,14 +239,14 @@
                                             {% set items_in_wishlist = api.get('/wishlistitem', {query:{wishlist_id:{'$in':wishlist_ids},product_id:{'$in':children_ids}}}) %}
                                         {% endif %}
                                     {% endif %}
-                                    <div class="panel-heading">
+                                    <div class="panel-heading panel-collection">
                                         {# Begin desktop buttons #}
                                         <div class="cart-actions collection hidden-xs">
                                             <div class="addto">
                                                 {% include "/product/_partials/list/actions-collection.html.twig" %}
                                                 {# Begin add to cart button #}
                                                 <div class="col-sm-4 col-md-3 col-lg-2 no-padding-right">
-                                                    <button type="submit" class="btn btn-block btn-primary" name="action" value="cart">
+                                                    <button type="submit" class="btn btn-block btn-primary btn-bigger" name="action" value="cart">
                                                         <i class="fa fa-shopping-cart"></i>
                                                         <span>Add to Cart</span>
                                                     </button>
@@ -317,7 +317,7 @@
                                                         {% endif %}
                                                         <div class="variations">
                                                             {% for variation in product.variant %}
-                                                                <div class="product" id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
+                                                                <div class="product product-list " id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
                                                                     <div class="row">
                                                                         {# Begin collection product image #}
                                                                         {% if variation.images is not empty %}
@@ -403,7 +403,7 @@
                                                                                         <ul class="tags hidden-xs hidden-sm">
                                                                                             <li>
                                                                                                 {% for tag in product.tags %}
-                                                                                                <span class="label label-info">{{tag|title}}</span>
+                                                                                                <!-- <span class="label label-info">{{tag|title}}</span> -->
                                                                                                 {% endfor %}
                                                                                             </li>
                                                                                         </ul>
@@ -493,7 +493,6 @@
         </div>
     </section>
     {# End Product Tabs #}
-    {% include "/_partials/promo/new_arrivals.html.twig" %}  {# New Arrivals Part #}
+    {#{% include "/_partials/promo/new_arrivals.html.twig" %}#}  {# New Arrivals Part #}
 
-    <div class="gap"></div>
 </div>

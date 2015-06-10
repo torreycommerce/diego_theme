@@ -229,7 +229,7 @@
             {# Category product grid #}
             {% set items_per_row = 3 %}
             <section class="products-category">
-            <div class="row">
+            <div class="">
             {% if products.num_total == 0 and categories is empty %}
             <div class="col-sm-12">
                     No products found. <a href="{{app.url}}/{{ app.request.url}}">Go back</a>
