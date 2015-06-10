@@ -5,21 +5,29 @@
 {% block title %}Create a Return{% endblock %} 
 
 {% block breadcrumb %}
+      <!-- Intro Block
+      ============================================-->
+      <section class="intro-block intro-page boxed-section cover-4 overlay-dark-m">
+      
+        <!-- Container -->
+        <div class="container">     
+          <!-- Section Title -->
+          <div class="section-title invert-colors no-margin-b">
+            <h2><i class="fa fa-plus-circle"></i> Create a Return</h2>
+            <p>To return an item you've already received, please enter the following details.</p>
+          </div>
+          <!-- /Section Title -->
+        </div>
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Intro Block
+      ============================================-->
 {{ base.breadcrumbs({'Create a Return':''}) }}
 {% endblock %}
 
 {% block content %}
-<div class="container main-container">
-    <div class="row">
-    {# Begin header #}
-        <div class="col-sm-12 col-md-9 col-lg-10">
-            <h1 class="section-title-inner"><span><i class="fa fa-plus-circle"></i> 
-                Create a Return</span>
-            </h1>
-            <h2 class="block-title-2">To return an item you've already received, please enter the following details:</h2>
-        </div>
-    {# End header #}
-    </div> <!-- /Row -->
+<div class="container">
 {{ forms.begin('guestreturn',app.url ~ '/return/create','post', {class:'form-horizontal'}) }}
 <div class="row">
     <div class="col-md-8">

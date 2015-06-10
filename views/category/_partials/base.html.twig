@@ -309,7 +309,7 @@
                       <div class="price-box">
                         <span class="price">{% if product.attributes.price %}
                                 {{ prod.price(product.attributes.price) }}</span>
-                                <span class="price price-old">${{ prod.price(product.attributes.compare_price) }}</span>
+                                <span class="price price-old">{{ prod.price(product.attributes.compare_price) }}</span>
                                 {% endif %}
                       </div>
                       <!-- /Price Box -->

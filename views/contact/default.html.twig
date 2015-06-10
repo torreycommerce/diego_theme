@@ -4,6 +4,29 @@
 Contact Us
 {% endblock %}
 {% block breadcrumb %}
+
+      <!-- Intro Block
+      ============================================-->
+      <section class="intro-block intro-page boxed-section page-bg overlay-dark-m">
+      
+        <!-- Container -->
+        <div class="container">     
+          <!-- Section Title -->
+          <div class="section-title invert-colors no-margin-b">
+            <h2>Contact Us</h2>
+            <p class="hidden-xs">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac augue at erat hendrerit
+            dictum. Praesent porta, purus eget sagittis imperdiet, nulla mi ullamcorper metus, id
+            hendrerit metus diam vitae est. Class aptent taciti sociosqu ad litora torquent per conubia
+            nostra, per inceptos himenaeos.</p>
+          </div>
+          <!-- /Section Title -->
+        </div>
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Intro Block
+      ============================================-->
+
 {{ base.breadcrumbs({'Contact Us':''}) }}
 {% endblock %}
 {% block content %}
@@ -27,58 +50,7 @@ Contact Us
         {% do app.redirect('/', {'success':'Your comment has been submitted. Thank you.'}) %}
     {% endif %}
 {% endif %}
-      <!-- Intro Block
-      ============================================-->
-      <section class="intro-block intro-page boxed-section page-bg overlay-dark-m">
       
-        <!-- Container -->
-        <div class="container">     
-          <!-- Section Title -->
-          <div class="section-title invert-colors no-margin-b">
-            <h2>Contact Us</h2>
-            <p class="hidden-xs">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac augue at erat hendrerit
-            dictum. Praesent porta, purus eget sagittis imperdiet, nulla mi ullamcorper metus, id
-            hendrerit metus diam vitae est. Class aptent taciti sociosqu ad litora torquent per conubia
-            nostra, per inceptos himenaeos.</p>
-          </div>
-          <!-- /Section Title -->
-        </div>
-        <!-- /Container -->
-      
-      </section>
-      <!-- /Intro Block
-      ============================================-->
-      
-      <!-- Page Info Block
-      ============================================-->
-      <section class="page-info-block boxed-section">
-      
-        <!-- Container -->
-        <div class="container cont-pad-x-15"> 
-
-          <!-- Breadcrumb -->
-          <ol class="breadcrumb pull-left">
-            <li><a href="#"><i class="ti ti-home"></i></a></li>
-            <li><a href="#">Pages</a></li>
-            <li><a href="#">other</a></li>
-            <li class="active">blog</li>
-          </ol>
-          <!-- /Breadcrumb --> 
-
-          <!-- hlinks -->
-          <ul class="page-links pull-right hlinks hlinks-icons color-icons-borders color-icons-bg-hovered">
-            <li><a href="#"><i class="icon fa fa-facebook"></i></a></li>
-            <li><a href="#"><i class="icon fa fa-twitter"></i></a></li>
-            <li><a href="#"><i class="icon fa fa-rss"></i></a></li>
-          </ul>
-          <!-- /hlinks -->
-
-        </div>
-        <!-- /Container -->
-      
-      </section>
-      <!-- /Page Info  Block
-      ============================================-->
      <!-- Content Block
       ============================================-->
       <section class="content-block default-bg">

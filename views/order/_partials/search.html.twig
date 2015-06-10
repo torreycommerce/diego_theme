@@ -4,19 +4,29 @@
 Order Status &amp; History
 {% endblock %}
 {% block breadcrumb %}
-    {{ base.breadcrumbs({'Order Status &amp; History':''}) }}
-{% endblock %}
-{% block content %}
-<div class="container main-container">
-    <div class="row">
-    {# Begin header #}
-        <div class="col-sm-12 col-md-9 col-lg-10">
-            <h1 class="section-title-inner"><span><i class="fa fa-history"></i> 
-                Order Status &amp; History</span>
-            </h1>
-            <h2 class="block-title-2">To view your current and past orders, please either <a href="{{app.url}}/account/login/">login to your account</a> or enter your information below.</h2>
+      <!-- Intro Block
+      ============================================-->
+      <section class="intro-block intro-page boxed-section cover-4 overlay-dark-m">
+      
+        <!-- Container -->
+        <div class="container">     
+          <!-- Section Title -->
+          <div class="section-title invert-colors no-margin-b">
+            <h2><i class="fa fa-history"></i> Order Status &amp; History</h2>
+            <p>To view your current and past orders, please either <a href="{{app.url}}/account/login/">login to your account</a> or enter your information below.</p>
+          </div>
+          <!-- /Section Title -->
         </div>
-    {# End header #}
+        <!-- /Container -->
+      
+      </section>
+      <!-- /Intro Block
+      ============================================-->
+    {{ base.breadcrumbs({'Order Status &amp; History ':''}) }}
+{% endblock %} 
+{% block content %}
+<div class="container">
+    <div class="row">
     </div> <!-- /Row -->
     <div class="row">
         <div class="col-md-8">
