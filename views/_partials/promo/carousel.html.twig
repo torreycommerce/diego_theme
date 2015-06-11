@@ -4,73 +4,32 @@
       
         <!-- Container -->
         <div class="container">
+            {% set widget = api.get('widget/render', {'slug' : 'default-carousel'}) %}
+            {% if widget is not empty and app.params.carousel is not empty %}
+                {{ widget }}
+            {% else %}
+                <div class="carousel-inner">
+                    <div class="item active">
 
-          <!-- Slider Wrapper -->
-          <div class="intro-slider">
-          
-            <!-- BxSlider -->
-            <div class="bxslider" data-call="bxslider" data-options="{pager:false, mode:'fade'}">
-            
-              <!-- Slide -->
-              <div class="slide">
-                <img class="img-main" src="{{ app.url_asset }}/images/diego/slides/slide1.jpg" alt=""/><!-- slider image + background -->
-                <!-- Text -->
-                <div class="text">
-                  <div class="vcenter">
-                    <div class="vcenter-this text-block">
-                      <h5 class="bx-layer" data-anim="bounceInLeft" data-dur="1000" data-delay="700">from 5th March - 26 March</h5>
-                      <h1 class="bx-layer" data-anim="bounceInDown" data-dur="1000" data-delay="100">fresh from the runway</h1><br/>
-                      <p class="bx-layer" data-anim="bounceInRight" data-dur="1000" data-delay="500">Helena is a freelance fashion house specialisings in print designs and fabrics.</p>
-                      <a class="btn btn-base bx-layer" data-anim="bounceInUp" data-dur="1000" data-delay="1000">shop now</a>
-                    </div>
-                  </div>
-                </div>
-                <!-- /Text -->
-              </div>
-              <!-- /Slide -->
-              
-              <!-- Slide -->
-              <div class="slide">
-                <img class="img-main" src="{{ app.url_asset }}/images/diego/slides/slide2.jpg" alt=""/><!-- slider image + background -->
-                <!-- Text -->
-                <div class="text">
-                  <div class="vcenter">
-                    <div class="vcenter-this text-block">
-                      <h5 class="bx-layer" data-anim="bounceInLeft" data-dur="1000" data-delay="700">from 5th March - 26 March</h5>
-                      <h1 class="bx-layer" data-anim="bounceInDown" data-dur="1000" data-delay="100">designer clothes only</h1><br/>
-                      <p class="bx-layer" data-anim="bounceInRight" data-dur="1000" data-delay="500">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet consectetur veli..</p>
-                      <a class="btn btn-white bx-layer" data-anim="bounceInUp" data-dur="1000" data-delay="1000">shop now</a>
-                    </div>
-                  </div>
-                </div>
-                <!-- /Text -->
-              </div>
-              <!-- /Slide -->
-              
-              <!-- Slide -->
-              <div class="slide">
-                <img class="img-main" src="{{ app.url_asset }}/images/diego/slides/slide3.jpg" alt=""/><!-- slider image + background -->
-                <!-- Text -->
-                <div class="text">
-                  <div class="vcenter">
-                    <div class="vcenter-this text-block">
-                      <h5 class="bx-layer" data-anim="bounceInLeft" data-dur="1000" data-delay="700">from 5th March - 26 March</h5>
-                      <h1 class="bx-layer" data-anim="bounceInDown" data-dur="1000" data-delay="100">hot summer collection</h1><br/>
-                      <p class="bx-layer" data-anim="bounceInRight" data-dur="1000" data-delay="500">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet consectetur veli..</p>
-                      <a class="btn btn-primary bx-layer" data-anim="bounceInUp" data-dur="1000" data-delay="1000">shop now</a>
-                    </div>
-                  </div>
-                </div>
-                <!-- /Text -->
-              </div>
-              <!-- /Slide -->
-            
-            </div>
-            <!-- /BxSlider -->
-            
-          </div>
-          <!-- Slider Wrapper -->
+                        {% if app.params.carousel is not empty %}
+                            {% set carousel_info = app.params.carousel | first %}
+                            {% set carousel = app.image.getImageUrl('carousel','carousel',carousel_info.id) %}
+                            
+                        {% endif %}
 
+                        {% if carousel is not empty %}
+                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-slider-default.jpg'" src="{{ carousel }}" alt="">
+                        {% else %}
+                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="visible-xs" src="{{ app.url_asset }}/images/promo-slider/promo-01-xs.jpg" alt="Grand Re-Opening - 50% off Sale Items">
+                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="visible-sm" src="{{ app.url_asset }}/images/promo-slider/promo-01-sm.jpg" alt="Grand Re-Opening - 50% off Sale Items">
+                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="visible-md" src="{{ app.url_asset }}/images/promo-slider/promo-01-md.jpg" alt="Grand Re-Opening - 50% off Sale Items">
+                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="visible-lg" src="{{ app.url_asset }}/images/promo-slider/promo-01-lg.jpg" alt="Grand Re-Opening - 50% off Sale Items">
+                        {% endif %}
+                        <div class="carousel-caption">
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
         <!-- /Container -->
       

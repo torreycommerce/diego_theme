@@ -959,7 +959,7 @@ pre.no-breaks, pre.no-breaks > code {
 }
 @media (max-width: 767px) {
 .panel-collection {
-  height: 100px !important;
+  height: 140px !important;
 }
 }
 .panel > .panel-heading.heading-iconed {
@@ -1919,7 +1919,14 @@ input[type="checkbox"] {
         line-height: normal;
         text-transform: uppercase;
     }
-
+@media (max-width: 767px) {
+  #logo-txt 
+    a {
+        font-size: 20px;
+        padding-top: 15px;
+        max-width: 250px;
+    }
+}
 
 /* navbar toggle 
 ........................... */

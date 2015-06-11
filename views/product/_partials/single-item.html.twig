@@ -3,7 +3,7 @@
 {# <pre>{{dump(product)}}</pre> #}
 <script type="text/javascript">
     var VariantsData = {isCollection: false, products: []}
-    VariantsData.products.push({{product.variant|json_encode}});
+    VariantsData.products.push({variants: {{product.variant|json_encode}}, variant_options: {{product.variant_options|json_encode}}});
 </script>
 {% for variation in product.variant %}
     <form method="post" id="productForm" action="{{ app.url }}/product/route">  
@@ -147,10 +147,10 @@
                         {% set items_in_wishlist = api.get('/wishlistitem', {query:{wishlist_id:{'$in':wishlist_ids},product_id:product.id}}) %}
                     {% endif %}
                 {% endif %}
-
-                {% if product.variant[0].price > 0 %}
-                    <div id="variation-selector-{{product.id}}">
+                
+                <div id="variation-selector-{{product.id}}">
                     </div>
+                {% if product.variant[0].price > 0 %}  
                     <!--/.size-details-->
                 <!-- Accordion -->
                 <div class="panel-group" id="accordion">
@@ -211,51 +211,19 @@
                 <h4>Buy now</h4>
                 <!-- Row -->
                 <div class="row grid-20">
-                  <!-- Col -->
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <!-- Input Group -->
-                      <div class="input-group">
-                        <div class="input-group-addon"><i class="icon fa fa-eye"></i></div>
-                        <select class="form-control">
-                          <option>Select Style</option>
-                          <option>Italian</option>
-                          <option>French</option>
-                          <option>American</option>
-                        </select>
-                      </div>
-                      <!-- /Input Group -->
-                    </div>
-                    <!-- /Form Group -->
-                    <div class="form-group">
-                      <!-- Input Group -->
-                      <div class="input-group">
-                        <div class="input-group-addon"><i class="icon fa fa-male"></i></div>
-                        <select class="form-control">
-                          <option>Select size</option>
-                          <option>Large</option>
-                          <option>Medium</option>
-                          <option>Small</option>
-                        </select>
-                      </div>
-                      <!-- /Input Group -->
-                    </div>
 
-               
-                  </div>
-                  <!-- /Col -->
-                  {# <form method="post" id="productForm" action="{{ app.url }}/product/route">   #}                      
+                      {% if variation.price > 0 %}
+                    <!--/.size-details-->
+                    <form method="post" id="productForm" action="{{ app.url }}/product/route">                      
                        {% if variation['inventory_quantity'] is defined and variation['inventory_minimum_quantity'] is defined and
                            variation['inventory_policy'] is defined and (variation['inventory_policy'] == 'continue' or
                            variation['inventory_quantity'] > variation['inventory_minimum_quantity'] ) %}
                                {# Begin product Size-Quantity #}
 
-                  <!-- Col -->
-                  <div class="col-md-6">
-                            <div class="row no-margin"> {# Begin Row#}
-                               <div class="productFilter productFilterLook2">
+                            <div class="col-md-6"> {# Begin Row#}
+                               <div class="form-group">
                                    {# Begin product Quantity #}
-                                    <div class="input-group  col-md-3 col-sm-6 col-xs-6 no-padding-left">
+                                    <div class="input-group col-md-6">
                                         <div class="input-group-btn">
                                             <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button">
                                                 <i class="fa fa-minus"></i>
@@ -269,31 +237,11 @@
                                </div>
                                {# End product quantity #}
                             </div> {# End Row#}
-
-                    <!-- /Form Group -->
-                    
-                    <!-- /Form Group -->
-                    <div class="form-group">
-                      <!-- Input Group -->
-                      <div class="input-group">
-                        <div class="input-group-addon"><i class="icon fa fa-paint-brush"></i></div>
-                        <select class="form-control">
-                          <option>Select Color</option>
-                          <option>Red</option>
-                          <option>Orange</option>
-                          <option>Yellow</option>
-                          <option>Green</option>
-                        </select>
-                      </div>
-                      <!-- /Input Group -->
-                    </div>
-                    <!-- /Form Group -->
-                    
-
-     
-                  </div>
-                  <!-- /Col -->
+                            {% endif %}
+                            </form>
                   
+
+
                 </div>
                 <!-- /Row -->
                 <div class="addto">
@@ -317,8 +265,9 @@
           
 
     </div>{# End row transitionfx #}
+  </form>
 {% endfor %}
-</form>
+
 
 {% include "/_partials/promo/new_arrivals.html.twig" %}
 {# New Arrivals Part #}
