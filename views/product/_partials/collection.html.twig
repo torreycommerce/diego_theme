@@ -303,7 +303,7 @@
                                                         {% if product.variant|length > 1 %}
 
                                                             <script type="text/javascript">
-                                                                VariantsData.products.push({{product.variant|json_encode}});
+                                                                VariantsData.products.push({variants: {{product.variant|json_encode}}, variant_options: {{product.variant_options|json_encode}}});
                                                             </script>
                                                             {% set variation_dropdown %}
                                                                 {% spaceless %}

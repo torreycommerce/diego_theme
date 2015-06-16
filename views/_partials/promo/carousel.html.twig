@@ -4,6 +4,7 @@
       
         <!-- Container -->
         <div class="container">
+            
             {% set widget = api.get('widget/render', {'slug' : 'default-carousel'}) %}
             {% if widget is not empty and app.params.carousel is not empty %}
                 {{ widget }}

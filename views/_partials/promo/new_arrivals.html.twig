@@ -45,12 +45,12 @@
                       <!-- Image -->
                       <div class="image"> 
                         <a href="{{ app.url }}/product/{{ product.slug }}" class="main"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ img_url }}" alt="img" class="img-responsive"></a>
-                        <ul class="additional">
+<!--                         <ul class="additional">
                           <li><a href="{{ app.url_asset }}/images/diego/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="{{ app.url_asset }}/images/diego/products/product1.jpg" alt=""></a></li>
                           <li><a href="{{ app.url_asset }}/images/diego/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="{{ app.url_asset }}/images/diego/products/product1.jpg" alt=""></a></li>
                           <li><a href="{{ app.url_asset }}/images/diego/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="{{ app.url_asset }}/images/diego/products/product1.jpg" alt=""></a></li>
                           <li><a href="{{ app.url_asset }}/images/diego/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="{{ app.url_asset }}/images/diego/products/product1.jpg" alt=""></a></li>
-                        </ul>
+                        </ul> -->
                       </div>
                       <!-- Image -->
                       
@@ -76,15 +76,14 @@
                         <!-- Price Box -->
                         <div class="price-box">
                           <span class="price">{% if product.attributes.price %}
-                          {{ prod.price(product.attributes.price) }} {% if product.attributes.compare_price[0] is not empty %}</span>
-                          <span class="price price-old">{{ prod.price(product.attributes.compare_price) }}</span>
+                          {{ prod.price(product.attributes.price) }} {% if product.attributes.compare_price[0] is not empty %}</span><span class="price price-old">{{ prod.price(product.attributes.compare_price) }}</span>
                         <!-- /Price Box -->
                         {% endif %}
                         {% endif %}
                         </div>
                         <!-- buttons -->
                         <div class="btn-group">
-                          <a class="btn btn-outline btn-base-hover" href="{{ app.url }}/product/{{ product.slug }}">add to cart</a>  
+                          <button type="submit" class="btn btn-outline btn-base-hover" name="action" value="cart"><span>Add to Cart</span></button>
                           <a class="btn btn-outline btn-default-hover" href="{{ app.url }}/product/{{ product.slug }}"><i class="icon fa fa-heart"></i></a>
                         </div> 
                         <!-- /buttons -->

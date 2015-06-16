@@ -5554,6 +5554,7 @@ ul.tags li a:hover {
   font: 400 15px/1 "Roboto Condensed";
   color: #131416;
   margin: 0 0 10px 0;
+  text-transform: capitalize !important;
 }
 .product .price-box {
   margin: 0 0 15px 0;
@@ -5678,6 +5679,211 @@ ul.tags li a:hover {
   color: #666;
   display: inline-block;
 }
+
+.quanitySniper {
+    height: 30px;
+    padding: 0;
+    text-align: center;
+    width: 40px;
+}
+
+/***  -------  Product Color - Size Selector  ------- ***/
+.color-details {
+    padding-top: 5px;
+/*    padding-bottom: 15px;
+*/
+position: relative;}
+.color-details span {
+  font-family: "Roboto";
+  color: #42464d;
+  text-transform: capitalize;
+}
+.color-details-collection {
+    border: none;
+    padding: 0;
+}
+
+.color-details-collection span {
+  text-align: center;
+  font-family: "Roboto";
+  font-size: 12px;
+  color: #42464d;
+  text-transform: capitalize;
+}
+
+.swatches {
+    margin: 0.5em 0;
+    padding-left: 0;
+}
+.swatches li {
+    border: 1px solid #b2b2b2;
+    display: inline-block;
+    margin: 2px 1px;
+    vertical-align: top;
+    list-style: none;
+}
+.swatches .selected,
+.swatches li:hover {
+    /* Swatches Selected Available Hover Border */
+    
+    border: 1px solid #4ec67f;
+}
+.notavailable li:hover {
+    /* Swatches Selected Available Hover Border */
+    
+    border: 2px dotted red;
+    cursor: not-allowed;
+
+}
+.swatches a {
+    background-position: center center;
+    background-repeat: no-repeat;
+    border: 1px solid #FFFFFF;
+    box-shadow: 1px 1px 2px #C5C5C5;
+    cursor: pointer;
+    display: block;
+    font-size:10px;
+    height: 33px;
+    text-align: center;
+    transition: all 0.25s ease 0s;
+    min-width: 33px;
+}
+.swatches .notavailable {
+    /* Swatches Selected NotAvailable Border  */
+    
+    border: 1px dotted #b2b2b2;
+    cursor: not-allowed;
+    opacity: 0.5;
+    -webkit-opacity: 0.5;
+    -ms-opacity: 0.5;
+    position: relative;
+}
+.swatches .notavailable-selected {
+    /* Swatches Selected NotAvailable Border  */
+    
+    border: 1px dotted red;
+    cursor: not-allowed;
+    opacity: 0.5;
+    -webkit-opacity: 0.5;
+    -ms-opacity: 0.5;
+    position: relative;
+}
+.swatches .notavailable:before {
+    /* Swatches Unselected NotAvailable - icon */
+    
+    content: "\f068";
+    font-family: 'FontAwesome' !important;
+    color: #fff;
+    cursor: not-allowed;
+    font-weight: 300;
+    text-decoration: inherit;
+    padding-right: 0.5em;
+    position: absolute;
+    top: 7px;
+    left: 10px;
+}
+.swatches a img {
+    height: 29px;
+    width: 29px;
+}
+/******--Size Details--******/
+
+.size-details {
+    padding-top: 5px;
+/*    padding-bottom: 55px;
+*/}
+
+.size-details span {
+  font-weight: normal;
+  font-family: "Roboto";
+  color: #42464d;
+  text-transform: capitalize;
+}
+
+.swatches-size {
+    margin: 0.5em 0;
+    padding-left: 0;
+}
+.swatches-size li {
+    border: 1px solid #b2b2b2;
+    background: #fff;
+    display: inline-block;
+    margin: 2px 1px;
+    vertical-align: top;
+    list-style: none;
+}
+.swatches-size .selected,
+.swatches-size li:hover {
+    /* Swatches Selected Available Hover Border */
+    
+    border: 1px solid #4ec67f;
+}
+.swatches-size .notavailable-selected {
+    /* Swatches Selected NotAvailable Border  */
+    
+    border: 1px dashed red;
+    background: none !important;
+    cursor: not-allowed;
+
+}
+.swatches-size a {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #ecebe9;
+    border: 2px solid #FFFFFF;
+    box-shadow: 1px 1px 2px #C5C5C5;
+    cursor: pointer;
+    display: block;
+    height: 33px;
+    text-align: center;
+    transition: all 0.25s ease 0s;
+    min-width: 33px;
+}
+.swatches-size .notavailable a {
+    background: none;
+    cursor: not-allowed;
+    opacity: 0.3;
+    -webkit-opacity: 0.3;
+    -ms-opacity: 0.3;
+}
+.swatches-size .notavailable-selected a {
+    /* Swatches Selected NotAvailable  */
+    
+    background: none;
+    cursor: not-allowed;
+    opacity: 0.3;
+    -webkit-opacity: 0.3;
+    -ms-opacity: 0.3;
+}
+.swatches-size .notavailable:hover {
+    border: 1px dashed #34495e;
+    cursor: not-allowed;
+}
+.swatches-size .notavailable {
+    /* Swatches Selected NotAvailable Border  */
+    
+    border: 1px dashed #b2b2b2;
+    background-color: none;
+    cursor: not-allowed;
+}
+.swatches-size a img {
+    height: 29px;
+    width: 29px;
+}
+.swatches-size p {
+    height: 29px;
+    width: 29px;
+    margin: 0;
+    padding-top: 5px;
+}
+.notavailable p {
+    height: 29px;
+    width: 29px;
+    background: none;
+    margin: 0;
+    padding-top: 5px;
+}
+
 
 /***  -------  Product Collection Page  ------- ***/
 
@@ -5959,6 +6165,59 @@ ul.tags li a:hover {
   float: right;
 }
 
+/* -------- Rating ------- */
+
+.star-rating {
+    position: relative;
+    display: inline;
+    margin: 0 0 0 -0.1em;
+    padding: 0;
+}
+.star-rating div {
+    position: relative;
+    display: inline;
+    overflow: hidden;
+    white-space: nowrap;
+    letter-spacing: 0;
+}
+.star-rating span {
+    margin: 0 .1em;
+}
+.star-rating .disabled {
+    color: #ccc;
+}
+.star-rating .active {
+    position: absolute;
+    left: 0;
+    color: #666b76;
+}
+.star-rating-input {
+    font-size: 2em;
+}
+.star-rating .choosing {
+    color: #666b76;
+}
+.star-rating .active-choosing {
+    color: #666b76;
+}
+.star-rating .disabled-choosing {
+    color: #ccc;
+}
+.product-details ul.reviews {
+    font-size: 12px;
+    margin-bottom: 10px !important;
+    padding-left: 0;
+}
+.product-details ul.reviews li {
+    display: inline-block;
+    list-style-type: none;
+    padding-left: 0;
+    padding-right: 4px;
+}
+
+.product-details ul.reviews li a{
+    color: #666b76;
+}
 
 /* IMAGE HOVER */
 
