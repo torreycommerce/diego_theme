@@ -38,24 +38,28 @@
                     {% endif %}
                     {% endif %}
                     <!-- Col -->
-                  <div class="item itemauto col-sm-6 col-md-3">
+                  <div class="col-sm-6 col-md-3">
                     <!-- product -->
                     <div class="product clearfix">
                     
                       <!-- Image -->
                       <div class="image"> 
                         <a href="{{ app.url }}/product/{{ product.slug }}" class="main"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ img_url }}" alt="img" class="img-responsive"></a>
-<!--                         <ul class="additional">
-                          <li><a href="{{ app.url_asset }}/images/diego/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="{{ app.url_asset }}/images/diego/products/product1.jpg" alt=""></a></li>
-                          <li><a href="{{ app.url_asset }}/images/diego/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="{{ app.url_asset }}/images/diego/products/product1.jpg" alt=""></a></li>
-                          <li><a href="{{ app.url_asset }}/images/diego/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="{{ app.url_asset }}/images/diego/products/product1.jpg" alt=""></a></li>
-                          <li><a href="{{ app.url_asset }}/images/diego/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="{{ app.url_asset }}/images/diego/products/product1.jpg" alt=""></a></li>
-                        </ul> -->
                       </div>
                       <!-- Image -->
-                      
-                      <span class="label label-sale">sale</span>
-                      
+                      <div class="label">
+                        {% for tag in product.tags %}
+                            {% if tag == 'new' %}
+                                <span class="label-new">{{ tag|capitalize }}</span> 
+                            {% elseif tag == 'sale' %}
+                                <span class="label-sale">{{ tag|capitalize }}</span> 
+                            {% elseif tag == 'popular' %}
+                                <span class="label-hot">{{ tag|capitalize }}</span> 
+                            {% else %}
+                                <span class="label-feat">{{ tag|capitalize }}</span> 
+                            {% endif %}
+                        {% endfor %}
+                      </div>
                       <!-- Details -->
                       <div class="details">
                       
@@ -76,7 +80,7 @@
                         <!-- Price Box -->
                         <div class="price-box">
                           <span class="price">{% if product.attributes.price %}
-                          {{ prod.price(product.attributes.price) }} {% if product.attributes.compare_price[0] is not empty %}</span><span class="price price-old">{{ prod.price(product.attributes.compare_price) }}</span>
+                          {{ prod.price(product.attributes.price) }} {% if product.attributes.compare_price[0] is not empty and product.attributes.compare_price != product.attributes.price %}</span><span class="price price-old">{{ prod.price(product.attributes.compare_price) }}</span>
                         <!-- /Price Box -->
                         {% endif %}
                         {% endif %}

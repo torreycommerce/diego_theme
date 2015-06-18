@@ -56,7 +56,19 @@
                         </ul>
                       </div>
                       <!-- Image -->
-                      
+                      <div class="label">
+                        {% for tag in product.tags %}
+                            {% if tag == 'new' %}
+                                <span class="label-new">{{ tag|capitalize }}</span> 
+                            {% elseif tag == 'sale' %}
+                                <span class="label-sale">{{ tag|capitalize }}</span> 
+                            {% elseif tag == 'popular' %}
+                                <span class="label-hot">{{ tag|capitalize }}</span> 
+                            {% else %}
+                                <span class="label-feat">{{ tag|capitalize }}</span> 
+                            {% endif %}
+                        {% endfor %}
+                      </div>
                       <!-- Details -->
                       <div class="details">
                       
