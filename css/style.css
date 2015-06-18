@@ -5479,27 +5479,54 @@ ul.tags li a:hover {
 
 
 .product .label {
-  position: absolute;
-  left: 0;
-  top: 0;
   color: #fff;
-  text-transform: uppercase;
   font: normal 11px/1 "Roboto";
+  left: 0;
+  padding: 0;
+  position: absolute;
+  text-transform: uppercase;
+  top: 0;
+}
+
+
+.product .label .label-sale {
+  background: #E95144;
+  color: #FFFFFF;
+  display: inline-block;
+  float: left;
+  font: normal 11px/1 "Roboto";
+  height: 100%;
   padding: 10px 13px;
 }
-
-
-.product .label.label-sale {
-  background: #E95144;
-}
-.product .label.label-new {
+.product .label .label-new {
   background: #00C0FF;
+  color: #FFFFFF;
+  display: inline-block;
+  float: left;
+  font: normal 11px/1 "Roboto";;
+  height: 100%;
+  padding: 10px 13px;
+
 }
-.product .label.label-feat {
+.product .label .label-feat {
   background: #468C00;
+  color: #FFFFFF;
+  display: inline-block;
+  float: left;
+  font: normal 11px/1 "Roboto";
+  height: 100%;
+  padding: 10px 13px;
+
 }
-.product .label.label-hot {
+.product .label .label-hot {
   background: #FFC60A;
+  color: #FFFFFF;
+  display: inline-block;
+  float: left;
+  font: normal 11px/1 "Roboto";
+  height: 100%;
+  padding: 10px 13px;
+
 }
 .product .desc {
   line-height: 1.4em;
