@@ -20,6 +20,7 @@ function VariantsManager (variants, variant_options, isCollection) {
     this.selectsData = {};
     this.selectedValues = {};
     this.disabled = false;
+    this.outOfStock = "Out of stock, please try another combination";
 
     this.getVariationSelector = function(selectName, optionValue){
         return "[id=variation-selector-"+self.product_id+"-"+selectName+"-"+optionValue+"]";
@@ -47,6 +48,7 @@ function VariantsManager (variants, variant_options, isCollection) {
                     if(self.selectedValues[name] == value){
                         // Selected, not available
                         $(self.getVariationSelector(name, value)).attr("class", "notavailable-selected");
+                        $(self.getVariationSelector(name, value)).tooltip();
                     }else{
                         //not selected not available
                         $(self.getVariationSelector(name, value)).attr("class", "notavailable");
@@ -55,10 +57,12 @@ function VariantsManager (variants, variant_options, isCollection) {
                 }else{
                     if(self.selectedValues[name] == value){
                         //Selected, available
-                        $(self.getVariationSelector(name, value)).attr("class", "selected").tooltip("destroy");
+                        $(self.getVariationSelector(name, value)).attr("class", "selected");
+                        $(self.getVariationSelector(name, value)).tooltip("destroy");
                     }else{
                         //not Selected available
-                        $(self.getVariationSelector(name, value)).attr("class", "").tooltip("destroy");
+                        $(self.getVariationSelector(name, value)).attr("class", "");
+                        $(self.getVariationSelector(name, value)).tooltip("destroy");
                     }
                 }
             });
@@ -204,7 +208,7 @@ function VariantsManager (variants, variant_options, isCollection) {
                                 class: "",
                                 "data-tooltip": "",
                                 "data-toggle": "tooltip",
-                                "title": "Out of stock, please try another combination"
+                                "title": self.outOfStock
                     })
                     .append(
                             self.getATag(selectName, optionValue)
@@ -236,6 +240,7 @@ function VariantsManager (variants, variant_options, isCollection) {
             }
         });
 
+        $('[data-toggle="tooltip"]').tooltip();
         self.updateChips();
     }
 
