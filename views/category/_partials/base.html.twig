@@ -277,16 +277,22 @@
                     <!-- Image -->
                     <div class="image"> 
                       <a href="{{ app.url }}/product/{{ product.slug }}"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ img_url }}" alt="img" class="img-responsive"></a>
-                      <ul class="additional">
-                        <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
-                        <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
-                        <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
-                        <li><a href="images/products/product1.jpg" data-gal="prettyPhoto[gallery 1]" title="Product Name"><img src="images/products/product1.jpg" alt=""></a></li>
-                      </ul>
                     </div>
                     <!-- Image -->
                     
-                    <span class="label label-sale">sale</span>
+                      <div class="label">
+                        {% for tag in product.tags %}
+                            {% if tag == 'new' %}
+                                <span class="label-new">{{ tag|capitalize }}</span> 
+                            {% elseif tag == 'sale' %}
+                                <span class="label-sale">{{ tag|capitalize }}</span> 
+                            {% elseif tag == 'popular' %}
+                                <span class="label-hot">{{ tag|capitalize }}</span> 
+                            {% else %}
+                                <span class="label-feat">{{ tag|capitalize }}</span> 
+                            {% endif %}
+                        {% endfor %}
+                      </div>
                     
                     <!-- Details -->
                     <div class="details">
