@@ -29,7 +29,12 @@ function estimator() {
                 $('#estimate').show();
                 $('#shipping-estimator').css({'opacity': 1});
                 $('#rate-estimate').html('$' + method_data.result.rate);
-                $('#date-estimate').html(method_data.result.date_range[0] + ' - ' + method_data.result.date_range[1]);
+                if (method_data.result.date_range.length > 0){
+                    $('#block-date-estimate').show();
+                    $('#date-estimate').html(method_data.result.date_range[0] + ' - ' + method_data.result.date_range[1]);
+                }else{
+                    $('#block-date-estimate').hide();
+                }
                 $('#tax-estimate').html('$' + tax_data.result.tax);
                 var total = parseFloat(cart_data.result.subtotal) + parseFloat(tax_data.result.tax) + parseFloat(method_data.result.rate);
                 $('#total-estimate').html('$' + total.toFixed(2).toLocaleString());
