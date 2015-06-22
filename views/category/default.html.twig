@@ -15,18 +15,6 @@
 {% set default_query = default_query is not defined ? {"status":"active","category_id":category.id}: default_query %}
 
 {% set title = 'Browse' %}
-
-{% block breadcrumb %}
-    {% set categories = app.request.path|split('/') %}
-    {% set category_crumbs = [] %}
-    {% for category in categories %}
-        {% set category_link = category_link ~ '/' ~ category %}
-        {% set category_title = category|replace('-',' ')|title %}
-        {% set category_crumbs = category_crumbs|merge({(category_title):('/category' ~ category_link)})%}
-    {% endfor %}
-    {{ base.breadcrumbs(category_crumbs) }}
-{% endblock %}
-
 {% block content %}
 {% include "/category/_partials/base.html.twig" %}
 {% endblock %}
