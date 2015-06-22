@@ -142,7 +142,12 @@
                 {# Begin item image #}
                 <div class="col-xs-4 col-sm-6 col-md-2 col-lg-2">
                     <div class="thumbnail">
-                        <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ product.thumbnail }}">
+                        {% if product.images.0.thumbnail is not empty %}
+                            {% set prod_image = product.images.0.thumbnail %}
+                        {% else %}
+                            {% set prod_image = product.thumbnail %}
+                        {% endif %}
+                        <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ prod_image }}">
                     </div>
                 </div>
                 {# End item image #}
@@ -347,5 +352,5 @@
         </section> {# End content-block default-bg #}
         {% endblock %}
         {% block js %}
-        {{ app.asset.js(app.url ~ '/js/estimator.js') }}
+        {{ app.asset.js(app.url_asset ~ '/js/estimator.js') }}
         {% endblock %}
