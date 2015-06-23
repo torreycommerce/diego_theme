@@ -141,20 +141,17 @@
         <div class="container cont-pad-x-15"> 
 
           <!-- Breadcrumb -->
-          <ol class="breadcrumb pull-left">
-            <li><a href="#"><i class="ti ti-home"></i></a></li>
-            <li><a href="#">Pages</a></li>
-            <li class="active">features</li>
-          </ol>
+        {% block breadcrumb %}
+            {% set categories = app.request.path|split('/') %}
+            {% set category_crumbs = [] %}
+            {% for category in categories %}
+                {% set category_link = category_link ~ '/' ~ category %}
+                {% set category_title = category|replace('-',' ')|title %}
+                {% set category_crumbs = category_crumbs|merge({(category_title):('/category' ~ category_link)})%}
+            {% endfor %}
+            {{ base.breadcrumbs(category_crumbs) }}
+        {% endblock %}
           <!-- /Breadcrumb --> 
-
-          <!-- hlinks -->
-          <ul class="page-links pull-right hlinks hlinks-icons color-icons-borders color-icons-bg-hovered">
-            <li><a href="#"><i class="icon fa fa-facebook"></i></a></li>
-            <li><a href="#"><i class="icon fa fa-twitter"></i></a></li>
-            <li><a href="#"><i class="icon fa fa-rss"></i></a></li>
-          </ul>
-          <!-- /hlinks -->
 
         </div>
         <!-- /Container -->
@@ -322,7 +319,7 @@
                       
                       <!-- buttons -->
                       <div class="btn-group">
-                        <a class="btn btn-outline btn-base-hover" href="{{ app.url }}/product/{{ product.slug }}">add to cart</a>  
+                        <a class="btn btn-outline btn-base-hover" href="{{ app.url }}/product/{{ product.slug }}">See Product</a>  
                         <a class="btn btn-outline btn-default-hover" href="{{ app.url }}/product/{{ product.slug }}"><i class="icon fa fa-heart"></i></a>
                       </div> 
                       <!-- /buttons -->
