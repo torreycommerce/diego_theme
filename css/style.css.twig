@@ -1120,8 +1120,8 @@ pre.no-breaks, pre.no-breaks > code {
 }
 
 .btn.btn-base-hover:hover {
-  background-color: #{{ settings["colors"]["buttons"]["product-btn-hover"]["value"] }};
-  color: #{{ settings["colors"]["buttons"]["product-btn-hover-text"]["value"] }};
+  background-color: #131416;
+  color: #fff;
   border-color: transparent;
 }
 
@@ -3572,7 +3572,7 @@ legend {
 -------------------------------------------------- */
 .footer-block {
   font-size: 13px;
-  color: rgba(0, 0, 0, 0.5);
+  color: #{{ settings["colors"]["footer"]["footer-text-color"]["value"] }};
   position: relative;
   z-index: 200;
 }
@@ -3601,7 +3601,7 @@ legend {
   text-transform: uppercase;
   margin: 0 0 20px 0;
   font-size: 14px;
-  color: #131416;
+  color: #{{ settings["colors"]["footer"]["footer-header-text"]["value"] }};
   font-weight: 500;
 }
 .footer-block .vlinks > li > a {
@@ -3638,6 +3638,7 @@ legend {
   line-height: 60px;
   text-align: left;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #{{ settings["colors"]["background"]["footer-bottom-line"]["value"] }};
 }
 .footer-block .footer-bottom a {
   color: inherit;
@@ -3679,6 +3680,7 @@ legend {
     padding: 20px 0;
     text-align: center;
     line-height: 1.8em;
+    background-color: #{{ settings["colors"]["background"]["footer-bottom-line"]["value"] }};
   }
   .footer-block .footer-bottom .pull-right, .footer-block .footer-bottom .pull-left {
     float: none !important;
@@ -3692,7 +3694,7 @@ legend {
 }
 
 .footer-block .invert-colors, .footer-block.invert-colors {
-  color: rgba(255, 255, 255, 0.6);
+  color: #{{ settings["colors"]["background"]["footer-copy"]["value"] }};
 }
 .footer-block .invert-colors .brand-col, .footer-block.invert-colors .brand-col {
   border-color: rgba(255, 255, 255, 0.1);
@@ -5601,14 +5603,12 @@ ul.tags li a:hover {
   height: auto;
 }
 .product .btn-outline {
-  border: 1px solid;
-  border-color: #{{ settings["colors"]["buttons"]["product-btn-border"]["value"] }};
-  color: #{{ settings["colors"]["buttons"]["product-btn-text"]["value"] }};
-  background-color: #{{ settings["colors"]["buttons"]["product-btn"]["value"] }};
+  border: 1px solid rgba(19, 20, 22, 0.2);
+  color: #131416;
+  background: #fff;
 }
 .product:hover .btn-outline {
-  border-color: #{{ settings["colors"]["buttons"]["product-btn-hover"]["value"] }};
-  
+  border-color: #131416;
 }
 .product .hlinks-rating {
   margin: 0 0 15px 0;

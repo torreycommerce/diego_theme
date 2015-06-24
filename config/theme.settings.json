@@ -49,14 +49,6 @@
                 "product-price-color": {
                     "type": "color",
                     "value": "E7214C"
-                },
-                "footer-title": {
-                    "type": "color",
-                    "value": "54697E"
-                },
-                "footer-link": {
-                    "type": "color",
-                    "value": "78828D"
                 }
             },
             "buttons": {
@@ -83,45 +75,17 @@
                 "default-text": {
                     "type": "color",
                     "value": "42464d"
-                },
-                "product-btn": {
-                    "type": "color",
-                    "value": "fff"
-                },
-                "product-btn-border": {
-                    "type": "color",
-                    "value": "cecfcf"
-                },
-                "product-btn-text": {
-                    "type": "color",
-                    "value": "131416"
-                },
-                "product-btn-hover": {
-                    "type": "color",
-                    "value": "131416"
-                },
-                "product-btn-hover-text": {
-                    "type": "color",
-                    "value": "fff"
                 }
 
             },
             "footer": {
                 "footer-text-color": {
                     "type": "color",
-                    "value": "999999"
-                },
-                "footer-color-link-hover": {
-                    "type": "color",
-                    "value": "ffffff"
+                    "value": "808080"
                 },
                 "footer-header-text": {
                     "type": "color",
-                    "value": "ffffff"
-                },
-                "footer-hr": {
-                    "type": "color",
-                    "value": "999999"
+                    "value": "131416"
                 },
                 "footer-copy": {
                     "type": "color",
