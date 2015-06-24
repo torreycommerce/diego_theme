@@ -1467,7 +1467,7 @@ h6 {
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
-  font-family: "Roboto";
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   color: #{{ settings["colors"]["content"]["title-color"]["value"] }};
 }
 
@@ -1762,7 +1762,9 @@ input[type="checkbox"] {
 /* HNAV
 ----------------------------------------- */
 .hnav {
-  font: 500 14px "Roboto";
+  font-weight: normal;
+  font-size: 14px;
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   min-height: 56px;
   z-index: 300;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -1899,8 +1901,9 @@ input[type="checkbox"] {
 #logo-txt 
     a {
         color: #131416;
-        font-size: 40px;
-        font-weight: 600;
+        font-weight: {{ settings["typography"]["logo_styles"]["logo-font-weight"]["value"] }};
+        font-family: {{ settings["typography"]["logo_styles"]["logo-typeface"]["value"] }};
+        font-size: {{ settings["typography"]["logo_styles"]["logo-font-size"]["value"] }};
         padding-bottom: 0;
         padding-top: 0;
         line-height: normal;
@@ -2797,7 +2800,9 @@ body {
   margin-bottom: 25px;
 }
 .section-title h2 {
-  font: 400 25px "Roboto Condensed";
+  font-weight: 400;
+  font-size: 25px;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
   position: relative;
   color: #{{ settings["colors"]["content"]["title-color"]["value"] }};
   display: block;
@@ -2820,7 +2825,10 @@ body {
   color: #{{ settings["colors"]["content"]["text-color"]["value"] }};
   margin: 0 auto;
   width: 50%;
-  font: 300 14px/1.6em "Roboto";
+  font-weight: 300; 
+  font-size: 14px/1.6em;
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
+
 }
 .section-title.invert-colors {
   color: #fff;
@@ -2854,7 +2862,9 @@ body {
   background: #42464d;
   color: #fff;
   margin: 0;
-  font: 400 15px/50px "Roboto Condensed";
+  font-weight: 400; 
+  font-size: 15px/50px;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
 }
 
 .boxed-title a {
@@ -2866,7 +2876,10 @@ body {
   padding: 0 30px;
   color: #fff;
   margin-top: -25px;
-  font: 400 15px/50px "Roboto Condensed";
+  font-weight: 400;
+  font-size: 15px/50px 
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
+
 }
 
 .filter-clear a {
@@ -2944,14 +2957,17 @@ body {
 }
 .promo-text h1 {
   margin: 0 0 20px 0;
-  font: 700 35px/1.5em "Roboto";
+  font: 700 35px/1.5em;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
   border: 2px solid #fff;
   display: inline-block;
   text-align: center;
   padding: 15px 50px;
 }
 .promo-text p {
-  font: 300 20px/1.5em "Roboto Condensed";
+  font-weight: 300;
+  font-size: 20px/1.5em;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
   margin: 0 0 30px 0;
   text-transform: none;
   opacity: 0.7;
@@ -3006,7 +3022,9 @@ body {
   line-height: 38px;
 }
 .modal-promo .modal-dialog h5 {
-  font: 700 20px/1.5em "Roboto Condensed";
+  font-weight: 700 ;
+  font-size: 20px/1.5em;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
   margin: 0 0 15px 0;
   color: #131416;
   text-transform: uppercase;
@@ -3325,7 +3343,9 @@ body {
 .header-text {
   margin: 0 0 13px 15px;
   display: block;
-  font: 400 14px/1 "Roboto Condensed";
+  font-weight: 400 ;
+  font-size: 14px/1;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
 }
 
 .header-search {
@@ -3386,12 +3406,16 @@ legend {
   margin: 0 15px 0 0;
 }
 .header-cart-summary small {
-  font: 400 12px/1 "Roboto Condensed";
+  font-weight: 400 ;
+  font-size: 12px/1;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
   display: block;
   margin: 0 0 7px 0;
 }
 .header-cart-summary .total {
-  font: 400 17px/1 "Roboto Condensed";
+  font-weight: 400 ;
+  font-size: 17px/1;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
   margin: 0;
   color: #42464d;
 }
@@ -4749,7 +4773,7 @@ legend {
   position: relative;
   z-index: 10;
   height: 50px;
-  font-family: "Roboto";
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   color: #{{ settings["colors"]["brand"]["primary-brand-color"]["value"] }};
   line-height: 1;
   font-size: 14px;
@@ -5367,13 +5391,17 @@ ul.tags li a:hover {
 }
 .intro-slider .slide .text h1 {
   margin: 0;
-  font: 700 50px/1 "Roboto";
+  font-weight: 700; 
+  font-size: 50px/1;
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   border: 2px solid #fff;
   padding: 20px 50px;
   display: inline-block;
 }
 .intro-slider .slide .text p, .intro-slider .slide .text h5 {
-  font: 300 17px/60px "Roboto Condensed";
+  font-weight: 300 ;
+  font-size: 17px/60px;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
   margin: 0;
   text-transform: uppercase;
 }
@@ -5476,7 +5504,9 @@ ul.tags li a:hover {
 
 .product .label {
   color: #fff;
-  font: normal 11px/1 "Roboto";
+  font-weight: normal;
+  font-size: 11px/1;
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   left: 0;
   padding: 0;
   position: absolute;
@@ -5490,7 +5520,9 @@ ul.tags li a:hover {
   color: #FFFFFF;
   display: inline-block;
   float: left;
-  font: normal 11px/1 "Roboto";
+  font-weight: normal; 
+  font-size: 11px/1;
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   height: 100%;
   padding: 10px 13px;
 }
@@ -5499,7 +5531,9 @@ ul.tags li a:hover {
   color: #FFFFFF;
   display: inline-block;
   float: left;
-  font: normal 11px/1 "Roboto";;
+  font-weight: normal;
+  font-size: 11px/1;
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   height: 100%;
   padding: 10px 13px;
 
@@ -5509,7 +5543,9 @@ ul.tags li a:hover {
   color: #FFFFFF;
   display: inline-block;
   float: left;
-  font: normal 11px/1 "Roboto";
+  font-weight: normal;
+  font-size: 11px/1;
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   height: 100%;
   padding: 10px 13px;
 
@@ -5519,7 +5555,9 @@ ul.tags li a:hover {
   color: #FFFFFF;
   display: inline-block;
   float: left;
-  font: normal 11px/1 "Roboto";
+  font-weight: normal;
+  font-size: 11px/1;
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   height: 100%;
   padding: 10px 13px;
 
@@ -5723,7 +5761,7 @@ ul.tags li a:hover {
 */
 position: relative;}
 .color-details span {
-  font-family: "Roboto";
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   color: #{{ settings["colors"]["content"]["title-color"]["value"] }};
   text-transform: capitalize;
 }
@@ -5734,7 +5772,7 @@ position: relative;}
 
 .color-details-collection span {
   text-align: center;
-  font-family: "Roboto";
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   font-size: 12px;
   color: #42464d;
   text-transform: capitalize;
@@ -5824,7 +5862,7 @@ position: relative;}
 
 .size-details span {
   font-weight: normal;
-  font-family: "Roboto";
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   color: #{{ settings["colors"]["content"]["title-color"]["value"] }};
   text-transform: capitalize;
 }
@@ -6054,7 +6092,9 @@ position: relative;}
   font-size: 0.85em;
 }
 .product-details .product-title {
-  font: 400 25px/1.5em "Roboto Condensed";
+  font-weight: 400 ;
+  font-size: 25px/1.5em ;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
   color: #{{ settings["colors"]["content"]["product-title-color"]["value"] }};
   margin: 0 0 10px 0;
 }
@@ -6077,7 +6117,9 @@ position: relative;}
   font-size: 11px;
 }
 .product-details .product-price, .price-sales {
-  font: 700 25px "Roboto Condensed";
+  font-weight: 700 ;
+  font-size: 25px;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
   color: #{{ settings["colors"]["content"]["product-price-color"]["value"] }};
   margin: 0 0 10px 0;
   position: relative;
@@ -6086,7 +6128,9 @@ position: relative;}
 }
 
 .product-details .product-standard-price {
-  font: 700 20px "Roboto Condensed";
+  font-weight: 700;
+  font-size: 20px;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
   color: #666b76;
   margin: 0 0 10px 0;
   padding-left: 10px;
@@ -6493,7 +6537,7 @@ table.cart-contents .details .title {
   display: block;
   color: #333;
   font-size: 14px;
-  font-family: "Roboto";
+  font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   text-transform: capitalize;
   margin: 0 0 10px 0;
 }
@@ -6660,7 +6704,9 @@ table.cart-contents .currency {
 /* CHECKOUT
 ----------------------------------------- */
 .checkout h6 {
-  font: 400 15px/1 "Roboto Condensed";
+  font-weight: 400 ;
+  font-size: 15px/1;
+  font-family: {{ settings["typography"]["title_styles"]["title-typeface"]["value"] }};
   text-transform: uppercase;
   margin: 0 0 20px 0;
   color: #131416;
