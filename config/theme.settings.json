@@ -280,19 +280,6 @@
                         }
                     }
                 },
-                "logo-font-weight": {
-                    "type": "dropdown",
-                    "value": "800",
-                    "options": {
-                        "800": "800",
-                        "700": "700",
-                        "600": "600",
-                        "400": "400",
-                        "300": "300"
-                    }
-                }
-            },
-            "title_styles": {
                 "title-typeface": {
                     "type": "dropdown_group",
                     "value": "Roboto Condensed, Arial, sans-serif",
@@ -319,7 +306,6 @@
                         }
                     }
                 }
-            }
     },
     "default": {
         "colors": {
@@ -602,19 +588,6 @@
                         }
                     }
                 },
-                "logo-font-weight": {
-                    "type": "dropdown",
-                    "value": "800",
-                    "options": {
-                        "800": "800",
-                        "700": "700",
-                        "600": "600",
-                        "400": "400",
-                        "300": "300"
-                    }
-                }
-            },
-            "title_styles": {
                 "title-typeface": {
                     "type": "dropdown_group",
                     "value": "Roboto Condensed, Arial, sans-serif",
@@ -638,9 +611,10 @@
                         "Monospace": {
                             "Courier New, Courier, monospace": "Courier new",
                             "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
+
                         }
                     }
                 }
-            }
+            } }
         }
     }
