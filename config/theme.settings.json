@@ -147,7 +147,47 @@
                     }
                 }
             },
-            "logo_styles": {
+            "nav_styles": {
+                "nav-typeface": {
+                    "type": "dropdown_group",
+                    "value": "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial",
+                    "options": {
+                        "Sans-Serif": {
+                            "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
+                            "Impact, Charcoal, Helvetica, Arial, sans-serif": "Impact",
+                            "Lucida Grande, Lucida Sans Unicode, Lucida Sans, Lucida, Helvetica, Arial, sans-serif": "Lucida Grande",
+                            "Trebuchet MS, sans-serif": "Trebuchet MS",
+                            "Verdana, Helvetica, Arial, sans-serif": "Verdana",
+                            "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
+                            "Roboto, Arial, sans-serif ": "Roboto"
+                        },
+                        "Serif": {
+                            "Garamond, Baskerville, Caslon, serif": "Garamond",
+                            "Georgia, Utopia, Times New Roman, Times, serif": "Georgia",
+                            "Palatino, Palatino Linotype, Book Antiqua, serif": "Palatino",
+                            "Times New Roman, Times, serif": "Times New Roman",
+                            "Josefin Slab, Georgia, Garamond, Times New Roman, Times, serif": "Josefin Slab"
+                        },
+                        "Monospace": {
+                            "Courier New, Courier, monospace": "Courier new",
+                            "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
+                        }
+                    }
+                },
+                "font-size-base": {
+                    "type": "dropdown",
+                    "value": "14px",
+                    "options": {
+                        "17px": "17px",
+                        "16px": "16px",
+                        "15px": "15px",
+                        "14px": "14px",
+                        "13px": "13px",
+                        "12px": "12px",
+                        "11px": "11px"
+                    }
+                }
+            },
                 "logo-typeface": {
                     "type": "dropdown_group",
                     "value": "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial",
@@ -173,7 +213,7 @@
                             "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
                         }
                     }
-                },
+                },                
                 "logo-font-size": {
                     "type": "dropdown",
                     "value": "34px",
