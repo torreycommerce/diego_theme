@@ -844,7 +844,7 @@ pre.no-breaks, pre.no-breaks > code {
 }
 
 .nav-tabs > li > a {
-  color: #{{ settings["colors"]["content"]["title-color"]["value"] }};
+  color: #{{ settings["colors"]["content"]["link-color"]["value"] }};
   border: 1px solid #ddd;
   border-bottom: 0;
   border-right-width: 0;
@@ -1391,11 +1391,8 @@ body {
   color: #{{ settings["colors"]["content"]["text-color"]["value"] }};
   font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   font-size: {{ settings["typography"]["base_styles"]["font-size-base"]["value"] }};
-
-
   font: 14px "Roboto", Arial, sans-serif;
   line-height: 1.7em;
-  color: #666b76;
 }
 
 .font-size-sm {
@@ -1467,7 +1464,7 @@ h6 {
 h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
   font-family: "Roboto";
-  color: #42464d;
+  color: #{{ settings["colors"]["content"]["title-color"]["value"] }};
 }
 
 pre {
@@ -1961,7 +1958,7 @@ input[type="checkbox"] {
 }
 .hnav .navbar-nav > li > a {
   text-transform: inherit;
-  color: #666b76;
+  color: #{{ settings["colors"]["content"]["header-link-text"]["value"] }};
   padding: 0 20px;
   font: normal 14px/56px "Roboto";
   border-radius: 0;
@@ -2624,7 +2621,7 @@ html {
 
 body {
   min-height: 100%;
-  background: #fff;
+  background-color: #{{ settings["colors"]["background"]["body"]["value"] }};
   background: url("../images/diego/backgrounds/tile1.png") repeat center 0 fixed;
 
 }

@@ -30,15 +30,15 @@
                     "type": "color",
                     "value": "666b76"
                 },
-                "header-top-text": {
-                    "type": "color",
-                    "value": "666b76"
-                },
-                "header-menu-text": {
+                "header-link-text": {
                     "type": "color",
                     "value": "666b76"
                 },
                 "title-color": {
+                    "type": "color",
+                    "value": "42464d"
+                },
+                "link-color": {
                     "type": "color",
                     "value": "333"
                 },
