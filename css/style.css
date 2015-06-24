@@ -3655,6 +3655,7 @@ legend {
   line-height: 60px;
   text-align: left;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #131416;
 }
 .footer-block .footer-bottom a {
   color: inherit;

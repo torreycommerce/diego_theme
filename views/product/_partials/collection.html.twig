@@ -69,24 +69,24 @@
                     {# Begin product header #}
                     <h2 class="product-title"> <a href="{{app.url}}/brand/{{product.brand|url_encode}}">{{product.brand}}</a></h2>
                     {# Begin review stars #}
-                    {% set review_score = product.product|values_in('review_score')|merge(product|values_in('review_score'))|average() %}
-                    {% if review_score > 0 %}
+                    {% set review_score = product.product|values_in('review_score')|merge( product.review_score ? [product.review_score] : [])|average() %}
                         <div class="row">
                             <div class="col-md-12">
                                 <ul class="reviews">
-                                    <li class="stars">
-                                        <a onclick="$('.nav-tabs a:last').tab('show')" href="#reviews">{{ base.rating( review_score ) }}</a>
-                                    </li>
-                                    <li class="average">
-                                        <a onclick="$('.nav-tabs a:last').tab('show')" href="#reviews">{{ (review_score * 5)|number_format(1) }} {% if reviews.num_total %}({{ reviews.num_total }}){% endif %}</a>
-                                    </li>
+                                    {% if review_score > 0 %}
+                                        <li class="stars">
+                                            <a onclick="$('.nav-tabs a:last').tab('show')" href="#reviews">{{ base.rating( review_score ) }}</a>
+                                        </li>
+                                        <li class="average">
+                                            <a onclick="$('.nav-tabs a:last').tab('show')" href="#reviews">{{ (review_score * 5)|number_format(1) }} {% if reviews.num_total %}({{ reviews.num_total }}){% endif %}</a>
+                                        </li>
+                                    {% endif %}
                                     <li class="submit">
                                         <a href="{{ app.url }}/review/id/{{product.id}}">Write a Review</a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                    {% endif %}
                     {# End review stars #}
                     <h2 class="product-title">{{product.title}}</h2>
                     {# End product header #}
