@@ -2,13 +2,9 @@
     "current": {
         "colors": {
             "brand": {
-                "brand-color": {
+                "primary-brand-color": {
                     "type": "color",
-                    "value": "4ec67f"
-                },                                  
-                "brand-secondary-color": {
-                    "type": "color",
-                    "value": "4bb777"
+                    "value": "E7214C"
                 } 
             },
             "background": {
@@ -16,95 +12,91 @@
                     "type": "color",
                     "value": "ffffff"
                 },
-                "header-top": {
+                "header-top-line": {
                     "type": "color",
-                    "value": "4bb777"
+                    "value": "131416"
                 },
-                "header": {
+                "footer-bottom-line": {
                     "type": "color",
-                    "value": "4ec67f"
-                },
-                "footer-bottom": {
-                    "type": "color",
-                    "value": "e3e3e3"
-                },
-                "footer": {
-                    "type": "color",
-                    "value": "EDEFF1"
-                }                                  
+                    "value": "131416"
+                }                  
             },
             "content": {
                 "logo": {
                     "type": "color",
-                    "value": "ffffff"
+                    "value": "2a2b2d"
                 },
                 "text-color": {
                     "type": "color",
-                    "value": "34495E"
+                    "value": "666b76"
                 },
-                "header-top-text": {
+                "header-link-text": {
                     "type": "color",
-                    "value": "ffffff"
-                },
-                "header-menu-text": {
-                    "type": "color",
-                    "value": "ffffff"
+                    "value": "666b76"
                 },
                 "title-color": {
                     "type": "color",
-                    "value": "34495E"
+                    "value": "42464d"
                 },
-                "footer-title": {
+                "link-color": {
                     "type": "color",
-                    "value": "54697E"
+                    "value": "333"
                 },
-                "footer-link": {
+                "product-title-color": {
                     "type": "color",
-                    "value": "78828D"
+                    "value": "131416"
+                },
+                "product-price-color": {
+                    "type": "color",
+                    "value": "E7214C"
                 }
             },
             "buttons": {
                 "primary-background": {
                     "type": "color",
-                    "value": "4ec67f"
+                    "value": "E7214C"
                 },
-                "primary-border": {
+                "primary-background-hover": {
                     "type": "color",
-                    "value": "27ae60"
+                    "value": "ce163e"
                 },
                 "primary-text": {
                     "type": "color",
                     "value": "ffffff"
                 },
-                "secondary-background": {
+                "default-background": {
                     "type": "color",
-                    "value": "cccccc"
+                    "value": "dee0e3"
                 },
-                "secondary-border": {
+                "default-border": {
                     "type": "color",
-                    "value": "cccccc"
+                    "value": "dddddd"
                 },
-                "secondary-text": {
+                "default-text": {
                     "type": "color",
-                    "value": "ffffff"
+                    "value": "42464d"
+                },
+                "default-hover-background": {
+                    "type": "color",
+                    "value": "e6e6e6"
+                },
+                "default-hover-border": {
+                    "type": "color",
+                    "value": "adadad"
+                },
+                "default-hover-text": {
+                    "type": "color",
+                    "value": "333"
                 }
             },
             "footer": {
                 "footer-text-color": {
                     "type": "color",
-                    "value": "999999"
-                },
-                "footer-color-link-hover": {
-                    "type": "color",
-                    "value": "ffffff"
+                    "value": "808080"
                 },
                 "footer-header-text": {
                     "type": "color",
-                    "value": "ffffff"
-                },
-                "footer-hr": {
-                    "type": "color",
-                    "value": "999999"
+                    "value": "131416"
                 },
                 "footer-copy": {
                     "type": "color",
@@ -125,7 +117,7 @@
                             "Trebuchet MS, sans-serif": "Trebuchet MS",
                             "Verdana, Helvetica, Arial, sans-serif": "Verdana",
                             "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
+                            "Roboto, Arial, sans-serif ": "Roboto"
                         },
                         "Serif": {
                             "Garamond, Baskerville, Caslon, serif": "Garamond",
@@ -157,7 +149,7 @@
             "nav_styles": {
                 "nav-typeface": {
                     "type": "dropdown_group",
-                    "value": "Helvetica, Arial, sans-serif",
+                    "value": "Roboto, Arial, sans-serif",
                     "options": {
                         "Sans-Serif": {
                             "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
@@ -165,8 +157,8 @@
                             "Lucida Grande, Lucida Sans Unicode, Lucida Sans, Lucida, Helvetica, Arial, sans-serif": "Lucida Grande",
                             "Trebuchet MS, sans-serif": "Trebuchet MS",
                             "Verdana, Helvetica, Arial, sans-serif": "Verdana",
-                            "Open Sans, Lucida Grande, Helvetica, Arial, sans-serif": "Open Sans",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
+                            "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
+                            "Roboto, Arial, sans-serif": "Roboto"
                         },
                         "Serif": {
                             "Garamond, Baskerville, Caslon, serif": "Garamond",
@@ -181,7 +173,7 @@
                         }
                     }
                 },
-                "nav-size-base": {
+                "font-size-base": {
                     "type": "dropdown",
                     "value": "15px",
                     "options": {
@@ -198,7 +190,7 @@
             "logo_styles": {
                 "logo-typeface": {
                     "type": "dropdown_group",
-                    "value": "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial",
+                    "value": "Roboto Condensed, Arial, sans-serif",
                     "options": {
                         "Sans-Serif": {
                             "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
@@ -207,7 +199,7 @@
                             "Trebuchet MS, sans-serif": "Trebuchet MS",
                             "Verdana, Helvetica, Arial, sans-serif": "Verdana",
                             "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
+                            "Roboto Condensed, Arial, sans-serif": "Roboto Condensed"
                         },
                         "Serif": {
                             "Garamond, Baskerville, Caslon, serif": "Garamond",
@@ -247,10 +239,10 @@
                     }
                 }
             },
-            "heading_styles": {
-                "heading-typeface": {
+            "product_styles": {
+                "product-typeface": {
                     "type": "dropdown_group",
-                    "value": "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial",
+                    "value": "Roboto Condensed, Arial, sans-serif",
                     "options": {
                         "Sans-Serif": {
                             "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
@@ -259,7 +251,60 @@
                             "Trebuchet MS, sans-serif": "Trebuchet MS",
                             "Verdana, Helvetica, Arial, sans-serif": "Verdana",
                             "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
+                            "Roboto Condensed, Arial, sans-serif": "Roboto Condensed"
+                        },
+                        "Serif": {
+                            "Garamond, Baskerville, Caslon, serif": "Garamond",
+                            "Georgia, Utopia, Times New Roman, Times, serif": "Georgia",
+                            "Palatino, Palatino Linotype, Book Antiqua, serif": "Palatino",
+                            "Times New Roman, Times, serif": "Times New Roman",
+                            "Josefin Slab, Georgia, Garamond, Times New Roman, Times, serif": "Josefin Slab"
+                        },
+                        "Monospace": {
+                            "Courier New, Courier, monospace": "Courier new",
+                            "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
+                        }
+                    }
+                },
+                "font-size-base": {
+                    "type": "dropdown",
+                    "value": "15px",
+                    "options": {
+                        "17px": "17px",
+                        "16px": "16px",
+                        "15px": "15px",
+                        "14px": "14px",
+                        "13px": "13px",
+                        "12px": "12px",
+                        "11px": "11px"
+                        }
+                    }
+                },
+                "logo-font-weight": {
+                    "type": "dropdown",
+                    "value": "800",
+                    "options": {
+                        "800": "800",
+                        "700": "700",
+                        "600": "600",
+                        "400": "400",
+                        "300": "300"
+                    }
+                }
+            },
+            "title_styles": {
+                "title-typeface": {
+                    "type": "dropdown_group",
+                    "value": "Roboto Condensed, Arial, sans-serif",
+                    "options": {
+                        "Sans-Serif": {
+                            "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
+                            "Impact, Charcoal, Helvetica, Arial, sans-serif": "Impact",
+                            "Lucida Grande, Lucida Sans Unicode, Lucida Sans, Lucida, Helvetica, Arial, sans-serif": "Lucida Grande",
+                            "Trebuchet MS, sans-serif": "Trebuchet MS",
+                            "Verdana, Helvetica, Arial, sans-serif": "Verdana",
+                            "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
+                            "Roboto Condensed, Arial, sans-serif ": "Roboto Condensed"
                         },
                         "Serif": {
                             "Garamond, Baskerville, Caslon, serif": "Garamond",
@@ -275,18 +320,13 @@
                     }
                 }
             }
-        }
     },
     "default": {
         "colors": {
             "brand": {
-                "brand-color": {
+                "primary-brand-color": {
                     "type": "color",
-                    "value": "4ec67f"
-                },                                  
-                "brand-secondary-color": {
-                    "type": "color",
-                    "value": "4bb777"
+                    "value": "E7214C"
                 } 
             },
             "background": {
@@ -294,95 +334,91 @@
                     "type": "color",
                     "value": "ffffff"
                 },
-                "header-top": {
+                "header-top-line": {
                     "type": "color",
-                    "value": "4bb777"
+                    "value": "131416"
                 },
-                "header": {
+                "footer-bottom-line": {
                     "type": "color",
-                    "value": "4ec67f"
-                },
-                "footer-bottom": {
-                    "type": "color",
-                    "value": "e3e3e3"
-                },
-                "footer": {
-                    "type": "color",
-                    "value": "EDEFF1"
-                }                                  
+                    "value": "131416"
+                }                  
             },
             "content": {
                 "logo": {
                     "type": "color",
-                    "value": "ffffff"
+                    "value": "2a2b2d"
                 },
                 "text-color": {
                     "type": "color",
-                    "value": "34495E"
+                    "value": "666b76"
                 },
-                "header-top-text": {
+                "header-link-text": {
                     "type": "color",
-                    "value": "ffffff"
-                },
-                "header-menu-text": {
-                    "type": "color",
-                    "value": "ffffff"
+                    "value": "666b76"
                 },
                 "title-color": {
                     "type": "color",
-                    "value": "34495E"
+                    "value": "42464d"
                 },
-                "footer-title": {
+                "link-color": {
                     "type": "color",
-                    "value": "54697E"
+                    "value": "333"
                 },
-                "footer-link": {
+                "product-title-color": {
                     "type": "color",
-                    "value": "78828D"
+                    "value": "131416"
+                },
+                "product-price-color": {
+                    "type": "color",
+                    "value": "E7214C"
                 }
             },
             "buttons": {
                 "primary-background": {
                     "type": "color",
-                    "value": "4ec67f"
+                    "value": "E7214C"
                 },
-                "primary-border": {
+                "primary-background-hover": {
                     "type": "color",
-                    "value": "27ae60"
+                    "value": "ce163e"
                 },
                 "primary-text": {
                     "type": "color",
                     "value": "ffffff"
                 },
-                "secondary-background": {
+                "default-background": {
                     "type": "color",
-                    "value": "cccccc"
+                    "value": "dee0e3"
                 },
-                "secondary-border": {
+                "default-border": {
                     "type": "color",
-                    "value": "cccccc"
+                    "value": "dddddd"
                 },
-                "secondary-text": {
+                "default-text": {
                     "type": "color",
-                    "value": "ffffff"
+                    "value": "42464d"
+                },
+                "default-hover-background": {
+                    "type": "color",
+                    "value": "e6e6e6"
+                },
+                "default-hover-border": {
+                    "type": "color",
+                    "value": "adadad"
+                },
+                "default-hover-text": {
+                    "type": "color",
+                    "value": "333"
                 }
             },
             "footer": {
                 "footer-text-color": {
                     "type": "color",
-                    "value": "999999"
-                },
-                "footer-color-link-hover": {
-                    "type": "color",
-                    "value": "ffffff"
+                    "value": "808080"
                 },
                 "footer-header-text": {
                     "type": "color",
-                    "value": "ffffff"
-                },
-                "footer-hr": {
-                    "type": "color",
-                    "value": "999999"
+                    "value": "131416"
                 },
                 "footer-copy": {
                     "type": "color",
@@ -403,7 +439,7 @@
                             "Trebuchet MS, sans-serif": "Trebuchet MS",
                             "Verdana, Helvetica, Arial, sans-serif": "Verdana",
                             "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
+                            "Roboto, Arial, sans-serif ": "Roboto"
                         },
                         "Serif": {
                             "Garamond, Baskerville, Caslon, serif": "Garamond",
@@ -435,7 +471,7 @@
             "nav_styles": {
                 "nav-typeface": {
                     "type": "dropdown_group",
-                    "value": "Helvetica, Arial, sans-serif",
+                    "value": "Roboto, Arial, sans-serif",
                     "options": {
                         "Sans-Serif": {
                             "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
@@ -443,8 +479,8 @@
                             "Lucida Grande, Lucida Sans Unicode, Lucida Sans, Lucida, Helvetica, Arial, sans-serif": "Lucida Grande",
                             "Trebuchet MS, sans-serif": "Trebuchet MS",
                             "Verdana, Helvetica, Arial, sans-serif": "Verdana",
-                            "Open Sans, Lucida Grande, Helvetica, Arial, sans-serif": "Open Sans",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
+                            "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
+                            "Roboto, Arial, sans-serif": "Roboto"
                         },
                         "Serif": {
                             "Garamond, Baskerville, Caslon, serif": "Garamond",
@@ -459,7 +495,7 @@
                         }
                     }
                 },
-                "nav-size-base": {
+                "font-size-base": {
                     "type": "dropdown",
                     "value": "15px",
                     "options": {
@@ -476,7 +512,7 @@
             "logo_styles": {
                 "logo-typeface": {
                     "type": "dropdown_group",
-                    "value": "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial",
+                    "value": "Roboto Condensed, Arial, sans-serif",
                     "options": {
                         "Sans-Serif": {
                             "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
@@ -485,7 +521,7 @@
                             "Trebuchet MS, sans-serif": "Trebuchet MS",
                             "Verdana, Helvetica, Arial, sans-serif": "Verdana",
                             "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
+                            "Roboto Condensed, Arial, sans-serif": "Roboto Condensed"
                         },
                         "Serif": {
                             "Garamond, Baskerville, Caslon, serif": "Garamond",
@@ -525,10 +561,10 @@
                     }
                 }
             },
-            "heading_styles": {
-                "heading-typeface": {
+            "product_styles": {
+                "product-typeface": {
                     "type": "dropdown_group",
-                    "value": "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial",
+                    "value": "Roboto Condensed, Arial, sans-serif",
                     "options": {
                         "Sans-Serif": {
                             "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
@@ -537,151 +573,7 @@
                             "Trebuchet MS, sans-serif": "Trebuchet MS",
                             "Verdana, Helvetica, Arial, sans-serif": "Verdana",
                             "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
-                        },
-                        "Serif": {
-                            "Garamond, Baskerville, Caslon, serif": "Garamond",
-                            "Georgia, Utopia, Times New Roman, Times, serif": "Georgia",
-                            "Palatino, Palatino Linotype, Book Antiqua, serif": "Palatino",
-                            "Times New Roman, Times, serif": "Times New Roman",
-                            "Josefin Slab, Georgia, Garamond, Times New Roman, Times, serif": "Josefin Slab"
-                        },
-                        "Monospace": {
-                            "Courier New, Courier, monospace": "Courier new",
-                            "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "red": {
-        "colors": {
-            "brand": {
-                "brand-color": {
-                    "type": "color",
-                    "value": "693441"
-                },                                  
-                "brand-secondary-color": {
-                    "type": "color",
-                    "value": "753A48"
-                } 
-            },
-            "background": {
-                "body": {
-                    "type": "color",
-                    "value": "ffffff"
-                },
-                "header-top": {
-                    "type": "color",
-                    "value": "693441"
-                },
-                "header": {
-                    "type": "color",
-                    "value": "753A48"
-                },
-                "footer-bottom": {
-                    "type": "color",
-                    "value": "A6A6A6"
-                },
-                "footer": {
-                    "type": "color",
-                    "value": "EDEFF1"
-                }                                  
-            },
-            "content": {
-                "logo": {
-                    "type": "color",
-                    "value": "ffffff"
-                },
-                "text-color": {
-                    "type": "color",
-                    "value": "753A48"
-                },
-                "header-top-text": {
-                    "type": "color",
-                    "value": "ffffff"
-                },
-                "header-menu-text": {
-                    "type": "color",
-                    "value": "ffffff"
-                },
-                "title-color": {
-                    "type": "color",
-                    "value": "693441"
-                },
-                "footer-title": {
-                    "type": "color",
-                    "value": "54697E"
-                },
-                "footer-link": {
-                    "type": "color",
-                    "value": "78828D"
-                }
-            },
-            "buttons": {
-                "primary-background": {
-                    "type": "color",
-                    "value": "693441"
-                },
-                "primary-border": {
-                    "type": "color",
-                    "value": "693441"
-                },
-                "primary-text": {
-                    "type": "color",
-                    "value": "ffffff"
-                },
-                "secondary-background": {
-                    "type": "color",
-                    "value": "9AADBD"
-                },
-                "secondary-border": {
-                    "type": "color",
-                    "value": "9AADBD"
-                },
-                "secondary-text": {
-                    "type": "color",
-                    "value": "ffffff"
-                }
-            },
-            "footer": {
-                "footer-text-color": {
-                    "type": "color",
-                    "value": "9AADBD"
-                },
-                "footer-color-link-hover": {
-                    "type": "color",
-                    "value": "FFFFFF"
-                },
-                "footer-header-text": {
-                    "type": "color",
-                    "value": "FFFFFF"
-                },
-                "footer-hr": {
-                    "type": "color",
-                    "value": "9AADBD"
-                },
-                "footer-copy": {
-                    "type": "color",
-                    "value": "9AADBD"
-                }
-            }
-        },
-        "typography": {
-            "base_styles": {
-                "base-typeface": {
-                    "type": "dropdown_group",
-                    "value": "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial",
-                    "options": {
-                        "Sans-Serif": {
-                            "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
-                            "Impact, Charcoal, Helvetica, Arial, sans-serif": "Impact",
-                            "Lucida Grande, Lucida Sans Unicode, Lucida Sans, Lucida, Helvetica, Arial, sans-serif": "Lucida Grande",
-                            "Trebuchet MS, sans-serif": "Trebuchet MS",
-                            "Verdana, Helvetica, Arial, sans-serif": "Verdana",
-                            "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
+                            "Roboto Condensed, Arial, sans-serif": "Roboto Condensed"
                         },
                         "Serif": {
                             "Garamond, Baskerville, Caslon, serif": "Garamond",
@@ -698,47 +590,6 @@
                 },
                 "font-size-base": {
                     "type": "dropdown",
-                    "value": "14px",
-                    "options": {
-                        "17px": "17px",
-                        "16px": "16px",
-                        "15px": "15px",
-                        "14px": "14px",
-                        "13px": "13px",
-                        "12px": "12px",
-                        "11px": "11px"
-                    }
-                }
-            },
-            "nav_styles": {
-                "nav-typeface": {
-                    "type": "dropdown_group",
-                    "value": "Helvetica, Arial, sans-serif",
-                    "options": {
-                        "Sans-Serif": {
-                            "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
-                            "Impact, Charcoal, Helvetica, Arial, sans-serif": "Impact",
-                            "Lucida Grande, Lucida Sans Unicode, Lucida Sans, Lucida, Helvetica, Arial, sans-serif": "Lucida Grande",
-                            "Trebuchet MS, sans-serif": "Trebuchet MS",
-                            "Verdana, Helvetica, Arial, sans-serif": "Verdana",
-                            "Open Sans, Lucida Grande, Helvetica, Arial, sans-serif": "Open Sans",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
-                        },
-                        "Serif": {
-                            "Garamond, Baskerville, Caslon, serif": "Garamond",
-                            "Georgia, Utopia, Times New Roman, Times, serif": "Georgia",
-                            "Palatino, Palatino Linotype, Book Antiqua, serif": "Palatino",
-                            "Times New Roman, Times, serif": "Times New Roman",
-                            "Josefin Slab, Georgia, Garamond, Times New Roman, Times, serif": "Josefin Slab"
-                        },
-                        "Monospace": {
-                            "Courier New, Courier, monospace": "Courier new",
-                            "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
-                        }
-                    }
-                },
-                "nav-size-base": {
-                    "type": "dropdown",
                     "value": "15px",
                     "options": {
                         "17px": "17px",
@@ -748,47 +599,7 @@
                         "13px": "13px",
                         "12px": "12px",
                         "11px": "11px"
-                    }
-                }
-            },            
-            "logo_styles": {
-                "logo-typeface": {
-                    "type": "dropdown_group",
-                    "value": "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial",
-                    "options": {
-                        "Sans-Serif": {
-                            "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
-                            "Impact, Charcoal, Helvetica, Arial, sans-serif": "Impact",
-                            "Lucida Grande, Lucida Sans Unicode, Lucida Sans, Lucida, Helvetica, Arial, sans-serif": "Lucida Grande",
-                            "Trebuchet MS, sans-serif": "Trebuchet MS",
-                            "Verdana, Helvetica, Arial, sans-serif": "Verdana",
-                            "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
-                        },
-                        "Serif": {
-                            "Garamond, Baskerville, Caslon, serif": "Garamond",
-                            "Georgia, Utopia, Times New Roman, Times, serif": "Georgia",
-                            "Palatino, Palatino Linotype, Book Antiqua, serif": "Palatino",
-                            "Times New Roman, Times, serif": "Times New Roman",
-                            "Josefin Slab, Georgia, Garamond, Times New Roman, Times, serif": "Josefin Slab"
-                        },
-                        "Monospace": {
-                            "Courier New, Courier, monospace": "Courier new",
-                            "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
                         }
-                    }
-                },
-                "logo-font-size": {
-                    "type": "dropdown",
-                    "value": "34px",
-                    "options": {
-                        "40px": "40px",
-                        "38px": "38px",
-                        "36px": "36px",
-                        "34px": "34px",
-                        "30px": "30px",
-                        "28px": "28px",
-                        "24px": "24px"
                     }
                 },
                 "logo-font-weight": {
@@ -803,10 +614,10 @@
                     }
                 }
             },
-            "heading_styles": {
-                "heading-typeface": {
+            "title_styles": {
+                "title-typeface": {
                     "type": "dropdown_group",
-                    "value": "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial",
+                    "value": "Roboto Condensed, Arial, sans-serif",
                     "options": {
                         "Sans-Serif": {
                             "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
@@ -815,7 +626,7 @@
                             "Trebuchet MS, sans-serif": "Trebuchet MS",
                             "Verdana, Helvetica, Arial, sans-serif": "Verdana",
                             "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
+                            "Roboto Condensed, Arial, sans-serif ": "Roboto Condensed"
                         },
                         "Serif": {
                             "Garamond, Baskerville, Caslon, serif": "Garamond",
@@ -833,4 +644,3 @@
             }
         }
     }
-}
