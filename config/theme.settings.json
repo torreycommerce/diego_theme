@@ -303,9 +303,10 @@
                         "Monospace": {
                             "Courier New, Courier, monospace": "Courier new",
                             "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
-                        }
                     }
                 }
+            }
+        }
     },
     "default": {
         "colors": {
@@ -615,6 +616,6 @@
                         }
                     }
                 }
-            } }
+            } 
         }
     }
