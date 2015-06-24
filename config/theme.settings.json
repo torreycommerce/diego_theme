@@ -75,6 +75,18 @@
                 "default-text": {
                     "type": "color",
                     "value": "42464d"
+                },
+                "default-hover-background": {
+                    "type": "color",
+                    "value": "e6e6e6"
+                },
+                "default-hover-border": {
+                    "type": "color",
+                    "value": "adadad"
+                },
+                "default-hover-text": {
+                    "type": "color",
+                    "value": "333"
                 }
 
             },
@@ -106,7 +118,7 @@
                             "Trebuchet MS, sans-serif": "Trebuchet MS",
                             "Verdana, Helvetica, Arial, sans-serif": "Verdana",
                             "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
-                            "Lato, Open Sans, Lucida Sans, Lucida Grande, Helvetica, sans-serif": "Lato"
+                            "Roboto, Arial, sans-serif ": "Roboto"
                         },
                         "Serif": {
                             "Garamond, Baskerville, Caslon, serif": "Garamond",

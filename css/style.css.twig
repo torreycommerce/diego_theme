@@ -1115,7 +1115,7 @@ pre.no-breaks, pre.no-breaks > code {
 
 .btn.btn-primary-hover:hover {
   background-color: #{{ settings["colors"]["buttons"]["primary-background"]["value"] }};
-  color: #fff;
+  color: #{{ settings["colors"]["buttons"]["primary-text"]["value"] }};
   border-color: transparent;
 }
 
@@ -1126,7 +1126,7 @@ pre.no-breaks, pre.no-breaks > code {
 }
 
 .btn.btn-default-hover:hover {
-  background-color: #dee0e3;
+  background-color: #{{ settings["colors"]["buttons"]["default-hover-background"]["value"] }};
   border-color: transparent;
 }
 
@@ -1136,6 +1136,13 @@ pre.no-breaks, pre.no-breaks > code {
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-color: #{{ settings["colors"]["buttons"]["default-border"]["value"] }};
 }
+
+.btn-default:hover {
+  background-color: #{{ settings["colors"]["buttons"]["default-hover-background"]["value"] }};
+  color: #{{ settings["colors"]["buttons"]["default-hover-text"]["value"] }};
+  border-color: #{{ settings["colors"]["buttons"]["default-hover-border"]["value"] }};
+}
+
 
 .btn-default-border{
     background-color: #ffffff !important;
@@ -1389,7 +1396,6 @@ body {
   color: #{{ settings["colors"]["content"]["text-color"]["value"] }};
   font-family: {{ settings["typography"]["base_styles"]["base-typeface"]["value"] }};
   font-size: {{ settings["typography"]["base_styles"]["font-size-base"]["value"] }};
-  font: 14px "Roboto", Arial, sans-serif;
   line-height: 1.7em;
 }
 
@@ -2791,7 +2797,7 @@ body {
 .section-title h2 {
   font: 400 25px "Roboto Condensed";
   position: relative;
-  color: #42464d;
+  color: #{{ settings["colors"]["content"]["title-color"]["value"] }};
   display: block;
   padding: 0 0 15px 0;
   margin: 0 0 10px 0;
@@ -3694,7 +3700,7 @@ legend {
 }
 
 .footer-block .invert-colors, .footer-block.invert-colors {
-  color: #{{ settings["colors"]["background"]["footer-copy"]["value"] }};
+  color: #{{ settings["colors"]["footer"]["footer-copy"]["value"] }};
 }
 .footer-block .invert-colors .brand-col, .footer-block.invert-colors .brand-col {
   border-color: rgba(255, 255, 255, 0.1);
