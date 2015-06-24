@@ -500,7 +500,6 @@
                         "11px": "11px"
                     }
                 }
-            }
             },
             "title_styles": {
                 "title-typeface": {
@@ -526,8 +525,8 @@
                         "Monospace": {
                             "Courier New, Courier, monospace": "Courier new",
                             "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
-                        }
                     }
+                }
             },
             "product_styles": {
                 "product-typeface": {
@@ -620,9 +619,10 @@
                         "600": "600",
                         "400": "400",
                         "300": "300"
-                        }
                     }
                 }
             }
         }
+    }
+}
     
