@@ -64,25 +64,37 @@
                     "type": "color",
                     "value": "E7214C"
                 },
-                "primary-border": {
+                "primary-background-hover": {
                     "type": "color",
-                    "value": "E7214C"
+                    "value": "ce163e"
                 },
                 "primary-text": {
                     "type": "color",
                     "value": "ffffff"
                 },
-                "secondary-background": {
+                "default-background": {
                     "type": "color",
-                    "value": "cccccc"
+                    "value": "dee0e3"
                 },
-                "secondary-border": {
+                "default-border": {
                     "type": "color",
-                    "value": "cccccc"
+                    "value": "dddddd"
                 },
-                "secondary-text": {
+                "default-text": {
                     "type": "color",
-                    "value": "ffffff"
+                    "value": "42464d"
+                },
+                "product-btn": {
+                    "type": "color",
+                    "value": "fff"
+                },
+                "product-btn-border": {
+                    "type": "color",
+                    "value": "cecfcf"
+                },
+                "product-btn-text": {
+                    "type": "color",
+                    "value": "131416"
                 }
             },
             "footer": {

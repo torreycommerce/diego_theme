@@ -1107,10 +1107,10 @@ pre.no-breaks, pre.no-breaks > code {
 
 .btn-primary {
   background-color: #{{ settings["colors"]["buttons"]["primary-background"]["value"] }};
-  color: #fff;
+  color: #{{ settings["colors"]["buttons"]["primary-text"]["value"] }};
 }
 .btn-primary:hover {
-  background: #ce163e;
+  background-color: #{{ settings["colors"]["buttons"]["primary-background-hover"]["value"] }};
 }
 
 .btn.btn-primary-hover:hover {
@@ -1120,8 +1120,8 @@ pre.no-breaks, pre.no-breaks > code {
 }
 
 .btn.btn-base-hover:hover {
-  background-color: #131416;
-  color: #fff;
+  background-color: #{{ settings["colors"]["buttons"]["product-btn-text"]["value"] }};
+  color: #{{ settings["colors"]["buttons"]["product-btn-border"]["value"] }};
   border-color: transparent;
 }
 
@@ -1131,14 +1131,15 @@ pre.no-breaks, pre.no-breaks > code {
 }
 
 .btn-default {
-  background-color: #dee0e3;
-  color: #42464d;
+  background-color: #{{ settings["colors"]["buttons"]["default-background"]["value"] }};
+  color: #{{ settings["colors"]["buttons"]["default-text"]["value"] }};
   border: 1px solid rgba(0, 0, 0, 0.1);
+  border-color: #{{ settings["colors"]["buttons"]["default-border"]["value"] }};
 }
 
 .btn-default-border{
     background-color: #ffffff !important;
-    border-color: #DDDDDD;
+    border-color: #{{ settings["colors"]["buttons"]["default-border"]["value"] }};
     border-radius: 3px 0 0 3px;
     border-style: solid;
     border-width: 2px 1px 1px 2px;
@@ -1152,10 +1153,7 @@ pre.no-breaks, pre.no-breaks > code {
   background-color: #{{ settings["colors"]["brand"]["primary-brand-color"]["value"] }};
   color: #fff;
 }
-.btn-primary:hover {
-  background-color: #c0153a;
-  color: #fff;
-}
+
 
 .btn-secondary {
   background-color: #E54D28;
@@ -5603,12 +5601,14 @@ ul.tags li a:hover {
   height: auto;
 }
 .product .btn-outline {
-  border: 1px solid rgba(19, 20, 22, 0.2);
-  color: #131416;
-  background: #fff;
+  border: 1px solid;
+  border-color: #{{ settings["colors"]["buttons"]["product-btn-border"]["value"] }};
+  color: #{{ settings["colors"]["buttons"]["product-btn-text"]["value"] }};
+  background-color: #{{ settings["colors"]["buttons"]["product-btn"]["value"] }};
 }
 .product:hover .btn-outline {
-  border-color: #131416;
+  border-color: #{{ settings["colors"]["buttons"]["product-btn-text"]["value"] }};
+  
 }
 .product .hlinks-rating {
   margin: 0 0 15px 0;
@@ -5710,7 +5710,7 @@ ul.tags li a:hover {
 position: relative;}
 .color-details span {
   font-family: "Roboto";
-  color: #42464d;
+  color: #{{ settings["colors"]["content"]["title-color"]["value"] }};
   text-transform: capitalize;
 }
 .color-details-collection {
@@ -5811,7 +5811,7 @@ position: relative;}
 .size-details span {
   font-weight: normal;
   font-family: "Roboto";
-  color: #42464d;
+  color: #{{ settings["colors"]["content"]["title-color"]["value"] }};
   text-transform: capitalize;
 }
 
@@ -6041,7 +6041,7 @@ position: relative;}
 }
 .product-details .product-title {
   font: 400 25px/1.5em "Roboto Condensed";
-  color: #42464d;
+  color: #{{ settings["colors"]["content"]["product-title-color"]["value"] }};
   margin: 0 0 10px 0;
 }
 .product-details .main-slider {
