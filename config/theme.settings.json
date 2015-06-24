@@ -4,8 +4,7 @@
             "brand": {
                 "primary-brand-color": {
                     "type": "color",
-                    "value": "E7214C"
-                }                              
+                    "value": "E7214C"                              
             },
             "background": {
                 "body": {
@@ -317,8 +316,7 @@
             "brand": {
                 "primary-brand-color": {
                     "type": "color",
-                    "value": "E7214C"
-                }                              
+                    "value": "E7214C"                              
             },
             "background": {
                 "body": {
@@ -525,12 +523,106 @@
                         "Monospace": {
                             "Courier New, Courier, monospace": "Courier new",
                             "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
-
                         }
+                    }
+            },
+            "product_styles": {
+                "product-typeface": {
+                    "type": "dropdown_group",
+                    "value": "Roboto Condensed, Arial, sans-serif",
+                    "options": {
+                        "Sans-Serif": {
+                            "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
+                            "Impact, Charcoal, Helvetica, Arial, sans-serif": "Impact",
+                            "Lucida Grande, Lucida Sans Unicode, Lucida Sans, Lucida, Helvetica, Arial, sans-serif": "Lucida Grande",
+                            "Trebuchet MS, sans-serif": "Trebuchet MS",
+                            "Verdana, Helvetica, Arial, sans-serif": "Verdana",
+                            "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
+                            "Roboto Condensed, Arial, sans-serif ": "Roboto Condensed"
+                        },
+                        "Serif": {
+                            "Garamond, Baskerville, Caslon, serif": "Garamond",
+                            "Georgia, Utopia, Times New Roman, Times, serif": "Georgia",
+                            "Palatino, Palatino Linotype, Book Antiqua, serif": "Palatino",
+                            "Times New Roman, Times, serif": "Times New Roman",
+                            "Josefin Slab, Georgia, Garamond, Times New Roman, Times, serif": "Josefin Slab"
+                        },
+                        "Monospace": {
+                            "Courier New, Courier, monospace": "Courier new",
+                            "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
+                        }
+                    }
+                },
+                "font-size-base": {
+                    "type": "dropdown",
+                    "value": "15px",
+                    "options": {
+                        "17px": "17px",
+                        "16px": "16px",
+                        "15px": "15px",
+                        "14px": "14px",
+                        "13px": "13px",
+                        "12px": "12px",
+                        "11px": "11px"
+                    }
+                }
+            },
+            "logo_styles": {
+                "logo-typeface": {
+                    "type": "dropdown_group",
+                    "value": "Roboto Condensed, Arial, sans-serif",
+                    "options": {
+                        "Sans-Serif": {
+                            "Helvetica, Arial, sans-serif": "Helvetica\/Arial",
+                            "Impact, Charcoal, Helvetica, Arial, sans-serif": "Impact",
+                            "Lucida Grande, Lucida Sans Unicode, Lucida Sans, Lucida, Helvetica, Arial, sans-serif": "Lucida Grande",
+                            "Trebuchet MS, sans-serif": "Trebuchet MS",
+                            "Verdana, Helvetica, Arial, sans-serif": "Verdana",
+                            "Source Sans Pro, sans-serif, Open Sans, Lucida Grande, Helvetica, Arial": "Source Sans Pro",
+                            "Roboto Condensed, Arial, sans-serif": "Roboto Condensed"
+                        },
+                        "Serif": {
+                            "Garamond, Baskerville, Caslon, serif": "Garamond",
+                            "Georgia, Utopia, Times New Roman, Times, serif": "Georgia",
+                            "Palatino, Palatino Linotype, Book Antiqua, serif": "Palatino",
+                            "Times New Roman, Times, serif": "Times New Roman",
+                            "Josefin Slab, Georgia, Garamond, Times New Roman, Times, serif": "Josefin Slab"
+                        },
+                        "Monospace": {
+                            "Courier New, Courier, monospace": "Courier new",
+                            "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
+                        }
+                    }
+                },                
+                "logo-font-size": {
+                    "type": "dropdown",
+                    "value": "40px",
+                    "options": {
+                        "40px": "40px",
+                        "38px": "38px",
+                        "36px": "36px",
+                        "34px": "34px",
+                        "30px": "30px",
+                        "28px": "28px",
+                        "24px": "24px"
+                    }
+                }
+            },
+            "logo-font-weight": {
+                "type": "dropdown",
+                "value": "600",
+                "options": {
+                    "800": "800",
+                    "700": "700",
+                    "600": "600",
+                    "400": "400",
+                    "300": "300"
+
                     }
                 }
             }
         }
     }
 }
-    
+}
+}
