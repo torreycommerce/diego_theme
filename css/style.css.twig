@@ -1966,7 +1966,7 @@ input[type="checkbox"] {
   color: #{{ settings["colors"]["content"]["header-link-text"]["value"] }};
   font-family: {{ settings["typography"]["nav_styles"]["nav-typeface"]["value"] }};
   font-size: {{ settings["typography"]["nav_styles"]["font-size-base"]["value"] }};
-  font: normal;
+  font-weight: normal;
   border-radius: 0;
   height: 56px;
 }
@@ -5574,7 +5574,9 @@ ul.tags li a:hover {
   opacity: 1;
 }
 .product .title {
-  font: 400 15px/1 "Roboto Condensed";
+  font-weight: 400;
+  font-family: {{ settings["typography"]["product_styles"]["product-typeface"]["value"] }};
+  font-size: {{ settings["typography"]["product_styles"]["font-size-base"]["value"] }};
   color: #{{ settings["colors"]["content"]["product-title-color"]["value"] }};
   margin: 0 0 10px 0;
   text-transform: capitalize !important;
@@ -5584,7 +5586,9 @@ ul.tags li a:hover {
 }
 .product .price {
   display: inline-block;
-  font: 400 15px/1 "Roboto Condensed";
+  font-family: {{ settings["typography"]["product_styles"]["product-typeface"]["value"] }};
+  font-size: {{ settings["typography"]["product_styles"]["font-size-base"]["value"] }};
+  font-weight: 400;
   color: #{{ settings["colors"]["content"]["product-price-color"]["value"] }};
   margin: 0 5px;
 }
@@ -5603,7 +5607,9 @@ ul.tags li a:hover {
 }
 
 .product .btn {
-  font: 400 11px "Roboto Condensed";
+  font-weight: 400;
+  font-size:11px;
+  font-family: {{ settings["typography"]["product_styles"]["product-typeface"]["value"] }};
   text-transform: uppercase;
   margin: 0;
   padding: 0 13px;
