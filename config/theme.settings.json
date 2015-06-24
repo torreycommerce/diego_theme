@@ -95,7 +95,16 @@
                 "product-btn-text": {
                     "type": "color",
                     "value": "131416"
+                },
+                "product-btn-hover": {
+                    "type": "color",
+                    "value": "131416"
+                },
+                "product-btn-hover-text": {
+                    "type": "color",
+                    "value": "fff"
                 }
+
             },
             "footer": {
                 "footer-text-color": {
