@@ -500,6 +500,7 @@
                         "11px": "11px"
                     }
                 }
+            }
             },
             "title_styles": {
                 "title-typeface": {
@@ -527,7 +528,7 @@
                             "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
                         }
                     }
-                },
+            },
             "product_styles": {
                 "product-typeface": {
                     "type": "dropdown_group",
@@ -624,4 +625,4 @@
                 }
             }
         }
-    }
+    
