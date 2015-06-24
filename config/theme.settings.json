@@ -280,6 +280,7 @@
                         }
                     }
                 },
+                "title-styles": {
                 "title-typeface": {
                     "type": "dropdown_group",
                     "value": "Roboto Condensed, Arial, sans-serif",
@@ -303,6 +304,8 @@
                         "Monospace": {
                             "Courier New, Courier, monospace": "Courier new",
                             "Monaco, Lucida Console, DejaVu Sans Mono, monospace": "Monaco"
+
+                        }
                     }
                 }
             }
@@ -589,6 +592,7 @@
                         }
                     }
                 },
+                "title-styles": {
                 "title-typeface": {
                     "type": "dropdown_group",
                     "value": "Roboto Condensed, Arial, sans-serif",
@@ -617,5 +621,7 @@
                     }
                 }
             } 
+
+        }
         }
     }
