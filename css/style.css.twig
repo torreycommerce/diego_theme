@@ -3239,7 +3239,8 @@ body {
   margin: 0 0 10px 0;
 }
 .header-block.line-top {
-  border-top: 4px solid #131416;
+  border-top: 4px solid;
+  border-color: #{{ settings["colors"]["brand"]["header-top-line"]["value"] }};
 }
 @media (max-width: 767px) {
   .header-block {
@@ -3706,6 +3707,7 @@ legend {
 
 .footer-bottom.invert-colors {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #{{ settings["colors"]["brand"]["footer-bottom-line"]["value"] }};
 }
 
 .payment-methods.hlinks-images > li img {
