@@ -69,7 +69,7 @@
                     {# Begin product header #}
                     <h2 class="product-title"> <a href="{{app.url}}/brand/{{product.brand|url_encode}}">{{product.brand}}</a></h2>
                     {# Begin review stars #}
-                    {% set review_score = product.product|values_in('review_score')|merge([product.review_score])|average() %}
+                    {% set review_score = product.product|values_in('review_score')|merge(product|values_in('review_score'))|average() %}
                     {% if review_score > 0 %}
                         <div class="row">
                             <div class="col-md-12">
@@ -293,162 +293,165 @@
 
                                                     {# End collection group header #}
                                                     {# Begin collection product $(this).parentsUntil('.product').hide(); #}
-                                                    {# <pre>{{dump(children)}}</pre> #}
                                                     <script type="text/javascript">
                                                         var VariantsData = {isCollection: true, products: []};
                                                     </script>
 
                                                     {% for product in children %}
-                                                        {% set variation_dropdown = '' %}
                                                         {% if product.variant|length > 1 %}
-
                                                             <script type="text/javascript">
                                                                 VariantsData.products.push({variants: {{product.variant|json_encode}}, variant_options: {{product.variant_options|json_encode}}});
                                                             </script>
-                                                            {% set variation_dropdown %}
-                                                                {% spaceless %}
-                                                                    <div class="variation-selection">
-                                                                        <div id="variation-selector-{{product.id}}" class="input-group">
-                                                                        </div>
-                                                                    </div>
-                                                                    {# <pre>{{dump(product.variant)}}</pre> #}
-                                                                {% endspaceless %}
-                                                            {% endset %}
                                                         {% endif %}
                                                         <div class="variations">
-                                                            {% for variation in product.variant %}
-                                                                <div class="product product-list " id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
+                                                                <div class="product product-list ">
                                                                     <div class="row">
-                                                                        {# Begin collection product image #}
-                                                                        {% if variation.images is not empty %}
-                                                                            <div class="col-xs-5 col-sm-6 col-md-2 col-lg-2">
-                                                                                <div class="image globalPadding10 ">
-                                                                                    <div class="thumbnail">
-                                                                                        <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ app.image.getImageUrl("product","thumbnail",variation.images.0.id) }}" width="250" class="img-responsive" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",variation.images.0.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",variation.id) }}" alt="" />
+                                                                        {% for variation in product.variant %}
+                                                                            <div id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
+                                                                                {# Begin collection product image #}
+                                                                                {% if variation.images is not empty %}
+                                                                                    <div class="col-xs-5 col-sm-6 col-md-2 col-lg-2">
+                                                                                        <div class="image globalPadding10 ">
+                                                                                            <div class="thumbnail">
+                                                                                                <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ app.image.getImageUrl("product","thumbnail",variation.images.0.id) }}" width="250" class="img-responsive" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",variation.images.0.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",variation.id) }}" alt="" />
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        {% elseif product.thumbnail is not empty %}
-                                                                            <div class="col-md-2 col-sm-6 col-xs-5">
-                                                                                <div class="image globalPadding10 ">
-                                                                                    <div class="thumbnail">
-                                                                                        <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ product.thumbnail }}" width="250" class="img-responsive" data-image-swap="main-product-image" {% if product.images.0.id is defined %}data-image-swap-src="{{app.image.getImageUrl("product","standard", product.images.0.id) }}" data-image-swap-zoom="{{app.image.getImageUrl("product","large",product.images.0.id) }}"{% endif %} alt="" />
+                                                                                {% elseif product.thumbnail is not empty %}
+                                                                                    <div class="col-md-2 col-sm-6 col-xs-5">
+                                                                                        <div class="image globalPadding10 ">
+                                                                                            <div class="thumbnail">
+                                                                                                <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ product.thumbnail }}" width="250" class="img-responsive" data-image-swap="main-product-image" {% if product.images.0.id is defined %}data-image-swap-src="{{app.image.getImageUrl("product","standard", product.images.0.id) }}" data-image-swap-zoom="{{app.image.getImageUrl("product","large",product.images.0.id) }}"{% endif %} alt="" />
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        {% else %}
-                                                                            <div class="col-md-2 col-sm-6 col-xs-5">
-                                                                                <div class="image">
-                                                                                    <div class="thumbnail"></div>
-                                                                                </div>
-                                                                            </div>
-                                                                        {% endif %}
-                                                                        {# End collection product image #}
-                                                                        {# Begin collection product details #}
-                                                                        <div class="col-xs-7 col-sm-6 col-md-3">
-                                                                            <div class="details">
-                                                                                <h4 class='name'>{{ product.name }}</h4>
-                                                                                {# Begin variation dropdown #}
-                                                                                {% if variation.price > 0 %}
-                                                                                    <div class="price">
-                                                                                        {{ prod.price(variation.price) }}
+                                                                                {% else %}
+                                                                                    <div class="col-md-2 col-sm-6 col-xs-5">
+                                                                                        <div class="image">
+                                                                                            <div class="thumbnail"></div>
+                                                                                        </div>
                                                                                     </div>
                                                                                 {% endif %}
-                                                                                {# End variation dropdown #}
-                                                                                {# Begin pricing #}
-                                                                                {% if (variation.compare_price is not empty) or (variation.price >= 100) or (variation.save_price is not empty) %}
-                                                                                    <ul class="pricing">
-                                                                                        {# Begin regular price #}
-                                                                                        {% if variation.compare_price > 0 %}
-                                                                                            <li class="regular">
-                                                                                                Compare at {{ prod.price(variation.compare_price) }}
-                                                                                            </li>
+                                                                                {# End collection product image #}
+                                                                                {# Begin collection product details #}
+                                                                                <div class="col-xs-7 col-sm-6 col-md-3">
+                                                                                    <div class="details">
+                                                                                        <h4 class='name'>{{ product.name }}</h4>
+                                                                                        {% if variation.price > 0 %}
+                                                                                            <div class="price">
+                                                                                                {{ prod.price(variation.price) }}
+                                                                                            </div>
                                                                                         {% endif %}
-                                                                                        {# End regular price #}
-                                                                                        {# Begin price per month #}
-                                                                                        {% if variation.price >= 100 %}
-                                                                                            <li class="per-month">
-                                                                                                <span data-tooltip data-toggle="tooltip" data-original-title="Spread payments over six months by selecting &quot;Checkout with Paypal&quot; on the Shopping Cart page. Then log in and apply for a &quot;Bill Me Later&quot; account.">
-                                                                                                    {{ prod.billmelater(variation.price) }}
-                                                                                                </span>
-                                                                                            </li>
+                                                                                        {# Begin pricing #}
+                                                                                        {% if (variation.compare_price is not empty) or (variation.price >= 100) or (variation.save_price is not empty) %}
+                                                                                            <ul class="pricing">
+                                                                                                {# Begin regular price #}
+                                                                                                {% if variation.compare_price > 0 %}
+                                                                                                    <li class="regular">
+                                                                                                        Compare at {{ prod.price(variation.compare_price) }}
+                                                                                                    </li>
+                                                                                                {% endif %}
+                                                                                                {# End regular price #}
+                                                                                                {# Begin price per month #}
+                                                                                                {% if variation.price >= 100 %}
+                                                                                                    <li class="per-month">
+                                                                                                        <span data-tooltip data-toggle="tooltip" data-original-title="Spread payments over six months by selecting &quot;Checkout with Paypal&quot; on the Shopping Cart page. Then log in and apply for a &quot;Bill Me Later&quot; account.">
+                                                                                                            {{ prod.billmelater(variation.price) }}
+                                                                                                        </span>
+                                                                                                    </li>
+                                                                                                {% endif %}
+                                                                                                {# End price per month #}
+                                                                                                {# Begin percent off #}
+                                                                                                {% if variation.save_price is not empty %}
+                                                                                                    <li class="percent">
+                                                                                                        Save {{ prod.saveprice(variation.save_price) }} {{ prod.savepercent(variation.save_percent) }}
+                                                                                                    </li>
+                                                                                                {% endif %}
+                                                                                                {# End percent off #}
+                                                                                            </ul>
                                                                                         {% endif %}
-                                                                                        {# End price per month #}
-                                                                                        {# Begin percent off #}
-                                                                                        {% if variation.save_price is not empty %}
-                                                                                            <li class="percent">
-                                                                                                Save {{ prod.saveprice(variation.save_price) }} {{ prod.savepercent(variation.save_percent) }}
-                                                                                            </li>
+                                                                                        {# End pricing #}
+                                                                                        {# Begin estimated shipping #}
+                                                                                        {% if (variation.inventory_quantity is not empty and variation.inventory_minimum_quantity is not empty) or
+                                                                                            (variation.inventory_shipping_estimate is not empty) %}
+                                                                                            <ul class="shipping">
+                                                                                                <li class="estimated-time">
+                                                                                                    {% if variation.inventory_quantity > variation.inventory_minimum_quantity %}
+                                                                                                        In Stock
+                                                                                                    {% elseif variation.inventory_shipping_estimate is not empty %}
+                                                                                                        {{ variation.inventory_shipping_estimate }}
+                                                                                                    {% endif %}
+                                                                                                </li>
+                                                                                            </ul>
                                                                                         {% endif %}
-                                                                                        {# End percent off #}
-                                                                                    </ul>
-                                                                                {% endif %}
-                                                                                {# End pricing #}
-                                                                                {# Begin estimated shipping #}
-                                                                                {% if (variation.inventory_quantity is not empty and variation.inventory_minimum_quantity is not empty) or
-                                                                                    (variation.inventory_shipping_estimate is not empty) %}
-                                                                                    <ul class="shipping">
-                                                                                        <li class="estimated-time">
-                                                                                            {% if variation.inventory_quantity > variation.inventory_minimum_quantity %}
-                                                                                                In Stock
-                                                                                            {% elseif variation.inventory_shipping_estimate is not empty %}
-                                                                                                {{ variation.inventory_shipping_estimate }}
+                                                                                            {# End estimated shipping #}
+                                                                                            {# Begin product tags #}
+                                                                                            {% if product.tags is not empty %}
+                                                                                                <ul class="tags hidden-xs hidden-sm">
+                                                                                                    <li>
+                                                                                                        {% for tag in product.tags %}
+                                                                                                        <!-- <span class="label label-info">{{tag|title}}</span> -->
+                                                                                                        {% endfor %}
+                                                                                                    </li>
+                                                                                                </ul>
                                                                                             {% endif %}
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                {% endif %}
-                                                                                    {# End estimated shipping #}
-                                                                                    {# Begin product tags #}
-                                                                                    {% if product.tags is not empty %}
-                                                                                        <ul class="tags hidden-xs hidden-sm">
-                                                                                            <li>
-                                                                                                {% for tag in product.tags %}
-                                                                                                <!-- <span class="label label-info">{{tag|title}}</span> -->
-                                                                                                {% endfor %}
-                                                                                            </li>
-                                                                                        </ul>
+                                                                                            {# End product tags #}
+                                                                                    </div>
+                                                                                    {% if variation.sku is not empty %}
+                                                                                        <div> 
+                                                                                            ITEM #{{variation.sku}}
+                                                                                        </div>
                                                                                     {% endif %}
-                                                                                    {# End product tags #}
+                                                                                </div>
+                                                                                {# End collection product details #}
                                                                             </div>
-                                                                        </div>
-                                                                        {# End collection product details #}
+                                                                        {% endfor %}
+
                                                                         {# Begin Color-Size variants #}
                                                                         <div class="col-xs-7 col-sm-6 col-md-4 col-lg-5">
-                                                                                {{ variation_dropdown }}
+                                                                            <div class="variation-selection">
+                                                                                <div id="variation-selector-{{product.id}}" class="input-group">
+                                                                                </div>
                                                                             </div>
+                                                                        </div>
                                                                         {# End Color-Size variants #}
-                                                                        {# Begin collection product actions #}
-                                                                        <div class="col-xs-7 col-sm-6 col-md-3 col-lg-2 pull-right">
-                                                                                <div class="actions">
-                                                                                    <div class="btn-toolbar">
-                                                                                        <div class="quantity-input-group quantity">
-                                                                                            {% if product.variant[0]['inventory_quantity'] is defined and product.variant[0]['inventory_minimum_quantity'] is defined and
-                                                                                            product.variant[0]['inventory_policy'] is defined and (product.variant[0]['inventory_policy'] == 'continue' or
-                                                                                            product.variant[0]['inventory_quantity'] > product.variant[0]['inventory_minimum_quantity'] ) %}
-                                                                                                <label for="quantity-selector" class="control-label">QTY</label>
-                                                                                               {# Begin product Quantity #}
-                                                                                                <div class="input-group">
-                                                                                                    <div class="input-group-btn">
-                                                                                                        <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button">
-                                                                                                            <i class="fa fa-minus"></i>
-                                                                                                        </button>
+
+                                                                        {% for variation in product.variant %}
+                                                                            <div id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
+                                                                                {# Begin collection product actions #}
+                                                                                <div class="col-xs-7 col-sm-6 col-md-3 col-lg-2 pull-right">
+                                                                                    <div class="actions">
+                                                                                        <div class="btn-toolbar">
+                                                                                            <div class="quantity-input-group quantity">
+                                                                                                {% if product.variant[0]['inventory_quantity'] is defined and product.variant[0]['inventory_minimum_quantity'] is defined and
+                                                                                                product.variant[0]['inventory_policy'] is defined and (product.variant[0]['inventory_policy'] == 'continue' or
+                                                                                                product.variant[0]['inventory_quantity'] > product.variant[0]['inventory_minimum_quantity'] ) %}
+                                                                                                    <label for="quantity-selector" class="control-label">QTY</label>
+                                                                                                   {# Begin product Quantity #}
+                                                                                                    <div class="input-group">
+                                                                                                        <div class="input-group-btn">
+                                                                                                            <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button">
+                                                                                                                <i class="fa fa-minus"></i>
+                                                                                                            </button>
+                                                                                                        </div>
+                                                                                                        <input class="form-control quantity-selector quanitySniper" value="0" maxlength="2" placeholder="0" name="items[{{variation.id}}]" type="text">
+                                                                                                        <div class="input-group-btn">
+                                                                                                            <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
+                                                                                                        </div>
                                                                                                     </div>
-                                                                                                    <input class="form-control quantity-selector quanitySniper" value="0" maxlength="2" placeholder="0" name="items[{{variation.id}}]" type="text">
-                                                                                                    <div class="input-group-btn">
-                                                                                                        <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            {% endif %}
+                                                                                                {% endif %}
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                                 {# End collection product actions #}
                                                                             </div>
+                                                                        {% endfor %}
+
                                                                     </div>
-                                                            {% endfor %}
-                                                                    {# End variation block of product #}
+                                                                </div>
                                                         </div>
+                                                        {# End variation block of product #}
                                                     {% endfor %}
                                                             {# End collection product #}
                                                 </div>
