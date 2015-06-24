@@ -2,57 +2,53 @@
     "current": {
         "colors": {
             "brand": {
-                "brand-color": {
+                "primary-brand-color": {
                     "type": "color",
-                    "value": "4ec67f"
-                },                                  
-                "brand-secondary-color": {
-                    "type": "color",
-                    "value": "4bb777"
-                } 
+                    "value": "E7214C"
+                }                              
             },
             "background": {
                 "body": {
                     "type": "color",
                     "value": "ffffff"
                 },
-                "header-top": {
+                "header-top-line": {
                     "type": "color",
-                    "value": "4bb777"
+                    "value": "131416"
                 },
-                "header": {
-                    "type": "color",
-                    "value": "4ec67f"
-                },
-                "footer-bottom": {
+                "footer-bottom-line": {
                     "type": "color",
                     "value": "e3e3e3"
-                },
-                "footer": {
-                    "type": "color",
-                    "value": "EDEFF1"
-                }                                  
+                }                                
             },
             "content": {
                 "logo": {
                     "type": "color",
-                    "value": "ffffff"
+                    "value": "2a2b2d"
                 },
                 "text-color": {
                     "type": "color",
-                    "value": "34495E"
+                    "value": "666b76"
                 },
                 "header-top-text": {
                     "type": "color",
-                    "value": "ffffff"
+                    "value": "666b76"
                 },
                 "header-menu-text": {
                     "type": "color",
-                    "value": "ffffff"
+                    "value": "666b76"
                 },
                 "title-color": {
                     "type": "color",
-                    "value": "34495E"
+                    "value": "333"
+                },
+                "product-title-color": {
+                    "type": "color",
+                    "value": "131416"
+                },
+                "product-price-color": {
+                    "type": "color",
+                    "value": "E7214C"
                 },
                 "footer-title": {
                     "type": "color",
@@ -66,11 +62,11 @@
             "buttons": {
                 "primary-background": {
                     "type": "color",
-                    "value": "4ec67f"
+                    "value": "E7214C"
                 },
                 "primary-border": {
                     "type": "color",
-                    "value": "27ae60"
+                    "value": "E7214C"
                 },
                 "primary-text": {
                     "type": "color",
