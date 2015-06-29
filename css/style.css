@@ -5718,11 +5718,21 @@ ul.tags li a:hover {
 /***  -------  Product Color - Size Selector  ------- ***/
 .color-details {
     padding-top: 5px;
+    position: relative;
 /*    padding-bottom: 15px;
 */
-position: relative;}
+}
+
 .color-details span {
   font-family: "Roboto";
+  font-size: 12px;
+  color: #42464d;
+  text-transform: capitalize;
+}
+
+.item-sku {
+  font-family: "Roboto";
+  font-size: 12px;
   color: #42464d;
   text-transform: capitalize;
 }
@@ -5740,8 +5750,16 @@ position: relative;}
 }
 
 .swatches {
-    margin: 0.5em 0;
+    height: 75px;
+    margin: 5px 0 5px 0;
     padding-left: 0;
+}
+
+@media (max-width: 991px) {
+  .swatches {
+    height: auto;
+  }
+
 }
 .swatches li {
     border: 1px solid #b2b2b2;
@@ -5754,7 +5772,7 @@ position: relative;}
 .swatches li:hover {
     /* Swatches Selected Available Hover Border */
     
-    border: 1px solid #4ec67f;
+    border: 1px solid #E7214C;
 }
 .notavailable li:hover {
     /* Swatches Selected Available Hover Border */
@@ -5772,6 +5790,7 @@ position: relative;}
     display: block;
     font-size:10px;
     height: 33px;
+    padding: 2px;
     text-align: center;
     transition: all 0.25s ease 0s;
     min-width: 33px;
@@ -5824,14 +5843,22 @@ position: relative;}
 .size-details span {
   font-weight: normal;
   font-family: "Roboto";
+  font-size: 12px;
   color: #42464d;
   text-transform: capitalize;
 }
 
 .swatches-size {
+    height: 75px;
     margin: 0.5em 0;
     padding-left: 0;
 }
+@media (max-width: 991px) {
+  .swatches-size {
+    height: auto;
+  }
+}
+
 .swatches-size li {
     border: 1px solid #b2b2b2;
     background: #fff;
@@ -5844,7 +5871,7 @@ position: relative;}
 .swatches-size li:hover {
     /* Swatches Selected Available Hover Border */
     
-    border: 1px solid #4ec67f;
+    border: 1px solid #E7214C;
 }
 .swatches-size .notavailable-selected {
     /* Swatches Selected NotAvailable Border  */
@@ -5862,7 +5889,9 @@ position: relative;}
     box-shadow: 1px 1px 2px #C5C5C5;
     cursor: pointer;
     display: block;
+    font-size: 10px;
     height: 33px;
+    padding: 2px;
     text-align: center;
     transition: all 0.25s ease 0s;
     min-width: 33px;
