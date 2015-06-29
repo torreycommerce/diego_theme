@@ -62,7 +62,6 @@ var player;
             el.click(function() {
                     $("#main-product-video").show();
                     $("#main-product-image").hide();
-                    alert('tet');
                     $('#main-product-video').html('<iframe src="//player.vimeo.com/video/'+id+'?autoplay=true" width="100%" height="300px" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen autoplay></iframe>');
                     $("[data-image-swap]").click(function() {
                         $("#main-product-video").hide();
