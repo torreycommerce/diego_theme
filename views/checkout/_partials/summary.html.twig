@@ -4,7 +4,7 @@
     <div class="col-md-12">
     {% for item in cartitems %}
     {% set product = api.get('/variant/' ~ item.product_id) %}
-        <div class="product">
+        <div class="product" style="border-bottom: 1px solid #ddd;">
             <div class="row">
                 {# Begin product image #}
                 <div class="col-xs-4 col-sm-4 col-md-4">
@@ -18,7 +18,7 @@
                     <div class="name">{{ product.title }}</div>
                     <div class="availability">{{ product.inventory_quantity > 0 ? 'In Stock' :  'Ships in '~ product.inventory_shipping_estimate }}</div>
                     <div class="qty">Qty: {{ item.quantity }}</div>
-                    <div class="amount"><span class="at">@</span><span class="price">Price:</span> <span class="dollar-sign">$</span>{{  product.price }} <span class="each">each</span></div>
+                    <div class="amount"><span class="at"></span><span class="price">Price:</span> <span class="dollar-sign">$</span>{{  product.price }} <span class="each">each</span></div>
                     {% if item.wishlist_id is not empty %}
                         {% set wishlist = api.get('/wishlist/' ~ item.wishlist_id) %}
                         <div class="wishlist">
@@ -40,18 +40,19 @@
 </div>
 <footer class="row">
     <div class="col-md-12">        
-        {# Begin subtotal #}
-        <div class="subtotal row">            
-            <div class="amount col-xs-8 col-xs-offset-4">Subtotal: <span class="dollar-sign">$</span> <span class="price">{{ cart.subtotal }}</span> </div>
-        </div>
-        {# End subtotal #}
+
         {# Begin product actions #}
         <div class="row">
-            <div class="actions col-xs-8 col-xs-offset-4 ">
+            <div class="actions col-xs-8 col-xs-offset-4" style="padding:10px 0;">
                 <a class="btn btn-default btn-sm" href="{{ app.url }}/cart">Edit Cart</a>
             </div>
         </div>
         {# End product actions #}
+        {# Begin subtotal #}
+        <div class="subtotal row">            
+            <div class="amount col-xs-4 text-right">Subtotal:</div><div class="amount col-xs-8"> <span class="dollar-sign">$</span> <span class="price">{{ cart.subtotal }}</span> </div>
+        </div>
+        {# End subtotal #}
         {# Begin coupon #}
         {% for id, coupon in cart.coupons %}
         <div class="coupon row">
@@ -87,7 +88,7 @@
                 </div>
             </div>        
             <div class="total row">
-                <div class="col-xs-4 text-right">Total:</div>
+                <div class="col-xs-4 text-right"><strong>Total:</strong></div>
                 {% set total = cart.subtotal|replace({',':''}) + shipping.rate|replace({',':''}) + tax.tax|replace({',':''}) %}
                 <div class="amount col-sm-8"> <span class="dollar-sign">$</span> <span class="price">{{ total|number_format(2) }}</span> </div>
                 <input type="hidden" name="checkout[total_verify]" value="{{ total }}">
@@ -109,7 +110,7 @@
                 <div class="amount col-sm-8"> <span class="dollar-sign">$</span> <span class="price">{{ tax.tax }}</span> </div>
             </div>        
             <div class="total row">
-                <div class="col-sm-4 text-right">Total:</div>
+                <div class="col-sm-4 text-right"><strong>Total:</strong></div>
                 {% set total = expressdetails.AMT|replace({',':''}) + tax.tax|replace({',':''}) %}
                 <div class="amount col-sm-8"> <span class="dollar-sign">$</span> <span class="price">{{ total|number_format(2) }}</span> </div>
                 <input type="hidden" name="checkout[total_verify]" value="{{ total }}">

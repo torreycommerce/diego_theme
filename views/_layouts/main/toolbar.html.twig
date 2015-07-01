@@ -1,4 +1,4 @@
-{% set categories = api.get('/category/tree') %}
+{% set categories = api.get('/category/sapling') %}
 {#
 <pre>
 {{ dump(categories) }}
@@ -142,19 +142,17 @@
                 <span class="sr-only">Toggle navigation</span>
                 <i class="fa fa-navicon"></i>
               </button>
-
-                  {% if app.params.logoimages is not empty %}
+                    {% if app.params.logoimages is not empty %}
                         {% set logo_info = app.params.logoimages | first %}
-                        {% set logo = app.image.getImageUrl('logo','thumbnail',logo_info.id) %}
+                        {% set logo = logo_info.url %}
                     {% endif %}
                     {% if logo is not empty %}
-                        <a class="navbar-brand img-responsive visible-xs " href="{{app.url}}/" style="background-image: url({{ logo }}); background-position: 0 10px; background-repeat: no-repeat; display: block;  width: 110px; background-size: contain;"></a>
+                        <a href="{{app.url}}/" class="navbar-brand img-responsive visible-xs " style="background-image: url({{ logo }}); background-position: 0 10px; background-repeat: no-repeat; display: block;  width: 110px; background-size: contain;"></a>
                     {% else %}
                         <div id="logo-txt"><a class="navbar-brand visible-xs" href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 17) }}</a></div>
                     {% endif %}
             </div>
             <!-- /Header-->
-          
             <!-- Collapse -->
             <div class="collapse navbar-collapse navbar-absolute">
             
@@ -286,46 +284,6 @@
               </div>
               <!-- /Navbar btn-group -->
               
-             {#} <!-- Navbar Left -->
-              <ul class="nav navbar-nav navbar-left navbar-right-xs">
-                <li class="dropdown has-panel">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img class="img-left" alt="" src="{{ app.url_asset }}/images/diego/flags/us.gif"><span>USD</span><i class="fa fa-angle-down toggler"></i></a>
-                  <!-- Dropdown Panel -->
-                  <div id="settings" class="dropdown-menu dropdown-panel" data-keep-open="true">
-                    <fieldset>
-                      <form>
-                        <div class="form-group">
-                          <label>Language</label>
-                          <select class="form-control">
-                            <option>English</option>
-                            <option>French</option>
-                            <option>German</option>
-                            <option>Spanish</option>
-                          </select>
-                        </div>
-                        
-                        <div class="form-group">
-                          <label>Currency</label>
-                          <select class="form-control">
-                            <option>US Dollar</option>
-                            <option>Kenyan Shillings</option>
-                            <option>TZ Shillings</option>
-                            <option>British Pound</option>
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label class="checkbox-inline"><input value="" type="checkbox">Remember settings </label>
-
-                        </div>
-                        <button class="btn btn-primary btn-block">change</button>
-                      </form>
-                    </fieldset>
-                  </div>
-                  <!-- /Dropdown Panel -->
-                  
-                </li>
-              </ul>
-              <!-- /Navbar Left -->#}
             </div>
             <!-- /Dont Collapse -->
 

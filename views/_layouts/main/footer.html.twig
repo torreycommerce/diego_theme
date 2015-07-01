@@ -11,9 +11,17 @@
             <!-- Brand -->
             <div class="col-md-3 brand-col brand-center">
               <div class="vcenter">
-                <a class="vcenter-this" href="{{app.url}}/">
-                  <img src="{{ app.url_asset }}/images/diego/logo-footer.png" alt="logo"/>
-                </a>
+                <div class="vcenter-this">
+                                      {% if app.params.logoimages is not empty %}
+                        {% set logo_info = app.params.logoimages | first %}
+                        {% set logo = logo_info.url %}
+                    {% endif %}
+                    {% if logo is not empty %}
+                        <a href="{{app.url}}/" class="img-responsive" style="background-image: url({{ logo }}); background-position: 50% 20%;  background-repeat: no-repeat; display: block; height:110px; background-size: contain;"></a>
+                    {% else %}
+                        <div id="logo-txt"><a href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 17) }}</a></div>
+                    {% endif %}
+                </div>
               </div>
             </div>
             <!-- /Brand -->
@@ -43,10 +51,10 @@
                 <div class="col-xs-6 col-sm-3 col-md-3">
                   <h5>member</h5>
                   <ul class="vlinks">
-                    <li><a href="#">Account</a></li>
-                    <li><a href="#">Wishlist and Favourites</a></li>
-                    <li><a href="#">Purchase History</a></li>
-                    <li><a href="#">View Cart</a></li>
+                    <li><a href="{{app.url}}/account">Account</a></li>
+                    <li><a href="{{app.url}}/account/wishlists">Wishlist and Favourites</a></li>
+                    <li><a href="{{app.url}}/account/orders">Purchase History</a></li>
+                    <li><a href="{{app.url}}/cart">View Cart</a></li>
                   </ul>
                 </div>
                 <!-- /Col -->
