@@ -3587,6 +3587,14 @@ legend {
 
 /* FOOTER
 -------------------------------------------------- */
+
+.gap {
+    height: 50px;
+    width: 100%;
+    clear: both;
+    display: block;
+}
+
 .footer-block {
   font-size: 13px;
   color: rgba(0, 0, 0, 0.5);
