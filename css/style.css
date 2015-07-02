@@ -2066,16 +2066,6 @@ input[type="checkbox"] {
   border-color: none !important;
 }
 
-.btn-group.my-account a:active, 
-.btn-group.my-account a:focus, 
-.btn-group.my-account a:hover, 
-.btn-group.my-account a:visited {
-  background-color: none !important;
-  border-radius: 0;
-  color: #666b76 ;
-  font-size: 13px;
-  border-color: none;
-}
 .btn-group.my-account a i {
   padding-right: 0px;
 }
@@ -2088,14 +2078,15 @@ input[type="checkbox"] {
 .btn-group.my-account a:focus,
 .btn-group.my-account a:hover,
 .btn-group.my-account a:visited {
-  background-color: 0 none !important;
+  background: none !important;
   color: #333 ;
+  border: none;
 }
 .btn-group.my-account .dropdown-menu li {
   padding: 0;
 }
 .btn-group.my-account .dropdown-menu li a {
-  background-color: 0 none;
+  background-color: none !important;
   color: #666b76;
   text-align: left;
   -webkit-border-radius: 0px;
@@ -2108,7 +2099,7 @@ input[type="checkbox"] {
 .btn-group.my-account .dropdown-menu li a:focus,
 .btn-group.my-account .dropdown-menu li a:hover,
 .btn-group.my-account .dropdown-menu li a:visited {
-  background-color: 0 none;
+  background-color: none;
   color: #666666;
 }
 .btn-group.my-account .dropdown-menu li .divider {
