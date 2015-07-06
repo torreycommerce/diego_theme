@@ -69,7 +69,7 @@
                
                {# Begin review stars #}
                {% set review_score = product|average('review_score') %}
-               <div class="hlinks hlinks-rating">
+               <div class="hlinks hlinks-rating product-details">
                   <ul class="reviews">
                      {% if review_score > 0 %}
                         <li class="stars">
@@ -243,9 +243,11 @@
                            </form>
                         {% endif %}
                         {% if variation.sku is not empty %}
+                        <div class="col-xs-12 col-md-4"> {# Begin Row#}
                            <div class="item-sku"> 
                                <strong>Item: </strong> #{{variation.sku}}
                            </div>
+                        </div>
                        {% endif %}
                      </div>
                   {% endfor %}
