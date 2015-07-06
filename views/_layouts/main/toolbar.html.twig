@@ -232,17 +232,17 @@
                       <div class="popover-close">
                           <div class="row">
                               <div class="col-md-7">
-                                  Quickcart
+                                  
                               </div>
                               <div class="col-md-5">
-                                  <a onclick="$('div.cart').popover('hide')" id="ajaxcart-close" class="btn btn-danger btn-sm pull-right fa fa-times"></a>
+                                  <a onclick="$('div.cart').popover('hide')" id="ajaxcart-close" class="btn btn-danger btn-sm pull-right"><i class="fa fa-times"></i></a>
                               </div>
                           </div>
                       </div>
                       {# Begin Popover products #}
                       <section class="ajaxcart-products">
                           {# Begin product #}
-                          <div class="ajaxcart-product product">
+                          <div class="ajaxcart-product product" style="border-bottom: 1px solid #ccc; ">
                               <div class="row">
                                   <div class="col-xs-4">
                                       <div class="thumbnail">
@@ -253,8 +253,8 @@
                                       <div class="name">
                                           <span class="product-name"></span>
                                       </div>
-                                      <div class="price"><strong>Price:</strong> $<span class="product-price"></span></div>
-                                      <div class="quantity"><strong>Qty:</strong> <span class="product-quantity"></span></div>
+                                      <div class="price"><span class="product-quantity"></span> X $<span class="product-price"></span></div>
+                                      
                                   </div>
                               </div>
                           </div>
@@ -265,15 +265,17 @@
                       <div class="row">
                           <div class="col-xs-8 col-xs-offset-4">
                               <div class="cart-totals">
-                                  <div class="items">Item count: <span class="item-count"></span></div>
-                                  <div class="total">Subtotal: $<span class="subtotal">0.00</span></div>
+                                  <div class="total pull-right"><strong>Subtotal: $<span class="subtotal pull-right">0.00</span></strong></div>
                               </div>
                           </div>
                       </div>
                       {# End popover cart totals #}
-                      <div class="row">
-                          <div class="col-md-12">
-                              <a href="{{ app.url }}/cart" class="btn btn-cart btn-block">My Cart</a>
+                      <div class="row grid-10">
+                          <div class="col-md-6">
+                            <a class="btn btn-base btn-block margin-y-5" href="{{ app.url }}/cart">view cart</a>
+                          </div>
+                          <div class="col-md-6">
+                            <a class="btn btn-primary btn-block margin-y-5" href="{{ app.url }}/checkout">checkout</a>
                           </div>
                       </div>
                   </div>
@@ -287,7 +289,7 @@
                                 Quickcart
                         </div>
                         <div class="col-md-5 col-xs-2">
-                            <a onclick="$('.mobile-popover').popover('hide')" id="ajaxcart-close" class="btn btn-danger btn-sm pull-right fa fa-times"></a>
+                            <a onclick="$('.mobile-popover').popover('hide')" id="ajaxcart-close" class="btn btn-danger btn-sm pull-right"><i class="fa fa-times"></i></a>
                         </div>
                     </div>
                 </div>
@@ -323,9 +325,12 @@
                     </div>
                 </div>
                 {# End popover cart totals #}
-                <div class="row">
-                    <div class="col-md-12">
-                        <a href="{{ app.url }}/cart" class="btn btn-cart btn-block">My Cart</a>
+                <div class="row grid-10">
+                    <div class="col-md-6">
+                      <a class="btn btn-base btn-block margin-y-5" href="{{ app.url }}/cart">view cart</a>
+                    </div>
+                    <div class="col-md-6">
+                      <a class="btn btn-primary btn-block margin-y-5" href="{{ app.url }}/checkout">checkout</a>
                     </div>
                 </div>
             </div>
