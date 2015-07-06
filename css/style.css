@@ -6439,9 +6439,12 @@ ul.tags li a:hover {
 /* CART
 ---------------------------------------------------------- */
 .cart {
-  width: 100%;
   margin-bottom: 40px;
-  border: 1px solid #ddd;
+  margin-right: 20px;
+}
+
+.popover-close {
+  width: 250px;
 }
 
 .cart-buttons .btn {
