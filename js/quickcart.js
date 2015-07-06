@@ -6,16 +6,16 @@ $(function() {
 
     var q=false;
 
-    $("li.cart").hover(function(){
+    $("div.cart").hover(function(){
         q = true;
         if (!$(".popover.fade.bottom.in").length && !cartTriggerTimeout) {
             cartTriggerTimeout = setTimeout(function(){
                 if (q) {
-                    if($('li.cart').attr('data-content') == '') {
+                    if($('div.cart').attr('data-content') == '') {
                         ajaxCart("{}", true);
                     } else {
-                        $('li.cart').popover("show");
-                        cartCloseTimeout = setTimeout(function(){$('li.cart').popover("hide");}, 5000);
+                        $('div.cart').popover("show");
+                        cartCloseTimeout = setTimeout(function(){$('div.cart').popover("hide");}, 5000);
                     }
                 }
                 cartTriggerTimeout = false;
@@ -28,7 +28,7 @@ $(function() {
     $.getJSON(acendaBaseUrl + '/api/sessioncart', function(data) {
         $('.cart .item-count, div.toolbar-mobile .item-count').html(data.result.item_count);
     });
-    $('li.cart, div.mobile-popover').popover({html:true, trigger: 'manual', placement:'bottom'});
+    $('div.cart, div.mobile-popover').popover({html:true, trigger: 'manual', placement:'bottom'});
 });
 
 $('#ajaxcart-close').click(function() {
@@ -62,7 +62,7 @@ $('button[value=cart]').click(function(event) {
     })
     .fail(function() {
         // Set popover on failure to add items
-        $('li.cart, div.mobile-popover').attr('data-content','<h5>Failed to add item(s) to cart.</h5>').popover('show');
+        $('div.cart, div.mobile-popover').attr('data-content','<h5>Failed to add item(s) to cart.</h5>').popover('show');
     })
     .success(ajaxCart);
 });
@@ -85,7 +85,7 @@ function ajaxCart(data, r) {
     }
 
     if (!success) {
-        $('li.cart').attr('data-content','<h5></h5>').popover('show');
+        $('div.cart').attr('data-content','<h5></h5>').popover('show');
         return;
     }
 
@@ -117,7 +117,7 @@ function ajaxCart(data, r) {
 
         if (items.length == 0) {
             if (!$("div.mobile-popover").is(":hidden"))
-                $('div.mobile-popover').attr('data-content','<div class="popover-close"><div class="row"><div class="col-md-12"><a onclick="$(\'li.cart\').popover(\'hide\')" id="ajaxcart-close" class="btn btn-danger btn-sm pull-right fa fa-times"></a></div></div></div><h5>Your cart is empty.</h5>').popover('show');
+                $('div.mobile-popover').attr('data-content','<div class="popover-close"><div class="row"><div class="col-md-12"><a onclick="$(\'div.cart\').popover(\'hide\')" id="ajaxcart-close" class="btn btn-danger btn-sm pull-right fa fa-times"></a></div></div></div><h5>Your cart is empty.</h5>').popover('show');
             return;
         }
 
@@ -186,11 +186,12 @@ function ajaxCart(data, r) {
             $('#collection .quantity-selector').val(0); // Set collection quantity selector values to 0
 
             if(cart_items.length > 0) {
-                if ($("div.mobile-popover").is(":hidden"))
-                    displayCart($('li.cart').attr('data-content',$('.cart .ajaxcart').html()), r);
+                displayCart($('div.cart').attr('data-content',$('.cart .ajaxcart').html()), r);
+                /*if ($("div.mobile-popover").is(":hidden"))
+                    displayCart($('div.cart').attr('data-content',$('.cart .ajaxcart').html()), r);
                 else{
                     displayCart($('div.mobile-popover').attr('data-content',$('.mobile-popover .ajaxcart').html()), r);
-                }
+                }*/
             }
 
         });
@@ -198,7 +199,6 @@ function ajaxCart(data, r) {
 }
 
 function displayCart(el, r){
-
     el.popover("show");
 
     el.on('shown.bs.popover', function () {

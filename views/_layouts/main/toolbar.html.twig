@@ -223,12 +223,117 @@
                 <!-- /Btn Wrapper -->
 
                 <!-- Btn Wrapper -->
-                <div class="btn-wrapper dropdown">
+                <div class="btn-wrapper dropdown cart" data-content="" data-placement='bottom' rel='popover'>
                 
-                  <a aria-expanded="false" class="btn btn-outline" data-toggle="dropdown"><b class="count count-scolor count-round">2</b><i class="ti ti-bag"></i></a>
+                  <a aria-expanded="false" class="btn btn-outline" data-toggle="dropdown" ><b class="count count-scolor count-round item-count"></b><i class="ti ti-bag"></i></a>
                   
+                  {# Begin ajax cart popover #}
+                  <div class="ajaxcart" style="display:none">
+                      <div class="popover-close">
+                          <div class="row">
+                              <div class="col-md-7">
+                                  Quickcart
+                              </div>
+                              <div class="col-md-5">
+                                  <a onclick="$('div.cart').popover('hide')" id="ajaxcart-close" class="btn btn-danger btn-sm pull-right fa fa-times"></a>
+                              </div>
+                          </div>
+                      </div>
+                      {# Begin Popover products #}
+                      <section class="ajaxcart-products">
+                          {# Begin product #}
+                          <div class="ajaxcart-product product">
+                              <div class="row">
+                                  <div class="col-xs-4">
+                                      <div class="thumbnail">
+                                          <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="product-image" src="">
+                                      </div>
+                                  </div>
+                                  <div class="col-xs-8">
+                                      <div class="name">
+                                          <span class="product-name"></span>
+                                      </div>
+                                      <div class="price"><strong>Price:</strong> $<span class="product-price"></span></div>
+                                      <div class="quantity"><strong>Qty:</strong> <span class="product-quantity"></span></div>
+                                  </div>
+                              </div>
+                          </div>
+                          {# Begin product #}
+                      </section>
+                      {# End Popover products #}
+                      {# Begin popover cart totals #}
+                      <div class="row">
+                          <div class="col-xs-8 col-xs-offset-4">
+                              <div class="cart-totals">
+                                  <div class="items">Item count: <span class="item-count"></span></div>
+                                  <div class="total">Subtotal: $<span class="subtotal">0.00</span></div>
+                              </div>
+                          </div>
+                      </div>
+                      {# End popover cart totals #}
+                      <div class="row">
+                          <div class="col-md-12">
+                              <a href="{{ app.url }}/cart" class="btn btn-cart btn-block">My Cart</a>
+                          </div>
+                      </div>
+                  </div>
+                  {# End ajax cart popover #}
+                  
+                  {# Begin ajax cart popover #}
+            <div class="ajaxcart" style="display:none;">
+                <div class="popover-close">
+                    <div class="row">
+                        <div class="col-md-7 col-xs-10">
+                                Quickcart
+                        </div>
+                        <div class="col-md-5 col-xs-2">
+                            <a onclick="$('.mobile-popover').popover('hide')" id="ajaxcart-close" class="btn btn-danger btn-sm pull-right fa fa-times"></a>
+                        </div>
+                    </div>
+                </div>
+                {# Begin Popover products #}
+                <section class="ajaxcart-products">
+                    {# Begin product #}
+                    <div class="ajaxcart-product product">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <div class="thumbnail">
+                                    <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="product-image" src="">
+                                </div>
+                            </div>
+                            <div class="col-xs-8">
+                                <div class="name">
+                                    <span class="product-name"></span>
+                                </div>
+                                <div class="price"><strong>Price:</strong> $<span class="product-price"></span></div>
+                                <div class="quantity"><strong>Qty:</strong> <span class="product-quantity"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    {# Begin product #}
+                </section>
+                {# End Popover products #}
+                {# Begin popover cart totals #}
+                <div class="row">
+                    <div class="col-xs-8 col-xs-offset-4">
+                        <div class="cart-totals">
+                            <div class="items">Item count: <span class="item-count"></span></div>
+                            <div class="total">Subtotal: $<span class="subtotal">0.00</span></div>
+                        </div>
+                    </div>
+                </div>
+                {# End popover cart totals #}
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="{{ app.url }}/cart" class="btn btn-cart btn-block">My Cart</a>
+                    </div>
+                </div>
+            </div>
+            {# End ajax cart popover #}
+
+
                     <!-- Dropdown Panel -->
-                    <div class="dropdown-menu dropdown-panel dropdown-right" data-keep-open="true">
+                   {# <div class="dropdown-menu dropdown-panel dropdown-right" data-keep-open="true">
                       <section>
                         <!-- Mini Cart -->
                         <ul class="mini-cart">
@@ -275,9 +380,9 @@
                           </div>
                         </div>
                       </section>
-                    </div>
+                    </div>#}
                     <!-- /Dropdown Panel -->
-                  
+                    
                 </div>
                 <!-- /Btn Wrapper -->
 
