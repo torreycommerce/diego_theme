@@ -6,13 +6,13 @@
                 Products to display:
                 1528, 12458, 14097, 21032
                 #}
-                {% set items_per_row = 4 %}
+                                 {% set items_per_row = 4 %}
                 {% set collection_ids = [] %}
                 {% set product_count = 1 %}
                 {% set options = ['image'] %}
-                {% set products = api.get('/catalog', {sort:"product.variant.popularity:-1",limit:8}) %}
+                {% set products = api.get('/catalog', {sort:"product.variant.popularity:-1",limit:4}) %}
                 {% set product_counter = 0 %}
-                {% for row,product in products if collection_ids[product.id] is empty and product_count < 8 %}
+                {% for row,product in products if collection_ids[product.id] is empty and product_count < 5 %}
                     {% if product.group == 'product' %}
                         {% for id in product.product.collection_id %}
                             {% set collection_ids = collection_ids|merge({(id):true}) %}
@@ -48,6 +48,7 @@
                     
                     {% if variant_images is empty %}
                         {% set variant_images = product.images %}
+                        {% set image_url = app.image.getImageUrl('product','thumbnail', variant_images[0].id) %}
                     {% endif %}
                 {% endif %}
                   <!-- Col -->
@@ -58,7 +59,7 @@
                     
                       <!-- Image -->
                       <div class="image"> 
-                        <a href="{{ app.url }}/product/{{ product.slug }}" class="main"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ img_url }}" alt="img" class="img-responsive"></a>
+                        <a href="{{ app.url }}/product/{{ product.slug }}" class="main"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ image_url }}" alt="img" class="img-responsive"></a>
                       </div>
                       <!-- Image -->
                       <div class="label">
