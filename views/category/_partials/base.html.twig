@@ -297,23 +297,29 @@
                       <a class="title" href="{{ app.url }}/product/{{ product.slug }}">{{ product.title }} </a>
                       
                       <!-- rating -->
-                      <ul class="hlinks hlinks-rating">
-                        <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
-                        <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
-                        <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
-                        <li><a href="#"><i class="icon fa fa-star"></i></a></li>
-                        <li><a href="#"><i class="icon fa fa-star"></i></a></li>
-                      </ul>
+                      <ul class="hlinks hlinks-rating" style="height:13px;">
+                          {% if product.review_score is not empty %}
+                            {% set nb_active_stars = product.review_score * 5 %}
+                            {% set nb_grey_stars = 5 - nb_active_stars %}
+                            {% for stars in 1..nb_active_stars %}
+                              <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                            {% endfor %}
+                            {% for stars in 1..nb_grey_stars %}
+                              <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                            {% endfor %}
+                          {% endif %}
+                        </ul>
                       <!-- /rating -->
                       
                       <p class="desc">{{ product.description|striptags|slice(0, 100) }}... </p>
                       
                       <!-- Price Box -->
                       <div class="price-box">
-                        <span class="price">{% if product.attributes.price %}
-                                {{ prod.price(product.attributes.price) }}</span>
-                                <span class="price price-old">{{ prod.price(product.attributes.compare_price) }}</span>
-                                {% endif %}
+                          <span class="price">{% if product.attributes.price %}
+                          {{ prod.price(product.attributes.price) }} {% if product.attributes.compare_price[0] is not empty and product.attributes.compare_price != product.attributes.price %}</span><span class="price price-old">{{ prod.price(product.attributes.compare_price) }}</span>
+                        <!-- /Price Box -->
+                        {% endif %}
+                        {% endif %}
                       </div>
                       <!-- /Price Box -->
                       
