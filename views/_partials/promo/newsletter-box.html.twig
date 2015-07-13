@@ -1,36 +1,5 @@
-      <!-- Newsletter Block
+<!-- Newsletter Block
       ============================================ -->
-      <div class="newsletter-block boxed-section overlay-dark-m cover-2-bg">
-      
-        <!-- Container -->
-        <div class="container">
-          <form>
-            <!-- Row -->
-            <div class="row grid-10">
-              <!-- Col -->
-              <div class="col-sm-3 col-md-2">
-                <span class="case-c">get newsletter</span>
-              </div>
-              <!-- Col -->
-              {{ newsletterform.begin('newsletter',app.url ~ '/newsletter') }}
-              <!-- Col -->
-              <div class="col-sm-6 col-md-8">
-                  <input id="NewsLInput" class="form-control" type="text" placeholder="Enter your email address" name="email"/>
-              </div>
-              <!-- Col -->
-              
-              <!-- Col -->
-              <div class="col-sm-3 col-md-2">
-                <button id="NewsLSub" class="btn btn-block btn-color yellow-bg" type="submit"><i class="icon-left fa fa-envelope"></i>subscribe</button>
-              </div>
-              <!-- /Col -->
-              {{ newsletterform.end() }}
-            </div>
-            <!-- /Row -->
-          </form>
-        </div>
-        <!-- /Container -->
-      
-      </div>
+      {% include "/_partials/subscribe_newsletter.html.twig" %}      
       <!-- /Newsletter Block
-      =================================================== -->
+=================================================== -->

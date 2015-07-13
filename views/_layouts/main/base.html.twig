@@ -116,7 +116,7 @@
     <section id="content">
             {% block breadcrumb %}{% endblock %}
             {% block stage %}
-            {# include "/_layouts/main/stage_header.html.twig" #}
+            {% include "/_layouts/main/stage_header.html.twig" %}
             {% block content %}
             {% endblock %}
             {% endblock %}
