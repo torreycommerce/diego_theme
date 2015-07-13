@@ -191,6 +191,20 @@ function VariantsManager (variants, variant_options, isCollection) {
         var self = this;
         $.each(selectData, function(selectName, optionArray){
             //Color styling
+            var optionArray2 = [];
+            if( selectName.toLowerCase() == "size"){
+                var my_list = ["XXXS", "XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+                for (i = 0; i < my_list.length; i++) {
+                    for (j = 0; j < optionArray.length; j++) {
+                        if (my_list[i].toUpperCase() == optionArray[j].toUpperCase()) {
+                            optionArray2.push(optionArray[j]);
+                        }
+                    }
+                }
+            }
+            else
+                optionArray2 = optionArray;
+
             if( selectName.toLowerCase() == "color"){
                 if(self.isCollection){
                     var div = $('<div>', {id: "variation-selector-"+self.product_id+"-"+selectName, name: selectName, class: "color-details-collection"}); 
@@ -211,7 +225,7 @@ function VariantsManager (variants, variant_options, isCollection) {
                             );
             }
 
-            $.each(optionArray, function(index, optionValue){
+            $.each(optionArray2, function(index, optionValue){
                 ul.append( 
                     $('<li>', { id: "variation-selector-"+self.product_id+"-"+selectName+"-"+optionValue, 
                                 class: "",
