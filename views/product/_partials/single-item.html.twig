@@ -9,7 +9,7 @@
          <!-- Product Row -->
          <div class="row product-details">
             {% for variation in product.variant %}
-               <div id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
+               <div id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:"{% endif %}>
                   {# Begin product images #}
                   <div id="product-images" class="col-md-5 mgb-30-xs">
                      {# Begin main image #}
@@ -264,7 +264,9 @@
                         </button> 
                   </div>
                   <!--/.End cart-actions-->
-                  {% include "/product/_partials/list/actions-single.html.twig" %}
+                  <form method="post" id="productForm" action="{{ app.url }}/product/route" class="form-inline">
+                     {% include "/product/_partials/list/actions-single.html.twig" %}
+                  </form>
                </div>
             </div>   <!-- /End Product Details -->
          </div>   <!-- / End Row product-details -->
