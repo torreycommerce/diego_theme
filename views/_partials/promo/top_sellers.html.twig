@@ -81,12 +81,17 @@
                         <a class="title" href="{{ app.url }}/product/{{ product.slug }}">{{ product.title|striptags|slice(0, 50) }}</a>
                         
                         <!-- rating -->
-                        <ul class="hlinks hlinks-rating">
-                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
-                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
-                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
-                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
-                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        <ul class="hlinks hlinks-rating" style="height:13px;">
+                          {% if product.review_score is not empty %}
+                            {% set nb_active_stars = product.review_score * 5 %}
+                            {% set nb_grey_stars = 5 - nb_active_stars %}
+                            {% for stars in 1..nb_active_stars %}
+                              <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                            {% endfor %}
+                            {% for stars in 1..nb_grey_stars %}
+                              <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                            {% endfor %}
+                          {% endif %}
                         </ul>
                         <!-- /rating -->
                         
