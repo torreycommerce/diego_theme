@@ -95,6 +95,27 @@
                       }) %}
 {#
 ##
+##  Search Suggestion API query
+##
+#}
+{% set search_suggestion = '' %}
+{% if products.num_total == 0 and app.request.get.s is not empty %}
+    {% set search_suggestion = api.get('/catalog/suggest', {'query':app.request.get.s})|first %}
+    {% if search_suggestion == app.request.get.s %}
+        {% set search_suggestion = '' %}
+    {% else %}
+        {% set products = api.get('/catalog', {
+                            "query":default_query|merge(filter_query),
+                            "page":app.request.get.page,
+                            "limit":limit,
+                            "search":search_suggestion,
+                            "search_in":search_fields,
+                            "sort":sortBy
+                      }) %}
+    {% endif %}
+{% endif %}
+{#
+##
 ##  Attribute filter API query
 ##
 #}
@@ -227,6 +248,11 @@
             {% set items_per_row = 3 %}
             <section class="products-category">
             <div class="">
+                {% if search_suggestion is not empty %}
+                <div class="col-sm-12">
+                    <p>Showing results for <strong><i>{{search_suggestion}}</i></strong></p>
+                </div>
+                {% endif %}
             {% if products.num_total == 0 and categories is empty %}
             <div class="col-sm-12">
                     No products found. <a href="{{app.url}}/{{ app.request.url}}">Go back</a>

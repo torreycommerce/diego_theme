@@ -454,6 +454,60 @@ $(document).ready(function() {
   });
 });
 
+
+//Search Autocomplete
+$(document).ready(function() {
+  var searchCompleterCategory = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    prefetch: {
+      url: acendaBaseUrl+'/api/category/tree',
+      ttl: 300000, //5 min cache
+      transform: function (response) {
+        res = [];
+        for(var k in response.result) {
+            var v = k.replace('-',' ').replace('/',' > ').replace(/\w+/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            res.push({'value':v, 'url':acendaBaseUrl+'/category/'+k});
+          }
+        return res;
+      }
+    }
+  });
+
+  var searchCompleterProduct = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: {
+      url: acendaBaseUrl+'/api/catalog/autocomplete?query=%QUERY',
+      wildcard: '%QUERY',
+      transform: function (response) {
+        res = [];
+        for (var i = 0, len = response.result.length; i < len; i++) {
+          res.push({'value':response.result[i]});
+        }
+        return res;
+      }
+    }
+  });
+
+  $('.search-autocomplete').typeahead(null, 
+    {
+      name: 'search',
+      display: 'value',
+      source: searchCompleterCategory
+    },
+    {
+      name: 'search',
+      display: 'value',
+      source: searchCompleterProduct
+    }
+  ).on('typeahead:selected', function(event, selection) {
+    if('url' in selection) {
+      window.location=selection.url;
+    }
+  });
+});
+
 function validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
