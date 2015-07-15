@@ -19,7 +19,7 @@
                     {% if logo is not empty %}
                         <a href="{{app.url}}/" class="img-responsive" style="background-image: url({{ logo }}); background-position: 50% 20%;  background-repeat: no-repeat; display: block; height:110px; background-size: contain;"></a>
                     {% else %}
-                        <div id="logo-txt"><a style="font-size:30px;" href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 17) }}</a></div>
+                        <div id="logo-txt"><a style="font-size:30px;" href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 32) }}</a></div>
                     {% endif %}
                 </div>
               </div>

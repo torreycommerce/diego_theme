@@ -27,7 +27,7 @@
                     {% if logo is not empty %}
                         <a href="{{app.url}}/" class="img-responsive" style="background-image: url({{ logo }}); background-position: 50% 20%;  background-repeat: no-repeat; display: block; height:110px; background-size: contain;"></a>
                     {% else %}
-                        <div id="logo-txt"><a href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 17) }}</a></div>
+                        <div id="logo-txt"><a href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 32) }}</a></div>
                     {% endif %}
                 </div>
                 <!-- v-centered -->
@@ -149,7 +149,7 @@
                     {% if logo is not empty %}
                         <a href="{{app.url}}/" class="navbar-brand img-responsive visible-xs " style="background-image: url({{ logo }}); background-position: 0 10px; background-repeat: no-repeat; display: block;  width: 110px; background-size: contain;"></a>
                     {% else %}
-                        <div id="logo-txt"><a class="navbar-brand visible-xs" href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 17) }}</a></div>
+                        <div id="logo-txt"><a class="navbar-brand visible-xs" href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 32) }}</a></div>
                     {% endif %}
             </div>
             <!-- /Header-->
