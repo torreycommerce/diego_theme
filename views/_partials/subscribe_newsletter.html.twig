@@ -1,5 +1,11 @@
 {%- import "/_macros/form-elements-bootstrap.html.twig" as newsletterform -%}
-{{ newsletterform.begin('newsletter',app.url ~ '/newsletter') }}
+
+{% set newsletterBox = api.get('widget/render', {'slug' : 'diego-theme--newsletter'}) %}
+{% if newsletterBox is not empty %}
+  {{ newsletterBox }}
+{% endif %}
+
+{#{{ newsletterform.begin('newsletter',app.url ~ '/newsletter') }}
  <!-- Newsletter Block
       ============================================ -->
       <div class="newsletter-block boxed-section overlay-dark-m cover-2-bg">
@@ -38,4 +44,5 @@
       </div>
       <!-- /Newsletter Block
       =================================================== -->
-{{ newsletterform.end() }}
+{{ newsletterform.end() }
+#}
