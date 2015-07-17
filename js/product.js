@@ -201,6 +201,8 @@ function VariantsManager (variants, variant_options, isCollection) {
                         }
                     }
                 }
+                if (optionArray2.length != optionArray.length)
+                    optionArray2=optionArray;
             }
             else
                 optionArray2 = optionArray;
