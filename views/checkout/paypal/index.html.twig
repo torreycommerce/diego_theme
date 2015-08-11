@@ -8,5 +8,5 @@
     	{% do app.redirect(sandbox_url) %}
 {% endif %}
 <h1>PayPal Express Payment error</h1>
-{{ api.error}}. Please <a href="{{app.url}}/cart">try again later</a>.
+{{ api.error ~ token}}. Please <a href="{{app.url}}/cart">try again later</a>.
 {% endblock %}
