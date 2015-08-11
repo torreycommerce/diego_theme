@@ -187,26 +187,13 @@ function VariantsManager (variants, variant_options, isCollection) {
         return tag =  $('<a>', {class: "", style:"background-color:"+color});
     }
 
-    this.buildChips = function(selectData){
+    this.buildChips = function(variant_options){
         var self = this;
-        $.each(selectData, function(selectName, optionArray){
+        $.each(variant_options, function(index, option){
+            var selectName = option.name;
+            var optionArray = option.values;
+            
             //Color styling
-            var optionArray2 = [];
-            if( selectName.toLowerCase() == "size"){
-                var my_list = ["XXXS", "XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
-                for (i = 0; i < my_list.length; i++) {
-                    for (j = 0; j < optionArray.length; j++) {
-                        if (my_list[i].toUpperCase() == optionArray[j].toUpperCase()) {
-                            optionArray2.push(optionArray[j]);
-                        }
-                    }
-                }
-                if (optionArray2.length != optionArray.length)
-                    optionArray2=optionArray;
-            }
-            else
-                optionArray2 = optionArray;
-
             if( selectName.toLowerCase() == "color"){
                 if(self.isCollection){
                     var div = $('<div>', {id: "variation-selector-"+self.product_id+"-"+selectName, name: selectName, class: "color-details-collection"}); 
@@ -227,7 +214,7 @@ function VariantsManager (variants, variant_options, isCollection) {
                             );
             }
 
-            $.each(optionArray2, function(index, optionValue){
+            $.each(optionArray, function(index, optionValue){
                 ul.append( 
                     $('<li>', { id: "variation-selector-"+self.product_id+"-"+selectName+"-"+optionValue, 
                                 class: "",
@@ -250,21 +237,13 @@ function VariantsManager (variants, variant_options, isCollection) {
             div.append(ul);
 
             if(self.isCollection){
-                if(selectName.toLowerCase() == "color"){
-                    $(self.selector).prepend(div);
-                }else{
-                    $(self.selector).append(div);
-                }
+                $(self.selector).append(div);
             }else{
                 var row = $('<div>', {class: "row no-margin"});
                 row.append(div);
                 var div = $('<div>', {class: "col-md-6 no-padding"});
                 div.append(row);
-                if(selectName.toLowerCase() == "color"){
-                    $(self.selector).prepend(div);
-                }else{
-                    $(self.selector).append(div);
-                }
+                $(self.selector).append(div);
             }
         });
 
@@ -272,23 +251,43 @@ function VariantsManager (variants, variant_options, isCollection) {
         self.updateChips();
     }
 
-    this.init = function(){
-        var self = this;
-        $.each( self.variant_options, function(index, value){
-            self.selectsData[value] = [];
+    this.orderOptions = function(options){
+        var ordered_options = [];
+        $.each( options, function(index, option){
+            var indexToInsert=0;
+            for(var i=0; i<ordered_options.length; i++){
+                if(ordered_options[i].position<option.position){
+                    //next
+                    indexToInsert = i+1;
+                }else if(ordered_options[i].position>option.position){
+                    break;
+                }else if(ordered_options[i].position==option.position){
+                    indexToInsert = i;
+                    break;
+                }
+            }
+            ordered_options.splice(indexToInsert,0,option);
         });
 
-        $.each( self.variants, function(index, variant){
-            $.each( self.selectsData, function(optionName, values){
-                if( values.indexOf(variant[optionName])<0 )
-                    values.push(variant[optionName]);
+        return ordered_options;
+    }
+
+    this.init = function(){
+        var self = this;
+        //Options ordering
+        self.variant_options = self.orderOptions(self.variant_options);
+
+        //Build selectsData
+        $.each( self.variant_options, function(index, option){
+            self.selectsData[option.name] = [];
+            $.each( option.values, function(index, value){
+                self.selectsData[option.name].push(value);
             });
         });
 
         var selected_variant = null;
 
         $.each(self.variants, function(index,variant){
-            console.log(variant);
             if(variant.price > 0){
                 selected_variant = variant;
                 return false;
@@ -300,6 +299,6 @@ function VariantsManager (variants, variant_options, isCollection) {
             self.selectedValues[selectName] = selected_variant[selectName];
         });
         //Bluilding HTML Select elements
-        self.buildChips(self.selectsData);
+        self.buildChips(self.variant_options);
     }
 }
