@@ -239,9 +239,9 @@ function VariantsManager (variants, variant_options, isCollection) {
             if(self.isCollection){
                 $(self.selector).append(div);
             }else{
-                var row = $('<div>', {class: "row no-margin"});
+                var row = $('<div>', {class: "row swatches-height"});
                 row.append(div);
-                var div = $('<div>', {class: "col-md-6 no-padding"});
+                var div = $('<div>', {class: "col-md-6 swatches-height"});
                 div.append(row);
                 $(self.selector).append(div);
             }

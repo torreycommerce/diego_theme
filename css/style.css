@@ -5903,6 +5903,17 @@ ul.tags li a:hover {
     height: 29px;
     width: 29px;
 }
+
+.swatches-height {
+  display: inline-block !important;
+  padding-bottom: 40px !important;
+}
+@media (max-width: 991px) {
+.swatches-height {
+  display: inline-block !important;
+  padding-bottom: 10px !important;
+}
+}
 /******--Size Details--******/
 
 .size-details {
