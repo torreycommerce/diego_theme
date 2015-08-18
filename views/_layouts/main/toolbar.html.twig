@@ -5,20 +5,20 @@
 </pre>
 #}
      <!-- Header Block
-      ============================================== -->      
+      ============================================== -->
         <!-- Main Header
         ............................................ -->
         <div class="main-header container">
-        
+
           <!-- Header Cols -->
-          <div class="header-cols"> 
-          
+          <div class="header-cols">
+
             <!-- Brand Col -->
             <div class="brand-col hidden-xs">
-            
+
               <!-- vcenter -->
               <div class="vcenter">
-                <!-- v-centered -->               
+                <!-- v-centered -->
                 <div class="vcenter-this">
                     {% if app.params.logoimages is not empty %}
                         {% set logo_info = app.params.logoimages | first %}
@@ -39,27 +39,27 @@
 
             <!-- Right Col -->
             <div class="right-col">
-            
+
               <!-- vcenter -->
               <div class="vcenter">
-              
+
                 <!-- v-centered -->
                 <div class="vcenter-this">
 
                   <!-- Nav Side -->
                   <nav class="nav-side navbar hnav hnav-sm hnav-borderless" role="navigation">
-                  
+
                     <!-- Dont Collapse -->
                     <div class="navbar-dont-collapse no-toggle">
-                    
+
                       <!-- Nav Right -->
                       <ul class="nav navbar-nav navbar-right case-u active-bcolor navbar-center-xs">
                         {% if app.user.id is null %}
                         <li class="dropdown has-panel">
-                          <a aria-expanded="false" href="{{app.url}}/account/login" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-left ti ti-user"></i><span class="hidden-sm">sign in</span></a>                          
+                          <a aria-expanded="false" href="{{app.url}}/account/login" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-left ti ti-user"></i><span class="hidden-sm">sign in</span></a>
                         </li>
                           <li class="dropdown has-panel">
-                          <a aria-expanded="false" href="{{app.url}}/account/login" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-left ti ti-pencil-alt"></i><span class="hidden-sm">sign up</span></a>                       
+                          <a aria-expanded="false" href="{{app.url}}/account/login" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-left ti ti-pencil-alt"></i><span class="hidden-sm">sign up</span></a>
                         </li>
                         {# End login button #}
                         {% else %}
@@ -80,33 +80,33 @@
                             </div>
                         </li>
                         {% endif %}
-                        {# End my account button #}                        
+                        {# End my account button #}
                       </ul>
                       <!-- /Nav Right-->
 
                     </div>
                     <!-- /Dont Collapse -->
-                    
+
                   </nav>
                   <!-- /Nav Side -->
-                
+
                 </div>
                 <!-- /v-centered -->
               </div>
               <!-- /vcenter -->
-              
+
             </div>
             <!-- /Right Col -->
-            
+
             <!-- Left Col -->
             <div class="left-col">
-            
+
               <!-- vcenter -->
               <div class="vcenter">
-                
-                <!-- v-centered -->               
+
+                <!-- v-centered -->
                 <div class="vcenter-this">
-                  
+
                   <form class="header-search" role="search" method="get" action="{{app.url}}/search">
                     <div class="form-group twitter-typeahead">
                       <input class="form-control typeahead search-autocomplete" placeholder="SEARCH" type="text" name="s" data-provide="typeahead" autocomplete="off">
@@ -116,26 +116,26 @@
 
                 </div>
                 <!-- v-centered -->
-                
+
               </div>
               <!-- vcenter -->
-            
+
             </div>
             <!-- /Left Col -->
           </div>
           <!-- Header Cols -->
-        
+
         </div>
         <!-- /Main Header
         .............................................. -->
-        
+
         <!-- Nav Bottom
         .............................................. -->
         <nav class="nav-bottom hnav hnav-ruled white-bg boxed-section">
-        
+
           <!-- Container -->
           <div class="container">
-          
+
             <!-- Header-->
             <div class="navbar-header">
               <button type="button" class="navbar-toggle no-border" data-toggle="collapse" data-target=".navbar-collapse">
@@ -155,7 +155,7 @@
             <!-- /Header-->
             <!-- Collapse -->
             <div class="collapse navbar-collapse navbar-absolute">
-            
+
                 <!-- Navbar Center -->
                 <ul class="nav navbar-nav navbar-center line-top line-pcolor case-c">
                     <li class="active"><a href="{{ app.url }}/">home</a></li>
@@ -183,21 +183,21 @@
                 {% endfor %}
                 </ul>
                 <!-- /Navbar Center -->
-              
+
             </div>
             <!-- /Collapse -->
-            
+
             <!-- Dont Collapse -->
             <div class="navbar-dont-collapse">
 
               <!-- Navbar btn-group -->
               <div class="navbar-btn-group btn-group navbar-right no-margin-r-xs">
-              
+
                 <!-- Btn Wrapper -->
                 <div class="btn-wrapper dropdown">
-                
+
                   <a class="btn btn-outline" data-toggle="dropdown"><i class="ti-plus"></i></a>
-                  
+
                   <!-- Dropdown Menu -->
                   <ul class="dropdown-menu">
                     <li><a href="{{app.url}}/contact">Contact Us</a></li>
@@ -211,31 +211,30 @@
                     {% else %}
                       <li><a href="{{app.url}}/return">Easy Returns</a></li>
                     {% endif %}
-                    {% if app.user.id != '' %}   
+                    {% if app.user.id != '' %}
                       <li><a href="{{app.url}}/account/registries">Gift Registry</a></li>
                     {% else %}
                       <li><a href="{{app.url}}/registry/search">Gift Registry</a></li>
                     {% endif %}
                   </ul>
                   <!-- /Dropdown Menu -->
-                  
+
                 </div>
                 <!-- /Btn Wrapper -->
 
                 <!-- Btn Wrapper -->
                 <div class="btn-wrapper dropdown cart" data-content="" data-placement='bottom' rel='popover'>
-                
+
                   <a aria-expanded="false" class="btn btn-outline" data-toggle="dropdown" ><b class="count count-scolor count-round item-count"></b><i class="ti ti-bag"></i></a>
-                  
+
                   {# Begin ajax cart popover #}
                   <div class="ajaxcart" style="display:none">
                       <div class="popover-close">
                           <div class="row">
                               <div class="col-md-7">
-                                  
+
                               </div>
                               <div class="col-md-5">
-                                  <a onclick="$('div.cart').popover('hide')" id="ajaxcart-close" class="btn btn-danger btn-sm pull-right"><i class="fa fa-times"></i></a>
                               </div>
                           </div>
                       </div>
@@ -254,7 +253,7 @@
                                           <span class="product-name"></span>
                                       </div>
                                       <div class="price"><span class="product-quantity"></span> X $<span class="product-price"></span></div>
-                                      
+
                                   </div>
                               </div>
                           </div>
@@ -280,7 +279,7 @@
                       </div>
                   </div>
                   {# End ajax cart popover #}
-                  
+
                   {# Begin ajax cart popover #}
             <div class="ajaxcart" style="display:none;">
                 <div class="popover-close">
@@ -334,20 +333,19 @@
                     </div>
                 </div>
             </div>
-            {# End ajax cart popover #}                    
+            {# End ajax cart popover #}
                 </div>
                 <!-- /Btn Wrapper -->
 
               </div>
               <!-- /Navbar btn-group -->
-              
+
             </div>
             <!-- /Dont Collapse -->
 
           </div>
           <!-- /Container -->
-          
+
         </nav>
         <!-- /Nav Bottom
         .............................................. -->
-        
