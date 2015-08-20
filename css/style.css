@@ -1065,6 +1065,7 @@ pre.no-breaks, pre.no-breaks > code {
 .btn, .navbar-btn {
   text-transform: capitalize;
   border: 1px solid transparent;
+  margin: 10px 0;
 }
 .btn .icon, .btn .icon-left, .navbar-btn .icon, .navbar-btn .icon-left {
   display: inline-block;
@@ -3421,6 +3422,7 @@ body {
   position: absolute;
   right: 0;
   top: 0;
+  margin:0;
 }
 
 legend {
@@ -5780,10 +5782,12 @@ ul.tags li a:hover {
 
 .quanitySniper {
     height: 30px;
+    margin:10px 0;
     padding: 0;
     text-align: center;
     width: 40px;
 }
+
 
 /***  -------  Product Color - Size Selector  ------- ***/
 .color-details {
