@@ -1,3 +1,4 @@
 {# Do main action #}
+{% set address = api.get('/customeraddress',{'query':{'customer_id':app.user.id}})[(id - 1)] %}
 {% do api.delete('/customeraddress/' ~ address.id) %}
 {% do app.redirect('/account/addresses') %}
