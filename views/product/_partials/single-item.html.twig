@@ -159,6 +159,8 @@
                   {% endif %}
                {% endif %}
 
+               <form method="post" id="productForm" action="{{ app.url }}/product/route">                      
+
                {% if product.variant[0].price > 0 %}  
                   <!--/.size-details-->
                   <!-- Accordion -->
@@ -209,65 +211,62 @@
                      <!-- /Panel -->
                   </div>
                   <!-- /End Accordion -->
-               {% endif %}
+                  {% endif %}
 
-               <h4>Buy now</h4>
-               <!-- Row -->
-               <div class="row grid-20">
-                  {% for variation in product.variant %}
-                     <div id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
-                        {% if variation.price > 0 %}
-                           <!--/.size-details-->
-                           <form method="post" id="productForm" action="{{ app.url }}/product/route">                      
-                              {% if variation['inventory_quantity'] is defined and variation['inventory_minimum_quantity'] is defined and
-                              variation['inventory_policy'] is defined and (variation['inventory_policy'] == 'continue' or
-                              variation['inventory_quantity'] > variation['inventory_minimum_quantity'] ) %}
-                              
-                                 {# Begin product Size-Quantity #}
-                                 <div class="col-xs-4 col-md-6 no-padding"> {# Begin Row#}
-                                    <div class="form-group">
-                                       {# Begin product Quantity #}
-                                       <div class="input-group col-md-6">
-                                          <div class="input-group-btn">
-                                             <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button"><i class="fa fa-minus"></i></button>
-                                          </div>
-                                          <input class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]" type="text">
-                                          <div class="input-group-btn">
-                                             <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
+                  <h4>Buy now</h4>
+                  <!-- Row -->
+                  <div class="row grid-20">
+                     {% for variation in product.variant %}
+                        <div id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
+                           {% if variation.price > 0 %}
+                              <!--/.size-details-->
+                                 {% if variation['inventory_quantity'] is defined and variation['inventory_minimum_quantity'] is defined and
+                                 variation['inventory_policy'] is defined and (variation['inventory_policy'] == 'continue' or
+                                 variation['inventory_quantity'] > variation['inventory_minimum_quantity'] ) %}
+                                 
+                                    {# Begin product Size-Quantity #}
+                                    <div class="col-xs-4 col-md-6 no-padding"> {# Begin Row#}
+                                       <div class="form-group">
+                                          {# Begin product Quantity #}
+                                          <div class="input-group col-md-6">
+                                             <div class="input-group-btn">
+                                                <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button"><i class="fa fa-minus"></i></button>
+                                             </div>
+                                             <input class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]" type="text">
+                                             <div class="input-group-btn">
+                                                <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
+                                             </div>
                                           </div>
                                        </div>
-                                    </div>
-                                    {# End product quantity #}
-                                 </div> {# End Row#}
-                              {% endif %}
-                           </form>
-                        {% endif %}
-                        {% if variation.sku is not empty %}
-                        <div class="col-xs-12 col-md-4"> {# Begin Row#}
-                           <div class="item-sku"> 
-                               <strong>Item: </strong> #{{variation.sku}}
+                                       {# End product quantity #}
+                                    </div> {# End Row#}
+                                 {% endif %}
+                           {% endif %}
+                           {% if variation.sku is not empty %}
+                           <div class="col-xs-12 col-md-4"> {# Begin Row#}
+                              <div class="item-sku"> 
+                                  <strong>Item: </strong> #{{variation.sku}}
+                              </div>
                            </div>
+                          {% endif %}
                         </div>
-                       {% endif %}
-                     </div>
-                  {% endfor %}
-               </div>
-               <div id="variation-selector-{{product.id}}" class="col-md-12 no-padding">
-               </div>
-               <!-- / End Row -->
-               <!-- / Begin Cart-actions -->
-               <div class="addto">
-                  <div class="col-sm-12 col-md-4 no-padding-side">
-                        <button type="submit" class="btn btn-block btn-primary btn-bigger" name="action" value="cart">
-                           <i class="icon-left ti ti-shopping-cart"></i>
-                           <span>Add to Cart</span>
-                        </button> 
+                     {% endfor %}
                   </div>
-                  <!--/.End cart-actions-->
-                  <form method="post" id="productForm" action="{{ app.url }}/product/route" class="form-inline">
+                  <div id="variation-selector-{{product.id}}" class="col-md-12 no-padding">
+                  </div>
+                  <!-- / End Row -->
+                  <!-- / Begin Cart-actions -->
+                  <div class="addto">
+                     <div class="col-sm-12 col-md-4 no-padding-side">
+                           <button type="submit" class="btn btn-block btn-primary btn-bigger" name="action" value="cart">
+                              <i class="icon-left ti ti-shopping-cart"></i>
+                              <span>Add to Cart</span>
+                           </button> 
+                     </div>
+                     <!--/.End cart-actions-->
                      {% include "/product/_partials/list/actions-single.html.twig" %}
-                  </form>
-               </div>
+                  </div>
+               </form>
             </div>   <!-- /End Product Details -->
          </div>   <!-- / End Row product-details -->
       </div> <!-- / End Product Row Product-details-->
