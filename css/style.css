@@ -1065,6 +1065,7 @@ pre.no-breaks, pre.no-breaks > code {
 .btn, .navbar-btn {
   text-transform: capitalize;
   border: 1px solid transparent;
+  margin: 10px 0;
 }
 .btn .icon, .btn .icon-left, .navbar-btn .icon, .navbar-btn .icon-left {
   display: inline-block;
@@ -1645,6 +1646,77 @@ input[type="checkbox"] {
   margin: 5px 0 0;
 }
 
+/* TYPEAHEAD
+------------------------------------------- */
+
+.twitter-typeahead .tt-hint {
+}
+.twitter-typeahead .hint-small {
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+    line-height: 1.5;
+}
+.twitter-typeahead .hint-large {
+    height: 45px;
+    padding: 10px 16px;
+    font-size: 18px;
+    border-radius: 6px;
+    line-height: 1.33;
+}
+.twitter-typeahead {
+     width: 100%;
+}
+.tt-dropdown-menu {
+     width: 100%;
+}
+.tt-hint {
+     width: 100%;
+}
+.tt-input, 
+.tt-hint {
+    margin: 0;
+}
+.input-group .form-control.tt-input { 
+    float:none;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+.input-group .form-control.tt-input:focus,.tt-hint:focus {
+    border-color:#ddd;
+}
+.tt-hint {
+    color: #999;
+}
+.tt-menu { 
+    /*width: 422px;
+    margin-top: 12px;*/
+    margin-top: -1px;
+    padding: 4px 0;
+    width: 100%;
+    font-size: 12px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+.tt-suggestion {
+    padding: 3px 20px;
+    cursor: pointer;
+    text-align: left;
+}
+.tt-suggestion.tt-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+    color: #fff;
+    background-color: #0097cf;
+}
+.tt-suggestion p {
+    margin: 0;
+}
+.tt-cursor {
+    background-color: #0097cf;
+}
+
 /* DROPDOWNS
 ------------------------------------------- */
 .dropdown-menu, .hnav .navbar-nav .dropdown-menu {
@@ -2066,16 +2138,6 @@ input[type="checkbox"] {
   border-color: none !important;
 }
 
-.btn-group.my-account a:active, 
-.btn-group.my-account a:focus, 
-.btn-group.my-account a:hover, 
-.btn-group.my-account a:visited {
-  background-color: none !important;
-  border-radius: 0;
-  color: #666b76 ;
-  font-size: 13px;
-  border-color: none;
-}
 .btn-group.my-account a i {
   padding-right: 0px;
 }
@@ -2088,14 +2150,15 @@ input[type="checkbox"] {
 .btn-group.my-account a:focus,
 .btn-group.my-account a:hover,
 .btn-group.my-account a:visited {
-  background-color: 0 none !important;
+  background: none !important;
   color: #333 ;
+  border: none;
 }
 .btn-group.my-account .dropdown-menu li {
   padding: 0;
 }
 .btn-group.my-account .dropdown-menu li a {
-  background-color: 0 none;
+  background-color: none !important;
   color: #666b76;
   text-align: left;
   -webkit-border-radius: 0px;
@@ -2108,7 +2171,7 @@ input[type="checkbox"] {
 .btn-group.my-account .dropdown-menu li a:focus,
 .btn-group.my-account .dropdown-menu li a:hover,
 .btn-group.my-account .dropdown-menu li a:visited {
-  background-color: 0 none;
+  background-color: none;
   color: #666666;
 }
 .btn-group.my-account .dropdown-menu li .divider {
@@ -3359,6 +3422,7 @@ body {
   position: absolute;
   right: 0;
   top: 0;
+  margin:0;
 }
 
 legend {
@@ -3587,6 +3651,14 @@ legend {
 
 /* FOOTER
 -------------------------------------------------- */
+
+.gap {
+    height: 50px;
+    width: 100%;
+    clear: both;
+    display: block;
+}
+
 .footer-block {
   font-size: 13px;
   color: rgba(0, 0, 0, 0.5);
@@ -3655,6 +3727,7 @@ legend {
   line-height: 60px;
   text-align: left;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #131416;
 }
 .footer-block .footer-bottom a {
   color: inherit;
@@ -5709,19 +5782,31 @@ ul.tags li a:hover {
 
 .quanitySniper {
     height: 30px;
+    margin:10px 0;
     padding: 0;
     text-align: center;
     width: 40px;
 }
 
+
 /***  -------  Product Color - Size Selector  ------- ***/
 .color-details {
     padding-top: 5px;
+    position: relative;
 /*    padding-bottom: 15px;
 */
-position: relative;}
+}
+
 .color-details span {
   font-family: "Roboto";
+  font-size: 12px;
+  color: #42464d;
+  text-transform: capitalize;
+}
+
+.item-sku {
+  font-family: "Roboto";
+  font-size: 12px;
   color: #42464d;
   text-transform: capitalize;
 }
@@ -5739,8 +5824,16 @@ position: relative;}
 }
 
 .swatches {
-    margin: 0.5em 0;
+    height: 75px;
+    margin: 5px 0 5px 0;
     padding-left: 0;
+}
+
+@media (max-width: 991px) {
+  .swatches {
+    height: auto;
+  }
+
 }
 .swatches li {
     border: 1px solid #b2b2b2;
@@ -5753,7 +5846,7 @@ position: relative;}
 .swatches li:hover {
     /* Swatches Selected Available Hover Border */
     
-    border: 1px solid #4ec67f;
+    border: 1px solid #E7214C;
 }
 .notavailable li:hover {
     /* Swatches Selected Available Hover Border */
@@ -5771,6 +5864,7 @@ position: relative;}
     display: block;
     font-size:10px;
     height: 33px;
+    padding: 2px;
     text-align: center;
     transition: all 0.25s ease 0s;
     min-width: 33px;
@@ -5813,6 +5907,17 @@ position: relative;}
     height: 29px;
     width: 29px;
 }
+
+.swatches-height {
+  display: inline-block !important;
+  padding-bottom: 40px !important;
+}
+@media (max-width: 991px) {
+.swatches-height {
+  display: inline-block !important;
+  padding-bottom: 10px !important;
+}
+}
 /******--Size Details--******/
 
 .size-details {
@@ -5823,14 +5928,22 @@ position: relative;}
 .size-details span {
   font-weight: normal;
   font-family: "Roboto";
+  font-size: 12px;
   color: #42464d;
   text-transform: capitalize;
 }
 
 .swatches-size {
+    height: 75px;
     margin: 0.5em 0;
     padding-left: 0;
 }
+@media (max-width: 991px) {
+  .swatches-size {
+    height: auto;
+  }
+}
+
 .swatches-size li {
     border: 1px solid #b2b2b2;
     background: #fff;
@@ -5843,7 +5956,7 @@ position: relative;}
 .swatches-size li:hover {
     /* Swatches Selected Available Hover Border */
     
-    border: 1px solid #4ec67f;
+    border: 1px solid #E7214C;
 }
 .swatches-size .notavailable-selected {
     /* Swatches Selected NotAvailable Border  */
@@ -5861,7 +5974,9 @@ position: relative;}
     box-shadow: 1px 1px 2px #C5C5C5;
     cursor: pointer;
     display: block;
+    font-size: 10px;
     height: 33px;
+    padding: 2px;
     text-align: center;
     transition: all 0.25s ease 0s;
     min-width: 33px;
@@ -6410,9 +6525,12 @@ position: relative;}
 /* CART
 ---------------------------------------------------------- */
 .cart {
-  width: 100%;
   margin-bottom: 40px;
-  border: 1px solid #ddd;
+  margin-right: 20px;
+}
+
+.popover-close {
+  width: 260px;
 }
 
 .cart-buttons .btn {

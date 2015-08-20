@@ -1,0 +1,19 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% block title %}Page not found{% endblock %}
+{% block content %}
+<div class="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="page-header">Page not found</h1>
+                <p>The page you are attempting to reach has moved or may no longer exist.<br> We recently redesigned our website and apologize for the inconvenience.<br>Please visit our new <a href="{{ app.url }}">homepage.</a></p>
+                {% if app.error.code != 404 %}
+                    <h2>Errmerhgerd <small>A undiscovered feature was discovered</small></h2>
+                    {{app.error.message}}<br /><br />
+                    <p>While rendering <b>{{app.error.view}}</b></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

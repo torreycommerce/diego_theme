@@ -27,6 +27,7 @@
 {{ app.asset.js(app.url_asset ~ '/js/jquery.cascadingdropdown.js') }}
 {{ app.asset.js(app.url_asset ~ '/js/normalizer.js') }}
 {{ app.asset.js(app.url_asset ~ '/js/jquery.maskedinput.js') }}
+{{ app.asset.js(app.url_asset ~ '/js/typeahead.js') }}
 
 
 {{ app.asset.js(app.url_asset ~ '/js/uikit-utils.js') }}
@@ -53,10 +54,14 @@
 
     <meta name="keywords" content="{% block meta_keywords %}{{ seo['keywords'] }}{% endblock %}">
     <meta name="description" content="{% block meta_description %}{{ seo['description'] }}{% endblock %}">
-
+    
+    {#
     {% if app['theme']['logo_images_and_colors']['logo_background']['favicon-image'] == '1' %}
       <link rel="shortcut icon" href="{{app.theme['logo_images_and_colors']['logo_background']['favicon-upload']}}" type="image/x-icon" />
     {% endif %}
+    #}
+    <link rel="shortcut icon" href="{{ app.url ~ '/favicon.ico' }}" type="image/x-icon" />
+
     <link rel="stylesheet" href="{{app.url_asset}}/css/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="{{app.url_asset}}/css/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/style.css" />
@@ -112,7 +117,7 @@
     <section id="content">
             {% block breadcrumb %}{% endblock %}
             {% block stage %}
-            {# include "/_layouts/main/stage_header.html.twig" #}
+            {% include "/_layouts/main/stage_header.html.twig" %}
             {% block content %}
             {% endblock %}
             {% endblock %}

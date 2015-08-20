@@ -6,13 +6,13 @@
                 Products to display:
                 1528, 12458, 14097, 21032
                 #}
-                {% set items_per_row = 4 %}
+                                 {% set items_per_row = 4 %}
                 {% set collection_ids = [] %}
                 {% set product_count = 1 %}
                 {% set options = ['image'] %}
-                {% set products = api.get('/catalog', {sort:"product.variant.popularity:-1",limit:8}) %}
+                {% set products = api.get('/catalog', {sort:"product.variant.popularity:-1",limit:4}) %}
                 {% set product_counter = 0 %}
-                {% for row,product in products if collection_ids[product.id] is empty and product_count < 8 %}
+                {% for row,product in products if collection_ids[product.id] is empty and product_count < 5 %}
                     {% if product.group == 'product' %}
                         {% for id in product.product.collection_id %}
                             {% set collection_ids = collection_ids|merge({(id):true}) %}
@@ -48,6 +48,7 @@
                     
                     {% if variant_images is empty %}
                         {% set variant_images = product.images %}
+                        {% set image_url = app.image.getImageUrl('product','thumbnail', variant_images[0].id) %}
                     {% endif %}
                 {% endif %}
                   <!-- Col -->
@@ -58,7 +59,7 @@
                     
                       <!-- Image -->
                       <div class="image"> 
-                        <a href="{{ app.url }}/product/{{ product.slug }}" class="main"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ img_url }}" alt="img" class="img-responsive"></a>
+                        <a href="{{ app.url }}/product/{{ product.slug }}" class="main"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ image_url }}" alt="img" class="img-responsive"></a>
                       </div>
                       <!-- Image -->
                       <div class="label">
@@ -77,19 +78,24 @@
                       <!-- Details -->
                       <div class="details">
                       
-                        <a class="title" href="{{ app.url }}/product/{{ product.slug }}">{{ product.title|striptags|slice(0, 45) }}</a>
+                        <a class="title" href="{{ app.url }}/product/{{ product.slug }}">{{ product.title|striptags|slice(0, 50) }}</a>
                         
                         <!-- rating -->
-                        <ul class="hlinks hlinks-rating">
-                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
-                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
-                          <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
-                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
-                          <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                        <ul class="hlinks hlinks-rating" style="height:13px;">
+                          {% if product.review_score is not empty %}
+                            {% set nb_active_stars = product.review_score * 5 %}
+                            {% set nb_grey_stars = 5 - nb_active_stars %}
+                            {% for stars in 1..nb_active_stars %}
+                              <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
+                            {% endfor %}
+                            {% for stars in 1..nb_grey_stars %}
+                              <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                            {% endfor %}
+                          {% endif %}
                         </ul>
                         <!-- /rating -->
                         
-                        <p class="desc">{{ product.description|striptags|slice(0, 60) }}...</p>
+                        <p class="desc">{{ product.description|striptags|slice(0, 65) }}...</p>
                         
                         <!-- Price Box -->
                         <div class="price-box">
@@ -101,7 +107,7 @@
                         
                         <!-- buttons -->
                         <div class="btn-group">
-                          <a class="btn btn-outline btn-base-hover" href="{{ app.url }}/product/{{ product.slug }}">add to cart</a>  
+                          <a class="btn btn-outline btn-base-hover" href="{{ app.url }}/product/{{ product.slug }}">see product</a>  
                           <a class="btn btn-outline btn-default-hover" href="{{ app.url }}/product/{{ product.slug }}"><i class="icon fa fa-heart"></i></a>
                         </div> 
                         <!-- /buttons -->

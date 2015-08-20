@@ -3,7 +3,6 @@
 {% import "/_macros/form-extras.html.twig" as extras %}
 {% import "/_macros/normalizer.html.twig" as normalizer %}
 {% block breadcrumb %}
-{{ base.breadcrumbs({'billing':''}) }}
       <!-- Intro Block
       ============================================-->
       <section class="intro-block intro-page boxed-section page-bg overlay-dark-m">
@@ -22,6 +21,7 @@
       </section>
       <!-- /Intro Block
       ============================================-->
+      {{ base.breadcrumbs({'billing':''}) }}
 {% endblock %}
 {% set step = 'billing' %}
 {% set cart = api.get('/sessioncart') %}
@@ -36,36 +36,6 @@
 {% if cart.items is empty %}
     {{ app.redirect('/') }}
 {% endif %}
-      <!-- Page Info Block
-      ============================================-->
-      <section class="page-info-block boxed-section">
-      
-        <!-- Container -->
-        <div class="container cont-pad-x-15"> 
-
-          <!-- Breadcrumb -->
-          <ol class="breadcrumb pull-left">
-            <li><a href="#"><i class="ti ti-home"></i></a></li>
-            <li><a href="#">Pages</a></li>
-            <li><a href="#">other</a></li>
-            <li class="active">blog</li>
-          </ol>
-          <!-- /Breadcrumb --> 
-
-          <!-- hlinks -->
-          <ul class="page-links pull-right hlinks hlinks-icons color-icons-borders color-icons-bg-hovered">
-            <li><a href="#"><i class="icon fa fa-facebook"></i></a></li>
-            <li><a href="#"><i class="icon fa fa-twitter"></i></a></li>
-            <li><a href="#"><i class="icon fa fa-rss"></i></a></li>
-          </ul>
-          <!-- /hlinks -->
-
-        </div>
-        <!-- /Container -->
-      
-      </section>
-      <!-- /Page Info  Block
-      ============================================-->
       <section class="content-block default-bg">
               <div class="container cont-pad-t-sm">
 

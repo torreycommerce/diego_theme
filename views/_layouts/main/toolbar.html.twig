@@ -1,33 +1,33 @@
-{% set categories = api.get('/category/tree') %}
+{% set categories = api.get('/category/sapling') %}
 {#
 <pre>
 {{ dump(categories) }}
 </pre>
 #}
      <!-- Header Block
-      ============================================== -->      
+      ============================================== -->
         <!-- Main Header
         ............................................ -->
         <div class="main-header container">
-        
+
           <!-- Header Cols -->
-          <div class="header-cols"> 
-          
+          <div class="header-cols">
+
             <!-- Brand Col -->
             <div class="brand-col hidden-xs">
-            
+
               <!-- vcenter -->
               <div class="vcenter">
-                <!-- v-centered -->               
+                <!-- v-centered -->
                 <div class="vcenter-this">
                     {% if app.params.logoimages is not empty %}
                         {% set logo_info = app.params.logoimages | first %}
-                        {% set logo = app.image.getImageUrl('logo','thumbnail',logo_info.id) %}
+                        {% set logo = logo_info.url %}
                     {% endif %}
                     {% if logo is not empty %}
                         <a href="{{app.url}}/" class="img-responsive" style="background-image: url({{ logo }}); background-position: 50% 20%;  background-repeat: no-repeat; display: block; height:110px; background-size: contain;"></a>
                     {% else %}
-                        <div id="logo-txt"><a href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 17) }}</a></div>
+                        <div id="logo-txt"><a href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 32) }}</a></div>
                     {% endif %}
                 </div>
                 <!-- v-centered -->
@@ -39,27 +39,27 @@
 
             <!-- Right Col -->
             <div class="right-col">
-            
+
               <!-- vcenter -->
               <div class="vcenter">
-              
+
                 <!-- v-centered -->
                 <div class="vcenter-this">
 
                   <!-- Nav Side -->
                   <nav class="nav-side navbar hnav hnav-sm hnav-borderless" role="navigation">
-                  
+
                     <!-- Dont Collapse -->
                     <div class="navbar-dont-collapse no-toggle">
-                    
+
                       <!-- Nav Right -->
                       <ul class="nav navbar-nav navbar-right case-u active-bcolor navbar-center-xs">
                         {% if app.user.id is null %}
                         <li class="dropdown has-panel">
-                          <a aria-expanded="false" href="{{app.url}}/account/login" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-left ti ti-user"></i><span class="hidden-sm">sign in</span></a>                          
+                          <a aria-expanded="false" href="{{app.url}}/account/login" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-left ti ti-user"></i><span class="hidden-sm">sign in</span></a>
                         </li>
                           <li class="dropdown has-panel">
-                          <a aria-expanded="false" href="{{app.url}}/account/login" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-left ti ti-pencil-alt"></i><span class="hidden-sm">sign up</span></a>                       
+                          <a aria-expanded="false" href="{{app.url}}/account/login" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-left ti ti-pencil-alt"></i><span class="hidden-sm">sign up</span></a>
                         </li>
                         {# End login button #}
                         {% else %}
@@ -80,84 +80,82 @@
                             </div>
                         </li>
                         {% endif %}
-                        {# End my account button #}                        
+                        {# End my account button #}
                       </ul>
                       <!-- /Nav Right-->
 
                     </div>
                     <!-- /Dont Collapse -->
-                    
+
                   </nav>
                   <!-- /Nav Side -->
-                
+
                 </div>
                 <!-- /v-centered -->
               </div>
               <!-- /vcenter -->
-              
+
             </div>
             <!-- /Right Col -->
-            
+
             <!-- Left Col -->
             <div class="left-col">
-            
+
               <!-- vcenter -->
               <div class="vcenter">
-                
-                <!-- v-centered -->               
+
+                <!-- v-centered -->
                 <div class="vcenter-this">
-                  
+
                   <form class="header-search" role="search" method="get" action="{{app.url}}/search">
-                    <div class="form-group">
-                      <input class="form-control" placeholder="SEARCH" type="text" name="s">
-                      <button class="btn btn-empty" type="submit"><i class="fa fa-search"></i></button>
+                    <div class="form-group twitter-typeahead">
+                      <input class="form-control typeahead search-autocomplete" placeholder="SEARCH" type="text" name="s" data-provide="typeahead" autocomplete="off">
+                      <button class="btn btn-empty btn-search" type="submit"><i class="fa fa-search"></i></button>
                     </div>
                   </form>
 
                 </div>
                 <!-- v-centered -->
-                
+
               </div>
               <!-- vcenter -->
-            
+
             </div>
             <!-- /Left Col -->
           </div>
           <!-- Header Cols -->
-        
+
         </div>
         <!-- /Main Header
         .............................................. -->
-        
+
         <!-- Nav Bottom
         .............................................. -->
         <nav class="nav-bottom hnav hnav-ruled white-bg boxed-section">
-        
+
           <!-- Container -->
           <div class="container">
-          
+
             <!-- Header-->
             <div class="navbar-header">
               <button type="button" class="navbar-toggle no-border" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <i class="fa fa-navicon"></i>
               </button>
-
-                  {% if app.params.logoimages is not empty %}
+                    {% if app.params.logoimages is not empty %}
                         {% set logo_info = app.params.logoimages | first %}
-                        {% set logo = app.image.getImageUrl('logo','thumbnail',logo_info.id) %}
+                        {% set logo = logo_info.url %}
                     {% endif %}
                     {% if logo is not empty %}
-                        <a class="navbar-brand img-responsive visible-xs " href="{{app.url}}/" style="background-image: url({{ logo }}); background-position: 0 10px; background-repeat: no-repeat; display: block;  width: 110px; background-size: contain;"></a>
+                        <a href="{{app.url}}/" class="navbar-brand img-responsive visible-xs " style="background-image: url({{ logo }}); background-position: 0 10px; background-repeat: no-repeat; display: block;  width: 110px; background-size: contain;"></a>
                     {% else %}
-                        <div id="logo-txt"><a class="navbar-brand visible-xs" href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 17) }}</a></div>
+                        <div id="logo-txt"><a class="navbar-brand visible-xs" href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 32) }}</a></div>
                     {% endif %}
             </div>
             <!-- /Header-->
-          
             <!-- Collapse -->
             <div class="collapse navbar-collapse navbar-absolute">
-            
+
                 <!-- Navbar Center -->
                 <ul class="nav navbar-nav navbar-center line-top line-pcolor case-c">
                     <li class="active"><a href="{{ app.url }}/">home</a></li>
@@ -185,21 +183,21 @@
                 {% endfor %}
                 </ul>
                 <!-- /Navbar Center -->
-              
+
             </div>
             <!-- /Collapse -->
-            
+
             <!-- Dont Collapse -->
             <div class="navbar-dont-collapse">
 
               <!-- Navbar btn-group -->
               <div class="navbar-btn-group btn-group navbar-right no-margin-r-xs">
-              
+
                 <!-- Btn Wrapper -->
                 <div class="btn-wrapper dropdown">
-                
+
                   <a class="btn btn-outline" data-toggle="dropdown"><i class="ti-plus"></i></a>
-                  
+
                   <!-- Dropdown Menu -->
                   <ul class="dropdown-menu">
                     <li><a href="{{app.url}}/contact">Contact Us</a></li>
@@ -213,126 +211,141 @@
                     {% else %}
                       <li><a href="{{app.url}}/return">Easy Returns</a></li>
                     {% endif %}
-                    {% if app.user.id != '' %}   
+                    {% if app.user.id != '' %}
                       <li><a href="{{app.url}}/account/registries">Gift Registry</a></li>
                     {% else %}
                       <li><a href="{{app.url}}/registry/search">Gift Registry</a></li>
                     {% endif %}
                   </ul>
                   <!-- /Dropdown Menu -->
-                  
+
                 </div>
                 <!-- /Btn Wrapper -->
 
                 <!-- Btn Wrapper -->
-                <div class="btn-wrapper dropdown">
-                
-                  <a aria-expanded="false" class="btn btn-outline" data-toggle="dropdown"><b class="count count-scolor count-round">2</b><i class="ti ti-bag"></i></a>
-                  
-                    <!-- Dropdown Panel -->
-                    <div class="dropdown-menu dropdown-panel dropdown-right" data-keep-open="true">
-                      <section>
-                        <!-- Mini Cart -->
-                        <ul class="mini-cart">
-                          <!-- Item -->
-                          <li class="clearfix">
-                            <img src="images/products/product1.jpg" alt="">
-                            <div class="text">
-                              <a class="title" href="#">Modern black hat</a>
-                              <div class="details">2 x $40.50
-                                <div class="btn-group">
-                                  <a class="btn btn-primary" href="#"><i class="fa fa-pencil"></i></a>
-                                  <a class="btn btn-default" href="#"><i class="fa fa-trash"></i></a>
-                                </div>
+                <div class="btn-wrapper dropdown cart" data-content="" data-placement='bottom' rel='popover'>
+
+                  <a aria-expanded="false" class="btn btn-outline" data-toggle="dropdown" ><b class="count count-scolor count-round item-count"></b><i class="ti ti-bag"></i></a>
+
+                  {# Begin ajax cart popover #}
+                  <div class="ajaxcart" style="display:none">
+                      <div class="popover-close">
+                          <div class="row">
+                              <div class="col-md-7">
+
                               </div>
-                            </div>
-                          </li>
-                          <!-- /Item -->
-                          
-                          <!-- Item -->
-                          <li class="clearfix">
-                            <img src="images/products/product2.jpg" alt="">
-                            <div class="text">
-                              <a class="title" href="#">Sexy lace blouse</a>
-                              <div class="details">1 x $95.00
-                                <div class="btn-group">
-                                  <a class="btn btn-primary" href="#"><i class="fa fa-pencil"></i></a>
-                                  <a class="btn btn-default" href="#"><i class="fa fa-trash"></i></a>
-                                </div>
+                              <div class="col-md-5">
                               </div>
-                            </div>
-                          </li>
-                          <!-- /Item -->
-                        </ul>
-                        <!-- /Mini Cart -->
+                          </div>
+                      </div>
+                      {# Begin Popover products #}
+                      <section class="ajaxcart-products">
+                          {# Begin product #}
+                          <div class="ajaxcart-product product" style="border-bottom: 1px solid #ccc; ">
+                              <div class="row">
+                                  <div class="col-xs-4">
+                                      <div class="thumbnail">
+                                          <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="product-image" src="">
+                                      </div>
+                                  </div>
+                                  <div class="col-xs-8">
+                                      <div class="name">
+                                          <span class="product-name"></span>
+                                      </div>
+                                      <div class="price"><span class="product-quantity"></span> X $<span class="product-price"></span></div>
+
+                                  </div>
+                              </div>
+                          </div>
+                          {# Begin product #}
                       </section>
-                      
-                      <section>
-                        <div class="row grid-10">
+                      {# End Popover products #}
+                      {# Begin popover cart totals #}
+                      <div class="row">
+                          <div class="col-xs-8 col-xs-offset-4">
+                              <div class="cart-totals">
+                                  <div class="total pull-right"><strong>Subtotal: $<span class="subtotal pull-right">0.00</span></strong></div>
+                              </div>
+                          </div>
+                      </div>
+                      {# End popover cart totals #}
+                      <div class="row grid-10">
                           <div class="col-md-6">
-                            <a class="btn btn-base btn-block margin-y-5" href="cart.html">view cart</a>
+                            <a class="btn btn-base btn-block margin-y-5" href="{{ app.url }}/cart">view cart</a>
                           </div>
                           <div class="col-md-6">
-                            <a class="btn btn-primary btn-block margin-y-5" href="checkout.html">checkout</a>
+                            <a class="btn btn-primary btn-block margin-y-5" href="{{ app.url }}/checkout">checkout</a>
                           </div>
+                      </div>
+                  </div>
+                  {# End ajax cart popover #}
+
+                  {# Begin ajax cart popover #}
+            <div class="ajaxcart" style="display:none;">
+                <div class="popover-close">
+                    <div class="row">
+                        <div class="col-md-7 col-xs-10">
+                                Quickcart
                         </div>
-                      </section>
+                        <div class="col-md-5 col-xs-2">
+                            <a onclick="$('.mobile-popover').popover('hide')" id="ajaxcart-close" class="btn btn-danger btn-sm pull-right"><i class="fa fa-times"></i></a>
+                        </div>
                     </div>
-                    <!-- /Dropdown Panel -->
-                  
+                </div>
+                {# Begin Popover products #}
+                <section class="ajaxcart-products">
+                    {# Begin product #}
+                    <div class="ajaxcart-product product">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <div class="thumbnail">
+                                    <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="product-image" src="">
+                                </div>
+                            </div>
+                            <div class="col-xs-8">
+                                <div class="name">
+                                    <span class="product-name"></span>
+                                </div>
+                                <div class="price"><strong>Price:</strong> $<span class="product-price"></span></div>
+                                <div class="quantity"><strong>Qty:</strong> <span class="product-quantity"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    {# Begin product #}
+                </section>
+                {# End Popover products #}
+                {# Begin popover cart totals #}
+                <div class="row">
+                    <div class="col-xs-8 col-xs-offset-4">
+                        <div class="cart-totals">
+                            <div class="items">Item count: <span class="item-count"></span></div>
+                            <div class="total">Subtotal: $<span class="subtotal">0.00</span></div>
+                        </div>
+                    </div>
+                </div>
+                {# End popover cart totals #}
+                <div class="row grid-10">
+                    <div class="col-md-6">
+                      <a class="btn btn-base btn-block margin-y-5" href="{{ app.url }}/cart">view cart</a>
+                    </div>
+                    <div class="col-md-6">
+                      <a class="btn btn-primary btn-block margin-y-5" href="{{ app.url }}/checkout">checkout</a>
+                    </div>
+                </div>
+            </div>
+            {# End ajax cart popover #}
                 </div>
                 <!-- /Btn Wrapper -->
 
               </div>
               <!-- /Navbar btn-group -->
-              
-             {#} <!-- Navbar Left -->
-              <ul class="nav navbar-nav navbar-left navbar-right-xs">
-                <li class="dropdown has-panel">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img class="img-left" alt="" src="{{ app.url_asset }}/images/diego/flags/us.gif"><span>USD</span><i class="fa fa-angle-down toggler"></i></a>
-                  <!-- Dropdown Panel -->
-                  <div id="settings" class="dropdown-menu dropdown-panel" data-keep-open="true">
-                    <fieldset>
-                      <form>
-                        <div class="form-group">
-                          <label>Language</label>
-                          <select class="form-control">
-                            <option>English</option>
-                            <option>French</option>
-                            <option>German</option>
-                            <option>Spanish</option>
-                          </select>
-                        </div>
-                        
-                        <div class="form-group">
-                          <label>Currency</label>
-                          <select class="form-control">
-                            <option>US Dollar</option>
-                            <option>Kenyan Shillings</option>
-                            <option>TZ Shillings</option>
-                            <option>British Pound</option>
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label class="checkbox-inline"><input value="" type="checkbox">Remember settings </label>
 
-                        </div>
-                        <button class="btn btn-primary btn-block">change</button>
-                      </form>
-                    </fieldset>
-                  </div>
-                  <!-- /Dropdown Panel -->
-                  
-                </li>
-              </ul>
-              <!-- /Navbar Left -->#}
             </div>
             <!-- /Dont Collapse -->
 
           </div>
           <!-- /Container -->
-          
+
         </nav>
         <!-- /Nav Bottom
         .............................................. -->
-        

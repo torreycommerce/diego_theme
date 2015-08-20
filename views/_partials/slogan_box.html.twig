@@ -1,4 +1,9 @@
-      <!-- Content Block
+{% set promo_sale = api.get('widget/render', {'slug' : 'diego-theme--promo-sale'}) %}
+{% if promo_sale is not empty %}
+  {{ promo_sale }}
+{% endif %}
+
+{#      <!-- Content Block
       ============================================ -->
       <div class="content-block boxed-section cover-3-bg overlay-dark-m" >
       
@@ -20,3 +25,4 @@
       </div>  
       <!-- /Content Block
       ============================================ -->
+#}

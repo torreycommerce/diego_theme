@@ -3,9 +3,10 @@
 {% import "/_macros/form-extras.html.twig" as extras %}
 {% block content %}
 {% set token = api.get('/order/paypalExpressToken') %}
-{% if token %}
-    {% do app.redirect('https://www.paypal.com/webscr?cmd=_express-checkout&token=' ~ token) %}
+{% set sandbox_url = api.get('/order/sandbox?token=' ~ token) %}
+{% if sandbox_url %}
+    	{% do app.redirect(sandbox_url) %}
 {% endif %}
 <h1>PayPal Express Payment error</h1>
-{{api.error}}. Please <a href="{{app.url}}/cart">try again later</a>.
+{{ api.error ~ token}}. Please <a href="{{app.url}}/cart">try again later</a>.
 {% endblock %}
