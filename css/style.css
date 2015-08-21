@@ -6139,6 +6139,7 @@ ul.tags li a:hover {
 
 .collection-dropdown{
   margin: 2px 0 0 15px;
+  text-align: center;
 }
 
 @media (max-width: 768px) {
@@ -6146,6 +6147,11 @@ ul.tags li a:hover {
       margin: 0;
     }
     
+}
+
+.btn-link-action {
+  background-color: #fff;
+  border: none;
 }
 
 /* misc */

@@ -28,7 +28,7 @@
     </button>
     <ul class="dropdown-menu collection-dropdown" role="menu">
         {% for registry in registries %}
-        <li><button type="submit" class="btn-sm btn-link-action" name="action" value="registry/{{registry.id}}">Add to '{{registry.name}}'</button></li>
+        <li><button type="submit" class="btn-sm btn-link-action" name="action" value="registry/{{registry.id}}">Add to <strong>'{{registry.name}}'</strong></button></li>
         {% endfor %}
     </ul>
 </div>
@@ -63,7 +63,7 @@
     </button>
     <ul class="dropdown-menu collection-dropdown" role="menu">
         {% for wishlist in wishlists %}
-        <li><button type="submit" class="btn-sm btn-link-action" name="action" value="wishlist/{{wishlist.id}}">Add to '{{wishlist.name}}'</button></li>
+        <li><button type="submit" class="btn-sm btn-link-action" name="action" value="wishlist/{{wishlist.id}}">Add to <strong>'{{wishlist.name}}'</strong></button></li>
         {% endfor %}
     </ul>
 </div>
