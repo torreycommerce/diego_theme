@@ -13,28 +13,41 @@
                   {# Begin product images #}
                   <div id="product-images" class="col-md-5 mgb-30-xs">
                      {# Begin main image #}
-                     {% set main_image_id = variation.images.0.id is not empty ? variation.images.0.id : product.images.0.id %}
-                     {% set main_image_id = main_image_id is empty ? 'default' : main_image_id %}
+                     {% set main_image_id = variation.images.0.id is not empty ? variation.images : product.images %}
+
+                      {% set best_varia = {} %}
+
+                      {% for test_varia in product.variant %}
+                        {% if test_varia.images.0 is not empty %}
+                            {% set best_varia = best_varia|merge({(test_varia.Color):(test_varia.images)}) %}
+                        {% endif %}
+                      {% endfor %}
+
+
+                      {% if variation.images.0.id is empty %}
+                        {% set main_image_id = best_varia[variation.Color] is not empty ? best_varia[variation.Color] : product.images %}
+                      {% endif %}
+
                      <div id="image-main">
                         <div class="row">
                            <div class="col-sm-12">
                                  <div class="thumbnail">
                                     <span class="helper hidden-xs"></span>
                                     <div id="main-product-video" style="display:none"></div>
-                                    <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="{{app.image.getImageUrl("product","standard",main_image_id) }}" data-image-zoom="{{app.image.getImageUrl("product","large",main_image_id) }}" alt="" />
+                                    <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="{{app.image.getImageUrl("product","standard",main_image_id.0.id) }}" data-image-zoom="{{app.image.getImageUrl("product","large",main_image_id.0.id) }}" alt="" />
                                  </div>
                            </div>
                         </div>
                      </div>
                      {# Begin main image #}
                      {# Begin image carousel #}
-                     {% if variation.images is not empty or variation.videos is not empty %}
+
                         <div id="image-carousel" class="hidden-xs row">
                            <div class="image-carousel">
                               <div id="image-carousel-{{variation.id}}" class="carousel">
                                  <div>
                                     <div class="item active itemauto">
-                                    {% for image in variation.images %}
+                                    {% for image in main_image_id %}
                                        {% set name = image.name is not empty ? image.name : product.name %}
                                        <div class="col-sm-2">
                                              <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
@@ -57,7 +70,6 @@
                               </div>
                            </div>
                         </div>
-                     {% endif %}
                      {# End image carousel #}
                   </div>
                   {# End product images #}
@@ -66,7 +78,7 @@
 
             <div class="col-md-7">  <!-- /Begin Product Details -->
                <h2 class="product-title"> <a href="{{app.url}}/brand/{{product.brand|url_encode}}">{{product.brand}}</a></h2>
-               
+
                {# Begin review stars #}
                {% set review_score = product|average('review_score') %}
                <div class="hlinks hlinks-rating product-details">
@@ -159,9 +171,7 @@
                   {% endif %}
                {% endif %}
 
-               <form method="post" id="productForm" action="{{ app.url }}/product/route">                      
-
-               {% if product.variant[0].price > 0 %}  
+               {% if product.variant[0].price > 0 %}
                   <!--/.size-details-->
                   <!-- Accordion -->
                   <div class="panel-group" id="accordion">
@@ -211,62 +221,65 @@
                      <!-- /Panel -->
                   </div>
                   <!-- /End Accordion -->
-                  {% endif %}
+               {% endif %}
 
-                  <h4>Buy now</h4>
-                  <!-- Row -->
-                  <div class="row grid-20">
-                     {% for variation in product.variant %}
-                        <div id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
-                           {% if variation.price > 0 %}
-                              <!--/.size-details-->
-                                 {% if variation['inventory_quantity'] is defined and variation['inventory_minimum_quantity'] is defined and
-                                 variation['inventory_policy'] is defined and (variation['inventory_policy'] == 'continue' or
-                                 variation['inventory_quantity'] > variation['inventory_minimum_quantity'] ) %}
-                                 
-                                    {# Begin product Size-Quantity #}
-                                    <div class="col-xs-4 col-md-6 no-padding"> {# Begin Row#}
-                                       <div class="form-group">
-                                          {# Begin product Quantity #}
-                                          <div class="input-group col-md-6">
-                                             <div class="input-group-btn">
-                                                <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button"><i class="fa fa-minus"></i></button>
-                                             </div>
-                                             <input class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]" type="text">
-                                             <div class="input-group-btn">
-                                                <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
-                                             </div>
+               <h4>Buy now</h4>
+               <!-- Row -->
+               <div class="row grid-20">
+                  {% for variation in product.variant %}
+                     <div id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
+                        {% if variation.price > 0 %}
+                           <!--/.size-details-->
+                           <form method="post" id="productForm" action="{{ app.url }}/product/route">
+                              {% if variation['inventory_quantity'] is defined and variation['inventory_minimum_quantity'] is defined and
+                              variation['inventory_policy'] is defined and (variation['inventory_policy'] == 'continue' or
+                              variation['inventory_quantity'] > variation['inventory_minimum_quantity'] ) %}
+
+                                 {# Begin product Size-Quantity #}
+                                 <div class="col-xs-4 col-md-6 no-padding"> {# Begin Row#}
+                                    <div class="form-group">
+                                       {# Begin product Quantity #}
+                                       <div class="input-group col-md-6">
+                                          <div class="input-group-btn">
+                                             <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button"><i class="fa fa-minus"></i></button>
+                                          </div>
+                                          <input class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]" type="text">
+                                          <div class="input-group-btn">
+                                             <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
                                           </div>
                                        </div>
-                                       {# End product quantity #}
-                                    </div> {# End Row#}
-                                 {% endif %}
-                           {% endif %}
-                           {% if variation.sku is not empty %}
-                           <div class="col-xs-12 col-md-4"> {# Begin Row#}
-                              <div class="item-sku"> 
-                                  <strong>Item: </strong> #{{variation.sku}}
-                              </div>
+                                    </div>
+                                    {# End product quantity #}
+                                 </div> {# End Row#}
+                              {% endif %}
+                           </form>
+                        {% endif %}
+                        {% if variation.sku is not empty %}
+                        <div class="col-xs-12 col-md-4"> {# Begin Row#}
+                           <div class="item-sku">
+                               <strong>Item: </strong> #{{variation.sku}}
                            </div>
-                          {% endif %}
                         </div>
-                     {% endfor %}
-                  </div>
-                  <div id="variation-selector-{{product.id}}" class="col-md-12 no-padding">
-                  </div>
-                  <!-- / End Row -->
-                  <!-- / Begin Cart-actions -->
-                  <div class="addto">
-                     <div class="col-sm-12 col-md-4 no-padding-side">
-                           <button type="submit" class="btn btn-block btn-primary btn-bigger" name="action" value="cart">
-                              <i class="icon-left ti ti-shopping-cart"></i>
-                              <span>Add to Cart</span>
-                           </button> 
+                       {% endif %}
                      </div>
-                     <!--/.End cart-actions-->
-                     {% include "/product/_partials/list/actions-single.html.twig" %}
+                  {% endfor %}
+               </div>
+               <div id="variation-selector-{{product.id}}" class="col-md-12 no-padding">
+               </div>
+               <!-- / End Row -->
+               <!-- / Begin Cart-actions -->
+               <div class="addto">
+                  <div class="col-sm-12 col-md-4 no-padding-side">
+                        <button type="submit" class="btn btn-block btn-primary btn-bigger" name="action" value="cart">
+                           <i class="icon-left ti ti-shopping-cart"></i>
+                           <span>Add to Cart</span>
+                        </button>
                   </div>
-               </form>
+                  <!--/.End cart-actions-->
+                  <form method="post" id="productForm" action="{{ app.url }}/product/route" class="form-inline">
+                     {% include "/product/_partials/list/actions-single.html.twig" %}
+                  </form>
+               </div>
             </div>   <!-- /End Product Details -->
          </div>   <!-- / End Row product-details -->
       </div> <!-- / End Product Row Product-details-->
@@ -275,7 +288,7 @@
       <!-- Content Block
       ============================================ -->
       <div class="content-block">
-      
+
         <!-- Container -->
         <div class="container no-pad-t">
 
@@ -311,13 +324,13 @@
 
             </div>
             <!-- /Tab Panes -->
-            
+
           </div>
           <!-- /Product Tabs -->
-          
+
         </div>
         <!-- /Container -->
-        
+
       </div>
       <!-- /Content Block
       ============================================ -->
