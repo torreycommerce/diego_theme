@@ -5,9 +5,9 @@
                 {% set collection_ids = [] %}
                 {% set product_count = 1 %}
                 {% set options = ['image'] %}
-                {% set products = api.get('/catalog', {sort:"product.variant.popularity:-1",limit:4}) %}
+                {% set products = api.get('/catalog', {sort:"product.variant.popularity:-1",limit:8}) %}
                 {% set product_counter = 0 %}
-                {% for row,product in products if collection_ids[product.id] is empty and product_count < 5 %}
+                {% for row,product in products if collection_ids[product.id] is empty and product_count < 9 %}
                     {% if product.group == 'product' %}
                         {% for id in product.product.collection_id %}
                             {% set collection_ids = collection_ids|merge({(id):true}) %}

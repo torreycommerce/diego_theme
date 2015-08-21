@@ -9,7 +9,7 @@
                 {% set options = ['image'] %}
                 {% set products = api.get('/catalog?query=tags:{$in:featured}') %}  
                 {% set product_counter = 0 %}
-                {% for row,product in products if collection_ids[product.id] is empty and product_count < 5 %}
+                {% for row,product in products if collection_ids[product.id] is empty and product_count < 9 %}
                     {% if product.group == 'product' %}
                         {% for id in product.product.collection_id %}
                             {% set collection_ids = collection_ids|merge({(id):true}) %}
