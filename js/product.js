@@ -22,11 +22,16 @@ function VariantsManager (variants, variant_options, isCollection) {
     this.disabled = false;
     this.outOfStock = "Out of stock, please try another combination";
 
+    this.jqSelector = function(str){
+        var temp = str.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
+        return temp;
+    }
+
     this.getVariationSelector = function(selectName, optionValue){
-        return "[id=variation-selector-"+self.product_id+"-"+selectName+"-"+optionValue+"]";
+        return "[id=variation-selector-"+ this.jqSelector(self.product_id+"-"+selectName+"-"+optionValue) +"]";
     }
     this.getSelectedValue = function(selectName){
-        return "[id=selected-"+selectName+"-"+self.product_id+"]";
+        return "[id=selected-"+ this.jqSelector(selectName+"-"+self.product_id) +"]";
     }
     this.getProductVariation = function(variant_id){
         return "[id=product-" + variant_id + "]";
