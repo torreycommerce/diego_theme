@@ -1,0 +1,39 @@
+{% set content = api.get('/content',{
+    'query':{
+        'slug':app.request.path,
+        'publish':'1',
+        '$or':[
+        {'publish_date':{'$lte':'now'}, 'publish_date_end':'0000-00-00 00:00:00'},
+        {'publish_date':{'$lte':'now'}, 'publish_date_end':{'$gte':'now'}}
+        ]
+    }
+})|first %}
+
+{% if content.id is empty %}
+    {% do app.redirect('content/base/' ~ app.request.path) %}
+{% endif %}
+{% extends "/content/_partials/templates/" ~ content.template ~ ".html.twig" %}
+
+{% block title %}
+    {{ content.page_title|default(content.title) }}
+{% endblock %}
+
+{% block meta_description %}
+    {{ content.meta_description }}
+{% endblock %}
+
+{% block meta_keywords %}
+    {{ content.keywords }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ base.breadcrumbs( { (content.title) : ''} ) }}
+{% endblock %}
+
+{% block page_title %}
+    {{ content.title }}
+{% endblock %}
+
+{% block page_content %}
+    {{ include(template_from_string(content.content)) }}
+{% endblock %}

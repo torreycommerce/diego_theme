@@ -1,0 +1,14 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/base.html.twig" as base %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+        	<header>
+        		<h1 class="page-header">{% block page_title %}{% endblock %}</h1>
+        	</header>
+            {% block page_content %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
