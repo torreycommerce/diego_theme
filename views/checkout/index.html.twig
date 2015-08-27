@@ -27,9 +27,13 @@
 {% set step = 'shipping' %}
 {% set methods = api.get('/shippingmethod', {query:{status:'active'}}) %}
 {% set cart = api.get('/sessioncart') %}
+{% set config = api.get('/config') %}
 {% block content %}
 {% if cart.items is empty %}
     {{ app.redirect('/') }}
+{% endif %}
+{% if config.components.payflowpro.enable == false %}
+    {{ app.redirect('/cart') }}
 {% endif %}
 {% if app.request.post.shipping %}
     {% set return = api.post('/sessioncart/checkout', app.request.post.shipping) %}

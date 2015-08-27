@@ -40,6 +40,7 @@
 {% if app.request.post.cart.coupon_code is not empty %}
 {% set result = api.post('/sessioncartcoupon', {code:app.request.post.cart.coupon_code}) %}
 {% endif %}
+{% set config = api.get('/config') %}
             <!-- Content Block
       ============================================-->
       <section class="content-block default-bg">
@@ -295,17 +296,21 @@
                                 <strong>Subtotal:</strong>&nbsp;<span class="amount" id="total-price"><span class="dollars"><span class="dollar-sign float-left">$</span>{{ cart.subtotal|number_format(2)|split('.')|first }}.{{ cart.subtotal|number_format(2)|split('.')|last }}</span></span>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div id="proceed-to-checkout">
-                                <a class="btn btn-primary btn-lg btn-block" style="margin:20px 0" href="{{ app.url }}/checkout">Proceed To Checkout
-                                <i class="fa fa-arrow-right"></i></a>
+                        {% if config.components.payflowpro.enable == true %}
+                            <div class="col-md-12">
+                                <div id="proceed-to-checkout">
+                                    <a class="btn btn-primary btn-lg btn-block" style="margin:20px 0" href="{{ app.url }}/checkout">Proceed To Checkout
+                                    <i class="fa fa-arrow-right"></i></a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div id="paypal">
-                                <a href="{{ app.url }}/checkout/paypal"><img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"></a>
+                        {% endif %}
+                        {% if config.components.nvp.enable == true %}
+                            <div class="col-md-12">
+                                <div id="paypal">
+                                    <a href="{{ app.url }}/checkout/paypal"><img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"></a>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
