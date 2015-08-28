@@ -386,6 +386,9 @@ function updateCartTotals(qtyField, cartItemId) {
         // toLocaleString for the commas
         $('#subtotal .amount .dollars').html(parseInt(result[0]).toLocaleString());
         $('#subtotal .amount .cents').html(result[1]);
+
+        $('.cart .item-count, .toolbar-mobile .item-count, #nav-mobile-main .item-count').html(data.result.item_count);
+        $('.cart .ajaxcart .item-count, .mobile-popover .ajaxcart .item-count').html(data.result.item_count);
     });
 }
 
