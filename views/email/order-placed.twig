@@ -2,7 +2,7 @@
 {% set order = api.get('/order/' ~ order_id) %}
 {% set items = api.get('/orderitem', {query:{order_id:order_id}}) %}
 {% set product_ids = items|values_in('product_id') %}
-{% set products = api.get('/product',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+{% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
 {% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
 
 Thank you for placing your order with {{ app.params['site']['title'] }}!
