@@ -106,7 +106,7 @@
                         {# Begin Product Prices #}
                         {% if variation.price > 0 %}
                            <div class="price-box">
-                              {% set stock_description = variation.inventory_quantity > 0 ? 'In Stock' :  variation.inventory_shipping_estimate is not empty ? variation.inventory_shipping_estimate : '' %}
+                              {% set stock_description = variation.has_stock ? 'In Stock' :  variation.inventory_shipping_estimate is not empty ? variation.inventory_shipping_estimate : '' %}
                               <h4 class="product-price">{{ prod.price(variation.price) }}</h4>
                               {# Begin regular price #}
                               {% if variation.price != variation.compare_price and variation.compare_price is not empty %}
