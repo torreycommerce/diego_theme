@@ -377,9 +377,11 @@
                                                                     <ul class="shipping" style="margin-bottom:0;">
                                                                         <li class="estimated-time">
                                                                             {% if variation.has_stock %}
-                                                                            In Stock
+                                                                                In Stock
                                                                             {% elseif variation.inventory_shipping_estimate is not empty %}
-                                                                            {{ variation.inventory_shipping_estimate }}
+                                                                                {{ variation.inventory_shipping_estimate }}
+                                                                            {% else %}
+                                                                                Out of Stock
                                                                             {% endif %}
                                                                         </li>
                                                                     </ul>
