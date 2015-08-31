@@ -376,7 +376,7 @@
                                                                     (variation.inventory_shipping_estimate is not empty) %}
                                                                     <ul class="shipping" style="margin-bottom:0;">
                                                                         <li class="estimated-time">
-                                                                            {% if variation.inventory_quantity > variation.inventory_minimum_quantity %}
+                                                                            {% if variation.has_stock %}
                                                                             In Stock
                                                                             {% elseif variation.inventory_shipping_estimate is not empty %}
                                                                             {{ variation.inventory_shipping_estimate }}
@@ -424,7 +424,7 @@
                                                                         <div class="btn-toolbar">
                                                                             <div class="quantity-input-group quantity">
                                                                                 {% if variation['inventory_quantity'] is defined and variation['inventory_minimum_quantity'] is defined and
-                                                                                variation['inventory_policy'] is defined and (variation['has_stock'] ) %}
+                                                                                variation['inventory_policy'] is defined and variation['has_stock'] %}
                                                                                     <label for="quantity-selector" class="control-label" style="font-size:12px; color:#42464d;"><strong>Qty</strong></label>
                                                                                     {# Begin product Quantity #}
                                                                                     <div class="input-group">

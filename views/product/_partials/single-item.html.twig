@@ -232,8 +232,7 @@
                            {% if variation.price > 0 %}
                               <!--/.size-details-->
                               {% if variation['inventory_quantity'] is defined and variation['inventory_minimum_quantity'] is defined and
-                              variation['inventory_policy'] is defined and (variation['inventory_policy'] == 'continue' or
-                              variation['inventory_quantity'] > variation['inventory_minimum_quantity'] ) %}
+                              variation['inventory_policy'] is defined and variation['has_stock'] %}
 
                                  {# Begin product Size-Quantity #}
                                  <div class="col-xs-4 col-md-6 no-padding"> {# Begin Row#}
