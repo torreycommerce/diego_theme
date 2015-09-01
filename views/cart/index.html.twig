@@ -139,12 +139,16 @@
                         <div class="col-md-4 col-lg-4">
                             <div class="name"><h6><a href="{{ app.url ~ product.url }}">{{ product.title }}</a></h6></div>
                             <div class="availability">
-                                {% if product.inventory_quantity > product.inventory_minimum_quantity %}
+                                {% if product.has_stock %}
                                     In Stock
                                 {% elseif variation.inventory_shipping_estimate is not empty %}
-                                <span class="text-danger">
-                                    {{ variation.inventory_shipping_estimate }}
-                                </span>
+                                    <span class="text-danger">
+                                        {{ variation.inventory_shipping_estimate }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-danger">
+                                        Out of Stock
+                                    </span>
                                 {% endif %}
                             </div>
                             <div class="remove"><button class="glyphicon glyphicon-trash" type="submit" name="cart[action]" value="remove/{{ id }}"></button></div>
