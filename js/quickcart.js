@@ -85,7 +85,7 @@ function ajaxCart(data, r) {
     }
 
     if (!success) {
-        $('div.cart').attr('data-content','<h5></h5>').popover('show');
+        $('div.cart, div.mobile-popover').attr('data-content','<h5>Failed to add item(s) to cart.</h5>').popover('show');
         return;
     }
 

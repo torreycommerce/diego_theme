@@ -48,3 +48,20 @@
     {% endif %}
 {% endspaceless %}
 {% endmacro %}
+
+{% macro rating(score, attributes=[]) %}
+{% spaceless %}
+    <div {% if attributes.id is not empty %}id="{{ attributes.id }}"{% endif %} class="star-rating {% if attributes.class is not empty %}{{ attributes.class }}{% endif %}">
+        <div class="disabled">
+            {% for stars in 0..4 %}
+                <span class="glyphicon glyphicon-star"></span>
+            {% endfor %}
+            <div class="active" style="width: {{ (score*100)|number_format }}%">
+                {% for stars in 0..4 %}
+                    <span class="glyphicon glyphicon-star"></span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endspaceless %}
+{% endmacro %}
