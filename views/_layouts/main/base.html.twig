@@ -51,29 +51,20 @@
     {% block head %}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
     <meta name="keywords" content="{% block meta_keywords %}{{ seo['keywords'] }}{% endblock %}">
     <meta name="description" content="{% block meta_description %}{{ seo['description'] }}{% endblock %}">
-    
-    {#
-    {% if app['theme']['logo_images_and_colors']['logo_background']['favicon-image'] == '1' %}
-      <link rel="shortcut icon" href="{{app.theme['logo_images_and_colors']['logo_background']['favicon-upload']}}" type="image/x-icon" />
-    {% endif %}
-    #}
-    <link rel="shortcut icon" href="{{ app.url ~ '/favicon.ico' }}" type="image/x-icon" />
-
+    <link rel="shortcut icon" href="{{ app.url ~ '/favicon.ico' ~ '?time=' ~ app.params.site.title }}" 
+        type="image/x-icon" />
     <link rel="stylesheet" href="{{app.url_asset}}/css/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="{{app.url_asset}}/css/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/style.css" />
-    
-    <!-- <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/assets/style.css" /> -->
     <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/fonts/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/datepicker.css" />
-    
-    
     <link rel="sitemap" href="{{app.url}}/api/sitemap" />
 
-    {% block css %}{% endblock %}
+    {% block css %}
+    {% endblock %}
+    
     <title>{% block title %}{{ app.params.site.title }}{% endblock %}</title>
 
     {% if app.params.social_settings is defined and app.params.social_settings is not empty %}
@@ -135,6 +126,7 @@
     </div>
  </body>
  <script>
+ /*
     respondToSizingMessage = function(e) {
   if(e.origin == 'http://angularadmin.acendev') {
     // e.data is the string sent by the origin with postMessage.
@@ -145,6 +137,6 @@
 }
 // we have to listen for 'message'
 window.addEventListener('message', respondToSizingMessage, false);
-
+*/
 </script>
 </html>
