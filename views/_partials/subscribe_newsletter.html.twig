@@ -2,5 +2,5 @@
 
 {% set newsletterBox = api.get('widget/render', {'slug' : 'newsletter'}) %}
 {% if newsletterBox is not empty %}
-  {# newsletterBox #}
+  {{ newsletterBox }}
 {% endif %}
