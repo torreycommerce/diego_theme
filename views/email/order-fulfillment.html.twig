@@ -91,6 +91,7 @@
     </head>
     {% set order = api.get('/order/' ~ order_id) %}
     {% set items = api.get('/orderitem', {query:{'order_id':order_id}}) %}
+    {% set fulfillment = api.get('/orderfulfillment/' ~ fulfillment_id) %}
     {% set product_ids = items|values_in('product_id') %}
     {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
     {% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
@@ -271,7 +272,6 @@
                                                                                     <h3 style="color:#E7214C;line-height:125%;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;font-weight:bold;margin-top:0;margin-bottom:3px;text-align:left; text-transform: uppercase;">Delivery Method</h3>
                                                                                     <div style="text-align:left;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;margin-bottom:0;color:#5F5F5F;line-height:135%;">Using {{ shipping_method.name }} <br>
                                                                                     {% for item in items %} <br>
-                                                                                    {% if item.status == 'shipped' %}
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
@@ -316,13 +316,16 @@
                                                                             <tr>
                                                                                 <td align="left" class="textContent">
                                                                                     <h3 style="color:#E7214C;line-height:125%;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold;margin-top:0;margin-bottom:3px;text-align:left; text-transform: uppercase;">Products</h3>
-                                                                                    <div style="text-align:left;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;margin-bottom:0;color:#5F5F5F;line-height:135%;">Status: {{ item.status }} <br>
-                                                                                    URL: {{site_url}}{{products[item.product_id].0.url}} <br>
+                                                                                    <div style="text-align:left;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;margin-bottom:0;color:#5F5F5F;line-height:135%;">
+                                                                                    Status: {{ item.status }} <br>
+                                                                                    Item name: <a href="{{site_url}}{{products[item.product_id].0.url}}" target="_blank">{{ item.name }}</a> <br>
                                                                                     SKU: {{item.sku}} <br>
-                                                                                    Item name: {{ item.name }} <br>
-                                                                                    Quantity: {{ item.quantity }} <br>
-                                                                                    Tracking number: {{ item.tracking_number }} <br>
-                                                                                    {% endif %}
+                                                                                    {% for ffi in fulfillment.items %}
+                                                                                        {% if ffi.id == item.id %}
+                                                                                            Quantity: {{ ffi.quantity }} <br>
+                                                                                            Tracking number: {{ ffi.tracking }} <br>
+                                                                                        {% endif %}
+                                                                                    {% endfor %}
                                                                                     {% endfor %}</div>
                                                                                 </td>
                                                                             </tr>

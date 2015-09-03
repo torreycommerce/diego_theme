@@ -92,7 +92,7 @@
     {% set order = api.get('/order/' ~ order_id) %}
     {% set items = api.get('/orderitem', {query:{'order_id':order_id}}) %}
     {% set product_ids = items|values_in('product_id') %}
-    {% set products = api.get('/product',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+    {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
     {% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
     {# Variables passed in: order_id #}
     <body style="background-color: #fff;"  leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
@@ -317,7 +317,7 @@
                                                                                 <td align="left" class="textContent">
                                                                                     <h3 style="color:#E7214C;line-height:125%;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold;margin-top:0;margin-bottom:3px;text-align:left; text-transform: uppercase;">Products</h3>
                                                                                     <div style="text-align:left;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;margin-bottom:0;color:#5F5F5F;line-height:135%;">Status: {{ item.status }} <br>
-                                                                                    URL: {{app.live_url}}{{products[item.product_id].0.url}} <br>
+                                                                                    URL: {{site_url}}{{products[item.product_id].0.url}} <br>
                                                                                     SKU: {{item.sku}} <br>
                                                                                     Item name: {{ item.name }} <br>
                                                                                     Quantity: {{ item.quantity }} <br>
