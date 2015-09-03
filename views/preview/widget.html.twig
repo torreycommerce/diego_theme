@@ -1,6 +1,6 @@
 {% extends "/_layouts/theme.html.twig" %}
 {% block body %}
-	{% set widget = api.get('widget/renderhtml', {'slug' : app.request.get.slug }) %}
+	{% set widget = api.get('widget/renderhtml', {'slug' : app.request.get.slug, 'preview' : app.request.get.preview }) %}
     {% if widget is not empty %}
         {{ widget }}
     {% endif %}
