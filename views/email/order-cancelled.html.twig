@@ -93,7 +93,7 @@
     {% set order = api.get('/order/' ~ order_id) %}
     {% set items = api.get('/orderitem', {query:{order_id:order_id}}) %}
     {% set product_ids = items|values_in('product_id') %}
-    {% set products = api.get('/product',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+    {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
         <body style="background-color: #fff;" leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
            <!-- CENTER THE EMAIL // -->
             <center style="background-color:#fff;">
@@ -295,7 +295,7 @@
                                                                                     <td align="left" class="textContent">
                                                                                         <h3 style="color:#E7214C;line-height:125%;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;font-weight:bold;margin-top:0;margin-bottom:3px;text-align:left; text-transform: uppercase;">Item Info</h3>
                                                                                         <div style="text-align:left;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;margin-bottom:0;color:#5F5F5F;line-height:135%;">{% for item in items %}
-                                                                                        <b>URL:</b> {{app.url}}{{products[item.product_id].0.url}} <br>
+                                                                                        <b>URL:</b> {{site_url}}{{products[item.product_id].0.url}} <br>
                                                                                         <b>SKU:</b> {{item.sku}} <br>
                                                                                         <b>Item name:</b> {{ item.name }} <br>
                                                                                         <b>Price:</b> ${{ item.price }} <br>
