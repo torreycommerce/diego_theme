@@ -1,48 +1,6 @@
 {%- import "/_macros/form-elements-bootstrap.html.twig" as newsletterform -%}
 
-{% set newsletterBox = api.get('widget/render', {'slug' : 'diego-theme--newsletter'}) %}
+{% set newsletterBox = api.get('widget/render', {'slug' : 'newsletter'}) %}
 {% if newsletterBox is not empty %}
   {{ newsletterBox }}
 {% endif %}
-
-{#{{ newsletterform.begin('newsletter',app.url ~ '/newsletter') }}
- <!-- Newsletter Block
-      ============================================ -->
-      <div class="newsletter-block boxed-section overlay-dark-m cover-2-bg">
-      
-        <!-- Container -->
-        <div class="container">
-          <form>
-            <!-- Row -->
-            <div class="row grid-10">
-              <!-- Col -->
-              <div class="col-sm-3 col-md-2">
-                <span class="case-c">get newsletter</span>
-              </div>
-              <!-- Col -->
-              
-                <!-- Col -->
-                <div class="col-sm-6 col-md-8">
-                    <input id="NewsLInput" name="email" class="form-control" type="text" placeholder="Enter your email address" />
-                </div>
-                <!-- Col -->
-                
-                <!-- Col -->
-                <div class="col-sm-3 col-md-2">
-                  
-                    <button class="btn btn-block btn-color yellow-bg" type="submit"><i class="icon-left fa fa-envelope"></i>subscribe</button>
-                  
-                </div>
-                <!-- /Col -->
-              
-            </div>
-            <!-- /Row -->
-          </form>
-        </div>
-        <!-- /Container -->
-      
-      </div>
-      <!-- /Newsletter Block
-      =================================================== -->
-{{ newsletterform.end() }
-#}

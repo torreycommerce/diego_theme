@@ -16,7 +16,7 @@
                 {# Begin product description #}
                 <div class="description col-xs-6 col-sm-8 col-md-8">
                     <div class="name">{{ product.title }}</div>
-                    <div class="availability">{{ product.inventory_quantity > 0 ? 'In Stock' :  'Ships in '~ product.inventory_shipping_estimate }}</div>
+                    <div class="availability">{{ variation.has_stock ? 'In Stock' :  variation.inventory_shipping_estimate is not empty ? variation.inventory_shipping_estimate : 'Out of Stock' }}</div>
                     <div class="qty">Qty: {{ item.quantity }}</div>
                     <div class="amount"><span class="at"></span><span class="price">Price:</span> <span class="dollar-sign">$</span>{{  product.price }} <span class="each">each</span></div>
                     {% if item.wishlist_id is not empty %}
@@ -111,7 +111,9 @@
             </div>        
             <div class="total row">
                 <div class="col-sm-4 text-right"><strong>Total:</strong></div>
-                {% set total = expressdetails.AMT|replace({',':''}) + tax.tax|replace({',':''}) %}
+                {# set total = expressdetails.AMT|replace({',':''}) + tax.tax|replace({',':''}) #}
+                {# PayPal Express AMT includes tax #}
+                {% set total = expressdetails.AMT|replace({',':''}) %}
                 <div class="amount col-sm-8"> <span class="dollar-sign">$</span> <span class="price">{{ total|number_format(2) }}</span> </div>
                 <input type="hidden" name="checkout[total_verify]" value="{{ total }}">
             </div>        

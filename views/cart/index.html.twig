@@ -139,12 +139,16 @@
                         <div class="col-md-4 col-lg-4">
                             <div class="name"><h6><a href="{{ app.url ~ product.url }}">{{ product.title }}</a></h6></div>
                             <div class="availability">
-                                {% if product.inventory_quantity > product.inventory_minimum_quantity %}
+                                {% if product.has_stock %}
                                     In Stock
                                 {% elseif variation.inventory_shipping_estimate is not empty %}
-                                <span class="text-danger">
-                                    {{ variation.inventory_shipping_estimate }}
-                                </span>
+                                    <span class="text-danger">
+                                        {{ variation.inventory_shipping_estimate }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-danger">
+                                        Out of Stock
+                                    </span>
                                 {% endif %}
                             </div>
                             <div class="remove"><button class="glyphicon glyphicon-trash" type="submit" name="cart[action]" value="remove/{{ id }}"></button></div>
@@ -227,11 +231,11 @@
         {{ forms.end() }}
         {{ forms.begin('cart','','post', {class:'form-horizontal'}) }}
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-8">
                 {# Begin subtotal / checkout #}
                 <div id="coupon-code">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-11 col-lg-10">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-11">
                             {# Begin coupon code #}
                                 {#<div class="title">Coupon Code</div>#}
                                 <div class="form-group">
@@ -281,14 +285,14 @@
                 {# Begin shipping estimator #}
                 <div id="shipping-estimator">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-11 col-lg-10">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-11">
                             {% include "/cart/_partials/estimator.html.twig" %}
                         </div>
                     </div>
                 </div>
                 {# End shipping estimator #}
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="well">
                     <div class="row">
                         <div class="col-md-12">

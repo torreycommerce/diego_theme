@@ -42,6 +42,7 @@ Contact Us
     'Other' : 'Other'
 }
 %}
+
 {% if app.request.post.contact is defined and app.request.post.contact.subject in subjects %}
     {% do app.request.validateToken() %}
     {% if app.params['contact-us']['to'] is empty or app.params['contact-us']['from'] is empty %}
@@ -69,10 +70,9 @@ Contact Us
                 
                 <!-- Comment Form -->
                 <div class="contact-form">
-                  <form>
+                  {{ forms.begin('contact','','post',{}) }}
                     <!-- Row -->
                     <div class="row">
-                    {{ forms.begin('contact','','post',{ class:'form-horizontal' }) }}
                       <!-- Col -->
                       <div class="col-md-6">
                         <div class="form-group">
@@ -114,7 +114,7 @@ Contact Us
                         </div>
                     </div>
                     {# End actions #}
-                  </form>
+                  {{ forms.end() }}
                 </div>
                 <!-- /Contact Form -->
                 

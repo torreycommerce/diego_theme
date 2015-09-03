@@ -46,7 +46,7 @@ Passed into the macro is a array of key:value pairs as (title):(relative url)
         <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
             {% if app.request.post.change_password %}
                 {% if (api.post('/customer/'~ app.user.id ~'/validatepassword', {'password':app.request.post.change_password.current_password} )) %}
-                    {% if api.put('/customer/' ~ app.user.id ~ '/changepassword/', app.request.post.change_password ) == false %}
+                    {% if api.post('/customer/' ~ app.user.id ~ '/changepassword/', app.request.post.change_password ) == false %}
                         {% set form_errors = api.error() %}
                     {% else %}
                         <div class="alert alert-success">Your new password has been saved.</div>
