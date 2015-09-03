@@ -2,13 +2,47 @@
 {% import "/_macros/base.html.twig" as base %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-12">
-        	<header>
-        		<h1 class="page-header">{% block page_title %}{% endblock %}</h1>
-        	</header>
-            {% block page_content %}
-            {% endblock %}
+      <!-- Intro Block
+      ============================================-->
+      <section class="intro-block intro-page boxed-section page-bg overlay-dark-m">
+      
+        <!-- Container -->
+        <div class="container">     
+          <!-- Section Title -->
+          <div class="section-title invert-colors no-margin-b">
+            <h2>{% block page_title %}{% endblock %}</h2>
+          </div>
+          <!-- /Section Title -->
         </div>
-    </div>
+        <!-- /Container -->
+      </section>
+      <!-- /Intro Block
+      ============================================-->
+
+           <!-- Content Block
+      ============================================-->
+      <section class="content-block default-bg space-t">
+        <!-- Container -->
+        <div class="container no-pad-t">
+
+          <!-- Row -->
+          <div class="row">
+
+            <!-- Main Col -->
+            <div id="main-col" class="col-sm-12 col-md-12 mgb-30-xs">
+ 
+				{% block page_content %}
+	            {% endblock %}
+              
+            </div>
+            <!-- /Side Col -->
+
+          </div>
+          <!-- /Row -->
+        
+        </div>
+        <!-- /Container -->
+    </section>
+    <!-- /Content Block
+    ============================================-->
 {% endblock %}
