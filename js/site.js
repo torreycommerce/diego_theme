@@ -1,5 +1,3 @@
-
-
 (function($){
    var ImageZoom = function(element, options)
    {
@@ -286,8 +284,8 @@ function adjustQuantity(qtyField, increment, postForm) {
     if (isNaN(qtyField.val())) {
         qtyField.val(0);
     }
+    var limit = parseInt(qtyField.data('limit'));
     var previousValue = parseInt(qtyField.val());
-
     var id = qtyField.data('id');
     var model = qtyField.data('model');
 
@@ -313,6 +311,16 @@ function adjustQuantity(qtyField, increment, postForm) {
     } else {
         qtyField.val(previousValue += increment);
     }
+
+    //Set qty to limit if entered value is above
+    if(limit){
+      if(!isNaN(limit)){
+        if(previousValue > limit){
+          qtyField.val(limit);
+        }
+      }
+    }
+
 
     // Because of our situation with OAuth, we need to use the form to update wishlist and registry items; however, we can use the api to update sessioncart items.
     if (typeof id !== 'undefined') { // We need to submit the updated quantity to the server

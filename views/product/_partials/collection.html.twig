@@ -429,16 +429,17 @@
                                                                                 variation['inventory_policy'] is defined and variation['has_stock'] %}
                                                                                     <label for="quantity-selector" class="control-label" style="font-size:12px; color:#42464d;"><strong>Qty</strong></label>
                                                                                     {# Begin product Quantity #}
-                                                                                    <div class="input-group">
-                                                                                        <div class="input-group-btn">
-                                                                                            <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button">
-                                                                                                <i class="fa fa-minus"></i>
-                                                                                            </button>
-                                                                                        </div>
-                                                                                        <input class="form-control quantity-selector quanitySniper" value="0" maxlength="2" placeholder="0" name="items[{{variation.id}}]" type="text">
-                                                                                        <div class="input-group-btn">
-                                                                                            <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
-                                                                                        </div>
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                {% set limit = variation.inventory_minimum_quantity is empty ? variation.inventory_quantity : variation.inventory_quantity - variation.inventory_minimum_quantity %}
+                <input {% if variation.inventory_policy !='continue' %} data-limit="{{limit}}" {% endif %} class="form-control quantity-selector quanitySniper" value="0" maxlength="2" placeholder="0" name="items[{{variation.id}}]" type="text">
+                <div class="input-group-btn">
+                    <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
+                </div>
                                                                                     </div>
                                                                                 {% endif %}
                                                                             </div>
