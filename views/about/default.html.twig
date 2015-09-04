@@ -1,0 +1,60 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
+{% block title %}
+About Us
+{% endblock %}
+{% block breadcrumb %}
+{{ base.breadcrumbs({'About Us':''}) }}
+{% endblock %}
+{% block content %}
+{% set subjects = {
+    'Order Status' : 'Order Status',
+    'Shipping / Tracking Info' : 'Shipping / Tracking Info',
+    'Cancel an Item / Order' : 'Cancel an Item / Order',
+    'Return and Item / Order' : 'Return and Item / Order',
+    'Product Question' : 'Product Question',
+    'Website Comment' : 'Website Comment',
+    'Store Comment' : 'Store Comment',
+    'Gift Registry Comment' : 'Gift Registry Comment',
+    'Other' : 'Other'
+}
+%}
+{% if app.request.post.contact is defined and app.request.post.contact.subject in subjects %}
+    {% do app.request.validateToken() %}
+    {% if app.params['contact-us']['to'] is empty or app.params['contact-us']['from'] is empty %}
+        <div class="alert-danger">We're sorry, contact-us feature has not yet been setup.</div>
+    {% elseif api.post('/contact', app.request.post.contact) %}
+        {% do app.redirect('/', {'success':'Your comment has been submitted. Thank you.'}) %}
+    {% endif %}
+{% endif %}
+
+    <div class="container main-container ">
+        <div class="row innerPage">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+
+                <div class="row userInfo">
+
+                    <div class="col-xs-12 col-sm-12">
+                    {% set widget = api.get('widget/render', {'slug' : 'about-us'}) %}
+                                {% if widget is not empty %}
+                                    {{ widget }}
+                                {% else %}
+                        <h1 class="title-big text-center section-title-style2">
+                            <span> About us </span>
+                        </h1>
+                            <p class="lead text-center">
+                                {{ app.params['business-info']['about-us'] }}
+                            </p>
+                    </div>
+                </div>
+            <!--/row end-->
+            </div>
+        </div>
+    <!--/.innerPage-->
+    <div style="clear:both"></div>
+    </div> {% endif %}
+    <!--/row || innerPage end-->
+    <!-- ./main-container -->
+    <div class="gap"></div>
+<!-- /main-container -->
+{% endblock %}

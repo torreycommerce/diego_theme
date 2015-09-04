@@ -1,0 +1,9 @@
+{% extends "/_layouts/theme.html.twig" %}
+{% block body %}
+	{% set widget = api.get('widget/render?slug=' ~ app.request.get.slug ) %}
+    {% if widget is not empty %}
+        {{ widget }}
+    {% endif %}
+{% endblock %}
+{% block footer %}
+{% endblock %}
