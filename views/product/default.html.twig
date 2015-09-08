@@ -1,6 +1,5 @@
 {% extends "/_layouts/theme.html.twig" %}
 
-{# Redirect old babyviva product links #}
 {% set request = app.request.path | split('/') %}
 {% if request.1 | split('-') | last | integer %}
     {% set item  = api.get('/catalog/' ~ request.1 | split('-') | last ) %}
@@ -11,13 +10,12 @@
     {% endif %}
 {% endif %}
 
-{% if app.request.path is integer %}
-    {% set item  = api.get('/catalog',{query:{id:app.request.path}})|first %}
-{% else %}
-    {% set item  = api.get('/catalog', {query:{slug:app.request.path}})|first %}
-{% endif %}
+{% set item  = api.get('/catalog', {query:{slug:app.request.path}})|first %}
 {% if item.id is empty %}
-    {% do app.redirect(app.request.referer,{'error':'Sorry, the product you requested is unavailable.'}) %}
+    {% set item  = api.get('/catalog',{query:{id:app.request.path}})|first %}
+    {% if item.id is empty %}
+        {% do app.redirect(app.request.referer,{'error':'Sorry, the product you requested is unavailable.'}) %}
+    {% endif %}
 {% endif %}
 
 {% set reviews = api.get('/productreview', { query:{ product_id: item.id,status:"active" } }) %}
