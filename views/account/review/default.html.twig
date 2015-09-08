@@ -45,7 +45,8 @@ set in the array in /account/_macros/base.html.twig
             {% endif %}
 
             {% if app.request.post.review is defined %}
-            {% if api.put('/productreview/' ~ review.id, app.request.post.review) %}
+            {% set data = app.request.post.review|merge({'status':'pending'}) %}
+            {% if api.put('/productreview/' ~ review.id, data) %}
             {% do app.redirect('/account/reviews') %}
             {% endif %}
             {% endif %}
