@@ -1922,6 +1922,7 @@ input[type="checkbox"] {
     float: none !important;
     font-size: 0;
     text-align: center;
+    margin-top: 20px;
   }
   .hnav .navbar-nav.navbar-center-xs > li {
     float: none !important;
@@ -1959,8 +1960,7 @@ input[type="checkbox"] {
 ........................... */
 .hnav .navbar-brand {
   display: block;
-  margin: 0;
-  padding: 0 15px 0 30px;
+  padding: 0 15px 0 15px;
   color: inherit;
   line-height: 56px;
   height: 56px;
@@ -1979,6 +1979,10 @@ input[type="checkbox"] {
   margin-right: 15px;
 }
 
+.nav-brand-logo {
+  padding: 15px 0 0 15px !important;
+  margin: 20px 0 0 15px;
+}
 /***  ------- Logo  ------- ***/
 
 #logo-txt 
@@ -1995,8 +1999,8 @@ input[type="checkbox"] {
   #logo-txt 
     a {
         font-size: 20px;
-        padding-top: 15px;
-        max-width: 250px;
+        padding-top: 1.5%;
+        max-width: 60%;
     }
 }
 
@@ -2568,6 +2572,7 @@ input[type="checkbox"] {
 .hnav.hnav-sm .navbar-form .form-group, .hnav.hnav-sm .navbar-form .form-control, .hnav.hnav-sm .navbar-form .button, .hnav.hnav-sm .navbar-form .btn {
   height: 34px;
   line-height: 34px;
+  margin-top: 20px;
 }
 
 
@@ -3406,7 +3411,7 @@ body {
 }
 .header-search .form-group {
   position: relative;
-  margin: 0;
+  margin: 20px 0;
 }
 .header-search .form-group input {
   width: 100%;
