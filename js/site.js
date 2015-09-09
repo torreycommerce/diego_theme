@@ -431,10 +431,10 @@ $('.btn-add-to-cart').click(function (e) {
 })
 
 // ZeroClipboard for wishlist/registry share links
-/*$(function() {
+$(function() {
 var client = new ZeroClipboard( $('#btn-share'), {
   moviePath: acendaBaseThemeUrl + "/swf/ZeroClipboard.swf"
-});*/
+});
 
 client.on( "load", function(client) {
   client.on( "complete", function(client, args) {
