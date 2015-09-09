@@ -90,15 +90,32 @@
         
           <!-- Container -->
           <div class="container">
-          
+            {# get content available #}
+            {% set contents = api.get('/content',{
+                    'query':{
+                        'publish':'1'
+                            }    
+                    })
+            %}
+            {# Build array with available content slugs #}
+            {% set contents_available = [] %}
+            {% for content in contents %}
+              {% set contents_available = contents_available|merge([content.slug]) %}
+            {% endfor %}
             <span class="copy-text">Copyright &copy; {{ app.params.site.title }} {{"now"|date("Y")}}. All right reserved. Powered by Acenda.</span>
             <!-- hlinks -->
             <ul class="hlinks pull-right">
                     <li><a href="{{app.url}}/about"> About </a></li>
                     <li><a href="{{app.url}}/contact"> Contact </a></li>
-                    <li><a href="{{app.url}}/content/faq">Help &amp; FAQs</a></li>                        
-                    <li><a href="{{app.url}}/content/privacy-policy">Privacy &amp; Security</a></li>
-                    <li><a href="{{app.url}}/content/terms-and-conditions"> Terms &amp; Conditions </a></li>
+                    {% if "faq" in contents_available %} 
+                      <li><a href="{{app.url}}/content/faq">Help &amp; FAQs</a></li> 
+                    {% endif %}
+                    {% if "privacy-policy" in contents_available %} 
+                      <li><a href="{{app.url}}/content/privacy-policy">Privacy &amp; Security</a></li> 
+                    {% endif %}
+                    {% if "terms-and-conditions" in contents_available %} 
+                      <li><a href="{{app.url}}/content/terms-and-conditions"> Terms &amp; Conditions </a></li> 
+                    {% endif %} 
             </ul>
             <!-- /hlinks -->
             
