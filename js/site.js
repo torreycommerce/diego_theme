@@ -260,8 +260,9 @@ $(document).ready(function () {
 // Datepicker
 $(document).ready(function() {
     $('input[datepicker=1]').datepicker({
-        format: 'yyyy-mm-dd'
+        format: 'yy-mm-dd'
     });
+    $('input[datepicker=1]').datepicker( "option", "dateFormat", "yy-mm-dd" );
 });
 
 function findBootstrapEnvironment() {
