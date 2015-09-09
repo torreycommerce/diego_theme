@@ -43,7 +43,7 @@
                     
                     {% if variant_images is empty %}
                         {% set variant_images = product.images %}
-                        {% set image_url = app.image.getImageUrl('product','thumbnail', variant_images[0].id) %}
+                        {% set image_url = app.image.getImageUrl('product','standard', variant_images[0].id) %}
                     {% endif %}
                 {% endif %}
                     <!-- Col -->
