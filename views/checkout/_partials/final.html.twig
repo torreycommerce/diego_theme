@@ -122,13 +122,15 @@
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                                             <div class="billing-address">
-                                                <div><strong>Billing Address:</strong></div>
-                                                <div class="address">
-                                                    <div class="name">{{ final_order.billing_first_name }} {{ final_order.billing_first_name }}</div>
-                                                    <div class="address1">{{ final_order.billing_street_line1 }}</div>
-                                                    <div class="city-state">{{ final_order.billing_city }}, {{ final_order.billing_state }} {{ final_order.billing_zip }}</div>
-                                                    <div class="billing-method">Card: {{ final_order.card_type }} | Last Digits {{ final_order.card_last4 }} </div>
-                                                </div>
+                                                {% if final_order.billing_first_name is not empty  %}
+                                                    <div><strong>Billing Address:</strong></div>
+                                                    <div class="address">
+                                                        <div class="name">{{ final_order.billing_first_name }} {{ final_order.billing_first_name }}</div>
+                                                        <div class="address1">{{ final_order.billing_street_line1 }}</div>
+                                                        <div class="city-state">{{ final_order.billing_city }}, {{ final_order.billing_state }} {{ final_order.billing_zip }}</div>
+                                                        <div class="billing-method">Card: {{ final_order.card_type }} | Last Digits {{ final_order.card_last4 }} </div>
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
