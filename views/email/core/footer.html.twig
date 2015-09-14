@@ -29,7 +29,7 @@
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr style="height:20px;">
                   <td align="center" class="footercopy">
-                    Copyright  &copy;{{"now"|date("Y")}} <a href="{{app.url}}/" target="_blank" style="text-decoration:none;">{{ app.params['site']['title'] }}</a>. Powered by <a href="https://www.acenda.com/" target="_new">Acenda.</a>
+                    Copyright  &copy;{{"now"|date("Y")}} <a href="{{app.url}}/" target="_blank" style="text-decoration:none;">{{ site_title|default("") }}</a>. Powered by <a href="https://www.acenda.com/" target="_new">Acenda.</a>
                   </td>           
                 </tr>
               </table>

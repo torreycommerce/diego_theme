@@ -3,7 +3,7 @@
  
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{{ app.params['site']['title'] }}</title>
+  <title>{{ site_title|default("") }}</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
   <style type="text/css">
   body {margin: 0; padding: 0; min-width: 100%!important;}
@@ -59,7 +59,7 @@
 {% set order = api.get('/order/' ~ order_id) %}
 {% set items = api.get('/orderitem', {query:{order_id:order_id}}) %}
 {% set product_ids = items|values_in('product_id') %}
-{% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+{% set products = api.get('/product',{query:{id:{'$in':product_ids}}})|group_by('id') %}
 <body yahoo bgcolor="#fff">
 <table width="100%" bgcolor="#fff" border="0" cellpadding="0" cellspacing="0">
 <tr>
@@ -76,7 +76,7 @@
           <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td class="h2">
-                You have cancelled your order with {{ app.params['site']['title'] }} !
+                You have cancelled your order with {{ site_title|default("") }} !
               </td>
             </tr>
             <tr>
@@ -128,13 +128,12 @@
                   <tr>
                     <td class="bodycopy light">
                         {% for item in items %}
-                        <b>URL:</b> {{site_url}}{{products[item.product_id].0.url}} <br>
+                        <b>URL:</b> {{app.url}}{{products[item.product_id].0.url}} <br>
                         <b>SKU:</b> {{item.sku}} <br>
                         <b>Item name:</b> {{ item.name }} <br>
                         <b>Price:</b> ${{ item.price }} <br>
                         <b>Quantity:</b> {{ item.quantity }}
                         {% endfor %}
-                    </td>
                   </tr>
                 </table>
               </td>

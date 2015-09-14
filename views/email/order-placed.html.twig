@@ -3,7 +3,7 @@
  
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{{ app.params['site']['title'] }}</title>
+  <title>{{ site_title|default("") }}</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
   <style type="text/css">
   body {margin: 0; padding: 0; min-width: 100%!important;}
@@ -21,7 +21,7 @@
   .bodycopy {font-size: 14px; line-height: 22px;}
   .light {color:#dcdcdc;}
   .light a {color:#dcdcdc;}
-   .light a:hover {color:#c4c4c4;}
+  .light a:hover {color:#c4c4c4;}
   .producttitle, .productprice { font-size: 12px; font-family: 'Open Sans', sans-serif; padding:0; margin:0; font-weight:bold; color:#474747;}
   .producttitle { margin-top:5px; font-weight:bold; text-transform: uppercase;}
   .productprice { margin: 0 0 20px 0; color: #1d2831;}

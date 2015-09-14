@@ -78,7 +78,7 @@
           <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td class="h2">
-                Thank you again for your order from {{ app.params['site']['title'] }}!
+                Thank you again for your order from {{ site_title|default("") }}
               </td>
             </tr>
             <tr>
@@ -175,7 +175,7 @@
         {% include 'email/core/top-seller.html.twig' %}
           <tr>
             <td class="innerpadding bodycopy">
-              Thank you from your friends at {{ app.params['site']['title'] }}.<br/>
+              Thank you from your friends at {{ site_title|default("") }}.<br/>
               Please add us to your email address book to make sure you receive important 
               emails from us.
             </td>
