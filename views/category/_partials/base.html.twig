@@ -413,7 +413,7 @@
               
             <div class="panel-group" id="accordionNo">
                 {% for name,filter_set in filters %}
-                    {% if filter_set|length > 1 %}
+                    {% if filter_set|length >= 1 %}
                         {% set filter_count = filters %}
                         {% if filter_set|length %}
                             {% if filters|length %}
