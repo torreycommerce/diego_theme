@@ -380,6 +380,19 @@
 }
 
 /* Clearing */
+@media (max-width: 991px) {
+.clearBoth:nth-child(3) {
+  clear:both! important;
+}
+
+}
+
+@media (min-width: 992px) {
+.clearBoth:nth-child(5) {
+  clear:both! important;
+}
+
+}
 .clear {
   clear: both !important;
   visibility: hidden;
@@ -5530,7 +5543,7 @@ ul.tags li a:hover {
     -o-transition: all 0.3s ease 0s;
     -ms-transition: all 0.3s ease 0s;
     margin-bottom: 15px;
-    height: 480px;
+    height: auto;
 }
 
 .itemauto {
