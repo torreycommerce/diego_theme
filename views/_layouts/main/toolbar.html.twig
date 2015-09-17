@@ -147,7 +147,7 @@
                         {% set logo = logo_info.url %}
                     {% endif %}
                     {% if logo is not empty %}
-                        <a href="{{app.url}}/" class="navbar-brand img-responsive visible-xs " style="background-image: url({{ logo }}); background-position: 0 10px; background-repeat: no-repeat; display: block;  width: 110px; background-size: contain;"></a>
+                        <a href="{{app.url}}/" class="navbar-brand nav-brand-logo img-responsive visible-xs " style="background-image: url({{ logo }}); background-position: 10px 0 10px 10px; background-repeat: no-repeat; display: block;  width: 110px; background-size: contain;"></a>
                     {% else %}
                         <div id="logo-txt"><a class="navbar-brand visible-xs" href="{{app.url}}/">{{ app.params.site.title|striptags|slice(0, 32) }}</a></div>
                     {% endif %}

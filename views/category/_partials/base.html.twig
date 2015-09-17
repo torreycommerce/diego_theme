@@ -1,4 +1,4 @@
-   {% spaceless %}
+{% spaceless %}
 {#
 ##
 ##  Url Validation
@@ -86,13 +86,15 @@
 ##
 #}
 {% set products = api.get('/catalog', {
-                            "query":default_query|merge(filter_query),
-                            "page":app.request.get.page,
-                            "limit":limit,
-                            "search":app.request.get.s,
-                            "search_in":search_fields,
-                            "sort":sortBy
-                      }) %}
+                        "query":default_query|merge(filter_query),
+                        "page":app.request.get.page,
+                        "limit":limit,
+                        "search":app.request.get.s,
+                        "search_in":search_fields,
+                        "sort":sortBy
+                  }) %}
+
+
 {#
 ##
 ##  Search Suggestion API query
@@ -114,6 +116,8 @@
                       }) %}
     {% endif %}
 {% endif %}
+
+
 {#
 ##
 ##  Attribute filter API query
@@ -130,6 +134,14 @@
 {#
 ##
 ##  Redirection rules (if category or request is not found)
+##
+#}
+{% if products.num_total == 0 and app.request.get.f is not defined and app.request.get.s is not defined and category is not defined %}
+    {{app.redirect('/')}}
+{% endif %}
+{#
+##
+##  Begin Twig template
 ##
 #}
 {% if products.num_total == 0 and app.request.get.f is not defined and app.request.get.s is not defined and category is not defined %}
@@ -401,7 +413,7 @@
               
             <div class="panel-group" id="accordionNo">
                 {% for name,filter_set in filters %}
-                    {% if filter_set|length > 1 %}
+                    {% if filter_set|length >= 1 %}
                         {% set filter_count = filters %}
                         {% if filter_set|length %}
                             {% if filters|length %}

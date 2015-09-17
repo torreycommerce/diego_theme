@@ -10,7 +10,7 @@
 	{% do app.redirect('/',[],'404') %}
 {% endif %}
 {% block content %}
-    {% set default_query = {"status":"active","category_id":{"$exists":true}} %}
+    {% set default_query = {"status":"active"} %}
     {% set default_attributes = "color,category_id,gender,size,price,review_score" %}
     {% include "/category/_partials/base.html.twig"%}
 {% endblock %}

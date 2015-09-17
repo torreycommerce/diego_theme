@@ -1,398 +1,194 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="format-detection" content="telephone=no" /> <!-- disable auto telephone linking in iOS -->
-        <title>{{ app.params['site']['title'] }}</title>
-        <style type="text/css">
-            /* RESET STYLES */
-            html { background-color:#E1E1E1; margin:0; padding:0; }
-            body, #bodyTable, #bodyCell, #bodyCell{height:100% !important; margin:0; padding:0; width:100% !important;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;}
-            table{border-collapse:collapse;}
-            table[id=bodyTable] {width:100%!important;margin:auto;max-width:500px!important;color:#7A7A7A;font-weight:normal;}
-            img, a img{border:0; outline:none; text-decoration:none;height:auto; line-height:100%;}
-            a {text-decoration:none !important;}
-            h1, h2, h3, h4, h5, h6{color:#5F5F5F; font-weight:normal; font-family: 'Source Sans Pro', sans-serif, helvetica, arial; font-size:20px; line-height:125%; text-align:Left; letter-spacing:normal;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;padding-top:0;padding-bottom:0;padding-left:0;padding-right:0;}
-            /* CLIENT-SPECIFIC STYLES */
-            .ReadMsgBody{width:100%;} .ExternalClass{width:100%;} /* Force Hotmail/Outlook.com to display emails at full width. */
-            .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div{line-height:100%;} /* Force Hotmail/Outlook.com to display line heights normally. */
-            table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;} /* Remove spacing between tables in Outlook 2007 and up. */
-            #outlook a{padding:0;} /* Force Outlook 2007 and up to provide a "view in browser" message. */
-            img{-ms-interpolation-mode: bicubic;display:block;outline:none; text-decoration:none;} /* Force IE to smoothly render resized images. */
-            body, table, td, p, a, li, blockquote{-ms-text-size-adjust:100%; -webkit-text-size-adjust:100%; font-weight:normal!important;} /* Prevent Windows- and Webkit-based mobile platforms from changing declared text sizes. */
-            .ExternalClass td[class="ecxflexibleContainerBox"] h3 {padding-top: 10px !important;} /* Force hotmail to push 2-grid sub headers down */
-            /* /\/\/\/\/\/\/\/\/ TEMPLATE STYLES /\/\/\/\/\/\/\/\/ */
-            /* ========== Page Styles ========== */
-            h1{display:block;font-size:26px;font-style:normal;font-weight:normal;line-height:100%;}
-            h2{display:block;font-size:20px;font-style:normal;font-weight:normal;line-height:120%;}
-            h3{display:block;font-size:17px;font-style:normal;font-weight:normal;line-height:110%;}
-            h4{display:block;font-size:18px;font-style:italic;font-weight:normal;line-height:100%;}
-            .flexibleImage{height:auto;}
-            .linkRemoveBorder{border-bottom:0 !important;}
-            table[class=flexibleContainerCellDivider] {padding-bottom:0 !important;padding-top:0 !important;}
-            body, #bodyTable{background-color:#E1E1E1;}
-            #emailHeader{background-color:#E1E1E1;}
-            #emailBody{background-color:#FFFFFF;}
-            #emailFooter{background-color:#E1E1E1;}
-            .nestedContainer{background-color:#F8F8F8; border:1px solid #CCCCCC;}
-            .emailButton{background-color:#205478; border-collapse:separate;}
-            .buttonContent{color:#FFFFFF; font-family: 'Source Sans Pro', sans-serif, helvetica, arial; font-size:18px; font-weight:bold; line-height:100%; padding:15px; text-align:center;}
-            .buttonContent a{color:#FFFFFF; display:block; text-decoration:none!important; border:0!important;}
-            .emailCalendar{background-color:#FFFFFF; border:1px solid #CCCCCC;}
-            .emailCalendarMonth{background-color:#205478; color:#FFFFFF; font-family: 'Source Sans Pro', sans-serif, helvetica, arial; font-size:16px; font-weight:bold; padding-top:10px; padding-bottom:10px; text-align:center;}
-            .emailCalendarDay{color:#205478; font-family: 'Source Sans Pro', sans-serif, helvetica, arial; font-size:60px; font-weight:bold; line-height:100%; padding-top:20px; padding-bottom:20px; text-align:center;}
-            .imageContentText {margin-top: 10px;line-height:0;}
-            .imageContentText a {line-height:0;}
-            #invisibleIntroduction {display:none !important;} /* Removing the introduction text from the view */
-            /*FRAMEWORK HACKS & OVERRIDES */
-            span[class=ios-color-hack] a {color:#275100!important;text-decoration:none!important;} /* Remove all link colors in IOS (below are duplicates based on the color preference) */
-            span[class=ios-color-hack2] a {color:#205478!important;text-decoration:none!important;}
-            span[class=ios-color-hack3] a {color:#8B8B8B!important;text-decoration:none!important;}
-            .a[href^="tel"], a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:none!important;cursor:default!important;}
-            .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:auto!important;cursor:default!important;}
-            /* MOBILE STYLES */
-            @media only screen and (max-width: 480px){
-                /*////// CLIENT-SPECIFIC STYLES //////*/
-                body{width:100% !important; min-width:100% !important;} /* Force iOS Mail to render the email at full width. */
-                /* FRAMEWORK STYLES */
-                table[id="emailHeader"],
-                table[id="emailBody"],
-                table[id="emailFooter"],
-                table[class="flexibleContainer"],
-                td[class="flexibleContainerCell"] {width:100% !important;}
-                td[class="flexibleContainerBox"], td[class="flexibleContainerBox"] table {display: block;width: 100%;text-align: left;}
-                td[class="imageContent"] img {height:auto !important; width:100% !important; max-width:100% !important; }
-                img[class="flexibleImage"]{height:auto !important; width:100% !important;max-width:100% !important;}
-                img[class="flexibleImageSmall"]{height:auto !important; width:auto !important;}
-                table[class="flexibleContainerBoxNext"]{padding-top: 10px !important;}
-                table[class="emailButton"]{width:100% !important;}
-                td[class="buttonContent"]{padding:0 !important;}
-                td[class="buttonContent"] a{padding:15px !important;}
-            }
-            /*  CONDITIONS FOR ANDROID DEVICES ONLY
-            @media only screen and (-webkit-device-pixel-ratio:.75){
-            /* Put CSS for low density (ldpi) Android layouts in here */
-            }
-            @media only screen and (-webkit-device-pixel-ratio:1){
-            /* Put CSS for medium density (mdpi) Android layouts in here */
-            }
-            @media only screen and (-webkit-device-pixel-ratio:1.5){
-            /* Put CSS for high density (hdpi) Android layouts in here */
-            }
-            /* end Android targeting */
-            /* CONDITIONS FOR IOS DEVICES ONLY
-            =====================================================*/
-            @media only screen and (min-device-width : 320px) and (max-device-width:568px) {
-            }
-            /* end IOS targeting */
-        </style>
-    </head>
-    {% set order = api.get('/order/' ~ order_id) %}
-    {% set items = api.get('/orderitem', {query:{'order_id':order_id}}) %}
-    {% set fulfillment = api.get('/orderfulfillment/' ~ fulfillment_id) %}
-    {% set product_ids = items|values_in('product_id') %}
-    {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
-    {% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
-    {# Variables passed in: order_id #}
-    <body style="background-color: #fff;"  leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
-           <!-- CENTER THE EMAIL // -->
-            <center style="background-color:#fff;">
-                <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="table-layout: fixed;max-width:100% !important;width: 100% !important;min-width: 100% !important;">
-                    <tr>
-                        <td align="center" valign="top" id="bodyCell">
-                            <!-- // EMAIL HEADER -->
+ 
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>{{ site_title|default("") }}</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
+  <style type="text/css">
+  body {margin: 0; padding: 0; min-width: 100%!important;}
+  img {height: auto;}
+  .content {width: 100%; max-width: 600px;}
+  .header {padding: 20px 30px 20px 30px;}
+  .innerpadding {padding: 40px 30px 40px 30px;}
+  .borderbottom {border-bottom: 1px solid #f2eeed;}
+  .bordergrey {border-bottom: 5px solid #d8d8d8; border-top: 5px solid #d8d8d8;}
+  .subhead {font-size: 15px; color: #ffffff; font-family: 'Open Sans', sans-serif; letter-spacing: 10px;}
+  .h1, .h2, .h3, .bodycopy {color: #1d2831; font-family: 'Open Sans', sans-serif;}
+  .h1 {font-size: 33px; line-height: 38px; font-weight: bold; text-transform: uppercase;}
+  .h2 {padding: 0 0 15px 0; font-size: 24px; line-height: 28px; font-weight: bold; text-transform: uppercase;}
+  .h3 {padding: 0 0 15px 0; font-size: 20px; line-height: 28px; font-weight: bold; text-transform: uppercase;}
+  .bodycopy {font-size: 14px; line-height: 22px;}
+  .light {color:#dcdcdc;}
+  .light a {color:#dcdcdc;}
+   .light a:hover {color:#c4c4c4;}
+  .producttitle, .productprice { font-size: 12px; font-family: 'Open Sans', sans-serif; padding:0; margin:0; font-weight:bold; color:#474747;}
+  .producttitle { margin-top:5px; font-weight:bold; text-transform: uppercase;}
+  .productprice { margin: 0 0 20px 0; color: #1d2831;}
+  .button {text-align: center; font-size: 18px; font-family: 'Open Sans', sans-serif; font-weight: bold; padding: 0 30px 0 30px;}
+  .button a {color: #ffffff; text-decoration: none;}
+  .footer {padding: 20px 30px 15px 30px;}
+  .footertitle {font-family: 'Open Sans', sans-serif; font-size: 20px; font-weight: 500; color: #f2f2f2;}
+  .footertitle a {color: #f2f2f2; text-decoration: none;}
+  .footertitle a:hover {color: #b0afaf; text-decoration: none;}
+  .footernav {font-family: 'Open Sans', sans-serif; font-size: 12px;  color: #f2f2f2;}
+  .footernav ul li {list-style-type: none; padding: 5px 0;}
+  .footernav a {color: #f2f2f2; text-decoration: none;}
+  .footernav a:hover {color: #b0afaf; text-decoration: none;}
+  .footerbottom {padding: 10px 10px;}
+  .footercopy {font-family: 'Open Sans', sans-serif; font-size: 10px;  color: #d9d9d9;}
+  .footercopy a {text-decoration: none; font-size: 10px;  color: #cbcbcb;}
+  .footerborder { height:60px; padding: 40px 0; border-left: 1px solid #949494; }
 
-                            <!-- EMAIL HEADER // -->
-                            <table style="background-color: #e1e1e1;"  border="0" cellpadding="0" cellspacing="0" width="500" id="emailHeader">
+  @media only screen and (max-width: 550px), screen and (max-device-width: 550px) {
+  body[yahoo] .hide {display: none!important;}
+  body[yahoo] .buttonwrapper {background-color: transparent!important;}
+  body[yahoo] .button {padding: 0px!important;}
+  body[yahoo] .button a {background-color: #e05443; padding: 15px 15px 13px!important;}
+  body[yahoo] .unsubscribe {display: block; margin-top: 20px; padding: 10px 50px; background: #2f3942; border-radius: 5px; text-decoration: none!important; font-weight: bold;}
+  }
 
-                                <!-- HEADER ROW // -->
-                                <tr>
-                                    <td align="center" valign="top">
-                                        <!-- CENTERING TABLE // -->
-                                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                            <tr>
-                                                <td align="center" valign="top">
-                                                    <!-- FLEXIBLE CONTAINER // -->
-                                                    <table border="0" cellpadding="10" cellspacing="0" width="500" class="flexibleContainer">
-                                                        <tr>
-                                                            <td valign="top" width="500" class="flexibleContainerCell">
+  /*@media only screen and (min-device-width: 601px) {
+    .content {width: 600px !important;}
+    .col425 {width: 425px!important;}
+    .col380 {width: 380px!important;}
+    }*/
 
-                                                                <!-- CONTENT TABLE // -->
-                                                                <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%">
-                                                                    <tr>
-                                                                        <td align="left" valign="middle" id="invisibleIntroduction" class="flexibleContainerBox" style="display:none !important;">
-                                                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:100%;">
-                                                                                <tr>
-                                                                                    <td align="left" class="textContent">
-                                                                                        <div style="font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:13px;color:#828282;text-align:center;line-height:120%;">
-                                                                                            Your order has been shipped. Thank you again for your order.
-                                                                                        </div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </table>
-                                                                        </td>
-                                                                            <!--                                                                     <td align="right" valign="middle" class="flexibleContainerBox">
-                                                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:100%;">
-                                                                                <tr>
-                                                                                    <td align="left" class="textContent">
-                                                                                        <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">
-                                                                                            If you can't see this message <a href="#" target="_blank" style="text-decoration:none;border-bottom:1px solid #828282;color:#828282;"><span style="color:#828282;">View&nbsp;it&nbsp;in&nbsp;your&nbsp;browser</span></a>.
-                                                                                        </div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </table>
-                                                                        </td> -->
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <!-- // FLEXIBLE CONTAINER -->
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <!-- // CENTERING TABLE -->
-                                    </td>
-                                </tr>
-                                <!-- // END -->
-
-                            </table>
-                            <!-- // END -->
-
-                            <!-- EMAIL CONTAINER // -->
-                            <table style="background-color: #fff;" border="2" cellpadding="5" cellspacing="0" width="500" id="emailBody" rules="none">
-
-                                <!-- MODULE ROW // -->
-                                <tr>
-                                    <td align="center" valign="top">
-                                        <!-- CENTERING TABLE // -->
-                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #fff; color:#FFFFFF;">
-                                            <tr>
-                                                <td align="center" valign="top">
-                                                    <!-- FLEXIBLE CONTAINER // -->
-                                                    <table border="0" cellpadding="0" cellspacing="0" width="500" class="flexibleContainer">
-                                                        <tr>
-                                                            <td align="center" valign="top" width="500" class="flexibleContainerCell">
-                                                                <!-- Begin toolbar -->
-                                                                <table border="0" cellpadding="30" cellspacing="0" width="100%" style="background-color: #f8f8f8; font-family: 'Source Sans Pro', sans-serif, helvetica, arial;">
-                                                                    <tr>
-                                                                        <td style="text-align: right; height: 34px; padding: 10px;">
-                                                                            <a href="{{app.url}}/account/login" style="border: none; color: #5F5F5F; display: inline-block; font-size: 12px; margin-right: 10px; padding: 10px 15px; text-decoration: none; text-transform: uppercase;">
-                                                                                Log in
-                                                                            </a>
-                                                                            <a href="{{app.url}}/cart" style="border:none; color: #5F5F5F; display: inline-block;font-size: 12px; margin: 0; padding: 10px 15px; text-decoration: none; text-transform: uppercase;">
-                                                                                My Cart
-                                                                            </a>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                                <!-- End toolbar -->
-                                                                <!-- CONTENT TABLE // -->
-                                                                <table border="0" cellpadding="30" cellspacing="0" width="100%">
-
-                                                                    <tr>
-                                                                        <td align="center" valign="top" class="textContent">
-                                                                            <h1 style="color:#6e6e6e;
-                                                                            line-height:100%;
-                                                                            font-family:Helvetica,Arial,sans-serif;
-                                                                            font-size:35px;
-                                                                            font-weight:normal;
-                                                                            margin-bottom:5px;
-                                                                            text-align:center; 
-                                                                            font-weight: 800;
-                                                                            line-height: normal;
-                                                                            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 1px #FFFFFF;
-                                                                            text-transform: uppercase;">{{ app.params['site']['title'] }}</h1>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                                <table>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <h2 style="text-align:center;font-weight:normal;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:600;margin-bottom:10px;color:#6e6e6e;line-height:135%; text-transform: uppercase; ">Thank you again for your order from {{ app.params['site']['title'] }}!</h2>
-                                                                            <div style="text-align:center;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;margin-bottom:10px;color:#FFFFFF;line-height:135%;">  Order ID: {{ order.order_number }} <br/>
-                                                                            Your order has been shipped</div>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                                <!-- // CONTENT TABLE -->
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <!-- // FLEXIBLE CONTAINER -->
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <!-- // CENTERING TABLE -->
-                                    </td>
-                                </tr>
-                                <!-- // MODULE ROW -->
-
-                                <!-- MODULE ROW // -->
-                                <tr>
-                                    <td align="center" valign="top">
-                                        <!-- CENTERING TABLE // -->
-                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8f8f8;" >
-                                            <tr>
-                                                <td align="center" valign="top">
-                                                    <!-- FLEXIBLE CONTAINER // -->
-                                                    <table border="0" cellpadding="0" cellspacing="0" width="500" class="flexibleContainer">
-                                                        <tr>
-                                                            <td align="center" valign="top" width="500" class="flexibleContainerCell">
-                                                                <table border="0" cellpadding="30" cellspacing="0" width="100%">
-                                                                    <tr>
-                                                                        <td align="center" valign="top">
-
-                                                            <!-- CONTENT TABLE // -->
-                                                            <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%">
-                                                                <tr>
-                                                                    <td align="left" valign="top" class="flexibleContainerBox">
-                                                                        <table border="0" cellpadding="0" cellspacing="0" width="210" style="max-width: 100%;">
-                                                                            <tr>
-                                                                                <td align="left" class="textContent">
-                                                                                    <h3 style="color:#E7214C;line-height:125%;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold;margin-top:0;margin-bottom:3px;text-align:left; text-transform: uppercase;">Shipping Address</h3>
-                                                                                    <div style="text-align:left;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;margin-bottom:0;color:#5F5F5F;line-height:135%;">                           {{ order.shipping_first_name }} {{ order.shipping_last_name }} <br>
-                                                                                    {% if order.giftlist_present is empty %}<br>
-                                                                                    {{ order.shipping_street_line1}} {{ order.shipping_street_line2}}<br>
-                                                                                    {{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_zip }} <br>
-                                                                                    {{ order.shipping_country }}<br>
-                                                                                    {{ order.shipping_phone_number }}<br>
-                                                                                    {% endif %}
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                    <td align="right" valign="middle" class="flexibleContainerBox">
-                                                                        <table class="flexibleContainerBoxNext" border="0" cellpadding="0" cellspacing="0" width="210" style="max-width: 100%;">
-                                                                            <tr>
-                                                                                <td align="left" class="textContent">
-                                                                                    <h3 style="color:#E7214C;line-height:125%;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;font-weight:bold;margin-top:0;margin-bottom:3px;text-align:left; text-transform: uppercase;">Delivery Method</h3>
-                                                                                    <div style="text-align:left;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;margin-bottom:0;color:#5F5F5F;line-height:135%;">Using {{ shipping_method.name }} <br>
-                                                                                    {% for item in items %} <br>
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                            <!-- // CONTENT TABLE -->
-
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <!-- // FLEXIBLE CONTAINER -->
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <!-- // CENTERING TABLE -->
-                                    </td>
-                                </tr>
-                                <!-- // MODULE ROW -->
-
-                            <!-- MODULE ROW // -->
-                            <tr mc:hideable>
-                                <td align="center" valign="top">
-                                    <!-- CENTERING TABLE // -->
-                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                        <tr>
-                                            <td align="center" valign="top">
-                                                <!-- FLEXIBLE CONTAINER // -->
-                                                <table border="0" cellpadding="30" cellspacing="0" width="500" class="flexibleContainer">
-                                                    <tr>
-                                                        <td valign="top" width="500" class="flexibleContainerCell">
-
-                                                            <!-- CONTENT TABLE // -->
-                                                            <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%">
-                                                                <tr>
-                                                                    <td align="left" valign="top" class="flexibleContainerBox">
-                                                                        <table border="0" cellpadding="0" cellspacing="0" width="210" style="max-width: 100%;">
-                                                                            <tr>
-                                                                                <td align="left" class="textContent">
-                                                                                    <h3 style="color:#E7214C;line-height:125%;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold;margin-top:0;margin-bottom:3px;text-align:left; text-transform: uppercase;">Products</h3>
-                                                                                    <div style="text-align:left;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;margin-bottom:0;color:#5F5F5F;line-height:135%;">
-                                                                                    Status: {{ item.status }} <br>
-                                                                                    Item name: <a href="{{site_url}}{{products[item.product_id].0.url}}" target="_blank">{{ item.name }}</a> <br>
-                                                                                    SKU: {{item.sku}} <br>
-                                                                                    {% for ffi in fulfillment.items %}
-                                                                                        {% if ffi.id == item.id %}
-                                                                                            Quantity: {{ ffi.quantity }} <br>
-                                                                                            Tracking number: {{ ffi.tracking }} <br>
-                                                                                        {% endif %}
-                                                                                    {% endfor %}
-                                                                                    {% endfor %}</div>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td align="left" class="textContent">
-                                                                                    <h3 style="color:#E7214C;line-height:125%;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold;margin-top:0;margin-bottom:3px;text-align:left; text-transform: uppercase;"><br/>Please Note:</h3>
-                                                                                    <div style="text-align:left;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:15px;margin-bottom:0;color:#5F5F5F;line-height:135%;">If your order was placed after-hours or on the weekend your tracking number will not be active until the next business day when the package is picked up by the carrier.</div>
-                                                                                </td>
-                                                                            </tr>                                                                            
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                            <!-- // CONTENT TABLE -->
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                                <!-- // FLEXIBLE CONTAINER -->
-                                                                                <!-- EMAIL FOOTER // -->
-                                <table style="background-color: #fff;"  border="0" cellpadding="0" cellspacing="0" width="500" id="emailFooter">
-
-                                    <!-- FOOTER ROW // -->
-                                    <tr>
-                                        <td align="center" valign="top">
-                                            <!-- CENTERING TABLE // -->
-                                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                                <tr>
-                                                    <td align="center" valign="top">
-                                                        <!-- FLEXIBLE CONTAINER // -->
-                                                        <table border="0" cellpadding="0" cellspacing="0" width="500" class="flexibleContainer">
-                                                            <tr>
-                                                                <td align="center" valign="top" width="500" class="flexibleContainerCell">
-                                                                    <table border="0" cellpadding="20" cellspacing="0" width="100%">
-                                                                        <tr>
-                                                                            <td valign="top" style="border-top: 1px solid #f5f5f5;" >
-
-                                                                                <div style="font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:13px;color:#828282;text-align:center;line-height:120%;">
-                                                                                <div>Copyright &copy;{{"now"|date("Y")}} <a href="{{app.url}}/" target="_blank" style="text-decoration:none;color:#828282;"><span style="color:#828282;">{{ app.params['site']['title'] }}</span></a>. All Rights Reserved. Powered by Acenda.</div>
-<!--                                                                                    <div>If you do not want to recieve emails from us, you can <a href="#" target="_blank" style="text-decoration:none;color:#828282;"><span style="color:#828282;">unsubscribe</span></a>.</div> -->
-                                                                                </div>
-
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                        <!-- // FLEXIBLE CONTAINER -->
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <!-- // CENTERING TABLE -->
-                                        </td>
-                                    </tr>
-                                </table>
-                                <!-- // END -->
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <!-- // CENTERING TABLE -->
-                                </td>
-                            </tr>
-                            <!-- // MODULE ROW -->
-
-                        </td>
-                    </tr>
-                <!-- End email footer -->
+  </style>
+</head>
+{% set order = api.get('/order/' ~ order_id) %}
+{% set items = api.get('/orderitem', {query:{'order_id':order_id}}) %}
+{% set fulfillment = api.get('/orderfulfillment/' ~ fulfillment_id) %}
+{% set product_ids = items|values_in('product_id') %}
+{% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+{% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
+{# Variables passed in: order_id #}
+<body yahoo bgcolor="#fff">
+<table width="100%" bgcolor="#fff" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <td>
+    <!--[if (gte mso 9)|(IE)]>
+      <table width="600" align="center" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td>
+    <![endif]-->     
+    <table bgcolor="#f7f7f7" class="content" align="center" cellpadding="0" cellspacing="0" border="0">
+      {% include 'email/core/header.html.twig' %}
+      <tr>
+        <td class="innerpadding borderbottom">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td class="h2">
+                Thank you again for your order from {{ app.params['site']['title'] }}!
+              </td>
+            </tr>
+            <tr>
+              <td class="bodycopy">
+                Order ID: {{ order.order_number }} <br/>
+                Your order has been shipped.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr bgcolor="#1d2831">
+        <td class="innerpadding bordergrey">
+          <table class="col380" align="left" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">  
+            <tr>
+              <td>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td class="h3 light">
+                      Shipping Address
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="bodycopy light">
+                        { order.shipping_first_name }} {{ order.shipping_last_name }} <br>
+                        {% if order.giftlist_present is empty %}<br>
+                        {{ order.shipping_street_line1}} {{ order.shipping_street_line2}}<br>
+                        {{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_zip }} <br>
+                        {{ order.shipping_country }}<br>
+                        {{ order.shipping_phone_number }}<br>
+                        {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="h3 light">
+                      Delivery Method
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="bodycopy light">
+                        Using {{ shipping_method.name }} <br>
+                        {% for item in items %} <br>
+                    </td>
+                  </tr>
                 </table>
-            </center>
-        </body>
+              </td>
+            </tr>
+          </table>
+          <!--[if (gte mso 9)|(IE)]>
+                </td>
+              </tr>
+          </table>
+          <![endif]-->
+        </td>
+      </tr>
+      <tr bgcolor="#808080" style="margin-top: 10px;">
+        <td class="innerpadding bordergrey">
+          <table class="col380" align="left" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">  
+            <tr>
+              <td>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td class="h3 light">
+                      Products
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="bodycopy light">
+                        Status: {{ item.status }} <br>
+                        Item name: <a href="{{site_url}}{{products[item.product_id].0.url}}" target="_blank">{{ item.name }}</a> <br>
+                        SKU: {{item.sku}} <br>
+                        {% for ffi in fulfillment.items %}
+                            {% if ffi.id == item.id %}
+                                Quantity: {{ ffi.quantity }} <br>
+                                Tracking number: {{ ffi.tracking }} <br>
+                            {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                    </td>
+                  </tr>
+                   <tr>
+                        <td align="left" class="textContent">
+                            <h3 class="bodycopy light"><br/>Please Note:</h3>
+                            <div style="text-align:left;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:13px;margin-bottom:0;color:#bdbdbd;line-height:135%;">If your order was placed after-hours or on the weekend your tracking number will not be active until the next business day when the package is picked up by the carrier.</div>
+                        </td>
+                    </tr> 
+                </table>
+              </td>
+            </tr>
+          </table>
+          <!--[if (gte mso 9)|(IE)]>
+                </td>
+              </tr>
+          </table>
+          <![endif]-->
+        </td>
+      </tr>
+          {% include 'email/core/top-seller.html.twig' %}
+          <tr>
+            <td class="innerpadding bodycopy">
+              Thank you from your friends at {{ app.params['site']['title'] }}.<br/>
+              Please add us to your email address book to make sure you receive important 
+              emails from us.
+            </td>
+          </tr>
+          {% include 'email/core/footer.html.twig' %}
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

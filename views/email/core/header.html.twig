@@ -1,37 +1,22 @@
-<!-- Begin email header -->
-<table border="0" cellpadding="0" cellspacing="0" width="640" style="font-family: helvetica, arial, sans-serif;">
-	<!-- Begin toolbar -->
-	<tr>
-		<td>
-			<table border="0" cellpadding="0" cellspacing="0" width="640" style="background-color: #222222; font-family: helvetica, arial, sans-serif;">
-				<tr>
-					<td style="text-align: right; height: 34px; padding: 10px;">
-						<a href="{{app.url}}/account/login" style="background-color: #555555; color: #FFFFFF; display: inline-block; font-size: 12px; margin-right: 10px; padding: 10px 15px; text-decoration: none; text-transform: uppercase;">
-							Log in
-						</a>
-						<a href="{{app.url}}/cart" style="background-color: #E16C25; color: #FFFFFF; display: inline-block;font-size: 12px; margin: 0; padding: 10px 15px; text-decoration: none; text-transform: uppercase;">
-							My Cart
-						</a>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<!-- End toolbar -->
-	<!-- Begin site name -->
-	<tr>
-		<td>
-			<table align="center" border="0" cellpadding="0" cellspacing="0" width="640" style="background-color: #FFFFFF; color: #333333; font-family: helvetica, arial, sans-serif; padding: 20px;">
-				<tr>
-					<td align="center" width="640" style="border-bottom: 1px solid #CCCCCC;">
-						<h1 style="font-size: 36px; line-height: 46px;">
-							{{ app.params['site']['title'] }}
-						</h1>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<!-- End site name -->
-</table>
-<!-- End email header
+          <tr>
+            <td bgcolor="#ededed" class="header">
+              <table class="col425" align="left" border="0" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 600px;">  
+                  <tr>
+                    <td height="70">
+                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                          <td class="h1" style="padding: 5px 0 0 0;">
+                            {{ site_title|default("") }}
+                          </td>
+                          <td style="padding: 5px 0 0 0;">
+                            <a href="https://www.facebook.com/acendainc" target="_blank" style="color:#fefefe; opacity: .5; text-decoration:none;"><img src="{{ app.url_asset }}/images/email/facebook.png" width="34" height="34" alt="" title="" border="0" style="border:0; display:inline_block;"/></a>
+                            <a href="https://twitter.com/getacenda" target="_blank" style="color:#fefefe; opacity: .5;; text-decoration:none;"><img src="{{ app.url_asset }}/images/email/twitter.png" width="34" height="34" alt="" title="" border="0" style="border:0; display:inline_block;"/></a>
+                            <a href="https://www.linkedin.com/company/acenda" target="_blank" style="color:#fefefe; opacity: .5; text-decoration:none;"><img src="{{ app.url_asset }}/images/email/google.png" width="34" height="34" alt="" title="" border="0" style="border:0; display:inline_block;"/></a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+          </tr>
