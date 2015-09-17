@@ -1,37 +1,37 @@
-          <tr>
-            <td class="footer" bgcolor="#474747">
-              <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                <tr style="height:140px;">
-                  <td align="left" class="footertitle" style="width:45%;">
-                    <a href="{{app.url}}/">ACENDA STORE</a>
-                  </td>
-                  <td class="footerborder" style="width:5%;"></td>
-                  <td align="left" class="footernav" style="width:25%;">
-                    <ul>
-                      <li><a href="{{app.url}}/account/login">My Account</a></li>
-                      <li><a href="{{app.url}}/account/whishlist">Whishlist</a></li>
-                      <li><a href="{{app.url}}/cart">Shopping Cart</a></li>
-                    </ul>
-                  </td>    
-                  <td align="left" class="footernav" style="width:25%;">
-                    <ul>
-                      <li><a href="{{app.url}}/account/orders">Order Status</a></li>
-                      <li><a href="{{app.url}}/registry/search">Gift Registries</a></li>
-                      <li><a href="{{app.url}}/account/contact">Contact Us</a></li>
-                    </ul>
-                  </td>            
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td class="footerbottom" bgcolor="#808080">
-              <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                <tr style="height:20px;">
-                  <td align="center" class="footercopy">
-                    Copyright  &copy;{{"now"|date("Y")}} <a href="{{app.url}}/" target="_blank" style="text-decoration:none;">{{ site_title|default("") }}</a>. Powered by <a href="https://www.acenda.com/" target="_new">Acenda.</a>
-                  </td>           
-                </tr>
-              </table>
-            </td>
-          </tr>
+<tr>
+  <td class="footer" bgcolor="#474747">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr style="height:140px;">
+        <td align="left" class="footertitle" style="width:45%;">
+          <a href="{{site_url}}/">{{ site_title|default("") }}</a>
+        </td>
+        <td class="footerborder" style="width:5%;"></td>
+        <td align="left" class="footernav" style="width:25%;">
+          <ul>
+            <li><a href="{{site_url}}/account/login">My Account</a></li>
+            <li><a href="{{site_url}}/account/whishlist">Whishlist</a></li>
+            <li><a href="{{site_url}}/cart">Shopping Cart</a></li>
+          </ul>
+        </td>
+        <td align="left" class="footernav" style="width:25%;">
+          <ul>
+            <li><a href="{{site_url}}/account/orders">Order Status</a></li>
+            <li><a href="{{site_url}}/registry/search">Gift Registries</a></li>
+            <li><a href="{{site_url}}/account/contact">Contact Us</a></li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+  <td class="footerbottom" bgcolor="#808080">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr style="height:20px;">
+        <td align="center" class="footercopy">
+          Copyright  &copy;{{"now"|date("Y")}} <a href="{{site_url}}/" target="_blank" style="text-decoration:none;">{{ site_title|default("") }}</a>. Powered by <a href="https://www.acenda.com/" target="_new">Acenda.</a>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
