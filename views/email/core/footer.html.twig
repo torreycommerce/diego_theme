@@ -3,21 +3,21 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr style="height:140px;">
         <td align="left" class="footertitle" style="width:45%;">
-          <a href="{{site_url}}/">{{ site_title|default("") }}</a>
+          <a href="{{params['url']['current']}}/">{{ params['site']['title']|default("") }}</a>
         </td>
         <td class="footerborder" style="width:5%;"></td>
         <td align="left" class="footernav" style="width:25%;">
           <ul>
-            <li><a href="{{site_url}}/account/login">My Account</a></li>
-            <li><a href="{{site_url}}/account/whishlist">Whishlist</a></li>
-            <li><a href="{{site_url}}/cart">Shopping Cart</a></li>
+            <li><a href="{{params['url']['current']}}/account/login">My Account</a></li>
+            <li><a href="{{params['url']['current']}}/account/whishlist">Whishlist</a></li>
+            <li><a href="{{params['url']['current']}}/cart">Shopping Cart</a></li>
           </ul>
         </td>
         <td align="left" class="footernav" style="width:25%;">
           <ul>
-            <li><a href="{{site_url}}/account/orders">Order Status</a></li>
-            <li><a href="{{site_url}}/registry/search">Gift Registries</a></li>
-            <li><a href="{{site_url}}/account/contact">Contact Us</a></li>
+            <li><a href="{{params['url']['current']}}/account/orders">Order Status</a></li>
+            <li><a href="{{params['url']['current']}}/registry/search">Gift Registries</a></li>
+            <li><a href="{{params['url']['current']}}/account/contact">Contact Us</a></li>
           </ul>
         </td>
       </tr>
@@ -29,7 +29,7 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr style="height:20px;">
         <td align="center" class="footercopy">
-          Copyright  &copy;{{"now"|date("Y")}} <a href="{{site_url}}/" target="_blank" style="text-decoration:none;">{{ site_title|default("") }}</a>. Powered by <a href="https://www.acenda.com/" target="_new">Acenda.</a>
+          Copyright  &copy;{{"now"|date("Y")}} <a href="{{params['url']['current']}}/" target="_blank" style="text-decoration:none;">{{ params['site']['title']|default("") }}</a>. Powered by <a href="https://www.acenda.com/" target="_new">Acenda.</a>
         </td>
       </tr>
     </table>
