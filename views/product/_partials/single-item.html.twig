@@ -2,6 +2,45 @@
    <script type="text/javascript">
       var VariantsData = {isCollection: false, products: []}
       VariantsData.products.push({variants: {{product.variant|json_encode}}, variant_options: {{product.variant_options|json_encode}}});
+      {# An array of unique image IDs, so we can request the image url only once per ID #}
+      {% set arr_uniq_img = {} %}
+
+      {# An array of unique product image IDs, so we can have a fallback if there's no variant images #}
+      {% set arr_uniq_prod_img = {} %}
+      {% for image in product.images %}
+         {% set arr_uniq_prod_img = arr_uniq_prod_img|merge([image.id]) %}
+         {% set arr_uniq_img = arr_uniq_img|merge([image.id]) %}
+      {% endfor %}
+   
+      {# An array of unique variant image IDs, so we can lookup for image ids on variant selection #}
+      {% set arr_uniq_var_img = {} %}
+      {% for variation in product.variant %}
+         {% set arr_var_img = {} %}
+         {% for image in variation.images %}
+            {% set arr_var_img = arr_var_img|merge([image.id]) %}
+            {% set arr_uniq_img = arr_uniq_img|merge([image.id]) %}
+         {% endfor %}
+         {% set arr_uniq_var_img = arr_uniq_var_img|merge({ ('_'~variation.id) : arr_var_img }) %}
+      {% endfor %}
+      
+
+      {# An array of unique image ID with types and img urls #}
+      {% set arr_uniq_var_img_url = {} %}
+      {% for img_id in arr_uniq_img %}
+         {% set arr_uniq_var_img_url = 
+            arr_uniq_var_img_url|merge({ ('_'~img_id) : {
+                  'large' : app.image.getImageUrl("product","large",img_id),
+                  'thumbnail' : app.image.getImageUrl("product","thumbnail",img_id),
+                  'standard' : app.image.getImageUrl("product","standard",img_id)
+               } }) %}
+      {% endfor %}
+      {% spaceless %}
+         var arr_uniq_prod_img = {{ arr_uniq_prod_img | json_encode}};
+         var arr_uniq_var_img = {{ arr_uniq_var_img | json_encode }};
+         var arr_uniq_img = {{ arr_uniq_img | json_encode }};
+         var arr_uniq_var_img_url = {{ arr_uniq_var_img_url | json_encode }};
+      {% endspaceless %}
+      
    </script>
    <div class="row transitionfx" id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
       <!-- Container -->
@@ -9,12 +48,12 @@
          <!-- Product Row -->
          <form method="post" id="productForm" action="{{ app.url }}/product/route">
             <div class="row product-details">
-               {% for variation in product.variant %}
-                  <div id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:"{% endif %}>
+               {# for variation in product.variant #}
+                  <div id="selected-variant-images product-{{product.variant[0].id}}" {% if loop.index > 1 %}style="display:"{% endif %}>
                      {# Begin product images #}
                      <div id="product-images" class="col-md-5 mgb-30-xs">
                         {# Begin main image #}
-                        {% set main_image_id = variation.images.0.id is not empty ? variation.images : product.images %}
+                        {% set main_image_id = product.variant[0].images.0.id is not empty ? product.variant[0].images : product.images %}
 
                          {% set best_varia = {} %}
 
@@ -25,17 +64,17 @@
                          {% endfor %}
 
 
-                         {% if variation.images.0.id is empty %}
-                           {% set main_image_id = best_varia[variation.Color] is not empty ? best_varia[variation.Color] : product.images %}
+                         {% if product.variant[0].images.0.id is empty %}
+                           {% set main_image_id = best_varia[product.variant[0].Color] is not empty ? best_varia[product.variant[0].Color] : product.images %}
                          {% endif %}
 
                         <div id="image-main">
                            <div class="row">
                               <div class="col-sm-12">
-                                    <div class="thumbnail">
+                                    <div class="thumbnail" id="variantSelectedImage">
                                        <span class="helper hidden-xs"></span>
                                        <div id="main-product-video" style="display:none"></div>
-                                       <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="{{app.image.getImageUrl("product","standard",main_image_id.0.id) }}" data-image-zoom="{{app.image.getImageUrl("product","large",main_image_id.0.id) }}" alt="" />
+                                       <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="" data-image-zoom="" alt="" />
                                     </div>
                               </div>
                            </div>
@@ -45,28 +84,29 @@
 
                            <div id="image-carousel" class="hidden-xs row">
                               <div class="image-carousel">
-                                 <div id="image-carousel-{{variation.id}}" class="carousel">
+                                 <div id="image-carousel-{{product.variant[0].id}}" class="carousel">
                                     <div>
-                                       <div class="item active itemauto">
-                                       {% for image in main_image_id %}
-                                          {% set name = image.name is not empty ? image.name : product.name %}
-                                          <div class="col-sm-2">
-                                                <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
-                                                      <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" class="" src="{{app.image.getImageUrl("product","thumbnail",image.id,secure) }}" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",image.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",image.id) }}" alt="" />
-                                                </div>
-                                          </div>
-                                       {% endfor %}
-                                       {% if variation.videos is not empty %}
-                                          {% do app.asset.js(app.url_asset ~ '/js/video-player.js') %}
-                                          {% for video in variation.videos %}
-                                             <div class="col-sm-2">
-                                                <div class="thumbnail video" data-video-src="{{ video }}" data-tooltip="" data-toggle="tooltip" data-original-title="">
-                                                      <i class="video-icon fa fa-play-circle"></i><img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" src="">
+
+                                       <div class="item active itemauto" id="variantImageCarouselCopy" style="display:none;">
+                                             
+                                             <div class="col-sm-2" id="variantImageThumbnailCopy">
+                                                   <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
+                                                         <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" class="" src="" data-image-swap="main-product-image" data-image-swap-src=""  data-image-swap-zoom="" alt="" />
+                                                   </div>
+                                             </div>
+                                             <div class="col-sm-2" id="variantVideoCopy">
+                                                {% do app.asset.js(app.url_asset ~ '/js/video-player.js') %}
+                                                <div class="thumbnail video" data-video-src="" data-tooltip="" data-toggle="tooltip" data-original-title="">
+                                                   <i class="video-icon fa fa-play-circle"></i><img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" src="">
                                                 </div>
                                              </div>
-                                          {% endfor %}
-                                       {% endif %}
+
                                        </div>
+
+                                       <div class="item active itemauto" id="variantImageCarousel">
+                                          
+                                       </div>
+
                                     </div>
                                  </div>
                               </div>
@@ -75,7 +115,7 @@
                      </div>
                      {# End product images #}
                   </div>
-               {% endfor %}
+               {# endfor #}
 
                <div class="col-md-7">  <!-- /Begin Product Details -->
                   <h2 class="product-title"> <a href="{{app.url}}/brand/{{product.brand|url_encode}}">{{product.brand}}</a></h2>
@@ -101,56 +141,59 @@
 
                   <h3 class="product-title">{{product.title}}</h3>
 
-                  {% for variation in product.variant %}
-                     <div id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
+                  {# for variation in product.variant #}
+                     <div id="variant-availability-price">
                         {# Begin Product Prices #}
-                        {% if variation.price > 0 %}
+                        {# if variation.price > 0 #}
                            <div class="price-box">
                               {% set stock_description = variation.has_stock ? 'In Stock' :  variation.inventory_shipping_estimate is not empty ? variation.inventory_shipping_estimate : 'Out of Stock' %}
-                              <h4 class="product-price">{{ prod.price(variation.price) }}</h4>
+                              {# {{ prod.price(variation.price) }} #}
+                              <h4 class="product-price"></h4>
                               {# Begin regular price #}
-                              {% if variation.price != variation.compare_price and variation.compare_price is not empty %}
-                                 <h4 class="product-standard-price">{{ prod.price(variation.compare_price) }}</h4>
-                              {% endif %}
+                              {# if variation.price != variation.compare_price and variation.compare_price is not empty #}
+                              {# prod.price(variation.compare_price) #}
+                              <h4 class="product-standard-price"></h4>
+                              {# endif #}
                               {# End regular price #}
                            </div>
                            <div class="price-box">
                               {# Begin pricing #}
                               <ul class="product">
                                  {# Begin percent off #}
-                                 {% if variation.save_price > 1 %}
-                                    <li class="pricing">
+                                 {# if variation.save_price > 1 #}
+                                    <li class="pricing save-pricing">
                                        Save up to {{ prod.saveprice(variation.save_price ) }} {{ prod.savepercent(variation.save_percent) }}
                                     </li>
-                                 {% endif %}
+                                 {# endif #}
                                  {# End percent off #}
                                  {# Begin price per month #}
-                                 {% if variation.price >= 100 %}
-                                    <li class="pricing">
-                                       <span data-tooltip data-toggle="tooltip" data-original-title="Spread payments over six months by selecting &quot;Checkout with Paypal&quot; on the Shopping Cart page. Then log in and apply for a &quot;Bill Me Later&quot; account.">
+                                 {# if variation.price >= 100 #}
+                                 {# <li class="pricing pricing-bill-me-later">
+                                       <span id="" data-tooltip data-toggle="tooltip" data-original-title="Spread payments over six months by selecting &quot;Checkout with Paypal&quot; on the Shopping Cart page. Then log in and apply for a &quot;Bill Me Later&quot; account.">
                                           {{ prod.billmelater(variation.price) }}
                                        </span>
-                                    </li>
-                                 {% endif %}
+                                    </li>#}
+                                 {# endif #}
                                  {# End price per month #}
                               </ul>
                               {# End pricing #}
                            </div>
-                           {% if stock_description == 'In Stock'%}
-                              <h6 class="incaps no-margin">
+                           {# if stock_description == 'In Stock'%}
+                              <h6 class="incaps no-margin" id="stock_text">
                                  <i class="fa fa fa-check-circle-o color-in"></i> {{stock_description}}
                               </h6>
-                           {% else %}
-                              <h6 class="incaps no-margin">
+                           {% else #}
+                              <h6 class="incaps no-margin" id="stock-text">
                                  <i class="fa fa-minus-circle color-out"></i> {{stock_description}}
                               </h6>
-                           {% endif %}
+                           {# endif #}
                            <h6 class="incaps no-margin-top">
                               <i class="glyphicon glyphicon-lock"></i> Secure online ordering
                            </h6>
-                        {% endif %}
+                        {# endif #}
                      </div>
-                  {% endfor %}
+                  {# endfor #}
+
 
                   {# Begin actions desktop #}
                   {% if app.user.id is not empty %}
@@ -227,22 +270,22 @@
                   <h4>Buy now</h4>
                   <!-- Row -->
                   <div class="row grid-20">
-                     {% for variation in product.variant %}
-                        <div id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
-                           {% if variation.price > 0 %}
+                     
+                     {# for variation in product.variant #}
+                        <div id="variant-details">
+                           {# if variation.price > 0 #}
                               <!--/.size-details-->
-                              {% if variation['inventory_quantity'] is defined and variation['inventory_minimum_quantity'] is defined and
-                              variation['inventory_policy'] is defined and variation['has_stock'] %}
+                              {# if variation['inventory_quantity'] is defined and variation['inventory_minimum_quantity'] is defined and variation['inventory_policy'] is defined and variation['has_stock'] #}
 
                                  {# Begin product Size-Quantity #}
-                                 <div class="col-xs-4 col-md-6 no-padding"> {# Begin Row#}
+                                 <div id="divQuantity" class="col-xs-4 col-md-6 no-padding"> {# Begin Row#}
                                     <div class="form-group">
                                        {# Begin product Quantity #}
                                        <div class="input-group col-md-6">
                                           <div class="input-group-btn">
                                              <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button"><i class="fa fa-minus"></i></button>
                                           </div>
-                                          <input class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]" type="text">
+                                          <input id="variantInput" class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]" type="text">
                                           <div class="input-group-btn">
                                              <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
                                           </div>
@@ -250,17 +293,18 @@
                                     </div>
                                     {# End product quantity #}
                                  </div> {# End Row#}
-                              {% endif %}
-                           {% endif %}
-                           {% if variation.sku is not empty %}
-                           <div class="col-xs-12 col-md-4"> {# Begin Row#}
+                              {# endif #}
+                           {# endif #}
+                           {# if variation.sku is not empty #}
+                           <div id="divSKU" class="col-xs-12 col-md-4"> {# Begin Row#}
                               <div class="item-sku">
-                                  <strong>Item: </strong> #{{variation.sku}}
+                                  <strong>Item: </strong> #<span id="variantSKU"></span>
                               </div>
                            </div>
-                          {% endif %}
+                          {# endif #}
                         </div>
-                     {% endfor %}
+
+                     {# endfor #}
                   </div>
                   <div id="variation-selector-{{product.id}}" class="col-md-12 no-padding">
                   </div>

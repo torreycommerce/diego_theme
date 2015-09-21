@@ -144,6 +144,16 @@ $(document).ready(function() {
 
 
    $('[data-image-zoom]').imageZoom();
+    $(".container").on("click", "[data-image-swap]", function() {
+      var src = $(this).attr('data-image-swap-src');
+      var el = $('#'+$(this).attr('data-image-swap'));
+      var srczoom = $(this).attr('data-image-swap-zoom');
+      el.removeClass('zoomed',1000);
+      el.panzoom('reset');
+      el.attr('src',src);
+      el.attr('data-image-zoom',srczoom);
+    });
+    /*
    $('[data-image-swap]').click(function() {
       var src = $(this).attr('data-image-swap-src');
       var el = $('#'+$(this).attr('data-image-swap'));
@@ -152,7 +162,7 @@ $(document).ready(function() {
       el.panzoom('reset');
       el.attr('src',src);
       el.attr('data-image-zoom',srczoom);
-   });
+   }); */
 
 
    $('.navbar .nav li a').click(function(){
