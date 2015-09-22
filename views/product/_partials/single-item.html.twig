@@ -5,7 +5,7 @@
       {# An array of unique image IDs, so we can request the image url only once per ID #}
       {% set arr_uniq_img = {} %}
 
-      {# An array of unique product image IDs, so we can have a fallback if there's no variant images #}
+      {# An array of unique product image IDs, so we can have a fallback if theres no variant images #}
       {% set arr_uniq_prod_img = {} %}
       {% for image in product.images %}
          {% set arr_uniq_prod_img = arr_uniq_prod_img|merge([image.id]) %}
@@ -285,8 +285,7 @@
                                           <div class="input-group-btn">
                                              <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button"><i class="fa fa-minus"></i></button>
                                           </div>
-                                          {% set limit = variation.inventory_minimum_quantity is empty ? variation.inventory_quantity : variation.inventory_quantity - variation.inventory_minimum_quantity %}
-                                          <input {% if variation.inventory_policy !='continue' %} data-limit="{{limit}}" {% endif %} id="variantInput" class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]" type="text">
+                                          <input data-limit="" id="variantInput" class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]" type="text">
                                           <div class="input-group-btn">
                                              <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
                                           </div>

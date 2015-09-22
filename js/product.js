@@ -100,10 +100,14 @@ function VariantsManager (variants, variant_options, isCollection) {
         if (obj_variant.price > 0 && typeof obj_variant.inventory_quantity != 'undefined' 
             && typeof obj_variant.inventory_minimum_quantity != 'undefined'
             && typeof obj_variant.inventory_policy != 'undefined'
-            && obj_variant.has_stock == '1'
-            && obj_variant.inventory_quantity > 0) {
+            && obj_variant.has_stock == '1') {
                 $('#divQuantity').show();
-                $('#variantInput').attr('name', 'items['+obj_variant.id+']');   
+                $('#variantInput').attr('name', 'items['+obj_variant.id+']'); 
+                if(obj_variant.inventory_policy != 'continue'){
+                    var limit = !obj_variant.inventory_minimum_quantity ? obj_variant.inventory_quantity : obj_variant.inventory_quantity - obj_variant.inventory_minimum_quantity;
+                    $('#variantInput').attr('data-limit', limit); 
+                }
+                  
         }
         $('#divSKU').hide();
         if (obj_variant.sku) {
