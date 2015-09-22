@@ -3,7 +3,7 @@
  
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{{ site_title|default("") }}</title>
+  <title>{{ params['site']['title']|default("") }}</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
   <style type="text/css">
   body {margin: 0; padding: 0; min-width: 100%!important;}
@@ -79,7 +79,7 @@
           <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td class="h2">
-                Thank you again for your order from {{ app.params['site']['title'] }}!
+                Thank you again for your order from {{ params['site']['title'] }}!
               </td>
             </tr>
             <tr>
@@ -149,7 +149,7 @@
                   <tr>
                     <td class="bodycopy light">
                         Status: {{ item.status }} <br>
-                        Item name: <a href="{{site_url}}{{products[item.product_id].0.url}}" target="_blank">{{ item.name }}</a> <br>
+                        Item name: <a href="{{params['url']['current']}}{{products[item.product_id].0.url}}" target="_blank">{{ item.name }}</a> <br>
                         SKU: {{item.sku}} <br>
                         {% for ffi in fulfillment.items %}
                             {% if ffi.id == item.id %}
@@ -180,7 +180,7 @@
           {% include 'email/core/top-seller.html.twig' %}
           <tr>
             <td class="innerpadding bodycopy">
-              Thank you from your friends at {{ app.params['site']['title'] }}.<br/>
+              Thank you from your friends at {{ params['site']['title'] }}.<br/>
               Please add us to your email address book to make sure you receive important 
               emails from us.
             </td>

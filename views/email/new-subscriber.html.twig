@@ -3,7 +3,7 @@
  
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{{ site_title|default("") }}</title>
+  <title>{{ params['site']['title']|default("") }}</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
   <style type="text/css">
   body {margin: 0; padding: 0; min-width: 100%!important;}
@@ -82,7 +82,7 @@
             </tr>
             <tr>
               <td class="bodycopy">
-                You have successfullly subscribed to the {{ app.params['site']['title'] }} newsletter. You will now be one of the first to know about our best promotions, latest arrivals, exclusive offers, and much more!*
+                You have successfullly subscribed to the {{ params['site']['title'] }} newsletter. You will now be one of the first to know about our best promotions, latest arrivals, exclusive offers, and much more!*
               </td>
             </tr>
           </table>
@@ -104,7 +104,7 @@
                       <table class="buttonwrapper" bgcolor="#3cb878" border="0" cellspacing="0" cellpadding="0">
                         <tr>
                           <td class="button" height="45">
-                            <a href="{{app.url}}/">Start Shopping!</a>
+                            <a href="{{params['url']['current']}}/">Start Shopping!</a>
                           </td>
                         </tr>
                       </table>
@@ -124,7 +124,7 @@
             {% include 'email/core/top-seller.html.twig' %}
           <tr>
             <td class="innerpadding bodycopy">
-              Thank you from your friends at {{ app.params['site']['title'] }}.<br/>
+              Thank you from your friends at {{ params['site']['title'] }}.<br/>
               Please add us to your email address book to make sure you receive important 
               emails from us.
             </td>

@@ -37,9 +37,121 @@ function VariantsManager (variants, variant_options, isCollection) {
         return "[id=product-" + variant_id + "]";
     }
 
+    this.getClosestImages = function(variant_id) {
+        return arr_uniq_var_img_url.variant_id;
+    }
+
+    this.getImageUrl = function(img_id, img_type) {
+        console.log('getImageUrl');
+        console.log(typeof arr_uniq_var_img_url['_'+img_id][img_type] != 'undefined');
+        if (typeof arr_uniq_var_img_url['_'+img_id][img_type] != 'undefined') {
+            return arr_uniq_var_img_url['_'+img_id][img_type];    
+        }
+        else {
+            return "";
+        }
+    }
+
+    this.setSelectImage = function(standard_img_url,large_img_url) {
+        $('#variantSelectedImage img').attr('src', standard_img_url);
+        $('#variantSelectedImage img').attr('data-image-zoom', large_img_url);
+    }
+
+    this.addImageToCarousel = function(variant_image_id,standard_img_url,large_img_url) {
+        var clonedDiv = $('#variantImageThumbnailCopy').clone();
+        clonedDiv.attr("id", variant_image_id);
+        clonedDiv.appendTo( "#variantImageCarousel" );
+        $('#'+variant_image_id+" img").attr("src", standard_img_url);
+        $('#'+variant_image_id+" img").attr('data-image-swap-src', standard_img_url);
+        $('#'+variant_image_id+" img").attr('data-image-swap-zoom', large_img_url);
+    }
+
+    this.resetSelection = function () {
+        $( "#variantImageCarousel" ).html('');
+        $('#variantSelectedImage img').attr('src', '');
+    }
+
+    this.updateImages = function(obj_variant) {
+        this.resetSelection();
+        console.log(obj_variant);
+        if (obj_variant.images.length > 0 ) {
+            
+            var i = 0;
+            for (key in obj_variant.images) {
+                var standard_img_url = this.getImageUrl(obj_variant.images[key].id,'standard');
+                var large_img_url = this.getImageUrl(obj_variant.images[key].id,'large');
+                if (i == 0)
+                    this.setSelectImage(standard_img_url,large_img_url);
+                this.addImageToCarousel(obj_variant.id+'-'+obj_variant.images[key].id,standard_img_url,large_img_url);
+                
+                console.log(large_img_url);
+                console.log(standard_img_url);
+                i++;
+            }
+            return arr_uniq_var_img_url.variant_id;
+        } else {
+            return arr_uniq_var_img_url.variant_id;
+        }
+    }
+
+    this.updateQuantitySku = function(obj_variant) {
+        console.log('updateQuantitySku');
+        $('#divQuantity').hide();
+        if (obj_variant.price > 0 && typeof obj_variant.inventory_quantity != 'undefined' 
+            && typeof obj_variant.inventory_minimum_quantity != 'undefined'
+            && typeof obj_variant.inventory_policy != 'undefined'
+            && obj_variant.has_stock == '1'
+            && obj_variant.inventory_quantity > 0) {
+                $('#divQuantity').show();
+                $('#variantInput').attr('name', 'items['+obj_variant.id+']');   
+        }
+        $('#divSKU').hide();
+        if (obj_variant.sku) {
+            $('#divSKU').show();
+            $('#variantSKU').html(obj_variant.sku);
+        }
+            console.log(obj_variant);
+        //$('#variant-details').
+    }
+    this.updatePriceAndAvailability = function(obj_variant) {
+        console.log('updatePriceAndAvailability');
+        $('.price-box').hide();
+        if (obj_variant.price > 0) {
+            $('.price-box').show();
+            $('.product-price').html('$'+obj_variant.price);
+            $('.product-standard-price').hide();
+            if (typeof obj_variant.compare_price != 'undefined' && obj_variant.price != obj_variant.compare_price && obj_variant.compare_price > 0) {
+                $('.product-standard-price').show();
+                $('.product-standard-price').html('$'+obj_variant.compare_price);
+            }
+            $('.save-pricing').hide();
+            if (typeof obj_variant.save_price != 'undefined' && obj_variant.save_price > 1) {
+                $('.save-pricing').show();
+                $('.save-pricing').html('$'+obj_variant.save_price);
+                $('.save-pricing').html(obj_variant.save_percent+'%');
+            }
+            var stock_text = this.getStockDescription(obj_variant);
+            if (stock_text == 'In Stock')
+                $('#stock-text').html('<i class="fa fa fa-check-circle-o color-in"></i>'+stock_text);
+            else
+                $('#stock-text').html('<i class="fa fa-minus-circle color-out"></i>'+stock_text);
+            /*
+            $('.pricing-bill-me-later').hide();
+            if (typeof obj_variant.price >= 100) {
+                $('.pricing-bill-me-later').show();
+            }*/
+        }
+        
+    }
+
+    this.getStockDescription = function (obj_variant) {
+         return obj_variant.has_stock == '1' ? 'In Stock' :  obj_variant.inventory_shipping_estimate ? obj_variant.inventory_shipping_estimate : 'Out of Stock';
+    }
+
     this.updateChips = function(){
         var self = this;
-        $.each(self.selectsData, function(name, optionArray){
+        console.log(self.selectsData);
+        $.each(self.selectsData, function(name, optionArray) {
             var selectedValues2 = {};
 
             $.each(self.selectsData, function(name2, optionArray2){
@@ -92,7 +204,12 @@ function VariantsManager (variants, variant_options, isCollection) {
                 var id = self.getProductVariation(variant.id);
                 var quantityInput = "input[name='items["+ variant.id +"]']";
                 if(variant.id == filteredVariants[0].id){
-                    $(id).show();
+                    console.log(id);
+                    //$(id).show();
+                    self.updateImages(filteredVariants[0]);
+                    self.updateQuantitySku(filteredVariants[0]);
+                    self.updatePriceAndAvailability(filteredVariants[0]);
+
                     if(self.isCollection){
                         $(quantityInput).val(0);
                     }else{
@@ -140,12 +257,16 @@ function VariantsManager (variants, variant_options, isCollection) {
     }
 
     this.updateVariants = function(selectName, optionValue){
+        console.log(selectName);
+        console.log(optionValue);
         var self = this;
-
         self.selectedValues[selectName] = optionValue;
-        var filteredVariants = self.getFilteredVariants(self.selectedValues);
+        console.log(self.selectedValues);
 
-        if(filteredVariants.length == 0 ){
+        var filteredVariants = self.getFilteredVariants(self.selectedValues);
+        console.log(filteredVariants);
+    
+        if(filteredVariants.length == 0 ) {
             // display the default variant evalable 
             var temp = {};
             temp[selectName] = optionValue;

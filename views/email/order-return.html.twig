@@ -3,7 +3,7 @@
  
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{{ site_title|default("") }}</title>
+  <title>{{ params['site']['title']|default("") }}</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
   <style type="text/css">
   body {margin: 0; padding: 0; min-width: 100%!important;}
@@ -136,7 +136,7 @@
                   </tr>
                   <tr>
                     <td class="bodycopy light">
-                        URL: {{site_url}}{{products[item.product_id].0.url}} <br>
+                        URL: {{params['url']['current']}}{{products[item.product_id].0.url}} <br>
                         SKU: {{item.sku}} <br>
                         Item name: {{ item.name }} <br>
                         Price: ${{ item.price|number_format(2) }} <br>
@@ -173,7 +173,7 @@
         {% include 'email/core/top-seller.html.twig' %}
           <tr>
             <td class="innerpadding bodycopy">
-              Thank you from your friends at {{ app.params['site']['title'] }}.<br/>
+              Thank you from your friends at {{ params['site']['title'] }}.<br/>
               Please add us to your email address book to make sure you receive important 
               emails from us.
             </td>
