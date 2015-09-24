@@ -89,9 +89,6 @@ function VariantsManager (variants, variant_options, isCollection) {
                 else
                     var img_alt = '';
 
-                if (typeof obj_variant.images[key].alt !== 'undefined')
-                    alert('alt is defined');
-
                 if (i == 0)
                     this.setSelectImage(standard_img_url,large_img_url,img_alt);
                 this.addImageToCarousel(obj_variant.id+'-'+obj_variant.images[key].id,standard_img_url,large_img_url,img_alt);
