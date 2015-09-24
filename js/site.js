@@ -146,9 +146,11 @@ $(document).ready(function() {
       var src = $(this).attr('data-image-swap-src');
       var el = $('#'+$(this).attr('data-image-swap'));
       var srczoom = $(this).attr('data-image-swap-zoom');
+      var alt = $(this).attr('alt');
       el.removeClass('zoomed',1000);
       el.panzoom('reset');
       el.attr('src',src);
+      el.attr('alt',alt);
       el.attr('data-image-zoom',srczoom);
     });
     /*

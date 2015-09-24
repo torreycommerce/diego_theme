@@ -52,18 +52,21 @@ function VariantsManager (variants, variant_options, isCollection) {
         }
     }
 
-    this.setSelectImage = function(standard_img_url,large_img_url) {
+    this.setSelectImage = function(standard_img_url,large_img_url,img_alt) {
         $('#variantSelectedImage img').attr('src', standard_img_url);
         $('#variantSelectedImage img').attr('data-image-zoom', large_img_url);
+        $('#variantSelectedImage img').attr('alt', img_alt);
     }
 
-    this.addImageToCarousel = function(variant_image_id,standard_img_url,large_img_url) {
+    this.addImageToCarousel = function(variant_image_id,standard_img_url,large_img_url,img_alt) {
         var clonedDiv = $('#variantImageThumbnailCopy').clone();
         clonedDiv.attr("id", variant_image_id);
         clonedDiv.appendTo( "#variantImageCarousel" );
         $('#'+variant_image_id+" img").attr("src", standard_img_url);
         $('#'+variant_image_id+" img").attr('data-image-swap-src', standard_img_url);
         $('#'+variant_image_id+" img").attr('data-image-swap-zoom', large_img_url);
+        $('#'+variant_image_id+" img").attr('alt', large_img_url);
+        $('#'+variant_image_id+" img").attr('alt', img_alt);
     }
 
     this.resetSelection = function () {
@@ -80,9 +83,18 @@ function VariantsManager (variants, variant_options, isCollection) {
             for (key in obj_variant.images) {
                 var standard_img_url = this.getImageUrl(obj_variant.images[key].id,'standard');
                 var large_img_url = this.getImageUrl(obj_variant.images[key].id,'large');
+
+                if (typeof obj_variant.images[key].alt !== 'undefined')
+                    var img_alt = obj_variant.images[key].alt;
+                else
+                    var img_alt = '';
+
+                if (typeof obj_variant.images[key].alt !== 'undefined')
+                    alert('alt is defined');
+
                 if (i == 0)
-                    this.setSelectImage(standard_img_url,large_img_url);
-                this.addImageToCarousel(obj_variant.id+'-'+obj_variant.images[key].id,standard_img_url,large_img_url);
+                    this.setSelectImage(standard_img_url,large_img_url,img_alt);
+                this.addImageToCarousel(obj_variant.id+'-'+obj_variant.images[key].id,standard_img_url,large_img_url,img_alt);
                 
                 console.log(large_img_url);
                 console.log(standard_img_url);
