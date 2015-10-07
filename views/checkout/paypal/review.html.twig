@@ -1,8 +1,12 @@
 {% extends "/_layouts/theme.html.twig" %}
 {% import "/_macros/form-elements-bootstrap.html.twig" as forms %}
 {% import "/_macros/form-extras.html.twig" as extras %}
-{% block content %}
 {% set cart = api.get('/sessioncart') %}
+{% if cart.items is not empty %} {# Set cart products for acenda object #}
+    {% set product_ids = cart.items|values_in('product_id') %}
+    {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+{% endif %}
+{% block content %}
 {% if cart.items is empty %}
     {% do app.redirect('/') %}
 {% endif %}
@@ -119,4 +123,13 @@
 {{ app.asset.js(app.url_asset ~ '/js/checkout.js') }}
 {{ app.asset.js(app.url_asset ~ '/js/region.js') }}
 {{ app.asset.js(app.url_asset ~ '/js/paypal.js') }}
+{% endblock %}
+
+{% block acenda %}
+    {{ parent() }}
+    {% include "/checkout/_partials/acenda.html.twig" %}
+{% endblock %}
+{% block dataLayer %}
+    {% include "/checkout/_partials/dataLayer.html.twig" %}
+    {{ parent() }}
 {% endblock %}
