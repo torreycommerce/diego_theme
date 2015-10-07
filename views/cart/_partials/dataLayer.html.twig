@@ -1,0 +1,28 @@
+{% if app.params.seo.enhanced_ecommerce == '1' %}
+	{% if cart is not empty %}
+		{% if cart.items is not empty %}
+			var products = [];
+			{% for id, item in cart.items %}
+			    {% set product = products[item.product_id].0 %}
+			    {% set product = product|merge({quantity : item.quantity}) %}
+			    products.push({               // Provide product details in an productFieldObject.
+						  'id': '{{product.id}}',    // Product ID (string).
+						  'name': '{{product.name}}', // Product name (string).
+						  'price': '{{product.price}}',         // Product price (currency).
+						  'brand': '{{product.brand}}',			// Product brand (string).
+						  //'coupon': 'APPARELSALE',          // Product coupon (string).
+						  'quantity': {{product.quantity}}   // Product quantity (number).
+						});
+			{% endfor %}
+			dataLayer.push({
+				    'event': 'checkout',
+				    'ecommerce': {
+				      'checkout': {
+				        'actionField': {'step': 1},
+				        'products': products
+				     }
+				   }
+				});
+		{% endif %}
+	{% endif %}
+{% endif %}

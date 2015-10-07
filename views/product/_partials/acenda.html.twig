@@ -1,0 +1,17 @@
+acenda.products = [];
+{% for product in item.product %}
+	acenda.products.push( {
+							id: {{product.id}},
+							name: {{product.name|json_encode}},
+							brand: {{product.brand|json_encode}},
+							variants: {{product.variant|json_encode}}, 
+							variant_options: {{product.variant_options|json_encode}}
+						} );
+{% endfor %}
+{% if item.group == 'collection' %}
+	acenda.collection = {
+		id: {{item.id}},
+		name : {{item.name|json_encode}},
+		brand: {{item.brand|json_encode}}
+	}
+{% endif %}

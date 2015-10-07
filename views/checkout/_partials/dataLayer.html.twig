@@ -1,0 +1,98 @@
+{% if final_order is defined %} 
+    var items = [];
+    {% for item in items %}
+        items.push({
+            'sku': '{{products[item.product_id].0.sku}}',
+            'id': '{{item.id}}',
+            'name': '{{item.name}}',
+            // 'category': 'Apparel',
+            'brand': '{{product.brand}}',
+            'price': '{{item.price}}',
+            'quantity': {{item.quantity}}
+        })
+    {% endfor %}
+    {% if app.params.seo.enhanced_ecommerce != '1' %} {# Adding transaction data to Google Tag Manager dataLayer #}
+        
+        var transaction = {
+            'transactionId': '{{final_order.order_number}}',
+            'transactionAffiliation': '{{app.params.site.title}}',
+            'transactionTotal': '{{final_order.total}}',
+            'transactionTax': '{{final_order.tax}}',
+            'transactionShipping': '{{final_order.shipping_rate}}',
+            'transactionProducts': []
+        }
+        transaction.transactionProducts = items;
+        dataLayer.push(transaction);
+    {% else %} {# Adding Enhance Ecommerce purchase data to Google Tag Manager dataLayer #}
+        dataLayer.push({
+            'ecommerce': {
+                'purchase': {
+                    'actionField': {
+                        'id': '{{final_order.order_number}}',                         // Transaction ID.
+                        'affiliation': '{{app.params.site.title}}',
+                        'revenue': '{{final_order.total}}',                     // Total transaction value (incl. tax and shipping)
+                        'tax':'{{final_order.tax}}',
+                        'shipping': '{{final_order.shipping_rate}}',
+                        //'coupon': 'SUMMER_SALE'
+                    },
+                    'products': items
+                }
+            }
+        });
+    {% endif %}
+
+    {% if app.params.seo.enhanced_ecommerce == '1' %}
+        {# Checkout Process Tracking #}
+        dataLayer.push({
+            'event': 'checkout',
+            'ecommerce': {
+              'checkout': {
+                'actionField': {'step': 4 },
+                'products': items
+             }
+           }
+        });
+    {% endif %}
+{% endif %}
+
+
+{# Checkout Process Tracking #}
+{% if app.params.seo.enhanced_ecommerce == '1' %}
+    {% if cart is not empty %}
+        {% if cart.items is not empty %}
+            var products = [];
+            {% for id, item in cart.items %}
+                {% set product = products[item.product_id].0 %}
+                {% set product = product|merge({quantity : item.quantity}) %}
+                products.push({               // Provide product details in an productFieldObject.
+                          'id': '{{product.id}}',    // Product ID (string).
+                          'name': '{{product.name}}', // Product name (string).
+                          'price': '{{product.price}}',         // Product price (currency).
+                          'brand': '{{product.brand}}',         // Product brand (string).
+                          //'coupon': 'APPARELSALE',          // Product coupon (string).
+                          'quantity': {{product.quantity}}   // Product quantity (number).
+                        });
+            {% endfor %}
+
+            {% if 'cart' in app.request.url %}
+                {% set step = 1 %}
+            {% elseif 'checkout/billing' in app.request.url %}
+                {% set step = 3 %}
+            {% elseif 'checkout/place' in app.request.url  or 'checkout/paypal/place' in app.request.url %}
+                {% set step = 4 %}
+            {% elseif 'checkout' in app.request.url  or 'checkout/paypal/review' in app.request.url %}
+                {% set step = 2 %}
+            {% endif %}
+
+            dataLayer.push({
+                    'event': 'checkout',
+                    'ecommerce': {
+                      'checkout': {
+                        'actionField': {'step': {{step}} },
+                        'products': products
+                     }
+                   }
+                });
+        {% endif %}
+    {% endif %}
+{% endif %}

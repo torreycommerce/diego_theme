@@ -1,0 +1,35 @@
+{# Google Tag Manager dataLayer #}
+{% if app.params.seo.enhanced_ecommerce == '1' %}
+	{% if item.group == 'product' %}
+		// Measure a view of product details.
+		dataLayer.push({
+		  'ecommerce': {
+		    'detail': {
+		      'actionField': {},    // 'detail' actions have an optional list property.
+		      'products': [{
+		        'name': {{item.product[0].name|json_encode}},         // Name or ID is required.
+		        'id': {{item.product[0].id}},
+		        'brand': {{item.product[0].brand|json_encode}},
+		        //'category': 'Apparel',
+		       }]
+		     }
+		   }
+		});
+	{% endif %}
+	{% if item.group == 'collection' %}
+		// Measure a view of product details.
+		dataLayer.push({
+		  'ecommerce': {
+		    'detail': {
+		      'actionField': {},    // 'detail' actions have an optional list property.
+		      'products': [{
+		        'name': {{item.name|json_encode}},         // Name or ID is required.
+		        'id': {{item.id}},
+		        'brand': {{item.brand|json_encode}},
+		        //'category': 'Apparel',
+		       }]
+		     }
+		   }
+		});
+	{% endif %}
+{% endif %}

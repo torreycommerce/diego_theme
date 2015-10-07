@@ -1,0 +1,11 @@
+{% if cart is not empty %}
+	acenda.cart = {};
+	{% if cart.items is not empty %}
+		acenda.cart.items = [];
+		{% for id, item in cart.items %}
+		    {% set product = products[item.product_id].0 %}
+		    {% set product = product|merge({quantity : item.quantity}) %}
+		    acenda.cart.items.push({{product|json_encode}});
+		{% endfor %}
+	{% endif %}
+{% endif %}
