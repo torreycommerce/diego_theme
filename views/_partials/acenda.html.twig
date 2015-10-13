@@ -1,0 +1,10 @@
+var acenda = {};
+acenda.site = '{{app.params.site.title}}';
+{% if app.params.seo.google_analytics is not empty %}
+    acenda.google_analytics_id = '{{ app.params.seo.google_analytics }}';
+{% elseif app.params.seo.google_tag_manager is not empty %}
+    acenda.google_tag_manager = '{{ app.params.seo.google_tag_manager }}';
+{% endif %}
+{% if app.params.seo.enhanced_ecommerce is not empty %}
+    acenda.enhanced_ecommerce = '{{ app.params.seo.enhanced_ecommerce }}';
+{% endif %}

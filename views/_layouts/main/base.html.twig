@@ -44,6 +44,11 @@
             var acendaBaseUrl = '{{app.url}}';
             var acendaBaseThemeUrl = '{{app.url_asset}}';
         </script>
+        <script>
+            {% block acenda %}
+                {% include '/_partials/acenda.html.twig' %}
+            {% endblock %}
+        </script>
     {% endblock %}
     {# Scripts #}
         {{ app.asset.js(app.url_asset ~ '/js/jquery-latest.min.js') }}
@@ -70,10 +75,23 @@
         {{ app.asset.js(app.url_asset ~ '/js/jquery.prettyPhoto.js') }}
         {{ app.asset.js(app.url_asset ~ '/js/wow.min.js') }}
         {{ app.asset.js(app.url_asset ~ '/js/theme.js') }}
+        {% if app.params.seo.google_analytics is not empty or app.params.seo.google_tag_manager is not empty %}
+            {{ app.asset.js(app.url_asset ~ '/js/acendaAnalytics.js') }}
+        {% endif %}
 
     {# End Scripts #}
 </head>
 <body>
+    {% if app.params.seo.google_tag_manager is not empty and app.params.seo.google_analytics is empty %}
+        <!-- Google Tag Manager DataLayer -->
+        <script>
+            var dataLayer = [];
+            {% block dataLayer %}
+                {% include '/_partials/tag-manager.html.twig' %} {# Google Tag Manager Snippet #}
+            {% endblock %}
+        </script>
+        <!-- Google Tag Manager DataLayer End -->
+    {% endif %}
 <div class="page-wrapper boxed-wrapper shadow">
 
     {% block body %}
@@ -120,6 +138,5 @@
     </footer>
     {# End Footer #}
     </div>
-    {% include "/_partials/analytics.html.twig" %}
  </body>
 </html>

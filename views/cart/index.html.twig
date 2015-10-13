@@ -23,7 +23,6 @@
       {{ base.breadcrumbs({'Cart':''}) }}
 {% endblock %}
 
-{% block content %}
 {% for item, quantity in app.request.post.cart.quantity %}
 {% if quantity <= 0 %}
 {% set result = api.delete('/sessioncartitem/' ~ item) %}
@@ -41,19 +40,52 @@
 {% set result = api.post('/sessioncartcoupon', {code:app.request.post.cart.coupon_code}) %}
 {% endif %}
 {% set config = api.get('/config') %}
+{% if api.error is not empty %}
+    {% set error = api.error %}
+{% endif %}
+{% do api.post('/sessioncartcoupon/refreshCoupons') %}
+{% set cart = api.get('/sessioncart') %}
+{% set cart_coupon = api.get('/sessioncartcoupon') %}
+{% set shipping_methods = api.get('/shippingmethod',{query:{status:'active'}}) %}
+    
+{% if (cart.items is not empty) %}
+    {% set product_ids = cart.items|values_in('product_id') %}
+    {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+
+    {# Remove products that were disabled or removed #}
+    {# TODO: We should probably do this outside of the template for orders #}
+    {% set items_deleted = false %}
+    {% for id, item in cart.items %}
+        {% set product = products[item.product_id].0 %}
+        {% if product.status != 'active' %}
+            {% do api.delete('/sessioncartitem/' ~ id) %}
+            {% if product.title is defined %}
+                {# This product is disabled or removed #}
+                {% do app.user.setFlash(product.title ~ ' is no longer available.', 'info') %}
+            {% else %}
+                {# This product doesn't exist anymore (deleted) #}
+                {% do app.user.setFlash('A product you have selected is no longer available.', 'info') %}
+            {% endif %}
+            {% set items_deleted = true %}
+        {% endif %}
+        {% if items_deleted %}
+            {% do app.redirect(app.request.url) %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% block content %}
+
             <!-- Content Block
       ============================================-->
       <section class="content-block default-bg">
       
         <!-- Container -->
         <div class="container cont-pad-t-sm">
-            {% if api.error is not empty %}
-            <div class="alert alert-warning">{{ api.error }}</div>
+            {% if error is not empty %}
+            <div class="alert alert-warning">{{ error }}</div>
             {% endif %}
-            {% do api.post('/sessioncartcoupon/refreshCoupons') %}
-            {% set cart = api.get('/sessioncart') %}
-            {% set cart_coupon = api.get('/sessioncartcoupon') %}
-            {% set shipping_methods = api.get('/shippingmethod',{query:{status:'active'}}) %}
+            
             {% if shipping_methods is empty %}
             <div class="row">
                 <div class="col-md-12">
@@ -94,29 +126,7 @@
         <!--/ cartTop -->
         </div>    
         {{ forms.begin('cart','','post', {class:'form-horizontal'}) }}
-        {% set product_ids = cart.items|values_in('product_id') %}
-        {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
 
-        {# Remove products that were disabled or removed #}
-        {# TODO: We should probably do this outside of the template for orders #}
-        {% set items_deleted = false %}
-        {% for id, item in cart.items %}
-        {% set product = products[item.product_id].0 %}
-        {% if product.status != 'active' %}
-        {% do api.delete('/sessioncartitem/' ~ id) %}
-        {% if product.title is defined %}
-        {# This product is disabled or removed #}
-        {% do app.user.setFlash(product.title ~ ' is no longer available.', 'info') %}
-        {% else %}
-        {# This product doesn't exist anymore (deleted) #}
-        {% do app.user.setFlash('A product you have selected is no longer available.', 'info') %}
-        {% endif %}
-        {% set items_deleted = true %}
-        {% endif %}
-        {% if items_deleted %}
-        {% do app.redirect(app.request.url) %}
-        {% endif %}
-        {% endfor %}
 
         {% for id, item in cart.items %}
         {% set product = products[item.product_id].0 %}
@@ -345,4 +355,13 @@
         {% endblock %}
         {% block js %}
         {{ app.asset.js(app.url_asset ~ '/js/estimator.js') }}
+        {% endblock %}
+
+        {% block acenda %}
+        {{ parent() }}
+        {% include "/cart/_partials/acenda.html.twig" %}
+        {% endblock %}
+        {% block dataLayer %}
+        {% include "/cart/_partials/dataLayer.html.twig" %}
+        {{ parent() }}
         {% endblock %}
