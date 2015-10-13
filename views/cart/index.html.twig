@@ -310,7 +310,7 @@
                                 <strong>Subtotal:</strong>&nbsp;<span class="amount" id="total-price"><span class="dollars"><span class="dollar-sign float-left">$</span>{{ cart.subtotal|number_format(2)|split('.')|first }}.{{ cart.subtotal|number_format(2)|split('.')|last }}</span></span>
                             </div>
                         </div>
-                        {% if config.components.payflowpro.enable == true %}
+                        {% if (config.components.payflowpro.enable == true or config.components.stripe.enable == true ) %}
                             <div class="col-md-12">
                                 <div id="proceed-to-checkout">
                                     <a class="btn btn-primary btn-lg btn-block" style="margin:20px 0" href="{{ app.url }}/checkout">Proceed To Checkout
