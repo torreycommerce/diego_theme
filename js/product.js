@@ -28,27 +28,27 @@ function VariantsManager (variants, variant_options, isCollection) {
     }
 
     this.getVariationSelector = function(selectName, optionValue){
-        selectName = selectName.replace(" ", "-");
-        optionValue = optionValue.replace(" ", "-");
+        selectName = selectName.replace(/ /g, "-");
+        optionValue = optionValue.replace(/ /g, "-");
         return "[id=variation-selector-"+ this.jqSelector(self.product_id+"-"+selectName+"-"+optionValue) +"]";
     }
 
     this.getVariationValueId = function(selectName, optionValue){
-        selectName = selectName.replace(" ", "-");
-        optionValue = optionValue.replace(" ", "-");
+        selectName = selectName.replace(/ /g, "-");
+        optionValue = optionValue.replace(/ /g, "-");
         return "variation-selector-"+this.product_id+"-"+selectName+"-"+optionValue;
     }
     this.getVariationOptionId = function(selectName){
-        selectName = selectName.replace(" ", "-");
+        selectName = selectName.replace(/ /g, "-");
         return "variation-selector-"+this.product_id+"-"+selectName;
     }
     this.getVariationSelectedId = function(selectName){
-        selectName = selectName.replace(" ", "-");
+        selectName = selectName.replace(/ /g, "-");
         return "selected-"+selectName+"-"+this.product_id;
     }
 
     this.getSelectedValue = function(selectName){
-        selectName = selectName.replace(" ", "-");
+        selectName = selectName.replace(/ /g, "-");
         return "[id=selected-"+ this.jqSelector(selectName+"-"+self.product_id) +"]";
     }
     this.getProductVariation = function(variant_id){
