@@ -1,19 +1,19 @@
-$(function() {
-    if(VariantsData.isCollection){
-        $.each(VariantsData.products, function(index, product){
-            new VariantsManager(product.variants, product.variant_options, true).init();
-        });
-    }else{
-        new VariantsManager(VariantsData.products[0].variants, VariantsData.products[0].variant_options, false).init();
-    }
-});
+if(acenda.collection){
+    $.each(acenda.products, function(index, product){
+        new VariantsManager(product.variants, product.variant_options, product.img, product.videos, true).init();
+    });
+}else{
+    new VariantsManager(acenda.products[0].variants, acenda.products[0].variant_options, acenda.products[0].img, acenda.products[0].videos, false).init();
+}
 
 var disabled_cart_button = 0;
 
-function VariantsManager (variants, variant_options, isCollection) {
+function VariantsManager (variants, variant_options, img, videos, isCollection) {
     var self = this;
     this.variants = variants;
     this.variant_options = variant_options;
+    this.arr_uniq_var_img_url = img.arr_uniq_var_img_url;
+    this.videos = videos;
     this.isCollection = isCollection;
     this.product_id = this.variants[0].product_id;
     this.selector = "[id=variation-selector-"+this.product_id+"]";
@@ -56,14 +56,14 @@ function VariantsManager (variants, variant_options, isCollection) {
     }
 
     this.getClosestImages = function(variant_id) {
-        return arr_uniq_var_img_url.variant_id;
+        return this.arr_uniq_var_img_url.variant_id;
     }
 
     this.getImageUrl = function(img_id, img_type) {
         console.log('getImageUrl');
-        console.log(typeof arr_uniq_var_img_url['_'+img_id][img_type] != 'undefined');
-        if (typeof arr_uniq_var_img_url['_'+img_id][img_type] != 'undefined') {
-            return arr_uniq_var_img_url['_'+img_id][img_type];    
+        console.log(typeof this.arr_uniq_var_img_url['_'+img_id][img_type] != 'undefined');
+        if (typeof this.arr_uniq_var_img_url['_'+img_id][img_type] != 'undefined') {
+            return this.arr_uniq_var_img_url['_'+img_id][img_type];    
         }
         else {
             return "";
@@ -86,6 +86,19 @@ function VariantsManager (variants, variant_options, isCollection) {
         $('#'+variant_image_id+" img").attr('alt', large_img_url);
         $('#'+variant_image_id+" img").attr('alt', img_alt);
     }
+    this.addVideosToCarousel = function(videos) {
+        $.each(videos, function(index, video){
+            var clonedDiv = $('#variantVideoCopy').clone();
+            var id = "product_video_"+index;
+            clonedDiv.attr("id", id);
+            clonedDiv.appendTo( "#variantImageCarousel" );
+            $('#'+id+" div").attr("data-video-src", video);
+        });
+        $("[data-image-swap]").click(function() {
+            stopVideo();
+        });
+        initVideoPlayer();
+    }
 
     this.resetSelection = function () {
         $( "#variantImageCarousel" ).html('');
@@ -93,10 +106,9 @@ function VariantsManager (variants, variant_options, isCollection) {
     }
 
     this.updateImages = function(obj_variant) {
-        this.resetSelection();
+        var self = this;
         console.log(obj_variant);
-        if (obj_variant.images.length > 0 ) {
-            
+        if (obj_variant.images.length > 0 ) {   
             var i = 0;
             for (key in obj_variant.images) {
                 var standard_img_url = this.getImageUrl(obj_variant.images[key].id,'standard');
@@ -115,9 +127,15 @@ function VariantsManager (variants, variant_options, isCollection) {
                 console.log(standard_img_url);
                 i++;
             }
-            return arr_uniq_var_img_url.variant_id;
+            return this.arr_uniq_var_img_url.variant_id;
         } else {
-            return arr_uniq_var_img_url.variant_id;
+            return this.arr_uniq_var_img_url.variant_id;
+        }
+    }
+
+    this.updateVideos = function(){
+        if(this.videos){
+            this.addVideosToCarousel(this.videos);
         }
     }
 
@@ -231,26 +249,20 @@ function VariantsManager (variants, variant_options, isCollection) {
         if(filteredVariants.length == 1){
             
             //hide and show proper variant, set quantity inputs
-            $.each(self.variants, function(index, variant){
-                var id = self.getProductVariation(variant.id);
-                var quantityInput = "input[name='items["+ variant.id +"]']";
-                if(variant.id == filteredVariants[0].id){
-                    console.log(id);
-                    //$(id).show();
-                    self.updateImages(filteredVariants[0]);
-                    self.updateQuantitySku(filteredVariants[0]);
-                    self.updatePriceAndAvailability(filteredVariants[0]);
-
-                    if(self.isCollection){
-                        $(quantityInput).val(0);
-                    }else{
-                        $(quantityInput).val(1);
-                    }
-                }else{
-                    $(quantityInput).val(0);
-                    $(id).hide();
-                }
-            });
+            var id = self.getProductVariation(filteredVariants[0].id);
+            var quantityInput = "#variantInput";
+            console.log(id);
+            self.resetSelection();
+            self.updateImages(filteredVariants[0]);
+            self.updateVideos();
+            self.updateQuantitySku(filteredVariants[0]);
+            self.updatePriceAndAvailability(filteredVariants[0]);
+            
+            if(self.isCollection){
+                $(quantityInput).val(0);
+            }else{
+                $(quantityInput).val(1);
+            }
 
             //Disable/Enable button according to variants availability
             if(self.isCollection){

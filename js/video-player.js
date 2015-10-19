@@ -1,33 +1,39 @@
 var player;
-            var tag = document.createElement('script');
-            
-            tag.src = "https://www.youtube.com/iframe_api";
-            var firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+var tag = document.createElement('script');
 
-
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 (function($){
-    youtubeUrlToId = function (url) {
-        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-        var match = url.match(regExp);
-        if (match&&match[7].length==11){
-            return match[7];
-        } else {
-            return false;
-        }
-    }
+    initVideoPlayer();
+}( window.jQuery ));
 
-    vimeoUrlToId = function (url) {
-        var regExp = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
-        var match = url.match(regExp);
+function youtubeUrlToId (url) {
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    if (match&&match[7].length==11){
+        return match[7];
+    } else {
+        return false;
+    }
+}
+
+function vimeoUrlToId (url) {
+    var regExp = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
+    var match = url.match(regExp);
+    if (match){
         if (match[3]){
             return match[3];
-        } else {
-            return false;
+        }else{
+            return false
         }
+    } else {
+        return false;
     }
+}
 
+function initVideoPlayer (){
     $("[data-video-src]").each(function() {
         var url = $(this).attr("data-video-src");
         var el = $(this);
@@ -72,7 +78,16 @@ var player;
             $('#main-product-video').html('<iframe src="//player.vimeo.com/video/'+id+'?autoplay=true" width="100%" height="300px" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen autoplay></iframe>');
         }
     });
-    
-    
+}
 
-}( window.jQuery ));
+function stopVideo(){
+    $("#main-product-video").hide();
+    $("#main-product-image").show();
+    if(player){
+        player.stopVideo();
+    }else{
+        $('.main-product-video').html('');
+    }     
+}
+
+

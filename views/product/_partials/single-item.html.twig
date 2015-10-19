@@ -1,47 +1,4 @@
 <div class="container main-container">
-   <script type="text/javascript">
-      var VariantsData = {isCollection: false, products: []}
-      VariantsData.products.push({variants: {{product.variant|json_encode}}, variant_options: {{product.variant_options|json_encode}}});
-      {# An array of unique image IDs, so we can request the image url only once per ID #}
-      {% set arr_uniq_img = {} %}
-
-      {# An array of unique product image IDs, so we can have a fallback if theres no variant images #}
-      {% set arr_uniq_prod_img = {} %}
-      {% for image in product.images %}
-         {% set arr_uniq_prod_img = arr_uniq_prod_img|merge([image.id]) %}
-         {% set arr_uniq_img = arr_uniq_img|merge([image.id]) %}
-      {% endfor %}
-   
-      {# An array of unique variant image IDs, so we can lookup for image ids on variant selection #}
-      {% set arr_uniq_var_img = {} %}
-      {% for variation in product.variant %}
-         {% set arr_var_img = {} %}
-         {% for image in variation.images %}
-            {% set arr_var_img = arr_var_img|merge([image.id]) %}
-            {% set arr_uniq_img = arr_uniq_img|merge([image.id]) %}
-         {% endfor %}
-         {% set arr_uniq_var_img = arr_uniq_var_img|merge({ ('_'~variation.id) : arr_var_img }) %}
-      {% endfor %}
-      
-
-      {# An array of unique image ID with types and img urls #}
-      {% set arr_uniq_var_img_url = {} %}
-      {% for img_id in arr_uniq_img %}
-         {% set arr_uniq_var_img_url = 
-            arr_uniq_var_img_url|merge({ ('_'~img_id) : {
-                  'large' : app.image.getImageUrl("product","large",img_id),
-                  'thumbnail' : app.image.getImageUrl("product","thumbnail",img_id),
-                  'standard' : app.image.getImageUrl("product","standard",img_id)
-               } }) %}
-      {% endfor %}
-      {% spaceless %}
-         var arr_uniq_prod_img = {{ arr_uniq_prod_img | json_encode}};
-         var arr_uniq_var_img = {{ arr_uniq_var_img | json_encode }};
-         var arr_uniq_img = {{ arr_uniq_img | json_encode }};
-         var arr_uniq_var_img_url = {{ arr_uniq_var_img_url | json_encode }};
-      {% endspaceless %}
-      
-   </script>
    <div class="row transitionfx" id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
       <!-- Container -->
       <div class="container no-pad-t">
