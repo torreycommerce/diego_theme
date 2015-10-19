@@ -31,11 +31,12 @@
     {% set crumbs = [] %}
 
     {% set category_link = '' %}
-
     {% for category in item.category|first|split('/') %}
-        {% set category_link = category_link ~ '/' ~ category %}
-        {% set category_title = category|replace('-',' ')|title %}
-        {% set crumbs = crumbs|merge({(category_title):('/category' ~ category_link)})%}
+        {% if category is not empty %}
+            {% set category_link = category_link ~ '/' ~ category %}
+            {% set category_title = category|replace('-',' ')|title %}
+            {% set crumbs = crumbs|merge({(category_title):('/category' ~ category_link)})%}
+        {% endif %}
     {% endfor %}
 
     {% set crumbs = crumbs|merge({(title):''}) %}
