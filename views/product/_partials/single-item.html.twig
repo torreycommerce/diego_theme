@@ -1,12 +1,12 @@
 <div class="container main-container">
-   <div class="row transitionfx" id="product-{{variation.id}}" {% if loop.index > 1 %}style="display:none"{% endif %}>
+   <div class="row transitionfx">
       <!-- Container -->
       <div class="container no-pad-t">
          <!-- Product Row -->
          <form method="post" id="productForm" action="{{ app.url }}/product/route">
             <div class="row product-details">
                {# for variation in product.variant #}
-                  <div id="selected-variant-images product-{{product.variant[0].id}}" {% if loop.index > 1 %}style="display:"{% endif %}>
+                  <div id="product-{{product.variant[0].id}}" {% if loop.index > 1 %}style="display:"{% endif %}>
                      {# Begin product images #}
                      <div id="product-images" class="col-md-5 mgb-30-xs">
                         {# Begin main image #}
@@ -28,7 +28,7 @@
                         <div id="image-main">
                            <div class="row">
                               <div class="col-sm-12">
-                                    <div class="thumbnail" id="variantSelectedImage">
+                                    <div class="thumbnail" id="variant-selected-image-{{product.id}}">
                                        <span class="helper hidden-xs"></span>
                                        <div id="main-product-video" style="display:none"></div>
                                        <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="" data-image-zoom="" alt="" />
@@ -43,24 +43,23 @@
                               <div class="image-carousel">
                                  <div id="image-carousel-{{product.variant[0].id}}" class="carousel">
                                     <div>
-
-                                       <div class="item active itemauto" id="variantImageCarouselCopy" style="display:none;">
+                                       <div class="item active itemauto" id="variant-image-carousel-copy" style="display:none;">
                                              
-                                             <div class="col-sm-2" id="variantImageThumbnailCopy">
-                                                   <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
-                                                         <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" class="" src="" data-image-swap="main-product-image" data-image-swap-src=""  data-image-swap-zoom="" alt="" />
-                                                   </div>
+                                          <div class="col-sm-2" id="variant-image-thumbnail-copy">
+                                             <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
+                                                <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" class="" src="" data-image-swap="main-product-image" data-image-swap-src=""  data-image-swap-zoom="" alt="" />
                                              </div>
-                                             <div class="col-sm-2" id="variantVideoCopy">
-                                                {% do app.asset.js(app.url_asset ~ '/js/video-player.js') %}
-                                                <div class="thumbnail video" data-video-src="" data-tooltip="" data-toggle="tooltip" data-original-title="">
-                                                   <i class="video-icon fa fa-play-circle"></i><img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" src="">
-                                                </div>
+                                          </div>
+                                          <div class="col-sm-2" id="variant-video-copy">
+                                             {% do app.asset.js(app.url_asset ~ '/js/video-player.js') %}
+                                             <div class="thumbnail video" data-video-src="" data-tooltip="" data-toggle="tooltip" data-original-title="">
+                                                <i class="video-icon fa fa-play-circle"></i><img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" src="">
                                              </div>
+                                          </div>
 
                                        </div>
 
-                                       <div class="item active itemauto" id="variantImageCarousel">
+                                       <div class="item active itemauto" id="variant-image-carousel-{{product.id}}">
                                           
                                        </div>
 
@@ -102,23 +101,23 @@
                      <div id="variant-availability-price">
                         {# Begin Product Prices #}
                         {# if variation.price > 0 #}
-                           <div class="price-box">
+                           <div class="price-box" id="price-box-{{product.id}}">
                               {% set stock_description = variation.has_stock ? 'In Stock' :  variation.inventory_shipping_estimate is not empty ? variation.inventory_shipping_estimate : 'Out of Stock' %}
                               {# {{ prod.price(variation.price) }} #}
-                              <h4 class="product-price"></h4>
+                              <h4 class="product-price" id="product-price-{{product.id}}"></h4>
                               {# Begin regular price #}
                               {# if variation.price != variation.compare_price and variation.compare_price is not empty #}
                               {# prod.price(variation.compare_price) #}
-                              <h4 class="product-standard-price"></h4>
+                              <h4 class="product-standard-price" id="product-standard-price-{{product.id}}"></h4>
                               {# endif #}
                               {# End regular price #}
                            </div>
-                           <div class="price-box">
+                           <div class="price-box" id="pricing-box-{{product.id}}">
                               {# Begin pricing #}
                               <ul class="product">
                                  {# Begin percent off #}
                                  {# if variation.save_price > 1 #}
-                                    <li class="pricing save-pricing">
+                                    <li class="pricing save-pricing" id="save-pricing-{{product.id}}">
                                        Save up to {{ prod.saveprice(variation.save_price ) }} {{ prod.savepercent(variation.save_percent) }}
                                     </li>
                                  {# endif #}
@@ -140,7 +139,7 @@
                                  <i class="fa fa fa-check-circle-o color-in"></i> {{stock_description}}
                               </h6>
                            {% else #}
-                              <h6 class="incaps no-margin" id="stock-text">
+                              <h6 class="incaps no-margin" id="stock-text-{{product.id}}">
                                  <i class="fa fa-minus-circle color-out"></i> {{stock_description}}
                               </h6>
                            {# endif #}
@@ -235,14 +234,14 @@
                               {# if variation['inventory_quantity'] is defined and variation['inventory_minimum_quantity'] is defined and variation['inventory_policy'] is defined and variation['has_stock'] #}
 
                                  {# Begin product Size-Quantity #}
-                                 <div id="divQuantity" class="col-xs-4 col-md-6 no-padding"> {# Begin Row#}
+                                 <div id="div-quantity-{{product.id}}" class="col-xs-4 col-md-6 no-padding"> {# Begin Row#}
                                     <div class="form-group">
                                        {# Begin product Quantity #}
                                        <div class="input-group col-md-6">
                                           <div class="input-group-btn">
                                              <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button"><i class="fa fa-minus"></i></button>
                                           </div>
-                                          <input data-limit="" id="variantInput" class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="items[{{variation.id}}]" type="text">
+                                          <input data-limit="" id="variant-input-{{product.id}}" class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="" type="text">
                                           <div class="input-group-btn">
                                              <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
                                           </div>
@@ -253,9 +252,9 @@
                               {# endif #}
                            {# endif #}
                            {# if variation.sku is not empty #}
-                           <div id="divSKU" class="col-xs-12 col-md-4"> {# Begin Row#}
+                           <div id="div-sku-{{product.id}}" class="col-xs-12 col-md-4"> {# Begin Row#}
                               <div class="item-sku">
-                                  <strong>Item: </strong> #<span id="variantSKU"></span>
+                                  <strong>Item: </strong> #<span id="variant-sku-{{product.id}}"></span>
                               </div>
                            </div>
                           {# endif #}
