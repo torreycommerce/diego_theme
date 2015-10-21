@@ -1,10 +1,12 @@
-if(acenda.collection){
-    $.each(acenda.products, function(index, product){
-        new VariantsManager(product.variants, product.variant_options, product.img, product.videos, true).init();
-    });
-}else{
-    new VariantsManager(acenda.products[0].variants, acenda.products[0].variant_options, acenda.products[0].img, acenda.products[0].videos, false).init();
-}
+$(function() {
+    if(acenda.collection){
+        $.each(acenda.products, function(index, product){
+            new VariantsManager(product.variants, product.variant_options, product.img, product.videos, true).init();
+        });
+    }else{
+        new VariantsManager(acenda.products[0].variants, acenda.products[0].variant_options, acenda.products[0].img, acenda.products[0].videos, false).init();
+    }
+});
 
 var disabled_cart_button = 0;
 
