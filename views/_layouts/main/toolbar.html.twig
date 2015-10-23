@@ -153,37 +153,78 @@
                     {% endif %}
             </div>
             <!-- /Header-->
+<style>
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+    margin-left: 1px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    margin-top: -1px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+}
+</style>
+
             <!-- Collapse -->
             <div class="collapse navbar-collapse navbar-absolute">
-
                 <!-- Navbar Center -->
                 <ul class="nav navbar-nav navbar-center line-top line-pcolor case-c">
-                    <li class="active"><a href="{{ app.url }}/">home</a></li>
-                    {% for main_category,items in categories if main_category != "clearance" %}
-                        {% if items.limb|length %}
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="{{app.url}}/category/{{items.slug}}">{{main_category|replace('-',' ')|title}}
-                            <i class="fa fa-angle-down toggler"></i>
-                        </a>
-                        <ul id="category_item" class="dropdown-menu">
-                            {% for category,subitems in items.limb %}
-                            {% set i = i + 1 %}
-                            <li>
-                                <a tabindex="-1" href="{{app.url}}/category/{{subitems.slug}}">{{category|replace('-',' ')|title}}</a>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                    {# End dropdown #}
+                  <li class="active"><a href="{{ app.url }}/">home</a></li>
+                  {% for main_category,items in categories if main_category != "clearance" %}
+                    {% if items.limb|length %}
+                      <li class="dropdown">
+                          <a class="dropdown-toggle" data-toggle="dropdown" href="{{app.url}}/category/{{items.slug}}">{{main_category|replace('-',' ')|title}}
+                              <i class="fa fa-angle-down toggler"></i>
+                          </a>
+                          <ul id="category_item" class="dropdown-menu">
+                              {% for category,subitems in items.limb %}
+                                {% if subitems.limb|length %}
+                                  {{ base.subcategory(category,subitems) }}
+                                {% else %}
+                                  <li>
+                                      <a tabindex="-1" href="{{app.url}}/category/{{subitems.slug}}">{{category|replace('-',' ')|title}}</a>
+                                  </li>
+                                {% endif %}
+                              {% endfor %}
+                          </ul>
+                      </li>
+                      {# End dropdown #}
                     {% else %}
-                    <li>
-                        <a href="{{app.url}}/category/{{items.slug}}">{{main_category|replace('-',' ')|title}}</a>
-                    </li>
-                {% endif %}
-                {% endfor %}
+                      <li>
+                          <a href="{{app.url}}/category/{{items.slug}}">{{main_category|replace('-',' ')|title}}</a>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
                 </ul>
                 <!-- /Navbar Center -->
-
             </div>
             <!-- /Collapse -->
 
