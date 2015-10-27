@@ -5,7 +5,7 @@
 {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
 {% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
 
-Thank you for placing your order with {{ app.params['site']['title'] }}!
+Thank you for placing your order with {{ params['site']['title'] }}!
 
 This email is to confirm your recent order.
 
@@ -27,7 +27,7 @@ using {{ shipping_method.name }}
 
 {% for item in items %}
 --------------------------------------------------------------------------
-URL: {{app.url}}{{products[item.product_id].0.url}}
+URL: {{params['url']['current']}}{{products[item.product_id].0.url}}
 SKU: {{item.sku}}
 Item name: {{ item.name }}
 Price: ${{ item.price|number_format(2) }}

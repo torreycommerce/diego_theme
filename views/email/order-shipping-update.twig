@@ -4,7 +4,7 @@
 {% set product = api.get('/product/' ~ item.product_id) %}
 {% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
 
-Thank you again for your order from {{ app.params['site']['title'] }}.
+Thank you again for your order from {{ params['site']['title'] }}.
 
 Order ID: {{ order.order_number }}
 
@@ -22,7 +22,7 @@ using {{ shipping_method.name }}
 
 --------------------------------------------------------------------------
 Status: {{ item.status }}
-URL: {{app.url}}{{product.url}}
+URL: {{params['url']['current']}}{{product.url}}
 SKU: {{item.sku}}
 Item name: {{ item.name }}
 Quantity: {{ item.quantity }}

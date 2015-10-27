@@ -1,9 +1,9 @@
 {%- import "/_macros/product.html.twig" as prod -%}
       <tr>
-        <td class="innerpadding borderbottom">
+        <td class="innerpadding borderbottom" style="padding: 40px 30px 40px 30px; border-bottom: 1px solid #f2eeed;">
           <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
-              <td class="h3">
+              <td class="h3" style="padding: 0 0 15px 0; font-size: 20px; line-height: 28px; font-weight: bold; text-transform: uppercase; color:#E7214D; font-family: 'Open Sans', sans-serif;">
                 Top Sellers
               </td>
             </tr>
@@ -55,7 +55,7 @@
                     <tr>
                         <td height="200" align="center" style="padding: 0;">
                             <img class="fix" onerror="this.src='{{ url_asset }}/images/product/image-250x250.jpg'" src="{{ image_url }}" width="200" height="200" border="0" alt="" />
-                            <p class="producttitle">{{ product.title|striptags|slice(0, 50) }}</p><p class="productprice"> {{ prod.price(product.attributes.price) }} </p>
+                            <p class="producttitle" style="margin-top:5px; font-weight:bold; text-transform: uppercase;">{{ product.title|striptags|slice(0, 50) }}</p><p class="productprice" style="margin: 0 0 20px 0; color: #42464d;"> {{ prod.price(product.attributes.price) }} </p>
                         </td>
                     </tr>
                 </table>
