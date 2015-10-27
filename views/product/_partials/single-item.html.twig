@@ -5,8 +5,7 @@
          <!-- Product Row -->
          <form method="post" id="productForm" action="{{ app.url }}/product/route">
             <div class="row product-details">
-               {# for variation in product.variant #}
-                  <div id="product-{{product.variant[0].id}}" {% if loop.index > 1 %}style="display:"{% endif %}>
+                  <div id="product-{{product.variant[0].id}}">
                      {# Begin product images #}
                      <div id="product-images" class="col-md-5 mgb-30-xs">
                         {# Begin main image #}
@@ -71,7 +70,6 @@
                      </div>
                      {# End product images #}
                   </div>
-               {# endfor #}
 
                <div class="col-md-7">  <!-- /Begin Product Details -->
                   <h2 class="product-title"> <a href="{{app.url}}/brand/{{product.brand|url_encode}}">{{product.brand}}</a></h2>
@@ -97,30 +95,20 @@
 
                   <h3 class="product-title">{{product.title}}</h3>
 
-                  {# for variation in product.variant #}
                      <div id="variant-availability-price">
                         {# Begin Product Prices #}
-                        {# if variation.price > 0 #}
                            <div class="price-box" id="price-box-{{product.id}}">
-                              {% set stock_description = variation.has_stock ? 'In Stock' :  variation.inventory_shipping_estimate is not empty ? variation.inventory_shipping_estimate : 'Out of Stock' %}
-                              {# {{ prod.price(variation.price) }} #}
                               <h4 class="product-price" id="product-price-{{product.id}}"></h4>
                               {# Begin regular price #}
-                              {# if variation.price != variation.compare_price and variation.compare_price is not empty #}
-                              {# prod.price(variation.compare_price) #}
                               <h4 class="product-standard-price" id="product-standard-price-{{product.id}}"></h4>
-                              {# endif #}
                               {# End regular price #}
                            </div>
                            <div class="price-box" id="pricing-box-{{product.id}}">
                               {# Begin pricing #}
                               <ul class="product">
                                  {# Begin percent off #}
-                                 {# if variation.save_price > 1 #}
                                     <li class="pricing save-pricing" id="save-pricing-{{product.id}}">
-                                       Save up to {{ prod.saveprice(variation.save_price ) }} {{ prod.savepercent(variation.save_percent) }}
                                     </li>
-                                 {# endif #}
                                  {# End percent off #}
                                  {# Begin price per month #}
                                  {# if variation.price >= 100 #}
@@ -134,21 +122,12 @@
                               </ul>
                               {# End pricing #}
                            </div>
-                           {# if stock_description == 'In Stock'%}
-                              <h6 class="incaps no-margin" id="stock_text">
-                                 <i class="fa fa fa-check-circle-o color-in"></i> {{stock_description}}
-                              </h6>
-                           {% else #}
-                              <h6 class="incaps no-margin" id="stock-text-{{product.id}}">
-                                 <i class="fa fa-minus-circle color-out"></i> {{stock_description}}
-                              </h6>
-                           {# endif #}
+                           <h6 class="incaps no-margin" id="stock-text-{{product.id}}">
+                           </h6>
                            <h6 class="incaps no-margin-top">
                               <i class="glyphicon glyphicon-lock"></i> Secure online ordering
                            </h6>
-                        {# endif #}
                      </div>
-                  {# endfor #}
 
 
                   {# Begin actions desktop #}
@@ -226,41 +205,30 @@
                   <h4>Buy now</h4>
                   <!-- Row -->
                   <div class="row grid-20">
-                     
-                     {# for variation in product.variant #}
-                        <div id="variant-details">
-                           {# if variation.price > 0 #}
-                              <!--/.size-details-->
-                              {# if variation['inventory_quantity'] is defined and variation['inventory_minimum_quantity'] is defined and variation['inventory_policy'] is defined and variation['has_stock'] #}
-
-                                 {# Begin product Size-Quantity #}
-                                 <div id="div-quantity-{{product.id}}" class="col-xs-4 col-md-6 no-padding"> {# Begin Row#}
-                                    <div class="form-group">
-                                       {# Begin product Quantity #}
-                                       <div class="input-group col-md-6">
-                                          <div class="input-group-btn">
-                                             <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button"><i class="fa fa-minus"></i></button>
-                                          </div>
-                                          <input data-limit="" id="variant-input-{{product.id}}" class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="" type="text">
-                                          <div class="input-group-btn">
-                                             <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    {# End product quantity #}
-                                 </div> {# End Row#}
-                              {# endif #}
-                           {# endif #}
-                           {# if variation.sku is not empty #}
-                           <div id="div-sku-{{product.id}}" class="col-xs-12 col-md-4"> {# Begin Row#}
-                              <div class="item-sku">
-                                  <strong>Item: </strong> #<span id="variant-sku-{{product.id}}"></span>
+                     <div id="variant-details">
+                        <!--/.size-details-->
+                        {# Begin product Size-Quantity #}
+                        <div id="div-quantity-{{product.id}}" class="col-xs-4 col-md-6 no-padding"> {# Begin Row#}
+                           <div class="form-group">
+                              {# Begin product Quantity #}
+                              <div class="input-group col-md-6">
+                                 <div class="input-group-btn">
+                                    <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button"><i class="fa fa-minus"></i></button>
+                                 </div>
+                                 <input data-limit="" id="variant-input-{{product.id}}" class="form-control quantity-selector quanitySniper" value="1" maxlength="2" placeholder="1" name="" type="text">
+                                 <div class="input-group-btn">
+                                    <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
+                                 </div>
                               </div>
                            </div>
-                          {# endif #}
+                           {# End product quantity #}
+                        </div> {# End Row#}
+                        <div id="div-sku-{{product.id}}" class="col-xs-12 col-md-4"> {# Begin Row#}
+                           <div class="item-sku">
+                               <strong>Item: </strong> #<span id="variant-sku-{{product.id}}"></span>
+                           </div>
                         </div>
-
-                     {# endfor #}
+                     </div>
                   </div>
                   <div id="variation-selector-{{product.id}}" class="col-md-12 no-padding">
                   </div>

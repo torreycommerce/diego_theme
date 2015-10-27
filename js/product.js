@@ -29,6 +29,22 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
         return temp;
     }
 
+    this.formatPrice = function(price){
+        if(Number(price)){
+            return Number(price).toFixed(2).toString();
+        }else{
+            return price;
+        }
+    }
+
+    this.getNumber = function(price){
+        if(Number(price)){
+            return Number(price);
+        }else{
+            return 0;
+        }
+    }
+
     this.getVariationSelector = function(selectName, optionValue){
         selectName = selectName.replace(/ /g, "-");
         optionValue = optionValue.replace(/ /g, "-");
@@ -59,6 +75,12 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
 
     this.getClosestImages = function(variant_id) {
         return this.arr_uniq_var_img_url.variant_id;
+    }
+
+    this.preloadImages = function(imgs){
+        $.each(imgs, function(index, img){
+            $('<img src="'+img.standard+'"/>');
+        });
     }
 
     this.getImageUrl = function(img_id, img_type) {
@@ -148,7 +170,7 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
         var self = this
         console.log('updateQuantitySku');
         $('#div-quantity-'+self.product_id).hide();
-        if (obj_variant.price > 0 && typeof obj_variant.inventory_quantity != 'undefined' 
+        if (self.getNumber(obj_variant.price) > 0 && typeof obj_variant.inventory_quantity != 'undefined' 
             && typeof obj_variant.inventory_minimum_quantity != 'undefined'
             && typeof obj_variant.inventory_policy != 'undefined'
             && obj_variant.has_stock == '1') {
@@ -169,29 +191,30 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
         //$('#variant-details').
     }
     this.updatePriceAndAvailability = function(obj_variant) {
+        var self = this;
         console.log('updatePriceAndAvailability');
 
         $('#price-box-'+this.product_id).hide();
         $('#pricing-box-'+this.product_id).hide();
         // $('.price-box').hide();
-        if (obj_variant.price > 0) {
+        if (self.getNumber(obj_variant.price) > 0) {
             // $('.price-box').show();
             $('#price-box-'+this.product_id).show();
             $('#pricing-box-'+this.product_id).show();
-            $('#product-price-'+this.product_id).html('$'+obj_variant.price);
+            $('#product-price-'+this.product_id).html('$'+self.formatPrice(obj_variant.price));
             $('#product-standard-price-'+this.product_id).hide();
-            if (typeof obj_variant.compare_price != 'undefined' && obj_variant.price != obj_variant.compare_price && obj_variant.compare_price > 0) {
+            if (typeof obj_variant.compare_price != 'undefined' && obj_variant.price != obj_variant.compare_price && self.getNumber(obj_variant.compare_price) > 0) {
                 $('#product-standard-price-'+this.product_id).show();
                 if(this.isCollection){
-                    $('#product-standard-price-'+this.product_id).html('Compare at '+'$'+obj_variant.compare_price);
+                    $('#product-standard-price-'+this.product_id).html('Compare at '+'$'+self.formatPrice(obj_variant.compare_price));
                 }else{
-                    $('#product-standard-price-'+this.product_id).html('$'+obj_variant.compare_price);
+                    $('#product-standard-price-'+this.product_id).html('$'+self.formatPrice(obj_variant.compare_price));
                 }
             }
             $('#save-pricing-'+this.product_id).hide();
-            if (typeof obj_variant.save_price != 'undefined' && obj_variant.save_price > 1) {
+            if (typeof obj_variant.save_price != 'undefined' && self.getNumber(obj_variant.save_price) > 1) {
                 $('#save-pricing-'+this.product_id).show();
-                $('#save-pricing-'+this.product_id).html('Save '+'$'+obj_variant.save_price+' ('+obj_variant.save_percent+'%'+')');
+                $('#save-pricing-'+this.product_id).html('Save '+'$'+self.formatPrice(obj_variant.save_price)+' ('+obj_variant.save_percent+'%'+')');
             }
             var stock_text = this.getStockDescription(obj_variant);
             if(this.isCollection){
@@ -364,7 +387,7 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
 
         $.each( this.variants, function(index, variant){
             var passfilter = true;
-            if(variant.price > 0){
+            if(self.getNumber(variant.price) > 0){
                 $.each( selectedValues, function(selectName, selectValue){
                     if(selectValue != ""){
                         if(variant[selectName]){
@@ -481,6 +504,10 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
 
     this.init = function(){
         var self = this;
+
+        //preload variant img
+        this.preloadImages(this.arr_uniq_var_img_url);
+
         //Options ordering
         self.variant_options = self.orderOptions(self.variant_options);
 
@@ -495,7 +522,7 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
         var selected_variant = self.variants[0];
 
         $.each(self.variants, function(index,variant){
-            if(variant.price > 0 && variant.has_stock){
+            if(self.getNumber(variant.price) > 0 && variant.has_stock){
                 selected_variant = variant;
                 return false;
             }
