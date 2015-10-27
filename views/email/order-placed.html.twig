@@ -70,18 +70,18 @@
         <tr>
           <td>
     <![endif]-->     
-    <table bgcolor="#f7f7f7" class="content" align="center" cellpadding="0" cellspacing="0" border="0">
+    <table bgcolor="#f7f7f7" class="content" align="center" cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: 600px;">
     {% include 'email/core/header.html.twig' %}
       <tr>
-        <td class="innerpadding borderbottom">
+        <td class="innerpadding borderbottom" style="padding: 40px 30px 40px 30px; border-bottom: 1px solid #f2eeed;">
           <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
-              <td class="h2">
+              <td class="h2" style="padding: 0 0 15px 0; font-size: 24px; line-height: 28px; font-weight: bold; text-transform: uppercase; color: #1d2831; font-family: 'Open Sans', sans-serif;">
                 Thank you for placing your order. Your order has been confirmed.
               </td>
             </tr>
             <tr>
-              <td class="bodycopy">
+              <td class="bodycopy" style="font-size: 14px; line-height: 22px; color: #1d2831; font-family: 'Open Sans', sans-serif;">
                 This email is to confirm your recent order.
               </td>
             </tr>
@@ -89,17 +89,17 @@
         </td>
       </tr>
       <tr bgcolor="#1d2831">
-        <td class="innerpadding bordergrey">
+        <td class="innerpadding bordergrey" style="padding: 40px 30px 40px 30px; border-bottom: 5px solid #d8d8d8; border-top: 5px solid #d8d8d8;">
           <table class="col380" align="left" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">  
             <tr>
               <td>
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
-                    <td class="h3 light">
+                    <td class="h3 light" style="padding: 0 0 15px 0; font-size: 20px; line-height: 28px; font-weight: bold; text-transform: uppercase; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                       Order Info
                   </tr>
                   <tr>
-                    <td class="bodycopy light">
+                    <td class="h3 light" style="padding: 0 0 15px 0; font-size: 20px; line-height: 28px; font-weight: bold; text-transform: uppercase; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                         Order ID: {{ order.order_number }} <br>
                         Subtotal: ${{ order.subtotal|number_format(2) }}<br>
                         Total: ${{order.total|number_format(2)}}
@@ -120,17 +120,17 @@
         </td>
       </tr>
       <tr bgcolor="#808080" style="margin-top: 10px;">
-        <td class="innerpadding bordergrey">
+        <td class="innerpadding bordergrey" style="padding: 40px 30px 40px 30px; border-bottom: 5px solid #d8d8d8; border-top: 5px solid #d8d8d8;">
           <table class="col380" align="left" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">  
             <tr>
               <td>
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
-                    <td class="h3 light">
+                    <td class="h3 light" style="padding: 0 0 15px 0; font-size: 20px; line-height: 28px; font-weight: bold; text-transform: uppercase; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                       Shipping Details
                   </tr>
                   <tr>
-                    <td class="bodycopy light">
+                    <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                         {{ order.shipping_first_name }} {{ order.shipping_last_name }} <br>
                         {{ order.shipping_street_line1}} {{ order.shipping_street_line2}} <br>
                         {{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_zip }} <br>
@@ -141,11 +141,11 @@
                     </td>
                   </tr>
                   <tr>
-                    <td class="h3 light">
+                    <td class="h3 light" style="padding: 0 0 15px 0; font-size: 20px; line-height: 28px; font-weight: bold; text-transform: uppercase; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                       Item Info
                   </tr>
                   <tr>
-                    <td class="bodycopy light">
+                    <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                         <b>URL:</b> {{params['url']['current']}}{{products[item.product_id].0.url}}<br>
                         <b>SKU:</b> {{item.sku}}<br>
                         <b>Item name:</b> {{ item.name }}<br>
@@ -167,8 +167,8 @@
       </tr>
               {% include 'email/core/top-seller.html.twig' %}
           <tr>
-            <td class="innerpadding bodycopy">
-              Thank you from your friends at {{ params['site']['title'] }}.<br/>
+            <td class="innerpadding bodycopy" style="padding: 40px 30px 40px 30px; font-size: 14px; line-height: 22px; color: #1d2831; font-family: 'Open Sans', sans-serif;">
+              Thank you from your friends at {{ app.params.site.title }}.<br/>
               Please add us to your email address book to make sure you receive important 
               emails from us.
             </td>

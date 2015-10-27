@@ -5,7 +5,7 @@
 {% set products = api.get('/product',{query:{id:{'$in':product_ids}}})|group_by('id') %}
 {% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
 
-Thank you again for your order from {{ app.params['site']['title'] }}.
+Thank you again for your order from {{ params['site']['title'] }}.
 
 Order ID: {{ order.order_number }}
 
@@ -25,7 +25,7 @@ using {{ shipping_method.name }}
 {% if item.status == 'shipped' %}
 --------------------------------------------------------------------------
 Status: {{ item.status }}
-URL: {{app.url}}{{products[item.product_id].0.url}}
+URL: {{params['url']['current']}}{{products[item.product_id].0.url}}
 SKU: {{item.sku}}
 Item name: {{ item.name }}
 Quantity: {{ item.quantity }}
