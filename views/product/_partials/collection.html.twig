@@ -9,13 +9,17 @@
                     {# Begin main image #}
                     {% set main_image_id = product.images.0.id is not empty ? product.images.0.id : product.product|values_in('images')[0]['id'] %}
                     {% set main_image_id = main_image_id is empty ? 'default' : main_image_id %}
+
+                    {% set main_image_alt = product.images.0.alt is not empty ? product.images.0.alt :product.product|values_in('images')[0]['alt'] %}
+                    {% set main_image_alt = main_image_alt is empty ? '' : main_image_alt %}
+                    
                     <div id="image-main">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="thumbnail">
                                     <span class="helper hidden-xs"></span>
                                     <div id="main-product-video" style="display:none"></div>
-                                    <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="{{app.image.getImageUrl("product","standard",main_image_id) }}" data-image-zoom="{{app.image.getImageUrl("product","large",main_image_id) }}" alt="" />
+                                    <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="{{app.image.getImageUrl("product","standard",main_image_id) }}" data-image-zoom="{{app.image.getImageUrl("product","large",main_image_id) }}" alt="{{ main_image_alt }}" />
                                 </div>
                             </div>
                         </div>
