@@ -135,8 +135,8 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
     this.updateImages = function(obj_variant) {
         var self = this;
         console.log(obj_variant);
+        self.resetSelection(); 
         if (obj_variant.images.length > 0 ) { 
-            self.resetSelection();  
             var i = 0;
             for (key in obj_variant.images) {
                 var standard_img_url = this.getImageUrl(obj_variant.images[key].id,'standard');
