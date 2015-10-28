@@ -135,7 +135,8 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
     this.updateImages = function(obj_variant) {
         var self = this;
         console.log(obj_variant);
-        if (obj_variant.images.length > 0 ) {   
+        if (obj_variant.images.length > 0 ) { 
+            self.resetSelection();  
             var i = 0;
             for (key in obj_variant.images) {
                 var standard_img_url = this.getImageUrl(obj_variant.images[key].id,'standard');
@@ -293,7 +294,7 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
             var id = self.getProductVariation(filteredVariants[0].id);
             var quantityInput = "#variant-input-"+self.product_id;
             console.log(id);
-            self.resetSelection();
+            // self.resetSelection();
             self.updateImages(filteredVariants[0]);
             self.updateVideos();
             self.updateQuantitySku(filteredVariants[0]);
