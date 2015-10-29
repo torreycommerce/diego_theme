@@ -4,7 +4,7 @@
 {% set product_ids = items|values_in('product_id') %}
 {% set products = api.get('/product',{query:{id:{'$in':product_ids}}})|group_by('id') %}
 
-You have cancelled your order with {{ app.params['site']['title'] }}.
+You have cancelled your order with {{ params['site']['title'] }}.
 
 This email is to confirm your order cancellation.
 
@@ -13,7 +13,7 @@ Date: {{ order.date_created }}
 
 --------------------------------------------------------------------------
 {% for item in items %}
-URL: {{app.url}}{{products[item.product_id].0.url}}
+URL: {{params['url']['current']}}{{products[item.product_id].0.url}}
 SKU: {{item.sku}}
 Item name: {{ item.name }}
 Price: ${{ item.price }}

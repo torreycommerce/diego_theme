@@ -2,7 +2,7 @@
 {% set return = api.get('/orderreturn/' ~ return_id) %}
 {% set item = api.get('/orderitem/' ~ return.item_id) %}
 
-{{ app.params['site']['title'] }}
+{{ params['site']['title'] }}
 
 You have successfully created a return and a copy of the return instructions below have been emailed to you. In order for us to process your return, your items must meet the following criteria:
 

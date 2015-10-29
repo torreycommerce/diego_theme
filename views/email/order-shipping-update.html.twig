@@ -14,7 +14,7 @@
   .borderbottom {border-bottom: 1px solid #f2eeed;}
   .bordergrey {border-bottom: 5px solid #d8d8d8; border-top: 5px solid #d8d8d8;}
   .subhead {font-size: 15px; color: #ffffff; font-family: 'Open Sans', sans-serif; letter-spacing: 10px;}
-  .h1, .h2, .h3, .bodycopy {color: #1d2831; font-family: 'Open Sans', sans-serif;}
+  .h1, .h2, .h3, .bodycopy {color: #42464d; font-family: 'Open Sans', sans-serif;}
   .h1 {font-size: 33px; line-height: 38px; font-weight: bold; text-transform: uppercase;}
   .h2 {padding: 0 0 15px 0; font-size: 24px; line-height: 28px; font-weight: bold; text-transform: uppercase;}
   .h3 {padding: 15px 0 15px 0; font-size: 20px; line-height: 28px; font-weight: bold; text-transform: uppercase;}
@@ -24,7 +24,7 @@
    .light a:hover {color:#c4c4c4;}
   .producttitle, .productprice { font-size: 12px; font-family: 'Open Sans', sans-serif; padding:0; margin:0; font-weight:bold; color:#474747;}
   .producttitle { margin-top:5px; font-weight:bold; text-transform: uppercase;}
-  .productprice { margin: 0 0 20px 0; color: #1d2831;}
+  .productprice { margin: 0 0 20px 0; color: #42464d;}
   .button {text-align: center; font-size: 18px; font-family: 'Open Sans', sans-serif; font-weight: bold; padding: 0 30px 0 30px;}
   .button a {color: #ffffff; text-decoration: none;}
   .footer {padding: 20px 30px 15px 30px;}
@@ -71,18 +71,18 @@
         <tr>
           <td>
     <![endif]-->     
-    <table bgcolor="#f7f7f7" class="content" align="center" cellpadding="0" cellspacing="0" border="0">
+    <table bgcolor="#f7f7f7" class="content" align="center" cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: 600px;">
     {% include 'email/core/header.html.twig' %}
       <tr>
-        <td class="innerpadding borderbottom">
+        <td class="innerpadding borderbottom" style="padding: 40px 30px 40px 30px; border-bottom: 1px solid #f2eeed;">
           <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
-              <td class="h2">
-                Thank you again for your order from {{ params['site']['title']|default("") }}!
+              <td class="h2" style="padding: 0 0 15px 0; font-size: 24px; line-height: 28px; font-weight: bold; text-transform: uppercase; color: #42464d; font-family: 'Open Sans', sans-serif;">
+                Thank you again for your order from {{ app.params.site.title }}!
               </td>
             </tr>
             <tr>
-              <td class="bodycopy">
+              <td class="bodycopy" style="font-size: 14px; line-height: 22px; color: #42464d; font-family: 'Open Sans', sans-serif;">
                 Order ID: {{ order.order_number }}<br>
                 Your order has shipped
               </td>
@@ -90,18 +90,18 @@
           </table>
         </td>
       </tr>
-      <tr bgcolor="#1d2831">
-        <td class="innerpadding bordergrey">
+      <tr bgcolor="#E7214D">
+        <td class="innerpadding bordergrey" style="padding: 40px 30px 40px 30px; border-bottom: 5px solid #d8d8d8; border-top: 5px solid #d8d8d8;">
           <table class="col380" align="left" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">  
             <tr>
               <td>
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
-                    <td class="h3 light">
+                    <td class="h3 light" style="padding: 0 0 15px 0; font-size: 20px; line-height: 28px; font-weight: bold; text-transform: uppercase; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                       Shipping Address
                   </tr>
                   <tr>
-                    <td class="bodycopy light">
+                    <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                         {{ order.shipping_first_name }} {{ order.shipping_last_name }} <br>
                         {% if order.giftlist_present is empty %}<br>
                         {{ order.shipping_street_line1}} {{ order.shipping_street_line2}}<br>
@@ -111,11 +111,11 @@
                         {% endif %}
                     </td>
                   <tr>
-                    <td class="h3 light">
+                    <td class="h3 light" style="padding: 0 0 15px 0; font-size: 20px; line-height: 28px; font-weight: bold; text-transform: uppercase; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                       Delivery Method
                   </tr>
                   <tr>
-                    <td class="bodycopy light">
+                    <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                         Using {{ shipping_method.name }} <br>
                         {% for item in items %} <br>
                         {% if item.status == 'shipped' %}
@@ -133,7 +133,7 @@
         </td>
       </tr>
       <tr bgcolor="#808080" style="margin-top: 10px;">
-        <td class="innerpadding bordergrey">
+        <td class="innerpadding bordergrey" style="padding: 40px 30px 40px 30px; border-bottom: 5px solid #d8d8d8; border-top: 5px solid #d8d8d8;">
           <table class="col380" align="left" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">  
             <tr>
               <td>
@@ -144,7 +144,7 @@
                     </td>
                   </tr>
                   <tr>
-                    <td class="bodycopy light">
+                    <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                         Status: {{ item.status }} <br>
                         URL: {{params['url']['current']}}{{products[item.product_id].0.url}} <br>
                         SKU: {{item.sku}} <br>
@@ -157,7 +157,7 @@
                   </tr>
                    <tr>
                         <td align="left" class="textContent">
-                            <h3 class="bodycopy light"><br/>Please Note:</h3>
+                            <h3 class="bodycopy light"style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;"><br/>Please Note:</h3>
                             <div style="text-align:left;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:13px;margin-bottom:0;color:#bdbdbd;line-height:135%;">If your order was placed after-hours or on the weekend your tracking number will not be active until the next business day when the package is picked up by the carrier.</div>
                         </td>
                     </tr> 
@@ -174,8 +174,8 @@
       </tr>
         {% include 'email/core/top-seller.html.twig' %}
           <tr>
-            <td class="innerpadding bodycopy">
-              Thank you from your friends at {{ params['site']['title']|default("") }}.<br/>
+            <td class="innerpadding bodycopy" style="padding: 40px 30px 40px 30px; font-size: 14px; line-height: 22px; color: #42464d; font-family: 'Open Sans', sans-serif;">
+              Thank you from your friends at {{ app.params.site.title }}.<br/>
               Please add us to your email address book to make sure you receive important 
               emails from us.
             </td>
