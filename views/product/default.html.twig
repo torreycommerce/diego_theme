@@ -53,7 +53,7 @@
 
 {% block dynamicclasses %}
     {% if item.product|length == 1%}
-        product-id-{{item.product.0.id }} product-id-{{item.product.0.slug }}
+        product-id-{{item.product.0.id }} product-slug-{{item.product.0.slug }}
     {% else %}
         collection-slug-{{app.request.path }}
     {% endif %}
