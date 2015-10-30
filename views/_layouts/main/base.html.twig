@@ -122,9 +122,20 @@
     <section id="content">
             {% block breadcrumb %}{% endblock %}
             {% block stage %}
-            {% include "/_layouts/main/stage_header.html.twig" %}
-            {% block content %}
-            {% endblock %}
+                {% include "/_layouts/main/stage_header.html.twig" %}
+                {% set url_based_class = app.request.url|split('/')|last %}
+                {% set url_based_array = app.request.url|split('/') %}
+                {% set url_based_class = '' %}
+                {% for part in url_based_array %}
+                    {% set url_based_class = url_based_class ~ ' url-' ~ loop.index ~ '-' ~ part %}
+                {% endfor %}
+                {% if url_based_array.0 | trim == ''%}
+                    {% set url_based_class = 'store-home-page' %}
+                {% endif %}
+                <div class="dynamic-classes {% spaceless %}{{ url_based_class }}{% endspaceless %} {% spaceless %}{% block dynamicclasses %}{% endblock %}{% endspaceless %}">
+                    {% block content %}
+                    {% endblock %}
+                </div>
             {% endblock %}
     </section>
     {# End Content #}
