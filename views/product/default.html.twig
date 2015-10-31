@@ -51,6 +51,14 @@
 {% set meta_description = item.meta_description|default(item.meta_description) %}
 {% block meta_description %}{{ meta_description|default(seo['description']) }}{% endblock %}
 
+{% block dynamicclasses %}
+    {% if item.product|length == 1%}
+        product-id-{{item.product.0.id }} product-slug-{{item.product.0.slug }}
+    {% else %}
+        collection-slug-{{app.request.path }}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     {# {% if item.product|length == 1 and item.product[0].variant|length == 1 %} #}
     {% if item.product|length == 1 %}
