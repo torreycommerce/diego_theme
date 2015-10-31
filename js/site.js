@@ -1,4 +1,5 @@
 (function($){
+
    var ImageZoom = function(element, options)
    {
       var elem = $(element);
@@ -121,18 +122,38 @@ $(document).ready(function() {
     $('#account').trigger('open');
   });
 
-  $(".close-menu").click(function(){
-    $('#nav-mobile-main').trigger('close');
-  });
-
-    $("#nav-mobile-main").mmenu({
-       zposition: "front",
-       position: "left",
-       classes: "mm-light",
-       dragOpen: true,
-       moveBackground: true
+  //Mobile navigation menu
+  $("#nav-mobile-main").attr("style", "");
+  $("#nav-mobile-main").mmenu({
+        autoHeight: true,
+        offCanvas: {
+               position  : "top",
+               zposition : "front"
+            },
+        navbars: [
+        {
+          content: ["<a class='mm-btn mm-prev' href='#'></a><a class='mm-title'>Categories</a>"],
+          position:"top"
+        }],
+        navbar: {
+          title: "",
+        },
+        extensions: ["theme-white"],
+        dragOpen: true,
+        moveBackground: true,
+        slidingSubmenus: true,
+        onClick: {
+          preventDefault: false,
+          close: true,
+          setSelected: false,
+        }
     }, {
-    }).trigger("open.btn-nav-mobile");
+       // configuration
+    });
+    var API = $("#nav-mobile-main").data( "mmenu" );
+    $("a[href='#']").click(function() {
+       API.close();
+    });
 
 
 

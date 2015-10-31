@@ -29,6 +29,12 @@
         <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/style.css" />
         <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/fonts/font-awesome/font-awesome.min.css" />
         <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/datepicker.css" />
+        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/jquery.mmenu.css" />
+        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/jquery.mmenu.themes.css" />
+        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/jquery.mmenu.positioning.css" />
+        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/jquery.mmenu.autoheight.css" />
+        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/jquery.mmenu.navbars.css" />
+        
         <link rel="sitemap" href="{{app.url}}/api/sitemap" />
 
         {% block css %}
@@ -54,10 +60,12 @@
         {{ app.asset.js(app.url_asset ~ '/js/jquery-latest.min.js') }}
         {{ app.asset.js(app.url_asset ~ '/js/bootstrap/bootstrap.min.js') }}
         {{ app.asset.js(app.url_asset ~ '/js/ZeroClipboard.min.js') }}
+        {{ app.asset.js(app.url_asset ~ '/js/jquery.mmenu.js') }}
+        {{ app.asset.js(app.url_asset ~ '/js/jquery.mmenu.autoheight.min.js') }}
+        {{ app.asset.js(app.url_asset ~ '/js/jquery.mmenu.navbars.min.js') }}
         {{ app.asset.js(app.url_asset ~ '/js/site.js') }}
         {{ app.asset.js(app.url_asset ~ '/js/google_map_normalizer.js') }}
         {{ app.asset.js(app.url_asset ~ '/js/quickcart.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/jquery.mmenu.js') }}
         {{ app.asset.js(app.url_asset ~ '/js/jquery.zoomify.js') }}
         {{ app.asset.js(app.url_asset ~ '/js/rating.js') }}
         {{ app.asset.js(app.url_asset ~ '/js/bootstrap-datepicker.js') }}
