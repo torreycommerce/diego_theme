@@ -177,20 +177,48 @@
                               <!-- /Collapse -->
                            </div>
                         {% endif %}
+                        {# Begin product features #}
+                        {% if product.dynamic_attributes is not empty %}
+                           <!-- Panel -->
+                           <div class="panel panel-default">
+                              <!-- Heading -->
+                              <div class="panel-heading">
+                                 <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                       Product Features
+                                    </a>
+                                 </h4>
+                              </div>
+                              <!-- /Heading -->
+                              <!-- Collapse -->
+                              <div id="collapseTwo" class="panel-collapse collapse">
+                                 <div class="panel-body">
+                                    <ul>
+                                        {% for feature in product.dynamic_attributes %}
+                                           <li>
+                                               {{feature}}: {{product[feature]}}
+                                           </li> 
+                                        {% endfor %}
+                                    </ul>
+                                 </div>
+                              </div>
+                              <!-- /Collapse -->
+                           </div>
+                        {% endif %}
                         <!-- /Panel -->
                         <!-- Panel -->
                         <div class="panel panel-default">
                            <!-- Heading -->
                            <div class="panel-heading">
                               <h4 class="panel-title">
-                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
                                     Product Reviews
                                  </a>
                               </h4>
                            </div>
                            <!-- /Heading -->
                            <!-- Collapse -->
-                           <div id="collapseTwo" class="panel-collapse collapse">
+                           <div id="collapseThree" class="panel-collapse collapse">
                               <div class="panel-body">
                                  {% include "/product/_partials/reviews.html.twig" %}
                               </div>
