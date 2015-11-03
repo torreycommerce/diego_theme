@@ -1734,10 +1734,12 @@ input[type="checkbox"] {
 ------------------------------------------- */
 .dropdown-menu, .hnav .navbar-nav .dropdown-menu {
   padding: 0;
+  margin-top: 0;
   box-shadow: 0 10px 0 -5px rgba(0, 0, 0, 0.1);
   border: 1px solid #cccccc;
   color: #666b76;
 }
+
 .dropdown-menu > li > a, .hnav .navbar-nav .dropdown-menu > li > a {
   padding: 0 20px;
   line-height: 40px;
@@ -1745,6 +1747,7 @@ input[type="checkbox"] {
   font-size: 0.9em;
   text-transform: capitalize;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  text-decoration: none;
 }
 .dropdown-menu.line-top, .hnav .navbar-nav .dropdown-menu.line-top {
   border-top: 3px solid #E7214C;
