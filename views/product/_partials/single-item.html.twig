@@ -38,18 +38,18 @@
                         {# Begin main image #}
                         {# Begin image carousel #}
 
-                           <div id="image-carousel" class="hidden-xs row">
+                           <div id="image-carousel" class="row">
                               <div class="image-carousel">
                                  <div id="image-carousel-{{product.variant[0].id}}" class="carousel">
                                     <div>
                                        <div class="item active itemauto" id="variant-image-carousel-copy" style="display:none;">
                                              
-                                          <div class="col-sm-2" id="variant-image-thumbnail-copy">
+                                          <div class="col-xs-2" id="variant-image-thumbnail-copy">
                                              <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
                                                 <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" class="" src="" data-image-swap="main-product-image" data-image-swap-src=""  data-image-swap-zoom="" alt="" />
                                              </div>
                                           </div>
-                                          <div class="col-sm-2" id="variant-video-copy">
+                                          <div class="col-xs-2" id="variant-video-copy">
                                              {% do app.asset.js(app.url_asset ~ '/js/video-player.js') %}
                                              <div class="thumbnail video" data-video-src="" data-tooltip="" data-toggle="tooltip" data-original-title="">
                                                 <i class="video-icon fa fa-play-circle"></i><img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" src="">
