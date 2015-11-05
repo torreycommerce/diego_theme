@@ -28,6 +28,7 @@
         <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/fonts/font-awesome/font-awesome.min.css" />
         <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/datepicker.css" />
         <link rel="sitemap" href="{{app.url}}/api/sitemap" />
+        <link rel="canonical" href="{{ app.request.base ~ '/' ~ app.request.url }}"/>
         {% block css %}{% endblock %}
         
         <title>{% block title %}{{ app.params.site.title }}{% endblock %}</title>
