@@ -26,14 +26,14 @@
                     </div>
                     {# End main image #}
                     {# Begin image carousel #}
-                    <div id="image-carousel" class="hidden-xs row">
+                    <div id="image-carousel" class="row">
                         <div class="image-carousel">
                             <div id="image-carousel-{{product.id}}" class="carousel">
                                 <div>
                                     <div class="item active itemauto">
                                         {% for image in product.images %}
                                         {% set name = image.name is not empty ? image.name : product.name %}
-                                        <div class="col-sm-2">
+                                        <div class="col-xs-2">
                                             <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
                                                 <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="" src="{{app.image.getImageUrl("product","thumbnail",image.id) }}" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",image.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",image.id) }}" alt="" />
                                             </div>
@@ -43,7 +43,7 @@
                                         {% for item in items %}
                                         {% for image in item.images if image.id is not empty %}
                                         {% set name = image.name is not empty ? image.name : item.name %}
-                                        <div class="col-sm-2">
+                                        <div class="col-xs-2">
                                             <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
                                                 <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="" src="{{app.image.getImageUrl("product","thumbnail",image.id) }}" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",image.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",image.id) }}" alt="" />
                                             </div>
@@ -53,7 +53,7 @@
                                         {% if product.videos is not empty %}
                                         {% do app.asset.js(app.url_asset ~ '/js/video-player.js') %}
                                         {% for video in product.videos %}
-                                        <div class="col-sm-2">
+                                        <div class="col-xs-2">
                                             <div class="thumbnail video" data-video-src="{{ video }}" data-tooltip="" data-toggle="tooltip" data-original-title="">
                                                 <i class="video-icon fa fa-play-circle"></i><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="">
                                             </div>
