@@ -5,15 +5,13 @@
 
 {% spaceless %}
 {# Getting Seo from config.mode.json #}
-{% if app.params.seo is defined and app.params.seo is not empty %}
-    {% set seo = app.params.seo %}
-{% else %}
-    {% set seo = { img: "", description: "", keywords: "", title: "Home" } %}
-{% endif %}
+    {% if app.params.seo is defined and app.params.seo is not empty %}
+        {% set seo = app.params.seo %}
+    {% else %}
+        {% set seo = { img: "", description: "", keywords: "", title: "Home" } %}
+    {% endif %}
 {# End Config Seo #}
-
 {% endspaceless %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,9 +34,8 @@
         <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/jquery.mmenu.navbars.css" />
         
         <link rel="sitemap" href="{{app.url}}/api/sitemap" />
-
-        {% block css %}
-        {% endblock %}
+        <link rel="canonical" href="{{ app.request.base ~ '/' ~ app.request.url }}"/>
+        {% block css %}{% endblock %}
         
         <title>{% block title %}{{ app.params.site.title }}{% endblock %}</title>
 
@@ -56,6 +53,7 @@
             {% endblock %}
         </script>
     {% endblock %}
+    
     {# Scripts #}
         {{ app.asset.js(app.url_asset ~ '/js/jquery-latest.min.js') }}
         {{ app.asset.js(app.url_asset ~ '/js/bootstrap/bootstrap.min.js') }}
@@ -86,76 +84,74 @@
         {% if app.params.seo.google_analytics is not empty or app.params.seo.google_tag_manager is not empty %}
             {{ app.asset.js(app.url_asset ~ '/js/acendaAnalytics.js') }}
         {% endif %}
-
     {# End Scripts #}
 </head>
 <body>
-    {% if app.params.seo.google_tag_manager is not empty and app.params.seo.google_analytics is empty %}
-        <!-- Google Tag Manager DataLayer -->
-        <script>
-            var dataLayer = [];
-            {% block dataLayer %}
-                {% include '/_partials/tag-manager.html.twig' %} {# Google Tag Manager Snippet #}
-            {% endblock %}
-        </script>
-        <!-- Google Tag Manager DataLayer End -->
+    {% set url_based_class = app.request.url|split('/')|last %}
+    {% set url_based_array = app.request.url|split('/') %}
+    {% set url_based_class = '' %}
+    {% for part in url_based_array %}
+        {% set url_based_class = url_based_class ~ ' url-' ~ loop.index ~ '-' ~ part %}
+    {% endfor %}
+    {% if url_based_array.0 | trim == ''%}
+        {% set url_based_class = 'store-home-page' %}
     {% endif %}
-<div class="page-wrapper boxed-wrapper shadow">
-
-    {% block body %}
-<!--[if lte IE 8]>
-<div id="outdated-warning" class="alert alert-dismissable alert-block alert-danger flash-notification flash-notification-danger">
-<h4>Please upgrade your browser!</h4><br>
-<p>Please upgrade to <a href="http://getfirefox.com" class="alert-link">Firefox</a>, <a href="http://www.google.com/chrome" class="alert-link">Chrome</a> or <a href="http://www.microsoft.com/windows/downloads/ie/getitnow.mspx" class="alert-link">Internet Explorer 9 or 10</a>. Thank you!</p>
-</div>
-<![endif]-->
-    {# Begin Header #}
-    <header id="main" class="header-block line-top" >
-        {# avoiding the display of the menu when we're in the store-protected template #}
-        {% if app.request.url != "store-protected" %}
-            {# Begin Toolbar #}
-            <section id="toolbar">
-                    {% block header %}
-                        {%include "/_layouts/main/toolbar.html.twig"%}
-                    {% endblock %}
-            </section>
-            {# End Toolbar #}
+    <div id="body" class="dynamic-classes {% spaceless %}{{ url_based_class }}{% endspaceless %} {% spaceless %}{% block dynamicclasses %}{% endblock %}{% endspaceless %}">
+        {% if app.params.seo.google_tag_manager is not empty and app.params.seo.google_analytics is empty %}
+            <!-- Google Tag Manager DataLayer -->
+            <script>
+                var dataLayer = [];
+                {% block dataLayer %}
+                    {% include '/_partials/tag-manager.html.twig' %} {# Google Tag Manager Snippet #}
+                {% endblock %}
+            </script>
+            <!-- Google Tag Manager DataLayer End -->
         {% endif %}
-        {# avoiding the display of the menu when we're in the store-protected template #}
-        {% if app.request.url != "store-protected" %}
-        {% endif %}
-    </header>
-    {# End Header #}
-    {# Begin Content #}
-    <section id="content">
-            {% block breadcrumb %}{% endblock %}
-            {% block stage %}
-                {% include "/_layouts/main/stage_header.html.twig" %}
-                {% set url_based_class = app.request.url|split('/')|last %}
-                {% set url_based_array = app.request.url|split('/') %}
-                {% set url_based_class = '' %}
-                {% for part in url_based_array %}
-                    {% set url_based_class = url_based_class ~ ' url-' ~ loop.index ~ '-' ~ part %}
-                {% endfor %}
-                {% if url_based_array.0 | trim == ''%}
-                    {% set url_based_class = 'store-home-page' %}
+        <div class="page-wrapper boxed-wrapper shadow">
+            {% block body %}
+            <!--[if lte IE 8]>
+            <div id="outdated-warning" class="alert alert-dismissable alert-block alert-danger flash-notification flash-notification-danger">
+            <h4>Please upgrade your browser!</h4><br>
+            <p>Please upgrade to <a href="http://getfirefox.com" class="alert-link">Firefox</a>, <a href="http://www.google.com/chrome" class="alert-link">Chrome</a> or <a href="http://www.microsoft.com/windows/downloads/ie/getitnow.mspx" class="alert-link">Internet Explorer 9 or 10</a>. Thank you!</p>
+            </div>
+            <![endif]-->
+            {# Begin Header #}
+            <header id="main" class="header-block line-top" >
+                {# avoiding the display of the menu when we're in the store-protected template #}
+                {% if app.request.url != "store-protected" %}
+                    {# Begin Toolbar #}
+                    <section id="toolbar">
+                        {% block header %}
+                            {%include "/_layouts/main/toolbar.html.twig"%}
+                        {% endblock %}
+                    </section>
+                    {# End Toolbar #}
                 {% endif %}
-                <div class="dynamic-classes {% spaceless %}{{ url_based_class }}{% endspaceless %} {% spaceless %}{% block dynamicclasses %}{% endblock %}{% endspaceless %}">
+                {# avoiding the display of the menu when we're in the store-protected template #}
+                {% if app.request.url != "store-protected" %}
+                {% endif %}
+            </header>
+            {# End Header #}
+            {# Begin Content #}
+            <section id="content">
+                {% block breadcrumb %}{% endblock %}
+                {% block stage %}
+                    {% include "/_layouts/main/stage_header.html.twig" %}
                     {% block content %}
                     {% endblock %}
-                </div>
+                {% endblock %}
+            </section>
+            {# End Content #}
             {% endblock %}
-    </section>
-    {# End Content #}
-    {% endblock %}
-    {% block js %}{% endblock %}
-        {# Begin Footer #}
-    <footer id="footer">
-            {% block footer %}
-                {% include "/_layouts/main/footer.html.twig"%}
-            {% endblock %}
-    </footer>
-    {# End Footer #}
+            {% block js %}{% endblock %}
+                {# Begin Footer #}
+            <footer id="footer">
+                    {% block footer %}
+                        {% include "/_layouts/main/footer.html.twig"%}
+                    {% endblock %}
+            </footer>
+            {# End Footer #}
+        </div>
     </div>
- </body>
+</body>
 </html>
