@@ -123,39 +123,22 @@ $(document).ready(function() {
   });
 
   //Mobile navigation menu
-  $("#nav-mobile-main").attr("style", "");
-  $("#nav-mobile-main").mmenu({
-        autoHeight: true,
-        offCanvas: {
-               position  : "top",
-               zposition : "front"
-            },
-        navbars: [
-        {
-          content: ["<a class='mm-btn mm-prev' href='#'></a><a class='mm-title'>Categories</a>"],
-          position:"top"
-        }],
-        navbar: {
-          title: "",
-        },
-        extensions: ["theme-white"],
-        dragOpen: true,
-        moveBackground: true,
-        slidingSubmenus: true,
-        onClick: {
-          preventDefault: false,
-          close: true,
-          setSelected: false,
-        }
-    }, {
-       // configuration
-    });
-    var API = $("#nav-mobile-main").data( "mmenu" );
-    $("a[href='#']").click(function() {
-       API.close();
-    });
-
-
+  $('#mobileMenu').slicknav({
+    appendTo:'#mobileMenuAnchor',
+    'allowParentLinks': true,
+    'closeOnClick': false,
+  });
+  var isOpen = false;
+  $('#mobile_nav_button').click(function(){
+    if(isOpen){
+      $('#mobileMenu').slicknav('close');
+      isOpen =false;
+    }else{
+      $('#mobileMenu').slicknav('open');
+      isOpen = true;
+    }
+    
+  });
 
     $("#acc_btn").click(function(){$('#account').trigger('open');});
     $(".sub_c").click(function(){$('#'+$(this).attr("ref")).trigger('open');});

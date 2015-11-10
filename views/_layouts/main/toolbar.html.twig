@@ -129,7 +129,7 @@
 <nav class="nav-bottom hnav hnav-ruled white-bg boxed-section">
 
   <!-- Container -->
-  <div class="container">
+  <div class="container" id="mobileMenuAnchor">
 
     <!-- Header-->
     <div class="navbar-header">
@@ -137,7 +137,7 @@
         <span class="sr-only">Toggle navigation</span>
         <i class="fa fa-navicon"></i>
       </button>#}
-      <a href="#nav-mobile-main" class="navbar-toggle no-border" id="mobile_nav_button">
+      <a class="navbar-toggle no-border" id="mobile_nav_button">
           <span class="sr-only">Toggle navigation</span>
           <i class="fa fa-navicon"></i>
       </a>
@@ -157,7 +157,7 @@
     <div class="collapse navbar-collapse navbar-absolute">
         <!-- Navbar Center -->
         <ul class="nav navbar-nav navbar-center line-top line-pcolor case-c">
-          <li class="active"><a href="{{ app.url }}/">hoasdme</a></li>
+          <li class="active"><a href="{{ app.url }}/">home</a></li>
           {% for main_category,items in categories if main_category != "clearance" %}
             {% if items.limb|length %}
               <li class="dropdown">
@@ -190,7 +190,7 @@
 
 
     <!-- Dont Collapse -->
-    <div class="navbar-dont-collapse">
+    <div  class="navbar-dont-collapse">
 
       <!-- Navbar btn-group -->
       <div class="navbar-btn-group btn-group navbar-right no-margin-r-xs">
@@ -350,52 +350,49 @@
 <!-- /Nav Bottom
 .............................................. -->
 
-{# Begin mobile navigation menu #}
-<nav id="nav-mobile-main" style="display:none;">
-    {# Begin nav list #}
-    <ul>
-        <!-- <li><h2>Categories</h2></li> -->
+<!-- Mobile Menu
+.............................................. -->
+<ul id="mobileMenu" style="display:none;">
+    <!-- <li><h2>Categories</h2></li> -->
+    <li>
+        <a href="{{app.url}}">
+            <i class="fa fa-home"></i> Home
+        </a>
+    </li>
+
+    <!-- TESTING -->
+    {% set id = 0 %}
+    {% for main_category,items in categories %}
+        {% set id = id + 1 %}
         <li>
-            <a href="{{app.url}}">
-                <i class="fa fa-home"></i> Home
+            <a href="{{app.url}}/category/{{ items.slug }}">
+                <i class="fa fa-star-o"></i>
+                {{main_category|replace('-',' ')|title}}
             </a>
+            {% if items.limb|length %}
+            <ul>
+                {% set i = 0 %}
+                {% for category,subitems in items.limb %}
+                    {% set i = i + 1 %}
+                    {% if subitems.limb|length %}
+                        {% set subid = "submenu-" ~ id ~ "-" ~ i %}
+                        {{ base.subcategory_mobile(category, subitems, subid) }}
+                    {% else %}
+                        <li>
+                            <a href="{{app.url}}/category/{{subitems.slug}}">
+                                <i class="fa fa-star-o"></i>
+                                {{category|replace('-',' ')|title}}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            {% endif %}
         </li>
-
-        <!-- TESTING -->
-        {% set id = 0 %}
-        {% for main_category,items in categories %}
-            {% set id = id + 1 %}
-            <li>
-                <a href="{{app.url}}/category/{{ items.slug }}" class="sub_c" ref="submenu-{{ id }}">
-                    <i class="fa fa-star-o"></i>
-                    {{main_category|replace('-',' ')|title}}
-                </a>
-                {% if items.limb|length %}
-                <ul id="submenu-{{ id }}" class="Vertical">
-                    {% set i = 0 %}
-                    {% for category,subitems in items.limb %}
-                        {% set i = i + 1 %}
-                        {% if subitems.limb|length %}
-                            {% set subid = "submenu-" ~ id ~ "-" ~ i %}
-                            {{ base.subcategory_mobile(category, subitems, subid) }}
-                        {% else %}
-                            <li>
-                                <a href="{{app.url}}/category/{{subitems.slug}}">
-                                    <i class="fa fa-star-o"></i>
-                                    {{category|replace('-',' ')|title}}
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-    {# End nav list #}
-</nav>
-{# End mobile navigation menu #}
-
+    {% endfor %}
+</ul>
+<!-- /Mobil Menu
+.............................................. -->
 <style>
  
 .dropdown-menu > li.kopie > a {
@@ -489,5 +486,30 @@
     display: none;
   }
 }*/
+</style>
+
+
+
+<style type="text/css">
+@media (min-width: 767px){
+  .slicknav_menu{
+    display: none;
+  }
+}
+
+#mobileMenu{
+  display:none;
+}
+.slicknav_btn{
+  display: none;
+}
+.slicknav_menu{
+  padding:0px;
+  background-color: white;
+}
+.slicknav_nav a{
+  color:black;
+}
+
 </style>
 
