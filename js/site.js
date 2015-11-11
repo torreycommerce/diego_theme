@@ -128,12 +128,16 @@ $(document).ready(function() {
     'allowParentLinks': true,
     'closeOnClick': false,
     'closedSymbol': '<i class="fa fa-chevron-right"></i>', 
-    'openedSymbol': '<i class="fa fa-chevron-down"></i>'
+    'openedSymbol': '<i class="fa fa-chevron-down"></i>',
   });
   var isOpen = false;
+  var closingMenus = false;
   $('#mobile_nav_button').click(function(){
     event.stopPropagation();
     if(isOpen){
+      closingMenus = true;
+      $('.slicknav_open >> .slicknav_arrow').children().trigger('click');
+      closingMenus = false;
       $('#mobileMenu').slicknav('close');
       isOpen =false;
     }else{
@@ -141,16 +145,21 @@ $(document).ready(function() {
       isOpen = true;
     }
   });
-  $('.slicknav_nav').click(function(){
-    event.stopPropagation();
-  });
   $('body').click(function(){
-    if(isOpen){
+    if(isOpen && !closingMenus){
+      closingMenus = true;
+      $('.slicknav_open >> .slicknav_arrow').children().trigger('click');
+      closingMenus = false;
       $('#mobileMenu').slicknav('close');
       isOpen =false;
     }
   });
-
+  $('.slicknav_nav').click(function(){
+    if(event){
+      event.stopPropagation();
+    }
+  });
+  
     $("#acc_btn").click(function(){$('#account').trigger('open');});
     $(".sub_c").click(function(){$('#'+$(this).attr("ref")).trigger('open');});
 

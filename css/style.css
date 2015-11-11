@@ -2609,6 +2609,10 @@ input[type="checkbox"] {
   padding: 0px !important;
   background-color: white !important;
 }
+.slicknav_nav{
+  max-height: 60vh !important;
+  overflow-y: auto !important;
+}
 .slicknav_nav a{
   color: black !important;
   padding-top: 20px !important;
@@ -2616,7 +2620,6 @@ input[type="checkbox"] {
   border-top: solid 1px #818182 !important;
   border-radius: 0px !important;
   font: normal 14px "Roboto" !important;
-
 }
 .slicknav_nav li:first-child a{
   border-top: none !important;
