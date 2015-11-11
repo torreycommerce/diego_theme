@@ -2591,6 +2591,30 @@ input[type="checkbox"] {
   margin-top: 20px;
 }
 
+/* Slicknav Mobile Nav
+----------------------------------------- */
+@media (min-width: 767px){
+  .slicknav_menu{
+    display: none !important;
+  }
+}
+
+#mobileMenu{
+  display: none !important;
+}
+.slicknav_btn{
+  display: none !important;
+}
+.slicknav_menu{
+  padding: 0px !important;
+  background-color: white !important;
+}
+.slicknav_nav a{
+  color: black !important;
+}
+.slicknav_nav a:hover{
+  background-color: white !important;
+}
 
 
 /* ACCOUNT NAVIGATION
