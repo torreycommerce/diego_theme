@@ -2615,8 +2615,8 @@ input[type="checkbox"] {
 }
 .slicknav_nav a{
   color: black !important;
-  padding-top: 20px !important;
-  padding-bottom: 20px !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
   border-top: solid 1px #818182 !important;
   border-radius: 0px !important;
   font: normal 14px "Roboto" !important;
