@@ -127,9 +127,12 @@ $(document).ready(function() {
     appendTo:'#mobileMenuAnchor',
     'allowParentLinks': true,
     'closeOnClick': false,
+    'closedSymbol': '<i class="fa fa-chevron-right"></i>', 
+    'openedSymbol': '<i class="fa fa-chevron-down"></i>'
   });
   var isOpen = false;
   $('#mobile_nav_button').click(function(){
+    event.stopPropagation();
     if(isOpen){
       $('#mobileMenu').slicknav('close');
       isOpen =false;
@@ -137,7 +140,15 @@ $(document).ready(function() {
       $('#mobileMenu').slicknav('open');
       isOpen = true;
     }
-    
+  });
+  $('.slicknav_nav').click(function(){
+    event.stopPropagation();
+  });
+  $('body').click(function(){
+    if(isOpen){
+      $('#mobileMenu').slicknav('close');
+      isOpen =false;
+    }
   });
 
     $("#acc_btn").click(function(){$('#account').trigger('open');});

@@ -356,7 +356,7 @@
     <!-- <li><h2>Categories</h2></li> -->
     <li>
         <a href="{{app.url}}">
-            <i class="fa fa-home"></i> Home
+            Home
         </a>
     </li>
 
@@ -366,7 +366,6 @@
         {% set id = id + 1 %}
         <li>
             <a href="{{app.url}}/category/{{ items.slug }}">
-                <i class="fa fa-star-o"></i>
                 {{main_category|replace('-',' ')|title}}
             </a>
             {% if items.limb|length %}
@@ -380,7 +379,6 @@
                     {% else %}
                         <li>
                             <a href="{{app.url}}/category/{{subitems.slug}}">
-                                <i class="fa fa-star-o"></i>
                                 {{category|replace('-',' ')|title}}
                             </a>
                         </li>
@@ -486,30 +484,5 @@
     display: none;
   }
 }*/
-</style>
-
-
-
-<style type="text/css">
-@media (min-width: 767px){
-  .slicknav_menu{
-    display: none;
-  }
-}
-
-#mobileMenu{
-  display:none;
-}
-.slicknav_btn{
-  display: none;
-}
-.slicknav_menu{
-  padding:0px;
-  background-color: white;
-}
-.slicknav_nav a{
-  color:black;
-}
-
 </style>
 
