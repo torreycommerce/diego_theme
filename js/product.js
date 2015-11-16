@@ -44,30 +44,42 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
             return 0;
         }
     }
-
+    this.getOptionIndexes = function(selectName, optionValue){
+        for(var i=0; i<this.variant_options.length; i++){
+            if(this.variant_options[i].name == selectName){
+                if(optionValue){
+                    for(var j=0; j<this.variant_options[i].values.length; j++){
+                        if(this.variant_options[i].values[j] == optionValue){
+                            return {option: i, value: j};
+                        }
+                    }
+                }else{
+                    return {option: i};
+                }
+            }
+        }
+    }
     this.getVariationSelector = function(selectName, optionValue){
-        selectName = selectName.replace(/ /g, "-");
-        optionValue = optionValue.replace(/ /g, "-");
-        return "[id=variation-selector-"+ this.jqSelector(self.product_id+"-"+selectName+"-"+optionValue) +"]";
+        var index = this.getOptionIndexes(selectName, optionValue);
+        return "[id=variation-selector-"+self.product_id+"-"+index.option+"-"+index.value+"]";
     }
 
     this.getVariationValueId = function(selectName, optionValue){
-        selectName = selectName.replace(/ /g, "-");
-        optionValue = optionValue.replace(/ /g, "-");
-        return "variation-selector-"+this.product_id+"-"+selectName+"-"+optionValue;
+        var index = this.getOptionIndexes(selectName, optionValue);
+        return "variation-selector-"+this.product_id+"-"+index.option+"-"+index.value;
     }
     this.getVariationOptionId = function(selectName){
-        selectName = selectName.replace(/ /g, "-");
-        return "variation-selector-"+this.product_id+"-"+selectName;
+        var index = this.getOptionIndexes(selectName, null);
+        return "variation-selector-"+this.product_id+"-"+index.option;
     }
     this.getVariationSelectedId = function(selectName){
-        selectName = selectName.replace(/ /g, "-");
-        return "selected-"+selectName+"-"+this.product_id;
+        var index = this.getOptionIndexes(selectName, null);
+        return "selected-"+index.option+"-"+this.product_id;
     }
 
     this.getSelectedValue = function(selectName){
-        selectName = selectName.replace(/ /g, "-");
-        return "[id=selected-"+ this.jqSelector(selectName+"-"+self.product_id) +"]";
+        var index = this.getOptionIndexes(selectName, null);
+        return "[id=selected-"+index.option+"-"+self.product_id+"]";
     }
     this.getProductVariation = function(variant_id){
         return "[id=product-" + variant_id + "]";
@@ -351,28 +363,27 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
     }
 
     this.updateVariants = function(selectName, optionValue){
-        console.log(selectName);
-        console.log(optionValue);
         var self = this;
-        self.selectedValues[selectName] = optionValue;
-        console.log(self.selectedValues);
 
-        var filteredVariants = self.getFilteredVariants(self.selectedValues);
-        console.log(filteredVariants);
-    
-        if(filteredVariants.length == 0 ) {
-            // display the default variant evalable 
-            var temp = {};
-            temp[selectName] = optionValue;
-            filteredVariants = self.getFilteredVariants( temp );
-            //Default selected variant with the new selected value
-            if(filteredVariants.length != 0){
-                $.each(self.selectsData, function(selectName, optionArray){
-                    self.selectedValues[selectName] = filteredVariants[0][selectName];
-                });
+        if(self.selectedValues[selectName] != optionValue){
+            self.selectedValues[selectName] = optionValue;
+
+            var filteredVariants = self.getFilteredVariants(self.selectedValues);
+        
+            if(filteredVariants.length == 0 ) {
+                // display the default variant evalable 
+                var temp = {};
+                temp[selectName] = optionValue;
+                filteredVariants = self.getFilteredVariants( temp );
+                //Default selected variant with the new selected value
+                if(filteredVariants.length != 0){
+                    $.each(self.selectsData, function(selectName, optionArray){
+                        self.selectedValues[selectName] = filteredVariants[0][selectName];
+                    });
+                }
             }
+            self.updateChips();
         }
-        self.updateChips();
     }
 
     this.generateSelectsData = function(filteredVariants){
@@ -436,9 +447,9 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
             //Color styling
             if( selectName.toLowerCase() == "color"){
                 if(self.isCollection){
-                    var div = $('<div>', {id: self.getVariationOptionId(selectName), name: selectName, class: "color-details-collection"}); 
+                    var div = $('<div>', {id: self.getVariationOptionId(selectName), class: "color-details-collection"}); 
                 }else{
-                    var div = $('<div>', {id: self.getVariationOptionId(selectName), name: selectName, class: "color-details"});
+                    var div = $('<div>', {id: self.getVariationOptionId(selectName), class: "color-details"});
                 }
      
                 var ul = $('<ul>', {class: "swatches Color"});  
@@ -447,7 +458,7 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
                             );
 
             }else{//size (default) styling
-                var div = $('<div>', {id: self.getVariationOptionId(selectName), name: selectName, class: "size-details"});           
+                var div = $('<div>', {id: self.getVariationOptionId(selectName), class: "size-details"});           
                 var ul = $('<ul>', {class: "swatches-size Size"});  
                 var span = $('<span>', {class: "selected-size"}).append(
                                 $('<strong>', {}).text(selectName.slice(0,1).toUpperCase()+selectName.slice(1,selectName.length) + ":  ") 
