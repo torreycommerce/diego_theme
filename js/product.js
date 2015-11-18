@@ -438,6 +438,15 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
         return tag =  $('<a>', {class: "", style:"background-color:"+color});
     }
 
+    this.unslugify = function(input){
+        var tmpArray = input.split('_');
+        for(var i = 0; i < tmpArray.length; i++){
+            if (tmpArray[i].length > 2)
+                tmpArray[i] = tmpArray[i].substring(0,1).toUpperCase() + tmpArray[i].substring(1);
+        }
+        return tmpArray.join(" ");
+    }
+
     this.buildChips = function(variant_options){
         var self = this;
         $.each(variant_options, function(index, option){
@@ -454,14 +463,14 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
      
                 var ul = $('<ul>', {class: "swatches Color"});  
                 var span = $('<span>', {class: "selected-color"}).append(
-                                $('<strong>', {}).text(selectName.slice(0,1).toUpperCase()+selectName.slice(1,selectName.length) + ":  ") 
+                                $('<strong>', {}).text(self.unslugify(selectName) + ":  ") 
                             );
 
             }else{//size (default) styling
                 var div = $('<div>', {id: self.getVariationOptionId(selectName), class: "size-details"});           
                 var ul = $('<ul>', {class: "swatches-size Size"});  
                 var span = $('<span>', {class: "selected-size"}).append(
-                                $('<strong>', {}).text(selectName.slice(0,1).toUpperCase()+selectName.slice(1,selectName.length) + ":  ") 
+                                $('<strong>', {}).text(self.unslugify(selectName) + ":  ") 
                             );
             }
 
