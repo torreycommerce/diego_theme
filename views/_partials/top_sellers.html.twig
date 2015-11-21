@@ -30,8 +30,6 @@
                     {% set variant_images = [] %}
 
                     {# if product.attributes.color|length > 1 %}
-                        {# set current_colors = app.request.get.f.color|keys #}
-
                         {% set current_colors = [] %}
                         {% for variant in product.variant
                             if variant.status == 'active' and variant.color not in current_colors and variant.images is not empty %}
