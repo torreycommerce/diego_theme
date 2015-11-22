@@ -150,9 +150,9 @@
       <!-- Intro Block
       ============================================-->
       <section class="intro-block intro-page boxed-section page-bg overlay-dark-m">
-      
+
         <!-- Container -->
-        <div class="container">     
+        <div class="container">
           <!-- Section Title -->
           <div class="section-title invert-colors no-margin-b">
             <h2>{{ name|default(category.name) }}</h2>
@@ -161,17 +161,17 @@
           <!-- /Section Title -->
         </div>
         <!-- /Container -->
-      
+
       </section>
       <!-- /Intro Block
       ============================================-->
-      
+
       <!-- Page Info Block
       ============================================-->
       <section class="page-info-block boxed-section">
-      
+
         <!-- Container -->
-        <div class="container cont-pad-x-15"> 
+        <div class="container cont-pad-x-15">
 
           <!-- Breadcrumb -->
         {% block breadcrumb %}
@@ -184,35 +184,35 @@
             {% endfor %}
             {{ base.breadcrumbs(category_crumbs) }}
         {% endblock %}
-          <!-- /Breadcrumb --> 
+          <!-- /Breadcrumb -->
 
         </div>
         <!-- /Container -->
-      
+
       </section>
       <!-- /Page Info  Block
       ============================================-->
-      
+
       <!-- Content Block
       ============================================ -->
       <section class="content-block default-bg">
-      
+
         <!-- Container -->
         <div class="container cont-main no-pad-t">
-        
+
           <!-- Row -->
           <div class="row">
 
             <!-- Main Col -->
             <div class="main-col col-sm-9 col-md-9">
-            
+
               <!-- Products Filter -->
               <div class="products-filter clearfix">
                 <!-- <div class="display">
                   <span class="show-list" onclick="changeView('list')"><span class="text hidden-xs">List</span><i class="icon fa fa-th-list"></i></span>
                   <span class="show-grid" onclick="changeView('grid')"><span class="text hidden-xs">Grid</span><i class="icon fa fa-th"></i></span>
                 </div> -->
-                <div class="col-lg-3 col-md-3 col-sm-3 hidden-xs"> 
+                <div class="col-lg-3 col-md-3 col-sm-3 hidden-xs">
                     <p class="pull-left"> Showing <strong>{{ products.num_total }}</strong> products </p>
                 </div>
                 {# Begin paging #}
@@ -228,14 +228,14 @@
                                     <button class="btn btn-default-border dropdown-toggle" data-toggle="dropdown" href="#">{{ limit }}&nbsp;
                                         <i class="fa fa-caret-down"></i>
                                     </button>
-                                    <ul class="dropdown-menu pull-right text-left">                                
+                                    <ul class="dropdown-menu pull-right text-left">
                                         <li><a href="{{app.request.getUrl({'limit':24,'page':1})}}">24</a></li>
                                         <li><a href="{{app.request.getUrl({'limit':36,'page':1})}}">36</a></li>
                                         <li><a href="{{app.request.getUrl({'limit':48,'page':1})}}">48</a></li>
                                         <li><a href="{{app.request.getUrl({'limit':60,'page':1})}}">60</a></li>
                                     </ul>
                                 </form>
-                            </div>   
+                            </div>
                             <div id="sort-by" class="filter form-inline">
                                 <form class="form-inline">
                                     <span class="small">Sort By:&nbsp;</span>
@@ -249,11 +249,11 @@
                                         {% endfor %}
                                     </ul>
                                 </form>
-                            </div>                 
+                            </div>
                         {# End filters #}
               </div>
               <!-- /Products Filter -->
-            
+
               <!-- Row -->
               <div class="product-grid row grid-20 mgb-20">
             {# Category product grid #}
@@ -283,21 +283,21 @@
                     {# Begin product #}
                     {% set product =  product|merge({'variant':product.product|values_in('variant')}) %}
                     {% set product =  product|merge({'attributes':product.variant|values_in(['price','compare_price','save_price','save_percent','color'])}) %}
-                        
+
                    {% if 'image' in options %}
                     {# Grab image based on color facets #}
                     {% set img_url = product.thumbnail %}
                     {% set variant_images = [] %}
 
-                    {% if product.attributes.color|length > 1 %}
+                    {# if product.attributes.color|length > 1 %}
                         {% set current_colors = [] %}
-                        {% for variant in product.variant 
+                        {% for variant in product.variant
                             if variant.status == 'active' and variant.color not in current_colors and variant.images is not empty %}
                                 {% set img_url = variant.thumbnail %}
                                 {% set current_colors = current_colors|merge([variant.color]) %}
                                 {% set variant_images = variant_images|merge([variant.images[0]]) %}
                         {% endfor %}
-                {% endif %}
+                        {% endif #}
 
                 {% set secure =  app.url_asset | slice(0,5)  %}
                 {% if secure == 'https' %}
@@ -319,32 +319,32 @@
                 <div class="item">
                   <!-- product -->
                   <div class="product clearfix">
-                  
+
                     <!-- Image -->
-                    <div class="image"> 
+                    <div class="image">
                       <a href="{{ app.url }}/product/{{ product.slug }}"><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ image_url }}" alt="img" class="img-responsive"></a>
                     </div>
                     <!-- Image -->
-                    
+
                       <div class="label">
                         {% for tag in product.tags %}
                             {% if tag == 'new' %}
-                                <span class="label-new">{{ tag|capitalize }}</span> 
+                                <span class="label-new">{{ tag|capitalize }}</span>
                             {% elseif tag == 'sale' %}
-                                <span class="label-sale">{{ tag|capitalize }}</span> 
+                                <span class="label-sale">{{ tag|capitalize }}</span>
                             {% elseif tag == 'popular' %}
-                                <span class="label-hot">{{ tag|capitalize }}</span> 
+                                <span class="label-hot">{{ tag|capitalize }}</span>
                             {% else %}
-                                <span class="label-feat">{{ tag|capitalize }}</span> 
+                                <span class="label-feat">{{ tag|capitalize }}</span>
                             {% endif %}
                         {% endfor %}
                       </div>
-                    
+
                     <!-- Details -->
                     <div class="details">
-                    
+
                       <a class="title" href="{{ app.url }}/product/{{ product.slug }}">{{ product.title }} </a>
-                      
+
                       <!-- rating -->
                       <ul class="hlinks hlinks-rating" style="height:13px;">
                           {% if product.review_score is not empty %}
@@ -359,9 +359,9 @@
                           {% endif %}
                         </ul>
                       <!-- /rating -->
-                      
+
                       <p class="desc">{{ product.description|striptags|slice(0, 100) }}... </p>
-                      
+
                       <!-- Price Box -->
                       <div class="price-box">
                           <span class="price">{% if product.attributes.price %}
@@ -371,16 +371,16 @@
                         {% endif %}
                       </div>
                       <!-- /Price Box -->
-                      
+
                       <!-- buttons -->
                       <div class="btn-group">
                         <a class="btn btn-outline btn-base-hover" href="{{ app.url }}/product/{{ product.slug }}">See Product</a>
-                      </div> 
+                      </div>
                       <!-- /buttons -->
-                      
+
                     </div>
                     <!-- /Details -->
-                    
+
                   </div>
                   <!-- /product -->
                   </div>  <!-- /item -->
@@ -388,10 +388,10 @@
 
                 </div>
                 <!-- /Col -->
-                
+
               </div>
               <!-- /Row -->
-              
+
               <!-- Pagination -->
                 {% if products|length == limit or app.request.get.page > 1 %}
                     <div class="col-md-12">
@@ -401,16 +401,16 @@
                     </div>
                 {% endif %}
               <!-- /Pagination -->
-              
+
             </div>
             <!-- /Main Col -->
-            
+
             <!-- Side Col -->
             <div class="side-col col-sm-3 col-md-3">
 
               <!-- Side Widget -->
               <div class="side-widget no-margin-l">
-              
+
             <div class="panel-group" id="accordionNo">
                 {% for name,filter_set in filters %}
                     {% if filter_set|length >= 1 %}
@@ -438,13 +438,13 @@
                         {% endif %}
                         <div class="filter">
                             {# Seperating each custom left nav into it's own include, ie: color chips for colors, or stars for customer reviews #}
-                            {% include  '/category/_partials/filter-' ~ (name in ['color','price','review_score','category_id'] ? name : 'default') ~ '.html.twig' %}                    
+                            {% include  '/category/_partials/filter-' ~ (name in ['color','price','review_score','category_id'] ? name : 'default') ~ '.html.twig' %}
                         </div>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
             </div>
-          
+
               </div>
               <!-- /Side Widget -->
 
@@ -453,18 +453,18 @@
 
           </div>
           <!-- /Row -->
-        
+
         </div>
         <!-- /Container -->
-        
+
       </section>
       <!-- /Content Block
       ============================================-->
 
-      
+
       <!-- Newsletter Block
       ============================================ -->
-      {% include "/_partials/subscribe_newsletter.html.twig" %}      
+      {% include "/_partials/subscribe_newsletter.html.twig" %}
       <!-- /Newsletter Block
       =================================================== -->
 
