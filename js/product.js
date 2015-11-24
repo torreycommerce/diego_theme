@@ -507,7 +507,6 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
             }
         });
 
-        $('[data-toggle="tooltip"]').tooltip();
         self.updateChips();
     }
 
