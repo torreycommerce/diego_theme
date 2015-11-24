@@ -280,8 +280,14 @@
                                         {% set items = product.product %}
                                         {% set layouts = product.layout is not empty ? product.layout : [{'name':'','items':items|values_in('id')}]%}
                                         {% for layout in layouts %}
-                                        {% set children = items|find({'id':layout.items}) %}
 
+                                        {# Build ordered children array #}
+                                        {% set children = [] %}
+                                        {% for item in layout.items %}
+                                            {% set children = children|merge( items|find({'id':item}) ) %}
+                                        {% endfor %}
+                                        {# set children = items|find({'id':layout.items}) #}
+                                        
                                         {% if children is not empty %}
                                         <div class="panel-group">
                                             {# Begin collection group header #}
