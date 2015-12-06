@@ -5,7 +5,7 @@
                 {% set collection_ids = [] %}
                 {% set product_count = 1 %}
                 {% set options = ['image'] %}
-                {% set products = api.get('/catalog', {sort:"product.variant.popularity:-1",limit:8}) %}
+                {% set products = api.get('/catalog', {sort:"product.date_created:-1",limit:8}) %}
                 {% set product_counter = 0 %}
                 {% for row,product in products if collection_ids[product.id] is empty and product_count < 9 %}
                     {% if product.group == 'product' %}
