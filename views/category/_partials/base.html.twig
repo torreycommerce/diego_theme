@@ -353,9 +353,11 @@
                             {% for stars in 1..nb_active_stars %}
                               <li class="active"><a href="#"><i class="icon fa fa-star"></i></a></li>
                             {% endfor %}
-                            {% for stars in 1..nb_grey_stars %}
-                              <li><a href="#"><i class="icon fa fa-star"></i></a></li>
-                            {% endfor %}
+                            {% if nb_grey_stars != 0 %}
+                              {% for stars in 1..nb_grey_stars %}
+                                <li><a href="#"><i class="icon fa fa-star"></i></a></li>
+                              {% endfor %}
+                            {% endif %}
                           {% endif %}
                         </ul>
                       <!-- /rating -->
