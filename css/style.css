@@ -8216,3 +8216,130 @@ div.pp_default .pp_details, div.light_rounded .pp_details, div.dark_rounded .pp_
 .skin-6-bg {
   background: #82B440;
 }
+
+/* COLOR CHIPS
+-------------------------------------------------- */
+.color-chip {
+  border: 1px solid #eee;
+  opacity: 0.7;
+  color: white;
+  font-size: .6em;
+  padding: .8em 1em;
+  margin: .19em .19em;
+  border-radius: 2em;
+  width: 3.5em;
+  height: 3.5em;
+}
+.color-chip i {
+  font-size: 1.2em;
+  line-height: 1.4em;
+  padding: 0;
+}
+.color-chip:hover,
+.color-chip:focus {
+  opacity: 1;
+  text-decoration: none;
+}
+.color-chip.white {
+  color: gray;
+  border: 1px solid #ccc;
+}
+.color-chip.active {
+  opacity: 1;
+}
+.color-chip.disabled {
+  opacity: 0.1;
+}
+.color-chip.disabled i {
+  padding: 0;
+}
+.color-chip.bright-red {
+  background-color: #ff00cc;
+}
+.color-chip.red {
+  background-color: #9b1e20;
+}
+.color-chip.hot-pink {
+  background-color: #ff33cc;
+}
+.color-chip.pink {
+  background-color: #e0b3cd;
+}
+.color-chip.bright-orange {
+  background-color: #ff9900;
+}
+.color-chip.orange {
+  background-color: #d58c28;
+}
+.color-chip.yellow {
+  background-color: #e5e058;
+}
+.color-chip.lime-green {
+  background-color: #00ff33;
+}
+.color-chip.army-green {
+  background-color: #999933;
+}
+.color-chip.light-green {
+  background-color: #b9d197;
+}
+.color-chip.green {
+  background-color: #90b55b;
+}
+.color-chip.teal {
+  background-color: #24c4c8;
+}
+.color-chip.light-blue {
+  background-color: #d8e2fa;
+}
+.color-chip.blue {
+  background-color: #346492;
+}
+.color-chip.deep-navy {
+  background-color: #000066;
+}
+.color-chip.dark-blue {
+  background-color: #000099;
+}
+.color-chip.purple {
+  background-color: #8033cc;
+}
+.color-chip.light-brown {
+  background-color: #d4c9be;
+}
+.color-chip.chocolate {
+  background-color: #663300;
+}
+.color-chip.brown {
+  background-color: #6f5d42;
+}
+.color-chip.black {
+  background-color: #000000;
+}
+.color-chip.grey {
+  background-color: #aaaaaa;
+}
+.color-chip.ivory {
+  background-color: #fffff0;
+}
+.color-chip.white {
+  background-color: #eeeeee;
+  border: 1px solid #999;
+}
+.color-chip.multi {
+  background: #88bfe8;
+  background: -moz-linear-gradient(-45deg, #88bfe8 0%, #96ffc2 27%, #b996ff 53%, #ff9698 75%, #f1ff96 100%, #70b0e0 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #88bfe8), color-stop(27%, #96ffc2), color-stop(53%, #b996ff), color-stop(75%, #ff9698), color-stop(100%, #f1ff96), color-stop(100%, #70b0e0));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(-45deg, #88bfe8 0%, #96ffc2 27%, #b996ff 53%, #ff9698 75%, #f1ff96 100%, #70b0e0 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(-45deg, #88bfe8 0%, #96ffc2 27%, #b996ff 53%, #ff9698 75%, #f1ff96 100%, #70b0e0 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(-45deg, #88bfe8 0%, #96ffc2 27%, #b996ff 53%, #ff9698 75%, #f1ff96 100%, #70b0e0 100%);
+  /* IE10+ */
+  background: linear-gradient(135deg, #88bfe8 0%, #96ffc2 27%, #b996ff 53%, #ff9698 75%, #f1ff96 100%, #70b0e0 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#88bfe8', endColorstr='#70b0e0', GradientType=1);
+  /* IE6-9 fallback on horizontal gradient */
+}
