@@ -16,23 +16,24 @@
 <html>
 <head>
     {% block head %}
+        <link rel="canonical" href="{{ app.request.base ~ '/' ~ app.request.url }}"/>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <meta name="keywords" content="{% block meta_keywords %}{{ seo['keywords'] }}{% endblock %}">
         <meta name="description" content="{% block meta_description %}{{ seo['description'] }}{% endblock %}">
-        <link rel="shortcut icon" href="{{ app.url ~ '/favicon.ico' ~ '?time=' ~ app.params.site.title }}" 
+        <link rel="shortcut icon" href="{{ app.url ~ '/favicon.ico' ~ '?time=' ~ app.params.site.title }}"
             type="image/x-icon" />
-        <link rel="stylesheet" href="{{app.url_asset}}/css/bootstrap/css/bootstrap.css">
-        <link rel="stylesheet" href="{{app.url_asset}}/css/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/style.css" />
-        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/fonts/font-awesome/font-awesome.min.css" />
-        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/datepicker.css" />
-        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/css/slicknav.css" />
-        
+        <link rel="stylesheet" href="{{app.url_asset}}/assets/css/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="{{app.url_asset}}/assets/css/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/assets/css/style.css" />
+        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/assets/fonts/font-awesome/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/assets/css/datepicker.css" />
+        <link rel="stylesheet" type="text/css" href="{{app.url_asset}}/assets/css/slicknav.css" />
+
         <link rel="sitemap" href="{{app.url}}/api/sitemap" />
-        <link rel="canonical" href="{{ app.request.base ~ '/' ~ app.request.url }}"/>
+
         {% block css %}{% endblock %}
-        
+
         <title>{% block title %}{{ app.params.site.title }}{% endblock %}</title>
 
         {% if app.params.social_settings is defined and app.params.social_settings is not empty %}
@@ -49,34 +50,34 @@
             {% endblock %}
         </script>
     {% endblock %}
-    
+
     {# Scripts #}
-        {{ app.asset.js(app.url_asset ~ '/js/jquery-latest.min.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/bootstrap/bootstrap.min.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/ZeroClipboard.min.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/jquery.slicknav.min.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/site.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/google_map_normalizer.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/quickcart.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/jquery.zoomify.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/rating.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/bootstrap-datepicker.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/parsley.min.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/parsley.extend.min.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/jquery.cascadingdropdown.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/normalizer.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/jquery.maskedinput.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/typeahead.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/uikit-utils.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/jquery.bxslider-rahisified.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/jquery-ui.min.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/highlight.pack.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/jquery-scrollto.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/jquery.prettyPhoto.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/wow.min.js') }}
-        {{ app.asset.js(app.url_asset ~ '/js/theme.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/jquery-latest.min.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/bootstrap/bootstrap.min.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/ZeroClipboard.min.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/jquery.slicknav.min.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/site.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/google_map_normalizer.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/quickcart.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/jquery.zoomify.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/rating.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/bootstrap-datepicker.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/parsley.min.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/parsley.extend.min.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/jquery.cascadingdropdown.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/normalizer.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/jquery.maskedinput.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/typeahead.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/uikit-utils.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/jquery.bxslider-rahisified.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/jquery-ui.min.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/highlight.pack.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/jquery-scrollto.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/jquery.prettyPhoto.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/wow.min.js') }}
+        {{ app.asset.js(app.url_asset ~ '/assets/js/theme.js') }}
         {% if app.params.seo.google_analytics is not empty or app.params.seo.google_tag_manager is not empty %}
-            {{ app.asset.js(app.url_asset ~ '/js/acendaAnalytics.js') }}
+            {{ app.asset.js(app.url_asset ~ '/assets/js/acendaAnalytics.js') }}
         {% endif %}
     {# End Scripts #}
 </head>

@@ -127,7 +127,7 @@ $(document).ready(function() {
     appendTo:'#mobileMenuAnchor',
     'allowParentLinks': true,
     'closeOnClick': false,
-    'closedSymbol': '<i class="fa fa-chevron-right"></i>', 
+    'closedSymbol': '<i class="fa fa-chevron-right"></i>',
     'openedSymbol': '<i class="fa fa-chevron-down"></i>',
   });
   var isOpen = false;
@@ -159,7 +159,7 @@ $(document).ready(function() {
       event.stopPropagation();
     }
   });
-  
+
     $("#acc_btn").click(function(){$('#account').trigger('open');});
     $(".sub_c").click(function(){$('#'+$(this).attr("ref")).trigger('open');});
 
@@ -477,7 +477,7 @@ $('.btn-add-to-cart').click(function (e) {
 // ZeroClipboard for wishlist/registry share links
 $(function() {
 var client = new ZeroClipboard( $('#btn-share'), {
-  moviePath: acendaBaseThemeUrl + "/swf/ZeroClipboard.swf"
+  moviePath: acendaBaseThemeUrl + "/assets/swf/ZeroClipboard.swf"
 });
 
 client.on( "load", function(client) {
@@ -538,7 +538,7 @@ $(document).ready(function() {
     }
   });
 
-  $('.search-autocomplete').typeahead(null, 
+  $('.search-autocomplete').typeahead(null,
     {
       name: 'search',
       display: 'value',
