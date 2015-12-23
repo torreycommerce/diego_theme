@@ -151,8 +151,7 @@
                   {% for item in fulfillment.items %}
                   <tr>
                     <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
-                        Status: {{ item.status }} <br>
-                        Item name: <a href="{{params['url']['current']}}{{products[item.product_id].0.url}}" target="_blank">{{ item.name }}</a> <br>
+                        Name: <a href="{{params['url']['current']}}{{products[item.product_id].0.url}}" target="_blank">{{ item.name }}</a> <br>
                         SKU: {{item.sku}} <br>
                         Quantity: {{item.quantity}} <br>
                     </td>
