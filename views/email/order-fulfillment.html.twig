@@ -57,11 +57,9 @@
   </style>
 </head>
 {% set order = api.get('/order/' ~ order_id) %}
-{% set items = api.get('/orderitem', {query:{'order_id':order_id}}) %}
 {% set fulfillment = api.get('/orderfulfillment/' ~ fulfillment_id) %}
-{% set product_ids = items|values_in('product_id') %}
-{% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
 {% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
+
 {# Variables passed in: order_id #}
 <body yahoo bgcolor="#fff">
 <table width="100%" bgcolor="#fff" border="0" cellpadding="0" cellspacing="0">
@@ -121,7 +119,11 @@
                   <tr>
                     <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                         Using {{ shipping_method.name }} <br>
-                        {% for item in items %} <br>
+                        Shipping Method: {{ fulfillment.shipping_method }} <br>
+                        Tracking number(s):
+                          {% for tracking_url in fulfillment.tracking_urls %}
+                            {{ tracking_url }}<br/>
+                          {% endfor %}
                     </td>
                   </tr>
                 </table>
@@ -146,20 +148,16 @@
                       Products
                     </td>
                   </tr>
+                  {% for item in fulfillment.items %}
                   <tr>
                     <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                         Status: {{ item.status }} <br>
                         Item name: <a href="{{params['url']['current']}}{{products[item.product_id].0.url}}" target="_blank">{{ item.name }}</a> <br>
                         SKU: {{item.sku}} <br>
-                        {% for ffi in fulfillment.items %}
-                            {% if ffi.id == item.id %}
-                                Quantity: {{ ffi.quantity }} <br>
-                                Tracking number: {{ ffi.tracking }} <br>
-                            {% endif %}
-                        {% endfor %}
-                        {% endfor %}
+                        Quantity: {{item.quantity}} <br>
                     </td>
                   </tr>
+                  {% endfor %}
                    <tr>
                         <td align="left" class="textContent">
                             <h3 class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;"><br/>Please Note:</h3>

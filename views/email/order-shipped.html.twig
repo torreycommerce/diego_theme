@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
- 
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>{{ params['site']['title'] }}</title>
@@ -57,9 +57,7 @@
   </style>
 </head>
 {% set order = api.get('/order/' ~ order_id) %}
-{% set items = api.get('/orderitem', {query:{'order_id':order_id}}) %}
-{% set product_ids = items|values_in('product_id') %}
-{% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
+{% set fulfillment = api.get('/orderfulfillment/' ~ fulfillment_id) %}
 {% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
 {# Variables passed in: order_id #}
 <body yahoo bgcolor="#fff">
@@ -70,7 +68,7 @@
       <table width="600" align="center" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td>
-    <![endif]-->     
+    <![endif]-->
     <table bgcolor="#f7f7f7" class="content" align="center" cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: 600px;">
     {% include 'email/core/header.html.twig' %}
       <tr>
@@ -92,7 +90,7 @@
       </tr>
       <tr bgcolor="#E7214D">
         <td class="innerpadding bordergrey" style="padding: 40px 30px 40px 30px; border-bottom: 5px solid #d8d8d8; border-top: 5px solid #d8d8d8;">
-          <table class="col380" align="left" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">  
+          <table class="col380" align="left" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
             <tr>
               <td>
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -117,9 +115,12 @@
                   <tr>
                     <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                         Using {{ shipping_method.name }} <br>
-                        {% for item in items %} <br>
-                        {% if item.status == 'shipped' %}
-                    </td>                    
+                        Shipping Method: {{ fulfillment.shipping_method }} <br>
+                        Tracking number(s):
+                          {% for tracking_url in fulfillment.tracking_urls %}
+                            {{ tracking_url }}<br/>
+                          {% endfor %}
+                    </td>
                   </tr>
                 </table>
               </td>
@@ -134,7 +135,7 @@
       </tr>
       <tr bgcolor="#808080" style="margin-top: 10px;">
         <td class="innerpadding bordergrey" style="padding: 40px 30px 40px 30px; border-bottom: 5px solid #d8d8d8; border-top: 5px solid #d8d8d8; ">
-          <table class="col380" align="left" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">  
+          <table class="col380" align="left" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
             <tr>
               <td>
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -143,24 +144,21 @@
                       Products
                     </td>
                   </tr>
-                  <tr>
-                    <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
-                        Status: {{ item.status }} <br>
-                        URL: {{app.live_url}}{{products[item.product_id].0.url}} <br>
+                  {% for item in fulfillment.items %}
+                    <tr>
+                      <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
                         SKU: {{item.sku}} <br>
-                        Item name: {{ item.name }} <br>
+                        Name: <a href="{{params['url']['current']}}/product/{{item.product_id}}" target="_blank">{{ item.name }}</a> <br>
                         Quantity: {{ item.quantity }} <br>
-                        Tracking number: {{ item.tracking_number }} <br>
-                        {% endif %}
-                        {% endfor %}
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
+                  {% endfor %}
                    <tr>
                         <td align="left" class="textContent">
                             <h3 class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;"><br/>Please Note:</h3>
                             <div style="text-align:left;font-family: 'Source Sans Pro', sans-serif, helvetica, arial;font-size:13px;margin-bottom:0;color:#bdbdbd;line-height:135%;">If your order was placed after-hours or on the weekend your tracking number will not be active until the next business day when the package is picked up by the carrier.</div>
                         </td>
-                    </tr> 
+                    </tr>
                 </table>
               </td>
             </tr>
@@ -176,7 +174,7 @@
           <tr>
             <td class="innerpadding bodycopy" style="padding: 40px 30px 40px 30px; font-size: 14px; line-height: 22px; color: #42464d; font-family: 'Open Sans', sans-serif;">
               Thank you from your friends at {{ app.params.site.title }}.<br/>
-              Please add us to your email address book to make sure you receive important 
+              Please add us to your email address book to make sure you receive important
               emails from us.
             </td>
           </tr>
