@@ -477,7 +477,7 @@ $('.btn-add-to-cart').click(function (e) {
 // ZeroClipboard for wishlist/registry share links
 $(function() {
 var client = new ZeroClipboard( $('#btn-share'), {
-  moviePath: acendaBaseThemeUrl + "/assets/swf/ZeroClipboard.swf"
+  moviePath: acendaBaseThemeUrl + "/swf/ZeroClipboard.swf"
 });
 
 client.on( "load", function(client) {
