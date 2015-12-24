@@ -168,27 +168,27 @@
 }
 
 .cover-1-bg {
-  background: url("../images/diego/backgrounds/cover1.jpg") no-repeat center 0 fixed;
+  background: url("../../images/diego/backgrounds/cover1.jpg") no-repeat center 0 fixed;
 }
 
 .cover-2-bg {
-  background: url("../images/diego/backgrounds/cover2.jpg") no-repeat center 0 fixed;
+  background: url("../../images/diego/backgrounds/cover2.jpg") no-repeat center 0 fixed;
 }
 
 .cover-3-bg {
-  background: url("../images/diego/backgrounds/cover3.jpg") no-repeat center 0 fixed;
+  background: url("../../images/diego/backgrounds/cover3.jpg") no-repeat center 0 fixed;
 }
 
 .cover-4-bg {
-  background: url("../images/diego/backgrounds/cover4.jpg") no-repeat center 0 fixed;
+  background: url("../../images/diego/backgrounds/cover4.jpg") no-repeat center 0 fixed;
 }
 
 .page-bg {
-  background: url("../images/diego//backgrounds/cover1.jpg") no-repeat center 0 fixed;
+  background: url("../../images/diego//backgrounds/cover1.jpg") no-repeat center 0 fixed;
 }
 
 .tile-1-bg {
-  background: url("../images/diego/backgrounds/tile1.png") repeat center 0 fixed;
+  background: url("../../images/diego/backgrounds/tile1.png") repeat center 0 fixed;
 }
 
 .bg-local {
@@ -2849,7 +2849,7 @@ html {
 body {
   min-height: 100%;
   background: #fff;
-  background: url("../images/diego/backgrounds/tile1.png") repeat center 0 fixed;
+  background: url("../../images/diego/backgrounds/tile1.png") repeat center 0 fixed;
 
 }
 

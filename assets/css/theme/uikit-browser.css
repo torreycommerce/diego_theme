@@ -485,7 +485,7 @@
 
 .ukb-preloader {
   position: absolute;
-  background: #fff url("../images/loader-48.gif") no-repeat center 200px;
+  background: #fff url("../../images/loader-48.gif") no-repeat center 200px;
   height: 100%;
   width: 100%;
   z-index: 9999;
