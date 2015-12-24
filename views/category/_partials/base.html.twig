@@ -466,7 +466,11 @@
 
       <!-- Newsletter Block
       ============================================ -->
-      {% include "/_partials/subscribe_newsletter.html.twig" %}
+      {%- import "/_macros/form-elements-bootstrap.html.twig" as newsletterform -%}
+      {% set newsletterBox = api.get('widget/render', {'slug' : 'newsletter'}) %}
+      {% if newsletterBox is not empty %}
+        {{ newsletterBox }}
+      {% endif %}
       <!-- /Newsletter Block
       =================================================== -->
 
