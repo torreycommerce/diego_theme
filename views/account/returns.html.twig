@@ -137,7 +137,7 @@
                     {% set product = api.get('/variant/' ~ item.product_id) %}
                     <div class="row">
                         <div class="col-xs-4 col-sm-4 col-md-3">
-                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="img-thumbnail" src='{{ product.thumbnail }}'>
+                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="img-thumbnail" src='{{ product.thumbnail }}'>
                         </div>
                         <div class="col-xs-8 col-sm-8 col-md-9">
                             <a href="{{ app.url ~ product.url }}">{{ item.name }}</a>

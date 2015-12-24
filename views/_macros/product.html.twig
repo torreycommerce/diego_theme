@@ -26,7 +26,7 @@
             {# Begin product image #}               
             <div class="image">
                 <a class="thumbnail" href="{{app.url}}/product/{{product.slug}}"> 
-                    <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" id="product-image-{{product.id}}" src="{{ img_url }}" class="img-responsive" data-image-source="{{ img_url }}">
+                    <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" id="product-image-{{product.id}}" src="{{ img_url }}" class="img-responsive" data-image-source="{{ img_url }}">
                 </a>
             </div>                            
             {# End product image #}
@@ -84,7 +84,7 @@
                     <div class="item active">
                         {% for item,child in product.variant if child.status == 'active' and child.images is not empty %}
                         <div class="thumbnail col-xs-2">
-                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ child.thumbnail }}" class="img-responsive" data-image-swap="product-image-{{product.id}}" data-image-swap-src="{{ child.thumbnail }}">
+                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" src="{{ child.thumbnail }}" class="img-responsive" data-image-swap="product-image-{{product.id}}" data-image-swap-src="{{ child.thumbnail }}">
                         </div>
                         {% set carouselblock = carouselblock + 1 %}
                         {% if carouselblock is divisibleby(6) and product.variant[(item + 1)] is defined %}

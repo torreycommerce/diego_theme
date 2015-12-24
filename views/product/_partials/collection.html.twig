@@ -19,7 +19,7 @@
                                 <div class="thumbnail">
                                     <span class="helper hidden-xs"></span>
                                     <div id="main-product-video" style="display:none"></div>
-                                    <img onerror="this.src='{{ app.url_asset }}/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="{{app.image.getImageUrl("product","standard",main_image_id) }}" data-image-zoom="{{app.image.getImageUrl("product","large",main_image_id) }}" alt="{{ main_image_alt }}" />
+                                    <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="{{app.image.getImageUrl("product","standard",main_image_id) }}" data-image-zoom="{{app.image.getImageUrl("product","large",main_image_id) }}" alt="{{ main_image_alt }}" />
                                 </div>
                             </div>
                         </div>
@@ -35,7 +35,7 @@
                                         {% set name = image.name is not empty ? image.name : product.name %}
                                         <div class="col-xs-2">
                                             <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
-                                                <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="" src="{{app.image.getImageUrl("product","thumbnail",image.id) }}" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",image.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",image.id) }}" alt="" />
+                                                <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="" src="{{app.image.getImageUrl("product","thumbnail",image.id) }}" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",image.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",image.id) }}" alt="" />
                                             </div>
                                         </div>
                                         {% endfor %}
@@ -45,7 +45,7 @@
                                         {% set name = image.name is not empty ? image.name : item.name %}
                                         <div class="col-xs-2">
                                             <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
-                                                <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" class="" src="{{app.image.getImageUrl("product","thumbnail",image.id) }}" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",image.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",image.id) }}" alt="" />
+                                                <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="" src="{{app.image.getImageUrl("product","thumbnail",image.id) }}" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",image.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",image.id) }}" alt="" />
                                             </div>
                                         </div>
                                         {% endfor %}
@@ -55,7 +55,7 @@
                                         {% for video in product.videos %}
                                         <div class="col-xs-2">
                                             <div class="thumbnail video" data-video-src="{{ video }}" data-tooltip="" data-toggle="tooltip" data-original-title="">
-                                                <i class="video-icon fa fa-play-circle"></i><img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="">
+                                                <i class="video-icon fa fa-play-circle"></i><img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" src="">
                                             </div>
                                         </div>
                                         {% endfor %}
@@ -312,7 +312,7 @@
                                                                 <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2">
                                                                     <div class="image globalPadding10" id="variant-selected-image-{{product.id}}">
                                                                         <div class="thumbnail" >
-                                                                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="" width="250" class="img-responsive" alt="" />
+                                                                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" src="" width="250" class="img-responsive" alt="" />
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -322,7 +322,7 @@
                                                                 <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2">
                                                                     <div class="image globalPadding10">
                                                                         <div class="thumbnail" >
-                                                                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ app.image.getImageUrl("product","thumbnail",variation.images.0.id) }}" width="250" class="img-responsive" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",variation.images.0.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",variation.id) }}" alt="" />
+                                                                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" src="{{ app.image.getImageUrl("product","thumbnail",variation.images.0.id) }}" width="250" class="img-responsive" data-image-swap="main-product-image" data-image-swap-src="{{app.image.getImageUrl("product","standard",variation.images.0.id) }}"  data-image-swap-zoom="{{app.image.getImageUrl("product","large",variation.id) }}" alt="" />
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -330,7 +330,7 @@
                                                                 <div class="col-md-2 col-sm-6 col-xs-12">
                                                                     <div class="image globalPadding10">
                                                                         <div class="thumbnail">
-                                                                            <img onerror="this.src='{{ app.url_asset }}/images/product/image-250x250.jpg'" src="{{ product.thumbnail }}" width="250" class="img-responsive" data-image-swap="main-product-image" {% if product.images.0.id is defined %}data-image-swap-src="{{app.image.getImageUrl("product","standard", product.images.0.id) }}" data-image-swap-zoom="{{app.image.getImageUrl("product","large",product.images.0.id) }}"{% endif %} alt="" />
+                                                                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" src="{{ product.thumbnail }}" width="250" class="img-responsive" data-image-swap="main-product-image" {% if product.images.0.id is defined %}data-image-swap-src="{{app.image.getImageUrl("product","standard", product.images.0.id) }}" data-image-swap-zoom="{{app.image.getImageUrl("product","large",product.images.0.id) }}"{% endif %} alt="" />
                                                                         </div>
                                                                     </div>
                                                                 </div>
