@@ -14,8 +14,8 @@
                 {% do app.redirect(app.request.referer,{'error':'Sorry, the product you requested is unavailable.' ~ request.1 | split('-') | last}) %}
             {% endif %}
 
-        {% else %}  
-            {% do app.redirect(app.request.referer,{'error':'Sorry, the product you requested is unavailable.'}) %}          
+        {% else %}
+            {% do app.redirect(app.request.referer,{'error':'Sorry, the product you requested is unavailable.'}) %}
         {% endif %}
     {% endif %}
 {% endif %}
@@ -57,7 +57,7 @@
             product-id-{{item.product.0.id }} product-slug-{{item.product.0.slug }}
             {% if item.product.0.category is not empty %}
                 {% for category in item.product.0.category %}
-                    product-category-{{category}} 
+                    product-category-{{category}}
                 {% endfor %}
             {% endif %}
         {% endspaceless %}
@@ -65,7 +65,7 @@
         collection-slug-{{app.request.path }}
         {% for prod in item.product %}
             {% for category in prod.category %}
-                product-category-{{category}} 
+                product-category-{{category}}
             {% endfor %}
         {% endfor %}
     {% endif %}
@@ -88,7 +88,7 @@
 
 {% block acenda %}
     {{ parent() }}
-    {% include "/product/_partials/analytics/google.html.twig" %}
+    {% include "/product/_partials/acenda.html.twig" %}
 {% endblock %}
 {% block dataLayer %}
     {% include "/product/_partials/dataLayer.html.twig" %}
