@@ -51,7 +51,7 @@
                                         {% endfor %}
                                         {% endfor %}
                                         {% if product.videos is not empty %}
-                                        {% do app.asset.js(app.url_asset ~ '/js/video-player.js') %}
+                                        {% do app.asset.js(app.url_asset ~ '/assets/js/video-player.js') %}
                                         {% for video in product.videos %}
                                         <div class="col-xs-2">
                                             <div class="thumbnail video" data-video-src="{{ video }}" data-tooltip="" data-toggle="tooltip" data-original-title="">
