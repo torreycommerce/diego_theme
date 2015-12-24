@@ -1,4 +1,4 @@
-{% extends "/_layouts/theme.html.twig" %}
+{% extends "/_layouts/base.html.twig" %}
 
 {% set category = api.get('/category',{"query":{"status":"active","slug":app.request.path}})|first %}
 {% if category is empty %}

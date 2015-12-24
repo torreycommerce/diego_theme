@@ -1,4 +1,4 @@
-{% extends "/_layouts/theme.html.twig" %}
+{% extends "/_layouts/base.html.twig" %}
 
 {% if  app.request.post.checkout %}
     {% set return = api.post('/sessioncart/checkout', app.request.post.checkout) %}
