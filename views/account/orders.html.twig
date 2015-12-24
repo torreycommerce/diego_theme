@@ -13,7 +13,7 @@
 {# Set the html head title #}
 {% block title %}Account - {{page_name|title}}{% endblock %}
 
-{# Load in the breadcrumbs positioned in /_layouts/main/base.html.twig #}
+{# Load in the breadcrumbs positioned in /base.html.twig #}
 {% block breadcrumb %}
 {#
 Passed into the macro is a array of key:value pairs as (title):(relative url)
@@ -28,7 +28,7 @@ Passed into the macro is a array of key:value pairs as (title):(relative url)
     {# Begin Order History #}
     {# Begin Header #}
         <div class="col-sm-12 col-md-9 col-lg-10">
-            <h1 class="section-title-inner"><span><i class="fa fa-calendar"></i> 
+            <h1 class="section-title-inner"><span><i class="fa fa-calendar"></i>
                 Your Orders</span>
             </h1><hr/>
             <div class="row userInfo hidden-xs">
@@ -43,7 +43,7 @@ Passed into the macro is a array of key:value pairs as (title):(relative url)
             </div>
         </div>
     </div> <!-- /Row -->
-    {# End header #} 
+    {# End header #}
     <div class="row userInfo">
         <div class="col-sm-12 col-md-9 col-lg-10 no-padding-left clearfix">
             {# Begin order filter #}
@@ -82,7 +82,7 @@ Passed into the macro is a array of key:value pairs as (title):(relative url)
     {# End pagination #}
     {% if orders is empty %}
     <div class="row">
-        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">    
+        <div class="col-sm-12 col-md-9 col-lg-10 clearfix">
             <p>There are no orders.</p>
         </div>
     </div>
@@ -160,7 +160,7 @@ Passed into the macro is a array of key:value pairs as (title):(relative url)
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
     {# End order #}
     {% endfor %}
     {# Begin pagination #}

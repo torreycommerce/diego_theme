@@ -119,7 +119,7 @@
                     {# Begin Toolbar #}
                     <section id="toolbar">
                         {% block header %}
-                            {%include "/_layouts/main/toolbar.html.twig"%}
+                            {%include "/_layouts/toolbar.html.twig"%}
                         {% endblock %}
                     </section>
                     {# End Toolbar #}
@@ -133,7 +133,7 @@
             <section id="content">
                 {% block breadcrumb %}{% endblock %}
                 {% block stage %}
-                    {% include "/_layouts/main/stage_header.html.twig" %}
+                    {% include "/_layouts/stage_header.html.twig" %}
                     {% block content %}
                     {% endblock %}
                 {% endblock %}
@@ -144,7 +144,7 @@
                 {# Begin Footer #}
             <footer id="footer">
                     {% block footer %}
-                        {% include "/_layouts/main/footer.html.twig"%}
+                        {% include "/_layouts/footer.html.twig"%}
                     {% endblock %}
             </footer>
             {# End Footer #}
