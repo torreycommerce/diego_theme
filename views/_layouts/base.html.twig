@@ -48,7 +48,7 @@
         </script>
         <script>
             {% block acenda %}
-                {% include '/_partials/acenda.html.twig' %}
+                {% include '/_partials/analytics/google.html.twig' %}
             {% endblock %}
         </script>
     {% endblock %}
@@ -99,7 +99,7 @@
             <script>
                 var dataLayer = [];
                 {% block dataLayer %}
-                    {% include '/_partials/tag-manager.html.twig' %} {# Google Tag Manager Snippet #}
+                    {% include '/_partials/analytics/tag-manager.html.twig' %} {# Google Tag Manager Snippet #}
                 {% endblock %}
             </script>
             <!-- Google Tag Manager DataLayer End -->

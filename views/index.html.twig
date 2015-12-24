@@ -1,14 +1,28 @@
 {% extends "/_layouts/base.html.twig" %}
 {% block content %}
-{% include "/_partials/promo/carousel.html.twig" %}
-{% include "/_partials/promo/product_nav.html.twig" %}
-{% include "/_partials/slogan_box.html.twig" %}
-{% include "/_partials/brand_logos.html.twig" %}
-{% include "/_partials/subscribe_newsletter.html.twig" %}
-{#{% include "/_partials/promo/slogan_box_middle.html.twig" %}
 
-{% include "/_partials/promo/featured_product.html.twig" %}
-{% include "/_partials/promo/promo_menu.html.twig" %}
+{# Widget Carousel or Default Carousel #}
+{% include "/_partials/carousel.html.twig" %}
 
-{% include "/_partials/promo/slogan_box.html.twig" %}#}
+{% include "/_partials/product_grid/index.html.twig" %}
+
+{# Promo Sale Widget #}
+{% set promo_sale = api.get('widget/render', {'slug' : 'promo-sale'}) %}
+{% if promo_sale is not empty %}
+  {{ promo_sale }}
+{% endif %}
+
+{# Brand Carousel Widget #}
+{% set brandCarousel = api.get('widget/render', {'slug' : 'brand-carousel'}) %}
+{% if brandCarousel is not empty %}
+ {{ brandCarousel }}
+{% endif %}
+
+{# Newsletter Widget #}
+{%- import "/_macros/form-elements-bootstrap.html.twig" as newsletterform -%}
+{% set newsletterBox = api.get('widget/render', {'slug' : 'newsletter'}) %}
+{% if newsletterBox is not empty %}
+  {{ newsletterBox }}
+{% endif %}
+
 {% endblock %}
