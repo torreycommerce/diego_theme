@@ -43,7 +43,7 @@
                                  <div id="image-carousel-{{product.variant[0].id}}" class="carousel">
                                     <div>
                                        <div class="item active itemauto" id="variant-image-carousel-copy" style="display:none;">
-                                             
+
                                           <div class="col-xs-2" id="variant-image-thumbnail-copy">
                                              <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
                                                 <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-450x450.jpg'" class="" src="" data-image-swap="main-product-image" data-image-swap-src=""  data-image-swap-zoom="" alt="" />
@@ -59,7 +59,7 @@
                                        </div>
 
                                        <div class="item active itemauto" id="variant-image-carousel-{{product.id}}">
-                                          
+
                                        </div>
 
                                     </div>
@@ -173,7 +173,7 @@
                                  <div class="panel-body">
                                     <div>{{full_description}}</div>
                                     <div id="variant-description-{{product.id}}" ></div>
-                                    
+
 
                                  </div>
                               </div>
@@ -200,7 +200,7 @@
                                         {% for feature in product.dynamic_attributes %}
                                            <li>
                                                {{feature}}: {{product[feature]}}
-                                           </li> 
+                                           </li>
                                         {% endfor %}
                                     </ul>
                                  </div>
@@ -309,12 +309,12 @@
               <!-- Tab Featured -->
               <div class="tab-pane" id="tab-featured">
               <!-- Col -->
-                {% include "/_partials/promo/featured_product.html.twig" %}
+                {% include "/_partials/product_grid/_partials/featured_product.html.twig" %}
               </div>
               <!-- Tab Trending -->
               <div class="tab-pane" id="tab-trending">
               <!-- Col -->
-                {% include "/_partials/top_sellers.html.twig" %}
+                {% include "/_partials/product_grid/_partials/top_sellers.html.twig" %}
               </div>
 
 
