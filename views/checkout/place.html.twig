@@ -15,8 +15,8 @@
 {# Concatenation of the different request during the checkout tunnel #}
 {% set post = app.request.post.checkout %}
 {% set request = request + {
-	'card_number': post.card_number, 
-	'card_cvv2': post.card_cvv2, 
+	'card_number': post.card_number,
+	'card_cvv2': post.card_cvv2,
 	'card_exp_month': post.card_exp_month,
 	'card_exp_year': post.card_exp_year,
 	'total_verify': post.total_verify
@@ -44,7 +44,7 @@
 
 {% block acenda %}
     {{ parent() }}
-    {% include "/checkout/_partials/analytics/google.html.twig" %}
+    {% include "/checkout/_partials/acenda.html.twig" %}
 {% endblock %}
 {% block dataLayer %}
     {% include "/checkout/_partials/dataLayer.html.twig" %}

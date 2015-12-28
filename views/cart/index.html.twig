@@ -5,9 +5,9 @@
       <!-- Intro Block
       ============================================-->
       <section class="intro-block intro-page boxed-section page-bg overlay-dark-m">
-      
+
         <!-- Container -->
-        <div class="container">     
+        <div class="container">
           <!-- Section Title -->
           <div class="section-title invert-colors no-margin-b">
             <h2><i class="glyphicon glyphicon-shopping-cart"></i> cart</h2>
@@ -16,7 +16,7 @@
           <!-- /Section Title -->
         </div>
         <!-- /Container -->
-      
+
       </section>
       <!-- /Intro Block
       ============================================-->
@@ -47,7 +47,7 @@
 {% set cart = api.get('/sessioncart') %}
 {% set cart_coupon = api.get('/sessioncartcoupon') %}
 {% set shipping_methods = api.get('/shippingmethod',{query:{status:'active'}}) %}
-    
+
 {% if (cart.items is not empty) %}
     {% set product_ids = cart.items|values_in('product_id') %}
     {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
@@ -79,13 +79,13 @@
             <!-- Content Block
       ============================================-->
       <section class="content-block default-bg">
-      
+
         <!-- Container -->
         <div class="container cont-pad-t-sm">
             {% if error is not empty %}
             <div class="alert alert-warning">{{ error }}</div>
             {% endif %}
-            
+
             {% if shipping_methods is empty %}
             <div class="row">
                 <div class="col-md-12">
@@ -118,13 +118,13 @@
                     {% endfor %}
 
                     {% if needRegistryOrWishlist == true %}
-                        <div class="col-xs-4 col-sm-6 col-md-3 col-lg-3 text-center"><i class="fa fa-heart"></i> WISHLIST/REGISTRY</div> 
+                        <div class="col-xs-4 col-sm-6 col-md-3 col-lg-3 text-center"><i class="fa fa-heart"></i> WISHLIST/REGISTRY</div>
                     {% endif %}
                     <div class="col-xs-4 col-sm-6 col-md-2 col-lg-2 text-right"><i class="fa fa-plus"></i> QUANTITY</div>
                 </div>
             </div>
         <!--/ cartTop -->
-        </div>    
+        </div>
         {{ forms.begin('cart','','post', {class:'form-horizontal'}) }}
 
 
@@ -345,7 +345,7 @@
         </div>
         {# Begin third party payments #}
         {{ forms.end() }}
-            
+
         {# End third party payments #}
         {% endif %}
         {% endif %}
@@ -359,7 +359,7 @@
 
         {% block acenda %}
         {{ parent() }}
-        {% include "/cart/_partials/analytics/google.html.twig" %}
+        {% include "/cart/_partials/acenda.html.twig" %}
         {% endblock %}
         {% block dataLayer %}
         {% include "/cart/_partials/dataLayer.html.twig" %}
