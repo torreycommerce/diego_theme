@@ -96,10 +96,10 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
     }
 
     this.getImageUrl = function(img_id, img_type) {
-        console.log('getImageUrl');
-        console.log(typeof this.arr_uniq_var_img_url['_'+img_id][img_type] != 'undefined');
+        //console.log('getImageUrl');
+        //console.log(typeof this.arr_uniq_var_img_url['_'+img_id][img_type] != 'undefined');
         if (typeof this.arr_uniq_var_img_url['_'+img_id][img_type] != 'undefined') {
-            return this.arr_uniq_var_img_url['_'+img_id][img_type];    
+            return this.arr_uniq_var_img_url['_'+img_id][img_type];
         }
         else {
             return "";
@@ -146,9 +146,9 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
 
     this.updateImages = function(obj_variant) {
         var self = this;
-        console.log(obj_variant);
-        self.resetSelection(); 
-        if (obj_variant.images.length > 0 ) { 
+        //console.log(obj_variant);
+        self.resetSelection();
+        if (obj_variant.images.length > 0 ) {
             var i = 0;
             for (key in obj_variant.images) {
                 var standard_img_url = this.getImageUrl(obj_variant.images[key].id,'standard');
@@ -162,9 +162,9 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
                 if (i == 0)
                     this.setSelectImage(standard_img_url,large_img_url,img_alt);
                 this.addImageToCarousel(obj_variant.id+'-'+obj_variant.images[key].id,standard_img_url,large_img_url,img_alt);
-                
-                console.log(large_img_url);
-                console.log(standard_img_url);
+
+                //console.log(large_img_url);
+                //console.log(standard_img_url);
                 i++;
             }
             return this.arr_uniq_var_img_url.variant_id;
@@ -181,31 +181,31 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
 
     this.updateQuantitySku = function(obj_variant) {
         var self = this
-        console.log('updateQuantitySku');
+        //console.log('updateQuantitySku');
         $('#div-quantity-'+self.product_id).hide();
-        if (self.getNumber(obj_variant.price) > 0 && typeof obj_variant.inventory_quantity != 'undefined' 
+        if (self.getNumber(obj_variant.price) > 0 && typeof obj_variant.inventory_quantity != 'undefined'
             && typeof obj_variant.inventory_minimum_quantity != 'undefined'
             && typeof obj_variant.inventory_policy != 'undefined'
             && obj_variant.has_stock == '1') {
                 $('#div-quantity-'+self.product_id).show();
-                $("#variant-input-"+self.product_id).attr('name', 'items['+obj_variant.id+']'); 
+                $("#variant-input-"+self.product_id).attr('name', 'items['+obj_variant.id+']');
                 if(obj_variant.inventory_policy != 'continue'){
                     var limit = !obj_variant.inventory_minimum_quantity ? obj_variant.inventory_quantity : obj_variant.inventory_quantity - obj_variant.inventory_minimum_quantity;
-                    $("#variant-input-"+self.product_id).attr('data-limit', limit); 
+                    $("#variant-input-"+self.product_id).attr('data-limit', limit);
                 }
-                  
+
         }
         $('#div-sku-'+self.product_id).hide();
         if (obj_variant.sku) {
             $('#div-sku-'+self.product_id).show();
             $('#variant-sku-'+self.product_id).html(obj_variant.sku);
         }
-            console.log(obj_variant);
+            //console.log(obj_variant);
         //$('#variant-details').
     }
     this.updatePriceAndAvailability = function(obj_variant) {
         var self = this;
-        console.log('updatePriceAndAvailability');
+        //console.log('updatePriceAndAvailability');
 
         $('#price-box-'+this.product_id).hide();
         $('#pricing-box-'+this.product_id).hide();
@@ -244,7 +244,7 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
                 $('.pricing-bill-me-later').show();
             }*/
         }
-        
+
     }
 
     this.updateDescription = function(obj_variant){
@@ -261,7 +261,7 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
 
     this.updateChips = function(){
         var self = this;
-        console.log(self.selectsData);
+        //console.log(self.selectsData);
         $.each(self.selectsData, function(name, optionArray) {
             var selectedValues2 = {};
 
@@ -309,18 +309,18 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
         var filteredVariants = self.getFilteredVariants(self.selectedValues);
 
         if(filteredVariants.length == 1){
-            
+
             //hide and show proper variant, set quantity inputs
             var id = self.getProductVariation(filteredVariants[0].id);
             var quantityInput = "#variant-input-"+self.product_id;
-            console.log(id);
+            //console.log(id);
             // self.resetSelection();
             self.updateImages(filteredVariants[0]);
             self.updateVideos();
             self.updateQuantitySku(filteredVariants[0]);
             self.updatePriceAndAvailability(filteredVariants[0]);
             self.updateDescription(filteredVariants[0]);
-            
+
             if(self.isCollection){
                 $(quantityInput).val(0);
             }else{
@@ -341,7 +341,7 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
                     self.disableAddToCart(false);
                 }else{
                     self.disableAddToCart(true);
-                } 
+                }
             }
         }else{
             if(self.isCollection){
@@ -369,9 +369,9 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
             self.selectedValues[selectName] = optionValue;
 
             var filteredVariants = self.getFilteredVariants(self.selectedValues);
-        
+
             if(filteredVariants.length == 0 ) {
-                // display the default variant evalable 
+                // display the default variant evalable
                 var temp = {};
                 temp[selectName] = optionValue;
                 filteredVariants = self.getFilteredVariants( temp );
@@ -452,31 +452,31 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
         $.each(variant_options, function(index, option){
             var selectName = option.name;
             var optionArray = option.values;
-            
+
             //Color styling
             if( selectName.toLowerCase() == "color"){
                 if(self.isCollection){
-                    var div = $('<div>', {id: self.getVariationOptionId(selectName), class: "color-details-collection"}); 
+                    var div = $('<div>', {id: self.getVariationOptionId(selectName), class: "color-details-collection"});
                 }else{
                     var div = $('<div>', {id: self.getVariationOptionId(selectName), class: "color-details"});
                 }
-     
-                var ul = $('<ul>', {class: "swatches Color"});  
+
+                var ul = $('<ul>', {class: "swatches Color"});
                 var span = $('<span>', {class: "selected-color"}).append(
-                                $('<strong>', {}).text(self.unslugify(selectName) + ":  ") 
+                                $('<strong>', {}).text(self.unslugify(selectName) + ":  ")
                             );
 
             }else{//size (default) styling
-                var div = $('<div>', {id: self.getVariationOptionId(selectName), class: "size-details"});           
-                var ul = $('<ul>', {class: "swatches-size Size"});  
+                var div = $('<div>', {id: self.getVariationOptionId(selectName), class: "size-details"});
+                var ul = $('<ul>', {class: "swatches-size Size"});
                 var span = $('<span>', {class: "selected-size"}).append(
-                                $('<strong>', {}).text(self.unslugify(selectName) + ":  ") 
+                                $('<strong>', {}).text(self.unslugify(selectName) + ":  ")
                             );
             }
 
             $.each(optionArray, function(index, optionValue){
-                ul.append( 
-                    $('<li>', { id: self.getVariationValueId(selectName, optionValue), 
+                ul.append(
+                    $('<li>', { id: self.getVariationValueId(selectName, optionValue),
                                 class: "",
                                 "data-tooltip": "",
                                 "data-toggle": "tooltip",
@@ -486,7 +486,7 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
                             self.getATag(selectName, optionValue)
                     ).click(function(){
                         self.updateVariants(selectName, optionValue);
-                    })  
+                    })
                 );
             });
 
@@ -547,7 +547,7 @@ function VariantsManager (variants, variant_options, img, videos, isCollection) 
                 self.selectsData[option.name].push(value);
             });
         });
-        
+
         var selected_variant = self.variants[0];
 
         $.each(self.variants, function(index,variant){
