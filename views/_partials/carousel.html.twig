@@ -1,10 +1,10 @@
       <!-- Intro Block
       ============================================ -->
       <div class="intro-block mgb-20">
-      
+
         <!-- Container -->
         <div class="container">
-            
+
             {% set widget = api.get('widget/render', {'slug' : 'default-carousel'}) %}
             {% if widget is not empty %}
                 {{ widget }}
@@ -15,16 +15,16 @@
                         {% if app.params.carousel is not empty %}
                             {% set carousel_info = app.params.carousel | first %}
                             {% set carousel = app.image.getImageUrl('carousel','carousel',carousel_info.id) %}
-                            
+
                         {% endif %}
 
                         {% if carousel is not empty %}
                             <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-slider-default.jpg'" src="{{ carousel }}" alt="">
                         {% else %}
-                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="visible-xs" src="{{ app.url_asset }}/images/promo-slider/promo-01-xs.jpg" alt="Grand Re-Opening - 50% off Sale Items">
-                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="visible-sm" src="{{ app.url_asset }}/images/promo-slider/promo-01-sm.jpg" alt="Grand Re-Opening - 50% off Sale Items">
-                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="visible-md" src="{{ app.url_asset }}/images/promo-slider/promo-01-md.jpg" alt="Grand Re-Opening - 50% off Sale Items">
-                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="visible-lg" src="{{ app.url_asset }}/images/promo-slider/promo-01-lg.jpg" alt="Grand Re-Opening - 50% off Sale Items">
+                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="visible-xs" src="{{ app.url_asset }}/assets/images/promo-slider/promo-01-xs.jpg" alt="">
+                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="visible-sm" src="{{ app.url_asset }}/assets/images/promo-slider/promo-01-sm.jpg" alt="">
+                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="visible-md" src="{{ app.url_asset }}/assets/images/promo-slider/promo-01-md.jpg" alt="">
+                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="visible-lg" src="{{ app.url_asset }}/assets/images/promo-slider/promo-01-lg.jpg" alt="">
                         {% endif %}
                         <div class="carousel-caption">
                         </div>
@@ -33,7 +33,7 @@
             {% endif %}
         </div>
         <!-- /Container -->
-      
+
       </div>
       <!-- /Intro Block
       ============================================ -->
