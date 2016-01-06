@@ -2074,6 +2074,11 @@ input[type="checkbox"] {
   border-radius: 0;
   height: 56px;
 }
+@media (max-width: 991px) {
+  .hnav .navbar-nav > li > a {
+  padding: 0 10px! important;
+}  
+}
 .hnav .navbar-nav > li > a .img-left, .hnav .navbar-nav > li > a .icon-left, .hnav .navbar-nav > li > a .toggler {
   display: inline-block;
 }
@@ -3687,7 +3692,11 @@ legend {
   padding: 0 15px;
   height: 50px;
 }
-
+@media (max-width: 767px) {
+.hnav.nav-side {
+  margin-top:20px;
+  }
+}
 .hnav.nav-bottom.hnav-ruled {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
