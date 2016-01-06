@@ -381,15 +381,15 @@
 
 /* Clearing */
 @media (max-width: 991px) {
-.clearBoth:nth-child(3) {
+.clearBoth:nth-child(2n+1) {
   clear:both! important;
 }
 
 }
 
 @media (min-width: 992px) {
-.clearBoth:nth-child(5) {
-  clear:both! important;
+.clearBoth:nth-child(4n+1) {
+  clear:left! important;
 }
 
 }
