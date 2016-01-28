@@ -1139,7 +1139,7 @@
                     position: "absolute",
                     top: "100%",
                     left: "0",
-                    zIndex: "100",
+                    zIndex: "1000",
                     display: "none"
                 },
                 ltr: {
