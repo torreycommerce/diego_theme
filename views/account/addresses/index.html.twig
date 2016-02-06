@@ -90,6 +90,9 @@ set in the array in /account/_macros/base.html.twig
                             </div>
                             <div class="panel-body">
                                 <address>
+                                    {% if address.company %}
+                                        <div class="company">{{ address.company }}</div>
+                                    {% endif %}
                                     <div class="address-1">{{ address.street_line1 }}</div>
                                     {% if address.street_line2 %}
                                         <div class="address-2">{{ address.street_line2 }}</div>
