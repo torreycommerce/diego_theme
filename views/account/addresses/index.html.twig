@@ -97,9 +97,6 @@ set in the array in /account/_macros/base.html.twig
                                     {% if address.street_line2 %}
                                         <div class="address-2">{{ address.street_line2 }}</div>
                                     {% endif %}
-                                    {% if address.company %}
-                                        <div class="company">{{ address.company }}</div>
-                                    {% endif %}
                                     <div class="zip">{{ address.city }}, {{ address.state }} {{ address.zip }}</div>
                                     <div class="country">{{ address.country }}</div>
                                     {% if address.street_line2 == '' %}<br />{% endif %}
