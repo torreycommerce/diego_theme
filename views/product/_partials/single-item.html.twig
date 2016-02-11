@@ -75,7 +75,7 @@
                   <h2 class="product-title"> <a href="{{app.url}}/brand/{{product.brand|url_encode}}">{{product.brand}}</a></h2>
 
                   {# Begin review stars #}
-                  {% set review_score = product|average('review_score') %}
+                  {% set review_score = reviews|average('score') %}
                   <div class="hlinks hlinks-rating product-details">
                      <ul class="reviews">
                         {% if review_score > 0 %}
