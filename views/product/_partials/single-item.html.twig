@@ -30,7 +30,7 @@
                                     <div class="thumbnail" id="variant-selected-image-{{product.id}}">
                                        <span class="helper hidden-xs"></span>
                                        <div id="main-product-video" style="display:none"></div>
-                                       <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="" data-image-zoom="" alt="" />
+                                       <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="" data-image-zoom="" alt="" style="display:none"/>
                                     </div>
                               </div>
                            </div>
@@ -40,7 +40,7 @@
 
                            <div id="image-carousel" class="row">
                               <div class="image-carousel">
-                                 <div id="image-carousel-{{product.variant[0].id}}" class="carousel">
+                                 <div id="image-carousel-{{product.id}}" class="carousel" style="display:none">
                                     <div>
                                        <div class="item active itemauto" id="variant-image-carousel-copy" style="display:none;">
 
