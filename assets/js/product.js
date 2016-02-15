@@ -25,6 +25,7 @@ function VariantsManager (product, img, isCollection) {
     this.disabled = false;
     this.outOfStock = "Out of stock, please try another combination";
     this.productImageSet = false;
+    this.currentImage = "";
 
     this.jqSelector = function(str){
         var temp = str.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
@@ -94,6 +95,7 @@ function VariantsManager (product, img, isCollection) {
     this.preloadImages = function(imgs){
         $.each(imgs, function(index, img){
             $('<img src="'+img.standard+'"/>');
+            $('<img src="'+img.large+'"/>');
         });
     }
 
@@ -107,10 +109,13 @@ function VariantsManager (product, img, isCollection) {
     }
 
     this.setSelectImage = function(standard_img_url,large_img_url,img_alt) {
-        $('#variant-selected-image-'+this.product_id+' img').attr('src', standard_img_url);
-        if(!this.isCollection){
-            $('#variant-selected-image-'+this.product_id+' img').attr('data-image-zoom', large_img_url);
+        if($('#variant-selected-image-'+this.product_id+' img').hasClass('zoomed')){
+            $('#variant-selected-image-'+this.product_id+' img').attr('src', large_img_url);
+            $('#variant-selected-image-'+this.product_id+' img').data.originalImage = standard_img_url;
+        }else{
+            $('#variant-selected-image-'+this.product_id+' img').attr('src', standard_img_url);
         }
+        $('#variant-selected-image-'+this.product_id+' img').attr('data-image-zoom', large_img_url);
         $('#variant-selected-image-'+this.product_id+' img').attr('alt', img_alt);
     }
 
@@ -139,60 +144,60 @@ function VariantsManager (product, img, isCollection) {
         initVideoPlayer();
     }
 
-    this.resetSelection = function () {
-        $( "#variant-image-carousel-"+this.product_id ).html('');
+    this.resetImageSelection = function () {
         $('#variant-selected-image-'+this.product_id+' img').attr('src', '');
+    }
+    this.resetCarouselSelection = function () {
+        $( "#variant-image-carousel-"+this.product_id ).html('');
     }
 
     this.updateImagesAndVideo = function(obj_variant) {
         var self = this;
-        self.resetSelection();
+        var images = [];
         if (obj_variant.images.length > 0 ) {
-            var i = 0;
-            for (key in obj_variant.images) {
-                var standard_img_url = this.getImageUrl(obj_variant.images[key].id,'standard');
-                var large_img_url = this.getImageUrl(obj_variant.images[key].id,'large');
-
-                if (typeof obj_variant.images[key].alt !== 'undefined')
-                    var img_alt = obj_variant.images[key].alt;
-                else
-                    var img_alt = '';
-
-                if (i == 0)
-                    this.setSelectImage(standard_img_url,large_img_url,img_alt);
-                if(!self.isCollection)
-                    this.addImageToCarousel(obj_variant.id+'-'+obj_variant.images[key].id,standard_img_url,large_img_url,img_alt);
-                i++;
-            }
+            images = obj_variant.images;
         } else if (self.product.images.length > 0) {
-            var i = 0;
-            for (key in self.product.images) {
-                var standard_img_url = this.getImageUrl(self.product.images[key].id,'standard');
-                var large_img_url = this.getImageUrl(self.product.images[key].id,'large');
-
-                if (typeof self.product.images[key].alt !== 'undefined')
-                    var img_alt = self.product.images[key].alt;
-                else
-                    var img_alt = '';
-
-                if (i == 0)
-                    this.setSelectImage(standard_img_url,large_img_url,img_alt);
-                if(!self.isCollection)
-                    this.addImageToCarousel(self.product.id+'-'+self.product.images[key].id,standard_img_url,large_img_url,img_alt);
-                i++;
-            }
+            images = self.product.images;
         }
-        if(!self.isCollection)
-            self.updateVideos();
+        if(images.length == 0){
+            if(!self.isCollection) stopVideo();
+            self.resetImageSelection();
+            self.currentImage = "";
+        }
+        self.resetCarouselSelection();
+        var i = 0;
+        for (key in images) {
+            var id = images[key].id;
+            var standard_img_url = this.getImageUrl(id,'standard');
+            var large_img_url = this.getImageUrl(id,'large');
+
+            if (typeof images[key].alt !== 'undefined')
+                var img_alt = images[key].alt;
+            else
+                var img_alt = '';
+
+            if (i == 0){
+                if(self.currentImage != id){
+                    $('#image-carousel-'+self.product_id).hide();
+                    $('#variant-selected-image-'+self.product_id+' img').hide();
+                    if(!self.isCollection) stopVideo();
+                    self.resetImageSelection();
+                    self.setSelectImage(standard_img_url,large_img_url,img_alt);
+                    self.currentImage = id;
+                }
+            }
+            if(!self.isCollection)
+                this.addImageToCarousel(obj_variant.id+'-'+images[key].id,standard_img_url,large_img_url,img_alt);
+            i++;
+        }
+        
+        self.updateVideos();
         //The first time the page load and the images are set, wait for 
         //the main product image to be loaded before showing it with carousel
-        if(!self.productImageSet){
-            $('#variant-selected-image-'+this.product_id+' img').on("load", function() {
-                $('#variant-selected-image-'+self.product_id+' img').show();
-                $('#image-carousel-'+self.product_id).show();
-            });
-            self.productImageSet = true;
-        }
+        $('#variant-selected-image-'+this.product_id+' img').on("load", function() {
+            $('#variant-selected-image-'+self.product_id+' img').show();
+            $('#image-carousel-'+self.product_id).show();
+        });
     }
 
     this.updateVideos = function(){
@@ -540,7 +545,7 @@ function VariantsManager (product, img, isCollection) {
         var self = this;
 
         //preload variant img
-        this.preloadImages(this.arr_uniq_var_img_url);
+        // this.preloadImages(this.arr_uniq_var_img_url);
 
         //Options ordering
         self.variant_options = self.orderOptions(self.variant_options);
