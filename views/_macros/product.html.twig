@@ -2,7 +2,6 @@
     {% spaceless %}
     {% set product =  product|merge({'variant':product.product|values_in('variant')}) %}
     {% set product =  product|merge({'attributes':product.variant|values_in(['price','compare_price','save_price','save_percent','color'])}) %}
-
     {% import _self as this %}
     {% import "/_macros/base.html.twig" as base %}
     <div class="product">
@@ -10,17 +9,32 @@
             {# Grab image based on color facets #}
             {% set img_url = product.thumbnail %}
 
-            {% if product.attributes.color|length > 1 %}
+            {# if product.attributes.color|length > 1 %}
                 {% set current_colors = app.request.get.f.color|keys %}
                 {% for variant in product.variant 
                     if variant.status == 'active' and variant.color in current_colors and variant.images is not empty %}
                         {% set img_url = variant.thumbnail %}
                 {% endfor %}
+            {% endif #}
+
+            {% set secure =  app.url_asset | slice(0,5)  %}
+            {% if secure == 'https' %}
+                {% set img_url = img_url | replace({'http:':'https:'}) %}
             {% endif %}
 
-	    {% set secure =  app.url_asset | slice(0,5)  %}
-	    {% if secure == 'https' %}
-		{% set img_url = img_url | replace({'http:':'https:'}) %}
+            {% if product.images is not empty %}
+                {% set image_url = app.image.getImageUrl('product','thumbnail', product.images[0].id) %}
+            {% else %}
+                {% set image_url = "" %}
+                {# Look for first variant with images, price>0 and has_stock #}
+                {% for variant in product.variant
+                      if variant.status == 'active' 
+                      and variant.price>0 
+                      and variant.has_stock 
+                      and variant.images is not empty 
+                      and image_url is empty %}
+                          {% set image_url = app.image.getImageUrl('product','thumbnail', variant.images[0].id) %}
+                {% endfor %}
             {% endif %}
 
             {# Begin product image #}               
@@ -82,16 +96,24 @@
             <div id="color-image-carousel-{{product.id}}" class="col-xs-6 col-sm-10 carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     <div class="item active">
-                        {% for item,child in product.variant if child.status == 'active' and child.images is not empty %}
-                        <div class="thumbnail col-xs-2">
-                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" src="{{ child.thumbnail }}" class="img-responsive" data-image-swap="product-image-{{product.id}}" data-image-swap-src="{{ child.thumbnail }}">
-                        </div>
-                        {% set carouselblock = carouselblock + 1 %}
-                        {% if carouselblock is divisibleby(6) and product.variant[(item + 1)] is defined %}
-                            {% set carouselHasNext = true %}
+                        {% set colors = [] %}
+                        {% for item,child in product.variant if 
+                            child.status == 'active' 
+                            and child.price>0 
+                            and child.has_stock 
+                            and child.images is not empty
+                            and child.color not in colors %}
+                            {% set colors = colors|merge([child.color]) %}
+                            {% set image_url = app.image.getImageUrl('product','thumbnail', child.images[0].id) %}
+                            <div class="thumbnail col-xs-2">
+                                <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" src="{{ image_url }}" class="img-responsive" data-image-swap="product-image-{{product.id}}" data-image-swap-src="{{ image_url }}">
                             </div>
-                            <div class="item">
-                        {% endif %}
+                            {% set carouselblock = carouselblock + 1 %}
+                            {% if carouselblock is divisibleby(6) and product.variant[(item + 1)] is defined %}
+                                {% set carouselHasNext = true %}
+                                </div>
+                                <div class="item">
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
