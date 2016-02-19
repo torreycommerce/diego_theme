@@ -159,7 +159,7 @@ function ajaxCart(data, r) {
                 return product_cart_id[a.id] > product_cart_id[b.id];
             });
             for (var i = 0; i < response.length; i++) {
-                var product_name = response[i].title;
+                var product_name = response[i].name;
                 var product_price = parseFloat(response[i].price).toFixed(2);
                 var product_thumbnail = response[i].thumbnail;
                 var product_id = response[i].id;
@@ -237,5 +237,4 @@ function displayCart(el, r){
 function resetErrors(){
     $('.ajaxcart .error').empty();
     $('div.cart').attr('data-content',$('.cart .ajaxcart').html());
-}       
-
+}
