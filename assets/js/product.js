@@ -418,7 +418,7 @@ function VariantsManager (product, img, isCollection) {
 
         $.each( this.variants, function(index, variant){
             var passfilter = true;
-            if(self.getNumber(variant.price) > 0){
+            if(self.getNumber(variant.price) > 0 && variant.has_stock == '1'){
                 $.each( selectedValues, function(selectName, selectValue){
                     if(selectValue != ""){
                         if(variant[selectName]){
@@ -561,7 +561,7 @@ function VariantsManager (product, img, isCollection) {
         var selected_variant = self.variants[0];
 
         $.each(self.variants, function(index,variant){
-            if(self.getNumber(variant.price) > 0 && variant.has_stock){
+            if(self.getNumber(variant.price) > 0 && variant.has_stock == '1'){
                 selected_variant = variant;
                 return false;
             }
