@@ -156,7 +156,7 @@ function VariantsManager (product, img, isCollection) {
         var images = [];
         if (obj_variant.images.length > 0 ) {
             images = obj_variant.images;
-        } else if (self.product.images.length > 0) {
+        } else if (typeof self.product.images !== 'undefined' && self.product.images.length > 0) {
             images = self.product.images;
         }
         if(images.length == 0){
@@ -190,9 +190,9 @@ function VariantsManager (product, img, isCollection) {
                 this.addImageToCarousel(obj_variant.id+'-'+images[key].id,standard_img_url,large_img_url,img_alt);
             i++;
         }
-        
+
         self.updateVideos();
-        //The first time the page load and the images are set, wait for 
+        //The first time the page load and the images are set, wait for
         //the main product image to be loaded before showing it with carousel
         $('#variant-selected-image-'+this.product_id+' img').on("load", function() {
             $('#variant-selected-image-'+self.product_id+' img').show();
