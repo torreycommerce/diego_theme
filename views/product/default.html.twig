@@ -4,6 +4,9 @@
 
 {% set item  = api.get('/catalog', {query:{slug:app.request.path}})|first %}
 {% if item.id is empty %}
+    {% set item  = api.get('/catalog', {query:{slug:request.1}})|first %}
+{% endif %}
+{% if item.id is empty %}
     {% set item  = api.get('/catalog',{query:{id:app.request.path}})|first %}
     {% if item.id is empty %}
         {% if request.1 | split('-') | last | integer %}
