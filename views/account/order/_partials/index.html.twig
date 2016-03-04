@@ -6,10 +6,13 @@
 {% do account.login() %}
 
 {% set order = api.get('/order',{query:{customer_id:app.user.id,order_number:id}}).0 %}
+{% if order is not empty %}
+    {% set order = api.get('/order/' ~ order.id) %}
+{% endif %}
 
 {% set page_name = 'order' %}
 
-{% block title %}Account - Order Details{% endblock %} 
+{% block title %}Account - Order Details{% endblock %}
 
 {% block breadcrumb %}
     {{ base.breadcrumbs({'Account':'/account','Order History':'/account/orders','Order Details':''}) }}
@@ -21,7 +24,7 @@
         <div class="customer-account">
         {# Begin header #}
             <div class="col-sm-12 col-md-9 col-lg-10">
-                <h1 class="section-title-inner"><span><i class="fa fa-calendar"></i> 
+                <h1 class="section-title-inner"><span><i class="fa fa-calendar"></i>
                     Order Details</span>
                 </h1><hr/>
                 <div class="row userInfo hidden-xs">
@@ -36,7 +39,7 @@
                 </div>
             </div>
         </div> <!-- /Row -->
-        {# End header #}            
+        {# End header #}
     	<div id="customer-account-order-details">
     	    <div class="col-sm-9 col-md-9 col-lg-10">
     	        {% include '/order/_partials/details.html.twig' %}

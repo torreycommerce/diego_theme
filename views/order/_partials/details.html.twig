@@ -17,7 +17,7 @@
             <div class="row">
             {# Begin header #}
                 <div class="col-sm-12">
-                    <h1 class="section-title-inner"><span><i class="fa fa-history"></i> 
+                    <h1 class="section-title-inner"><span><i class="fa fa-history"></i>
                         Order Status & History</span>
                     </h1>
                     <h2 class="block-title-2">Your items for Order #{{ order.order_number }}</h2>
@@ -38,7 +38,7 @@
                                     <div>Order Total: ${{ order.total|replace({',':''})|number_format(2, '.') }}</div>
                                 </div>
                                 {# End order details #}
-                            </div>         
+                            </div>
                             <div class="col-sm-12 col-md-12">
                                 {# Begin shipping Address #}
                                 <div class="shipping-address">
@@ -55,7 +55,7 @@
                                     </address>
                                 </div>
                                 {# End shipping Address #}
-                            </div>          
+                            </div>
                             <div class="col-sm-12 col-md-12">
                                 {# Begin shipment details #}
                                 <div class="shipping-method">
@@ -83,7 +83,7 @@
                                                 <div class="modal-body">Are you sure you want to cancel this order?</div>
                                                 <div class="modal-footer">
                                                     {{ form.begin('',app.url ~ '/order/actions') }}
-                                                    <a class="btn btn-default" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Back</a> 
+                                                    <a class="btn btn-default" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Back</a>
                                                     <button name="action" value="cancel" class="btn btn-danger"><i class="fa fa-minus-circle"></i> Cancel Order</button>
                                                     <input type="hidden" name="email" value="{{order.email}}">
                                                     <input type="hidden" name="id" value="{{order.order_number}}">
@@ -107,7 +107,7 @@
                                         </div>
                                     {% endif %}
                                 </div>
-                            </div>  
+                            </div>
                         </div>
                         {# End order actions #}
                     </div>
@@ -142,21 +142,21 @@
                                             (for wishlist)
                                             {% endif %}
                                         </div>
-                                        {# End wishlist #}                        
+                                        {# End wishlist #}
                                         {# Begin item price #}
                                         <div class="col-md-12 col-lg-3">
                                             Price: ${{ item.price|number_format(2, '.') }}
                                         </div>
                                         {# End item price #}
                                         {# Being item quantity #}
-                                        <div class="col-md-12 col-lg-2">                            
+                                        <div class="col-md-12 col-lg-2">
                                             Qty: {{ item.quantity }}
                                         </div>
-                                        {# End item quantity #}                        
+                                        {# End item quantity #}
                                         {# Begin tracking number #}
                                         <div class="col-md-12 col-lg-3">
                                             {% if item.tracking_number is not empty %}
-                                            Tracking number: 
+                                            Tracking number:
                                             <a href="http://www.google.com/search?q={{ item.tracking_number }}">
                                                 {{ item.tracking_number }}
                                             </a>
@@ -165,8 +165,8 @@
                                         {# End tracking number #}
                                         {# Begin registry #}
                                         {% if item.registry_id is not empty %}
-                                        <div class="col-md-12 col-lg-12">                            
-                                            (for registry)                       
+                                        <div class="col-md-12 col-lg-12">
+                                            (for registry)
                                         </div>
                                         {% endif %}
                                         {# End registry #}
@@ -177,13 +177,13 @@
                             <hr>
                         </div>
                         {# End order items #}
-                        {% endfor %}                
+                        {% endfor %}
                         <div class="row">
                             {# Begin billing address #}
                             <div class="col-sm-6 col-md-4 col-lg-4">
                                 <div class="billing-address">
                                     <div><strong>Billing Address</strong></div>
-                                    {% if order.transaction_type == 'PayPal' %}
+                                    {% if order.payments[0].platform == 'PayPal' %}
                                     <address>
                                         <div>{{ order.billing_first_name}} {{ order.billing_last_name}}</div>
                                         <div>{{ order.billing_street_line1}}</div>
@@ -198,8 +198,8 @@
                                     {% endif %}
                                 </div>
                                 <div class="billing-method">
-                                    <div><strong>Billing Method</strong></div>                        
-                                    {% if order.transaction_type == 'PayPal Express' %} {# Express order #}
+                                    <div><strong>Billing Method</strong></div>
+                                    {% if order.payments[0].platform == 'PayPal Express' %} {# Express order #}
                                     <div>
                                         PayPal Express
                                     </div>
@@ -253,10 +253,10 @@
                                             <div class="col-md-6">${{order.total|number_format(2, '.')}}</div>
                                         </div>
                                     </div>
-                                </div>                    
+                                </div>
                             </div>
                             {# End order totals #}
-                        {% endif %}            
+                        {% endif %}
                         </div>
                     </div>
                 </div>
@@ -264,7 +264,7 @@
             {# Begin returns #}
             {% set returns = api.get('/orderreturn', {query:{order_id:order.id}}) %}
             {% if returns is not empty %}
-            <div class="returns">        
+            <div class="returns">
                 <div class="well">
                     <div class="row">
                         <div class="col-md-12">
@@ -306,7 +306,7 @@
                     </div>
                     {% endfor %}
                 </div>
-                
+
             </div>
             {% endif %}
             {# End returns #}
@@ -325,5 +325,5 @@
                         </div>
                     End Button Group#}
         </div>
-    </div>    
+    </div>
 </div>
