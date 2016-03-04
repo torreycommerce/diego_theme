@@ -2,6 +2,8 @@
 {% block breadcrumb %}
 {{ base.breadcrumbs({'checkout':''}) }}
 {% endblock %}
+{# Calculate subtotal without discounts #}
+{% set subtotal = 0 %}
 
 {% do app.user.setState('order_sent', null) %}
 <div class="container main-container">
@@ -27,7 +29,7 @@
                                 <div>We have sent you an e-mail confirmation.</div>
                                 {% if request.customer_id is defined %}
                                     <div class="order-number">
-                                        <a href="{{app.url}}/account/order/{{final_order.order_number}}">{{ final_order.order_number }}</a>.
+                                        <a href="{{app.url}}/account/order/{{final_order.order_number}}">Order #{{ final_order.order_number }}</a>.
                                     </div>
                                     <div class="order-placed">Order Placed: {{ final_order.date_created|date("F jS, Y") }}</div>
                                     <!-- <div class="order-estimated-delivery">Estimated Delivery: June 5, 2014</div> -->
@@ -79,15 +81,18 @@
                         <h2 class="block-title-2">Items Ordered</h2>
                         <div id="order-items" class="panel-group">
                             {# LOOP Items #}
-                            {% for product in products %}
+                            {% for id, item in items %}
+                            {% set product = products[item.product_id].0 %}
                             <div class="item itemauto panel panel-border">
                                 <div class="panel-heading">
                                         <div class="row">
                                             <div class="col-xs-8 col-sm-9 col-md-9 col-lg-9">
-                                                <h4 class="panel-title">{{ product[0].title }}</h4>
+                                                <h4 class="panel-title">{{item.quantity}} x {{ product.title }}</h4>
                                             </div>
+                                            {% set price = product.price * item.quantity %}
+                                            {% set subtotal = subtotal + price %}
                                             <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
-                                                <h4 class="item-total text-right">Total: ${{ product[0].price|number_format(2, '.') }}</h4>
+                                                <h4 class="item-total text-right">Price: ${{ product.price|number_format(2, '.') }}</h4>
                                             </div>
                                         </div>
                                 </div>
@@ -128,8 +133,8 @@
                                     <div class="order-totals">
                                         <div class="order-subtotal">
                                             <div class="row">
-                                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Order Subtotal:</div>
-                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ final_order.subtotal|number_format(2, '.') }}</div>
+                                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Subtotal:</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ subtotal|number_format(2, '.') }}</div>
                                             </div>
                                         </div>
                                         <div class="shipping">
@@ -142,16 +147,18 @@
                                         {% for dsc in coupons %}
                                             {% set discount = discount + dsc.discount %}
                                         {% endfor %}
-                                        <div class="coupon-discount">
-                                            <div class="row">
-                                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Coupon Discount:</div>
-                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ discount|number_format(2, '.') }}</div>
+                                        {% if discount > 0 %}
+                                        <div class="row">
+                                            <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Discount:</div>
+                                            <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">
+                                                -${{ discount|number_format(2, '.')}}
                                             </div>
                                         </div>
+                                        {% endif %}
                                         <div class="pre-tax-total">
                                             <div class="row">
                                                 <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Total Before Tax:</div>
-                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ (final_order.subtotal + final_order.shipping_rate + discount)|number_format(2, '.') }}</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ (final_order.subtotal + final_order.shipping_rate)|number_format(2, '.') }}</div>
                                             </div>
                                         </div>
                                         <div class="tax">
@@ -168,7 +175,7 @@
                                         </div> -->
                                         <div class="order-total">
                                             <div class="row">
-                                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Order Total:</div>
+                                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Total:</div>
                                                 <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ final_order.total|number_format(2, '.') }}</div>
                                             </div>
                                         </div>

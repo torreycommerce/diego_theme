@@ -97,7 +97,7 @@ Passed into the macro is a array of key:value pairs as (title):(relative url)
                     <div class="order-details col-sm-4 col-md-4 col-lg-3">
                         <div class="order-info">
                             <div><strong>Order Info</strong></div>
-                            <div class="order-id">Order # {{ order.order_number }}</div>
+                            <div class="order-id">Order #{{ order.order_number }}</div>
                             <div class="order-status">Status: {{ order.status }}</div>
                             <div class="order-date">Ordered: {{ order.date_created }}</div>
                         </div>
@@ -114,7 +114,7 @@ Passed into the macro is a array of key:value pairs as (title):(relative url)
                         </div>
                         {% endif %}
                         <div class="order-total">
-                            Total: ${{ order.total }}
+                            Total: ${{ order.total|number_format(2, '.') }}
                         </div>
                         {# Begin actions #}
                         <div class="actions">
@@ -138,22 +138,24 @@ Passed into the macro is a array of key:value pairs as (title):(relative url)
                         {% set product_ids = items|values_in('product_id') %}
                         {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
                         {% for item in items %}
-                        <div class="item itemauto">
-                            <div class="row">
-                                {# Begin item image #}
-                                <div class="col-xs-4 col-sm-4 col-md-3 col-md-2">
-                                    <a href="{{ product[item.product_id][0].url }}" class="thumbnail">
-                                        <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="img-responsive" src='{{ products[item.product_id][0].thumbnail }}'>
-                                    </a>
+                            {% set product = products[item.product_id].0 %}
+                            {% set image_url = app.image.getImageUrl('product','thumbnail', product.images[0].id) %}
+                            <div class="item itemauto">
+                                <div class="row">
+                                    {# Begin item image #}
+                                    <div class="col-xs-4 col-sm-4 col-md-3 col-md-2">
+                                        <a href="{{ app.url ~ product.url }}" class="thumbnail">
+                                            <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" class="img-responsive" src='{{ image_url }}'>
+                                        </a>
+                                    </div>
+                                    {# End item image #}
+                                    {# Begin item details #}
+                                    <div class="col-xs-8 col-sm-8 col-md-9 col-md-10">
+                                        <a href="{{ app.url ~ product.url }}">{{ item.name }}</a>
+                                    </div>
+                                    {# End item details #}
                                 </div>
-                                {# End item image #}
-                                {# Begin item details #}
-                                <div class="col-xs-8 col-sm-8 col-md-9 col-md-10">
-                                    <a href="{{ app.url ~ product[item.product_id][0].url }}">{{ item.name }}</a>
-                                </div>
-                                {# End item details #}
                             </div>
-                        </div>
                         {% endfor %}
                     </div>
                     {# End order items #}

@@ -6,8 +6,8 @@
     {% do app.request.validateToken() %}
     {% set form = app.request.post.guestreturn is null ? app.request.post.createreturn : app.request.post.guestreturn %}
     {% set order = api.get('/order',{query:{email: form.email, order_number:form.order_id}})|first %}
-    {% if order is null %}
-        {% do app.user.setFlash('Order was not found.', 'danger') %}
+    {% if order.id is null %}
+        {% do app.user.setFlash('Order was not found. Please confirm the accuracy of order number and email address.', 'danger') %}
         {% do app.redirect('/return') %}
     {% endif %}
     {% set page_name = 'return' %}

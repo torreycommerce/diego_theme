@@ -63,11 +63,11 @@
                     {% if product.attributes.price %}
                     <div class="price">{{ this.price(product.attributes.price) }}</div>
                     {% endif %}
-                    {% if product.attributes.price.0 >= 100 %}
+                    {# if product.attributes.price.0 >= 100 %}
                     <div class="price-per-month hidden-xs">
                         <span data-tooltip data-toggle="tooltip" data-original-title="Spread payments over six months by selecting &quot;Checkout with Paypal&quot; on the Shopping Cart page. Then log in and apply for a &quot;Bill Me Later&quot; account.">{{ this.billmelater(product.attributes.price) }}</span>
                     </div>
-                    {% endif %}
+                    {% endif #}
                     {% if product.attributes.compare_price|max - product.attributes.price|max > 1  %}
                     <div class="price-regular hidden-xs">Compare at {{ this.price(product.attributes.compare_price) }}</div>
                     <div class="percent hidden-xs">

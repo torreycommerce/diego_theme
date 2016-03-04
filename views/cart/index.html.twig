@@ -74,6 +74,9 @@
     {% endfor %}
 {% endif %}
 
+{# Calculate subtotal without discounts #}
+{% set subtotal = 0 %}
+
 {% block content %}
 
             <!-- Content Block
@@ -130,16 +133,12 @@
 
         {% for id, item in cart.items %}
         {% set product = products[item.product_id].0 %}
+        {% set image_url = app.image.getImageUrl('product','thumbnail', product.images[0].id) %}
             <div class="row userInfo">
                 {# Begin item image #}
                 <div class="col-xs-4 col-sm-6 col-md-2 col-lg-2">
                     <div class="thumbnail">
-                        {% if product.images.0.thumbnail is not empty %}
-                            {% set prod_image = product.images.0.thumbnail %}
-                        {% else %}
-                            {% set prod_image = product.thumbnail %}
-                        {% endif %}
-                        <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" src="{{ prod_image }}">
+                        <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" src="{{ image_url }}">
                     </div>
                 </div>
                 {# End item image #}
@@ -185,6 +184,7 @@
                                 {% endif %}
                                 <div class="price">
                                     {% set price = product.price * item.quantity %}
+                                    {% set subtotal = subtotal + price %}
                                     <div class="item-label"><strong>Total:</strong></div>
                                     <span class="dollar-sign float-left">$</span><span class="amount"><span class="dollars">{{ price|number_format(2)|split('.')|first }}.{{ price|number_format(2)|split('.')|last }}</span></span>
                                 </div>
@@ -306,8 +306,51 @@
                 <div class="well">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="price">
-                                <strong>Subtotal:</strong>&nbsp;<span class="amount" id="total-price"><span class="dollars"><span class="dollar-sign float-left">$</span>{{ cart.subtotal|number_format(2)|split('.')|first }}.{{ cart.subtotal|number_format(2)|split('.')|last }}</span></span>
+                            <div class="row">
+                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8"><strong>Subtotal:</strong></div>
+                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">
+                                    ${{ subtotal|number_format(2)}}
+                                </div>
+                            </div>
+                            <div class="row" id="rate-estimate-checkout" style="display:none;">
+                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8" data-tooltip data-toggle="tooltip" data-placement="left" data-original-title="Estimated shipping rate.">
+                                    <strong>Shipping*:</strong>
+                                </div>
+                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4"></div>
+                            </div>
+                            {% set discount = 0 %}
+                            {% for dsc in cart.coupons %}
+                                {% set discount = discount + dsc.discount %}
+                            {% endfor %}
+                            {% for dsc in cart.globals %}
+                                {% set discount = discount + dsc.discount %}
+                            {% endfor %}
+                            {% if discount > 0 %}
+                            <div class="row">
+                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8"><strong>Discount:</strong></div>
+                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">
+                                    -${{ discount|number_format(2)}}
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div class="row" id="total-before-tax" style="display:none;">
+                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8"><strong>Total Before Tax:</strong></div>
+                                <div  class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">
+                                </div>
+                            </div>
+                            <div class="row" id="tax-estimate-checkout" style="display:none;">
+                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8" data-tooltip data-toggle="tooltip" data-placement="left" data-original-title="Estimated Sales Tax.">
+                                    <strong>Sales Tax*:</strong>
+                                </div>
+                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4"></div>
+                            </div>
+                            <div class="row" id="estimate-total">
+                                <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8" data-tooltip data-toggle="tooltip" data-placement="left" data-original-title="Estimated order total. Exact total including shipping cost and sales tax will be calculated during checkout.">
+                                    <strong>Total*:</strong>
+                                </div>
+                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">
+                                    ${{ cart.subtotal|number_format(2) }}
+                                </div>
                             </div>
                         </div>
                         {% if (config.components.payflowpro.enable == true or config.components.stripe.enable == true ) %}

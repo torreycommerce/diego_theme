@@ -6,7 +6,14 @@
 {# {% do account.login() %} #}
 
 {% set page_name = 'return' %}
-{% set order = api.get('/order',{query:{order_number: app.request.path}}).0 %}
+{% set order = api.get('/order',{query:{order_number: app.request.path}})|first %}
+{% if order.id is null %}
+	{% do app.user.setFlash('Order was not found.', 'danger') %}
+	{% do app.redirect('/account/orders') %}
+{% endif %}
+
+
+
 {% set orderitems = api.get('/orderitem', {query:{order_id:order.id, status:'shipped'}}) %}
 {% if order.date_created|strtotime > app.params.returnTime|strtotime %}
     {% do app.redirect('/account/orders', {'error':'Order is too old for returns.x' ~ app.request.path ~ 'x'}) %}

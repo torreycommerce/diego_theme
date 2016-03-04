@@ -3,7 +3,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{{ params['site']['title'] }}</title>
+  <title>{{ app.params.site.title|default("") }}</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
   <style type="text/css">
   body {margin: 0; padding: 0; min-width: 100%!important;}
@@ -58,6 +58,8 @@
 </head>
 {% set order = api.get('/order/' ~ order_id) %}
 {% set fulfillment = api.get('/orderfulfillment/' ~ fulfillment_id) %}
+{% set product_ids = fulfillment.items|values_in('product_id') %}
+{% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
 {% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
 {# Variables passed in: order_id #}
 <body yahoo bgcolor="#fff">
@@ -76,7 +78,7 @@
           <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td class="h2" style="padding: 0 0 15px 0; font-size: 24px; line-height: 28px; font-weight: bold; text-transform: uppercase; color: #42464d; font-family: 'Open Sans', sans-serif;">
-                Thank you again for your order from {{ params['site']['title']|default("") }}
+                Thank you again for your order from {{ app.params.site.title|default("") }}
               </td>
             </tr>
             <tr>
@@ -145,11 +147,12 @@
                     </td>
                   </tr>
                   {% for item in fulfillment.items %}
+                  {% set product = products[item.product_id].0 %}
                     <tr>
                       <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
-                        SKU: {{item.sku}} <br>
-                        Name: <a href="{{params['url']['current']}}/product/{{item.product_id}}" target="_blank">{{ item.name }}</a> <br>
-                        Quantity: {{ item.quantity }} <br>
+                        <b>Item:</b> <a href="{{app.url}}{{product.url}}">{{ product.title }}</a><br>
+                        <b>SKU:</b> {{product.sku}}<br>
+                        <b>Quantity:</b> {{ item.quantity }}<br>
                       </td>
                     </tr>
                   {% endfor %}

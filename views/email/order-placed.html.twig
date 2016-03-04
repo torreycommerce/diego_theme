@@ -3,7 +3,7 @@
  
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{{ params['site']['title']|default("") }}</title>
+  <title>{{ app.params.site.title|default("") }}</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
   <style type="text/css">
   body {margin: 0; padding: 0; min-width: 100%!important;}
@@ -61,6 +61,11 @@
 {% set product_ids = items|values_in('product_id') %}
 {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
 {% set shipping_method = api.get('/shippingmethod/' ~ order.shipping_method) %}
+{% set subtotal = 0 %}
+{% for id, item in items %}
+  {% set product = products[item.product_id].0 %}
+  {% set subtotal = subtotal + product.price * item.quantity %}
+{% endfor %}
 <body yahoo bgcolor="#fff">
 <table width="100%" bgcolor="#fff" border="0" cellpadding="0" cellspacing="0">
 <tr>
@@ -99,13 +104,21 @@
                       Order Info
                   </tr>
                   <tr>
+                    {% set discount = 0 %}
+                    {% for dsc in coupons %}
+                        {% set discount = discount + dsc.discount %}
+                    {% endfor %}
                     <td class="h3 light" style="padding: 0 0 15px 0; font-size: 20px; line-height: 28px; font-weight: bold; text-transform: uppercase; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
-                        Order ID: {{ order.order_number }} <br>
-                        Subtotal: ${{ order.subtotal|number_format(2) }}<br>
-                        Total: ${{order.total|number_format(2)}}
+                        Order #{{ order.order_number }} <br>
                         Date: {{ order.date_created }}<br>
-                        Tax: ${{order.tax|number_format(2)}}<br>
-                        Total: ${{order.total|number_format(2)}}
+                        Subtotal: ${{ subtotal|number_format(2) }}<br>
+                        Shipping: ${{order.shipping_rate|number_format(2, '.')}}<br>
+                        {% if discount > 0 %}
+                        Discount: -${{discount|number_format(2, '.')}}<br>
+                        {% endif %}
+                        Total Before Tax: ${{ (order.subtotal + order.shipping_rate)|number_format(2, '.') }}<br>
+                        Sales Tax: ${{order.tax|number_format(2, '.')}}<br>
+                        Total: ${{order.total|number_format(2, '.')}}<br>
                     </td>
                   </tr>
                 </table>
@@ -138,6 +151,7 @@
                         {{ order.shipping_phone_number }} <br>
                         using {{ shipping_method.name }} <br>
                         {% for item in items %}
+                        {% set product = products[item.product_id].0 %}
                     </td>
                   </tr>
                   <tr>
@@ -146,10 +160,9 @@
                   </tr>
                   <tr>
                     <td class="bodycopy light" style="font-size: 14px; line-height: 22px; color: #dcdcdc; font-family: 'Open Sans', sans-serif;">
-                        <b>URL:</b> {{params['url']['current']}}{{products[item.product_id].0.url}}<br>
-                        <b>SKU:</b> {{item.sku}}<br>
-                        <b>Item name:</b> {{ item.name }}<br>
-                        <b>Price:</b> ${{ item.price|number_format(2) }}<br>
+                        <b>Item:</b> <a href="{{app.url}}{{product.url}}">{{ product.title }}</a><br>
+                        <b>SKU:</b> {{product.sku}}<br>
+                        <b>Price:</b> ${{ product.price|number_format(2, '.') }}<br>
                         <b>Quantity:</b> {{ item.quantity }}<br>
                         {% endfor %}
                     </td>

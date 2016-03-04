@@ -35,7 +35,7 @@
                                     <div><strong>Order Info</strong></div>
                                     <div>Order #{{ order.order_number }}</div>
                                     <div>{{ order.date_created }}</div>
-                                    <div>Order Total: ${{ order.total|replace({',':''})|number_format(2) }}</div>
+                                    <div>Order Total: ${{ order.total|replace({',':''})|number_format(2, '.') }}</div>
                                 </div>
                                 {# End order details #}
                             </div>         
@@ -118,15 +118,17 @@
                         {% set product_ids = items|values_in('product_id') %}
                         {% set products = api.get('/variant',{query:{id:{'$in':product_ids}}})|group_by('id') %}
                         {% if items is not empty %}
-                        {% set bill = 0 %}
+                        {% set subtotal = 0 %}
                         {% for item in items %}
-                        {% set bill = bill + (item.price * item.quantity) %}
+                        {% set product = products[item.product_id].0 %}
+                        {% set image_url = app.image.getImageUrl('product','thumbnail', product.images[0].id) %}
+                        {% set subtotal = subtotal + (product.price * item.quantity) %}
                         <div class="order-item">
                             <div class="row">
                                 {# Begin product image #}
                                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-2">
                                     <div class="thumbnail">
-                                        <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" src='{{ products[item.product_id][0].thumbnail }}'>
+                                        <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" src='{{ image_url }}'>
                                     </div>
                                 </div>
                                 {# End product image #}
@@ -135,7 +137,7 @@
                                     <div class="row">
                                         {# Begin wishlist #}
                                         <div class="col-md-12 col-lg-12">
-                                            <a href="{{ app.url ~ products[item.product_id].0.url }}" target="_blank">{{ item.name }}</a>
+                                            <a href="{{ app.url ~ product.url }}" target="_blank">{{ product.title }}</a>
                                             {% if item.wishlist_id is not empty %}
                                             (for wishlist)
                                             {% endif %}
@@ -143,7 +145,7 @@
                                         {# End wishlist #}                        
                                         {# Begin item price #}
                                         <div class="col-md-12 col-lg-3">
-                                            Price: ${{ item.price }}
+                                            Price: ${{ item.price|number_format(2, '.') }}
                                         </div>
                                         {# End item price #}
                                         {# Being item quantity #}
@@ -214,12 +216,12 @@
                                 <div class="order-totals">
                                     <div class="shipping">
                                         <div class="row">
-                                            <div class="col-md-6">Shipping:</div>
-                                            <div class="col-md-6">${{order.shipping_rate}}</div>
+                                            <div class="col-md-6">Subtotal:</div>
+                                            <div class="col-md-6">${{subtotal|number_format(2, '.')}}</div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">Subtotal:</div>
-                                            <div class="col-md-6">${{bill}}</div>
+                                            <div class="col-md-6">Shipping:</div>
+                                            <div class="col-md-6">${{order.shipping_rate|number_format(2, '.')}}</div>
                                         </div>
                                     </div>
                                     {# Begin coupons #}
@@ -227,21 +229,28 @@
                                         <div class="row">
                                         {% set coupons = api.get('/ordercoupon', {query:{order_id:order.id}}) %}
                                         {% if coupons is not empty %}
-                                            {% for coupon in coupons %}
-                                            <div class="col-md-6">Coupon Discount ({{ coupon.code }})</div><div class="col-md-6 discount-line-through">${{ coupon.discount }}</div>
+                                            {% set discount = 0 %}
+                                            {% for dsc in coupons %}
+                                                {% set discount = discount + dsc.discount %}
                                             {% endfor %}
+                                            <div class="col-md-6">Discount:</div><div class="col-md-6 discount-line-through">-${{ discount|number_format(2, '.') }}</div>
                                         {% endif %}
                                         </div>
                                     </div>
                                     {# End coupons #}
                                     <div class="sales-tax">
                                         <div class="row">
+                                            {% set total_before_tax = subtotal + order.shipping_rate %}
+                                            <div class="col-md-6">Total Before Tax:</div>
+                                            <div class="col-md-6">${{total_before_tax|number_format(2, '.')}}</div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-6">Sales Tax:</div>
-                                            <div class="col-md-6">${{order.tax}}</div>
+                                            <div class="col-md-6">${{order.tax|number_format(2, '.')}}</div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">Total:</div>
-                                            <div class="col-md-6">${{order.total}}</div>
+                                            <div class="col-md-6">${{order.total|number_format(2, '.')}}</div>
                                         </div>
                                     </div>
                                 </div>                    
