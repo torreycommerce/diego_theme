@@ -1,7 +1,7 @@
 {% set id = api.get('/order',{'query':{'order_number':app.request.get.id}}) %}
 {% set order = api.get('/order/' ~ id) %}
 {% if order.email == app.request.get.email and order.id == id and order.status == 'pending' %}
-    {% set result = api.put('/order/' ~ id, {'status':'cancelled'}) %}
+    {% set result = api.put('/order/' ~ order.id ~ '/cancel', {'email' : true}) %}
     {% if result %}
         {% do app.user.setFlash('Order has been cancelled') %}
     {% else %}
