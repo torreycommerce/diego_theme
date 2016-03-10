@@ -134,13 +134,13 @@
                                         <div class="order-subtotal">
                                             <div class="row">
                                                 <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Subtotal:</div>
-                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ subtotal|number_format(2, '.') }}</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4 text-right">${{ subtotal|number_format(2, '.') }}</div>
                                             </div>
                                         </div>
                                         <div class="shipping">
                                             <div class="row">
                                                 <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Shipping:</div>
-                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ final_order.shipping_rate|number_format(2, '.') }}</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4 text-right">${{ final_order.shipping_rate|number_format(2, '.') }}</div>
                                             </div>
                                         </div>
                                         {% set discount = 0 %}
@@ -150,7 +150,7 @@
                                         {% if discount > 0 %}
                                         <div class="row">
                                             <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Discount:</div>
-                                            <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">
+                                            <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4 text-right">
                                                 -${{ discount|number_format(2, '.')}}
                                             </div>
                                         </div>
@@ -158,13 +158,13 @@
                                         <div class="pre-tax-total">
                                             <div class="row">
                                                 <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Total Before Tax:</div>
-                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ (final_order.subtotal + final_order.shipping_rate)|number_format(2, '.') }}</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4 text-right">${{ (final_order.subtotal + final_order.shipping_rate)|number_format(2, '.') }}</div>
                                             </div>
                                         </div>
                                         <div class="tax">
                                             <div class="row">
                                                 <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Sales Tax:</div>
-                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ final_order.tax|number_format(2, '.')}}</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4 text-right">${{ final_order.tax|number_format(2, '.')}}</div>
                                             </div>
                                         </div>
                                         <!-- <div class="gift-card">
@@ -176,7 +176,7 @@
                                         <div class="order-total">
                                             <div class="row">
                                                 <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Total:</div>
-                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4">${{ final_order.total|number_format(2, '.') }}</div>
+                                                <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4 text-right">${{ final_order.total|number_format(2, '.') }}</div>
                                             </div>
                                         </div>
                                     </div>

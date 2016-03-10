@@ -26,7 +26,7 @@ function AcendaAnalytics(trackingID){
 	}
 
 	this.route = function(route){
-		if(route.includes('place')){
+		if(route.indexOf('place')>-1){
 			this.transaction();
 		}
 	}
@@ -36,34 +36,34 @@ function AcendaAnalytics(trackingID){
 		ga('set', '&cu', this.currency)
 		this.addToCartTracking();
 
-		if(route.includes('place')){
+		if(route.indexOf('place')>-1){
 			this.ECtransaction();
 		}
-		if(route.includes('product')){
+		if(route.indexOf('product')>-1){
 			this.productDetails();
 		}
-		if(route.includes('cart')){
+		if(route.indexOf('cart')>-1){
 			this.removeToCartTracking();
 		}
-		if(route.includes('checkout') || route.includes('cart')){
+		if(route.indexOf('checkout')>-1 || route.indexOf('cart')>-1){
 			this.checkoutProcess(route);
 		}
 	}
 
 	this.getCheckoutStep = function(route){
-		if(route.includes('cart')){
+		if(route.indexOf('cart')>-1){
 			return 1;
-		}else if(route.includes('checkout/billing')){
+		}else if(route.indexOf('checkout/billing')>-1){
 			return 3;
-		}else if(route.includes('checkout/place') || route.includes('checkout/paypal/place')){
+		}else if(route.indexOf('checkout/place')>-1 || route.indexOf('checkout/paypal/place')>-1){
 			return 4;
-		}else if(route.includes('checkout') || route.includes('checkout/paypal/review')){
+		}else if(route.indexOf('checkout')>-1 || route.indexOf('checkout/paypal/review')>-1){
 			return 2;
 		}
 	}
 
 	this.getCheckoutMethod = function(link){
-		if(link.includes("paypal")){
+		if(link.indexOf("paypal")>-1){
 			return "PayPal Checkout";
 		}else{
 			return "Regular Checkout";
@@ -166,7 +166,7 @@ function AcendaAnalytics(trackingID){
 		//When clicking on continue checkout -> send Step 2 of checkout with  option:shipping_method "Completed Checkout - Shipping Info"
 	this.checkoutStep2 = function(route){
 		var button;
-		if(route.includes('paypal')){
+		if(route.indexOf('paypal')>-1){
 			button = 'button[name=place]';
 		}else{
 			button = 'button[name=continue]';
@@ -428,28 +428,28 @@ function AcendaTagManager(){
 
 	this.ECroute = function(route){
 		this.addToCartTracking();
-		if(route.includes('cart')){
+		if(route.indexOf('cart')>-1){
 			this.removeToCartTracking();
 		}
-		if(route.includes('checkout') || route.includes('cart')){
+		if(route.indexOf('checkout')>-1 || route.indexOf('cart')>-1){
 			this.checkoutProcess(route);
 		}
 	}
 
 	this.getCheckoutStep = function(route){
-		if(route.includes('cart')){
+		if(route.indexOf('cart')>-1){
 			return 1;
-		}else if(route.includes('checkout/billing')){
+		}else if(route.indexOf('checkout/billing')>-1){
 			return 3;
-		}else if(route.includes('checkout/place') || route.includes('checkout/paypal/place')){
+		}else if(route.indexOf('checkout/place')>-1 || route.indexOf('checkout/paypal/place')>-1){
 			return 4;
-		}else if(route.includes('checkout') || route.includes('checkout/paypal/review')){
+		}else if(route.indexOf('checkout')>-1 || route.indexOf('checkout/paypal/review')>-1){
 			return 2;
 		}
 	}
 
 	this.getCheckoutMethod = function(link){
-		if(link.includes("paypal")){
+		if(link.indexOf("paypal")>-1){
 			return "PayPal Checkout";
 		}else{
 			return "Regular Checkout";
@@ -532,7 +532,7 @@ function AcendaTagManager(){
 		//When clicking on continue checkout -> send Step 2 of checkout with  option:shipping_method "Completed Checkout - Shipping Info"
 	this.checkoutStep2 = function(route){
 		var button;
-		if(route.includes('paypal')){
+		if(route.indexOf('paypal')>-1){
 			button = 'button[name=place]';
 		}else{
 			button = 'button[name=continue]';

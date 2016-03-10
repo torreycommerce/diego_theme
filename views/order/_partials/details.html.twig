@@ -215,11 +215,11 @@
                                     <div class="shipping">
                                         <div class="row">
                                             <div class="col-md-6">Subtotal:</div>
-                                            <div class="col-md-6">${{subtotal|number_format(2, '.')}}</div>
+                                            <div class="col-md-6 text-right">${{subtotal|number_format(2, '.')}}</div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">Shipping:</div>
-                                            <div class="col-md-6">${{order.shipping_rate|number_format(2, '.')}}</div>
+                                            <div class="col-md-6 text-right">${{order.shipping_rate|number_format(2, '.')}}</div>
                                         </div>
                                     </div>
                                     {# Begin coupons #}
@@ -231,7 +231,7 @@
                                             {% for dsc in coupons %}
                                                 {% set discount = discount + dsc.discount %}
                                             {% endfor %}
-                                            <div class="col-md-6">Discount:</div><div class="col-md-6 discount-line-through">-${{ discount|number_format(2, '.') }}</div>
+                                            <div class="col-md-6">Discount:</div><div class="col-md-6 discount-line-through text-right">-${{ discount|number_format(2, '.') }}</div>
                                         {% endif %}
                                         </div>
                                     </div>
@@ -240,15 +240,15 @@
                                         <div class="row">
                                             {% set total_before_tax = subtotal + order.shipping_rate %}
                                             <div class="col-md-6">Total Before Tax:</div>
-                                            <div class="col-md-6">${{total_before_tax|number_format(2, '.')}}</div>
+                                            <div class="col-md-6 text-right">${{total_before_tax|number_format(2, '.')}}</div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">Sales Tax:</div>
-                                            <div class="col-md-6">${{order.tax|number_format(2, '.')}}</div>
+                                            <div class="col-md-6 text-right">${{order.tax|number_format(2, '.')}}</div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">Total:</div>
-                                            <div class="col-md-6">${{order.total|number_format(2, '.')}}</div>
+                                            <div class="col-md-6 text-right">${{order.total|number_format(2, '.')}}</div>
                                         </div>
                                     </div>
                                 </div>

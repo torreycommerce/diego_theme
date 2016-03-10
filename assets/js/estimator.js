@@ -43,6 +43,7 @@ function estimator() {
                 setTaxEstimated(tax_data.result.tax);
                 var total = parseFloat(cart_data.result.subtotal) + parseFloat(tax_data.result.tax) + parseFloat(method_data.result.rate);
                 $('#total-estimate').html('$' + total.toFixed(2).toLocaleString());
+                setTotalEstimated(total.toFixed(2).toLocaleString());
             });
         });
     });
