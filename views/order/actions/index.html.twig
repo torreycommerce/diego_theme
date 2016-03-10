@@ -4,7 +4,7 @@
     {% do app.redirect('/order') %}
 {% else %}
     {% if app.request.post.action == 'cancel' %}
-        {% set result = api.put('/order/' ~ order.id, {'status':'cancelled'}) %}
+        {% set result = api.put('/order/' ~ order.id ~ '/cancel', {'email' : true}) %}
         {% if result %}
             {% do app.user.setFlash('Order has been cancelled') %}
         {% else %}
