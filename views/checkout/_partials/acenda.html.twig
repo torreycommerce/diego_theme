@@ -1,24 +1,24 @@
 {% if final_order is not empty %}
     acenda.order = {
-        id: {{final_order.order_number|json_encode}},         // Transaction ID. Required
-        revenue: {{final_order.total|json_encode}},               // Grand Total
-        shipping: {{final_order.shipping_rate|json_encode}},      // Shipping
-        tax: {{final_order.tax|json_encode}}         
+        "id": {{final_order.order_number|json_encode}},         // Transaction ID. Required
+        "revenue": {{final_order.total|json_encode}},               // Grand Total
+        "shipping": {{final_order.shipping_rate|json_encode}},      // Shipping
+        "tax": {{final_order.tax|json_encode}}         
     }
     acenda.order.items = [];
     {% for item in items %}
         acenda.order.items.push({
-            id: {{ item.id }},                // Product id. Required
-            name: {{ item.name|json_encode }},                // Product name. Required
-            sku: {{ products[item.product_id].0.sku|json_encode }},          // SKU/code
-            price: {{ item.price|json_encode }},                 // Unit price
-            quantity: {{ item.quantity|json_encode }}                   // Quantity
+            "id": {{ item.id }},                // Product id. Required
+            "name": {{ item.name|json_encode }},                // Product name. Required
+            "sku": {{ products[item.product_id].0.sku|json_encode }},          // SKU/code
+            "price": {{ item.price|json_encode }},                 // Unit price
+            "quantity": {{ item.quantity|json_encode }}                   // Quantity
         });
     {% endfor %}
     acenda.order.coupons = [];
     {# for coupon in coupons #}
         //acenda.order.coupons.push({
-        //    code: {{ coupon.code|json_encode }},                // Order coupon.code
+        //    "code": {{ coupon.code|json_encode }},                // Order coupon.code
         //});
     {# endfor #}
 {% endif %}

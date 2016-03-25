@@ -27,10 +27,11 @@
                         <div id="image-main">
                            <div class="row">
                               <div class="col-sm-12">
+                                    <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-450x450.jpg'" id="main-product-image-copy" class="img-responsive" src="{{ app.url_asset }}/assets/images/product/image-450x450.jpg" data-image-zoom="" alt="" style="display:none"/>
                                     <div class="thumbnail" id="variant-selected-image-{{product.id}}">
                                        <span class="helper hidden-xs"></span>
                                        <div id="main-product-video" style="display:none"></div>
-                                       <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-450x450.jpg'" id="main-product-image" class="img-responsive" src="" data-image-zoom="" alt="" style="display:none"/>
+                                       
                                     </div>
                               </div>
                            </div>
@@ -46,7 +47,7 @@
 
                                           <div class="col-xs-2" id="variant-image-thumbnail-copy">
                                              <div class="thumbnail" data-tooltip="" data-toggle="tooltip" data-original-title="{{ name }}">
-                                                <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-450x450.jpg'" class="" src="" data-image-swap="main-product-image" data-image-swap-src=""  data-image-swap-zoom="" alt="" />
+                                                <img onerror="this.src='{{ app.url_asset }}/assets/images/product/image-450x450.jpg'" class="" src="{{ app.url_asset }}/assets/images/product/image-450x450.jpg" data-image-swap="main-product-image" data-image-swap-src="{{ app.url_asset }}/assets/images/product/image-450x450.jpg"  data-image-swap-zoom="" alt="" />
                                              </div>
                                           </div>
                                           <div class="col-xs-2" id="variant-video-copy">

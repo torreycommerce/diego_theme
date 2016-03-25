@@ -185,7 +185,7 @@ function ajaxCart(data, r) {
                         var stock = stock - parseInt(response[i].inventory_minimum_quantity);
                     }
                     var message = product_name + " <b>Not added</b>" + '</br>' + 'Only ' + stock + ' left in stock.';
-                    var error = $('<div>', {class: "col-md-12 alert alert-danger"}).html(message);
+                    var error = $('<div>', {"class": "col-md-12 alert alert-danger"}).html(message);
                     errors.append(error);
                 }
             }
