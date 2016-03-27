@@ -10,7 +10,6 @@ $(function() {
 
 var disabled_cart_button = 0;
 function VariantsManager (product, img, isCollection) {
-    var self = this;
     this.product = product;
     this.variants = this.product.variants;
     this.variant_options = this.product.variant_options;
@@ -50,18 +49,18 @@ function VariantsManager (product, img, isCollection) {
                 if(optionValue){
                     for(var j=0; j<this.variant_options[i].values.length; j++){
                         if(this.variant_options[i].values[j] == optionValue){
-                            return {option: i, value: j};
+                            return {"option": i, "value": j};
                         }
                     }
                 }else{
-                    return {option: i};
+                    return {"option": i};
                 }
             }
         }
     }
     this.getVariationSelector = function(selectName, optionValue){
         var index = this.getOptionIndexes(selectName, optionValue);
-        return "[id=variation-selector-"+self.product_id+"-"+index.option+"-"+index.value+"]";
+        return "[id=variation-selector-"+this.product_id+"-"+index.option+"-"+index.value+"]";
     }
 
     this.getVariationValueId = function(selectName, optionValue){
@@ -79,7 +78,7 @@ function VariantsManager (product, img, isCollection) {
 
     this.getSelectedValue = function(selectName){
         var index = this.getOptionIndexes(selectName, null);
-        return "[id=selected-"+index.option+"-"+self.product_id+"]";
+        return "[id=selected-"+index.option+"-"+this.product_id+"]";
     }
     this.getProductVariation = function(variant_id){
         return "[id=product-" + variant_id + "]";
@@ -122,12 +121,12 @@ function VariantsManager (product, img, isCollection) {
         $('#'+variant_image_id+" img").attr('alt', img_alt);
     }
     this.addVideosToCarousel = function(videos) {
-        var self = this;
+        var _this = this;
         $.each(videos, function(index, video){
             var clonedDiv = $('#variant-video-copy').clone();
-            var id = "product-video-"+self.product_id+"-"+index;
+            var id = "product-video-"+_this.product_id+"-"+index;
             clonedDiv.attr("id", id);
-            clonedDiv.appendTo( "#variant-image-carousel-"+self.product_id );
+            clonedDiv.appendTo( "#variant-image-carousel-"+_this.product_id );
             $('#'+id+" div").attr("data-video-src", video);
         });
         $("[data-image-swap]").click(function() {
@@ -414,7 +413,7 @@ function VariantsManager (product, img, isCollection) {
     }
 
     this.getAColorTag = function(selectName, optionValue, color){
-        return tag =  $('<a>', {"class": "", style:"background-color:"+color});
+        return tag =  $('<a>', {"class": "", "style":"background-color:"+color});
     }
     this.unslugify = function(input){
         var tmpArray = input.split('_');
@@ -507,7 +506,7 @@ function VariantsManager (product, img, isCollection) {
     }
     this.init = function(){
         //Options ordering
-        self.variant_options = self.orderOptions(self.variant_options);
+        this.variant_options = this.orderOptions(this.variant_options);
         //Build selectsData
         var _this = this
         $.each( this.variant_options, function(index, option){
