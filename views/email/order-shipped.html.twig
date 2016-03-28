@@ -119,9 +119,17 @@
                         Using {{ shipping_method.name }} <br>
                         Shipping Method: {{ fulfillment.shipping_method }} <br>
                         Tracking number(s):
-                          {% for tracking_url in fulfillment.tracking_urls %}
-                            {{ tracking_url }}<br/>
-                          {% endfor %}
+                        {% if fulfillment.tracking_urls is not empty %}
+                            {% for tracking_url in fulfillment.tracking_urls %}
+                                <a href="{{ tracking_url }}" target="_blank">{{ tracking_url }}<a><br/>
+                            {% endfor %}
+                        {% elseif fulfillment.tracking_numbers is not empty %}
+                            {% for tracking_num in fulfillment.tracking_numbers %}
+                                {{ tracking_num }}<br/>
+                            {% endfor %}
+                         {% else %}
+                            There isn't any tracking numbers available for this shipment.
+                         {% endif %}
                     </td>
                   </tr>
                 </table>
