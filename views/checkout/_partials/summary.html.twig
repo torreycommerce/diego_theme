@@ -33,16 +33,16 @@
                         <div class="registry">
                             <a href="{{ app.url }}/registry/{{ item.registry_id }}"><i class="icon icon-gift"></i> For {{ registry.name }}</a>
                         </div>
-                    {% endif %}                    
+                    {% endif %}
                 </div>
-                {# End product description #}                
+                {# End product description #}
             </div>
         </div>
     {% endfor %}
     </div>
 </div>
 <footer class="row">
-    <div class="col-md-12">        
+    <div class="col-md-12">
 
         {# Begin product actions #}
         <div class="row">
@@ -52,51 +52,34 @@
         </div>
         {# End product actions #}
         {# Begin subtotal #}
-        <div class="subtotal row">            
-            <div class="amount col-xs-6 text-right">Subtotal:</div><div class="amount col-xs-6 text-right"><span class="dollar-sign">$</span><span class="price">{{ subtotal|number_format(2, '.') }}</span></div>
+        <div class="subtotal row">
+            <div class="amount col-xs-6 text-right">Subtotal:</div>
+            <div class="amount col-xs-6 text-right">
+                <span class="dollar-sign">$</span>
+                <span class="price">{{ cart.item_subtotal|number_format(2, '.') }}</span>
+            </div>
         </div>
         {# End subtotal #}
-        {% if step == 'billing' %}        
+        {% if step == 'billing' %}
             <div class="shipping row">
                 <div class="col-xs-6 text-right">Shipping:</div>
                 {% set shipping = api.post('/shippingmethod/' ~ app.user.getState('shipping_method') ~ '/rate', {'total':cart.subtotal, 'quantity':cart.item_count}) %}
                 <div class="amount col-xs-6 text-right"><span class="dollar-sign">$</span><span class="price">{{ shipping.rate|number_format(2, '.') }}</span></div>
             </div>
-        {% endif %}   
-        {% if step == 'express' %}        
+        {% endif %}
+        {% if step == 'express' %}
             <div class="shipping row">
                 <div class="col-sm-6 text-right">Shipping:</div>
                 <div class="amount col-sm-6 text-right"><span class="dollar-sign">$</span><span class="price">{{ expressdetails.SHIPPINGAMT|number_format(2, '.') }}</span></div>
             </div>
-        {% endif %}  
-        {% set discount = 0 %}
-        {% for dsc in cart.coupons %}
-            {% set discount = discount + dsc.discount %}
-        {% endfor %}
-        {% for dsc in cart.globals %}
-            {% set discount = discount + dsc.discount %}
-        {% endfor %}
-        {% if discount > 0 %}
-        <div class="coupon row">
-            <div class="col-sm-6 text-right">Discount:</div>
-            <div class="amount col-sm-6 text-right"><span class="dollar-sign">-$</span><span class="price">{{ discount|number_format(2, '.') }}</span></div>
-        </div>
         {% endif %}
 
-        {# Begin coupon }
-        {% for id, coupon in cart.coupons %}
+        {% if cart.discount_price > 0 %}
         <div class="coupon row">
-            <div class="col-sm-6 text-right">Coupon {{coupon.code}}:</div>
-            <div class="amount col-sm-6 text-right"><span class="dollar-sign">-$</span><span class="price">{{ coupon.discount }}</span></div>
+            <div class="col-sm-6 text-right">Discount:</div>
+            <div class="amount col-sm-6 text-right"><span class="dollar-sign">-$</span><span class="price">{{ cart.discount_price|number_format(2, '.') }}</span></div>
         </div>
-        {% endfor %}
-        {% for id, global in cart.globals %}        
-        <div class="global row">
-            <div class="col-sm-6 text-right">Discount {{ global.code }}:</div>
-            <div class="amount col-sm-6 text-right"><span class="dollar-sign">-$</span><span class="price">{{ global.discount }}</span></div>
-        </div>
-        {% endfor %}
-        { End coupon #}
+        {% endif %}
 
 
         {# End cart total #}
@@ -107,14 +90,14 @@
                 <div class="amount col-sm-6 text-right"><span class="dollar-sign"><strong>$</strong></span><span class="price"><strong>{{ total|number_format(2, '.') }}</strong></span></div>
             </div>
         {% endif %}
-        {% if step == 'billing' %}   
+        {% if step == 'billing' %}
             <div class="tax row">
                 <div class="col-xs-6 text-right">Total Before Tax:</div>
                 {% set total_before_tax = cart.subtotal|replace({',':''}) + shipping.rate|replace({',':''}) %}
                 <div class="amount col-xs-6 text-right">
                     <span class="dollar-sign">$</span><span class="price">{{ total_before_tax|number_format(2, '.') }}</span>
-                </div>    
-            </div>             
+                </div>
+            </div>
             <div class="tax row">
                 <div class="col-xs-6 text-right">Sales Tax:</div>
                 {% if app.user.getState('shipping_zip') is empty %}
@@ -126,22 +109,22 @@
                 <div class="amount col-xs-6 text-right">
                     <span class="dollar-sign">$</span><span class="price">{{ tax.tax|number_format(2, '.') }}</span>
                 </div>
-            </div>        
+            </div>
             <div class="total row">
                 <div class="col-xs-6 text-right"><strong>Total:</strong></div>
                 {% set total = cart.subtotal|replace({',':''}) + shipping.rate|replace({',':''}) + tax.tax|replace({',':''}) %}
                 <div class="amount col-sm-6 text-right"><span class="dollar-sign">$</span><span class="price">{{ total|number_format(2, '.') }}</span></div>
                 <input type="hidden" name="checkout[total_verify]" value="{{ total }}">
-            </div>        
+            </div>
         {% endif %}
-        {% if step == 'express' %}        
+        {% if step == 'express' %}
             <div class="tax row">
                 <div class="col-xs-6 text-right">Total Before Tax:</div>
                 {% set total_before_tax = cart.subtotal|replace({',':''}) + shipping.rate|replace({',':''}) %}
                 <div class="amount col-xs-6 text-right">
                     <span class="dollar-sign">$</span><span class="price">{{ total_before_tax|number_format(2, '.') }}</span>
-                </div>    
-            </div>    
+                </div>
+            </div>
             <div class="tax row">
                 <div class="col-sm-6 text-right">Sales Tax:</div>
                 {% if selected_address is empty %}
@@ -151,7 +134,7 @@
                     {% set tax = api.post('/taxdata/calculate', {'subtotal':cart.subtotal, 'shipping_zip':address.zip, 'shipping_rate':expressdetails.SHIPPINGAMT}) %}
                 {% endif %}
                 <div class="amount col-sm-6 text-right"><span class="dollar-sign">$</span><span class="price">{{ tax.tax|number_format(2, '.') }}</span></div>
-            </div>        
+            </div>
             <div class="total row">
                 <div class="col-sm-6 text-right"><strong>Total:</strong></div>
                 {# set total = expressdetails.AMT|replace({',':''}) + tax.tax|replace({',':''}) #}
@@ -159,7 +142,7 @@
                 {% set total = expressdetails.AMT|replace({',':''}) - expressdetails.TAXAMT|replace({',':''}) + tax.tax %}
                 <div class="amount col-sm-6 text-right"><span class="dollar-sign">$</span><span class="price">{{ total|number_format(2, '.') }}</span></div>
                 <input type="hidden" name="checkout[total_verify]" value="{{ total }}">
-            </div>        
+            </div>
         {% endif %}
-    </div>    
+    </div>
 </footer>
