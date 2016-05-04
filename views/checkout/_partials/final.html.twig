@@ -143,15 +143,11 @@
                                                 <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4 text-right">${{ final_order.shipping_rate|number_format(2, '.') }}</div>
                                             </div>
                                         </div>
-                                        {% set discount = 0 %}
-                                        {% for dsc in coupons %}
-                                            {% set discount = discount + dsc.discount %}
-                                        {% endfor %}
-                                        {% if discount > 0 %}
+                                        {% if final_order.discount_price > 0 %}
                                         <div class="row">
                                             <div class="txt-label col-xs-8 col-sm-8 col-md-7 col-lg-8">Discount:</div>
                                             <div class="amount col-xs-4 col-sm-4 col-md-5 col-lg-4 text-right">
-                                                -${{ discount|number_format(2, '.')}}
+                                                -${{ final_order.discount_price|number_format(2, '.')}}
                                             </div>
                                         </div>
                                         {% endif %}
