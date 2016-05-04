@@ -4,15 +4,34 @@
 {% set redirect = 'cart' %}
 {% if action == '' %}
     {# Add items to the cart #}
-    {% for item, quantity in app.request.post.items %}
-        {% if quantity is empty %}
-            {% set quantity = 1 %}
-        {% endif %}
-        {% if quantity > 0 %}
-            {% set result = api.post('/sessioncartitem', {"product_id":item, "quantity":quantity}) %}
-            {% set result_add = result_add + {(item):result} %}
-        {% endif %}
-    {% endfor %}
+    {% if app.request.post.items is not empty %}
+        {% for item, quantity in app.request.post.items %}
+            {% if quantity is empty %}
+                {% set quantity = 1 %}
+            {% endif %}
+            {% if quantity > 0 %}
+                {% set result = api.post('/sessioncartitem', {"product_id":item, "quantity":quantity}) %}
+                {% set result_add = result_add + {(item):result} %}
+                {% do api.post('/sessioncartdiscount/refresh') %}
+            {% endif %}
+        {% endfor %}
+    {% elseif app.request.post.bundles is not empty %}
+        {% for bundle_id, quantity in app.request.post.bundles %}
+            {% if quantity > 0 %}
+                {% set result = api.get('/bundle/'~bundle_id) %}
+                {% if result is not empty %}
+                    {% for variant in result.variant_id %}
+                        {% set result = api.post('/sessioncartitem', {"product_id":variant.id, "quantity":variant.quantity * quantity}) %}
+                        {% set result_add = result_add + {(variant.id):result} %}
+                    {% endfor %}
+                    {% set result = api.post('/sessioncartdiscount', {"type":"bundle", "id":bundle_id}) %}
+                    {% do api.post('/sessioncartdiscount/refresh') %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {# Add bundle to cart  #}
+
 {% elseif action == 'wishlist' %}
     {# Check for default wishlist, otherwise add to wishlist with specified id #}
     {% if id == 0 %}
