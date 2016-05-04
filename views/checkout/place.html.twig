@@ -24,13 +24,13 @@
 {% set request = request + app.user.getCheckoutStates('shipping') %}
 {% set request = request + app.user.getCheckoutStates('billing')%}
 {% set request = request + {'test_order' : app.user.getState('test_order')} %}
-{% set response = api.post('/order/place', request) %}
+{% set final_order = api.post('/order/place', request) %}
 
 {# data block from checkout/_partials/final.html.twig #}
-{% if response is not empty %}
+{% if final_order is not empty %}
     {% do app.user.clearCheckoutStates('shipping') %}
     {% do app.user.clearCheckoutStates('billing') %}
-    {% set final_order = api.get('/order/' ~ response | integer) %}
+    {# set final_order = api.get('/order/' ~ response | integer) #}
     {% set items = api.get('/orderitem', {query:{'order_id':final_order.id}}) %}
     {% set coupons = api.get('/ordercoupon', {query:{'order_id':final_order.id}}) %}
     {% set product_ids = items|values_in('product_id') %}
