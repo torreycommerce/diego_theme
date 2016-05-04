@@ -12,7 +12,7 @@
 
                     {% set main_image_alt = product.images.0.alt is not empty ? product.images.0.alt :product.product|values_in('images')[0]['alt'] %}
                     {% set main_image_alt = main_image_alt is empty ? '' : main_image_alt %}
-                    
+
                     <div id="image-main">
                         <div class="row">
                             <div class="col-sm-12">
@@ -197,7 +197,15 @@
                 <div class="col-md-12">
                     <div class="panel-tabs">
                         <ul class="nav nav-tabs">
-                            <li class="active">
+                            {# Begin Bundle logic #}
+                            {% set bundles = api.get('/bundle', {query:{collection_id:item.id}}) %}
+                            {% if bundles| length >= 1 %}
+                                <li class="active">
+                                    <a href="#bundles" data-toggle="tab">Bundles</a>
+                                </li>
+                            {% endif %}
+                            {# End Bundle logic #}
+                            <li {% if bundles| length == 0 %}class="active"{% endif %}>
                                 <a href="#children" data-toggle="tab">Products</a>
                             </li>
                             {% if product.description is not empty %}
@@ -217,6 +225,154 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="tab-content">
+                        {% if bundles| length >= 1 %}
+                            <div id="bundles" class="tab-pane fade {% if bundles| length >= 1 %} in active {% endif %}">
+                                <form method="post" id="productForm" action="{{ app.url }}/product/route" class="form-inline">
+                                    <div class="panel panel-default panel-tab">
+                                        <div class="panel-heading">
+                                        {# Begin desktop buttons #}
+                                            <div class="btn-toolbar hidden-xs">
+                                                <div class="row">
+                                                    {# Begin add to cart button #}
+                                                    <div class="col-sm-4 col-md-3 col-lg-2 col-lg-offset-10 col-md-offset-9 col-sm-offset-8">
+                                                        <button type="submit" class="btn btn-block btn-cart" name="action" value="cart">
+                                                            <i class="fa fa-shopping-cart"></i>
+                                                            <span>Add to Cart</span>
+                                                        </button>
+                                                    </div>
+                                                    {# End add to cart button #}
+                                                </div>
+                                            </div>
+                                            {# End desktop buttons #}
+                                            {# Begin mobile buttons #}
+                                            <div class="visible-xs btn-toolbar">
+                                                <div class="actions row">
+                                                {# Begin buy button #}
+                                                    <div class="col-sm-12 col-xs-12">
+                                                        <button type="submit" name="action" value="cart" class="btn btn-cart btn-block">
+                                                            <i class="fa fa-shopping-cart"></i>
+                                                            <span>Add to Cart</span>
+                                                        </button>
+                                                    </div>
+                                                    {# End buy button #}
+                                                </div>
+                                            </div>
+                                            {# End mobile buttons #}
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="panel-group">
+                                                {% for bundle in bundles %}
+                                                    {# Begin collection product #}
+                                                    <div class="variations">
+                                                        <div class="product">
+                                                            <div class="row">
+                                                                <div>
+                                                                    {# Begin collection product image #}
+                                                                    <div class="col-xs-5 col-sm-6 col-md-2 col-lg-2">
+                                                                        <div class="image thumbnail" id="variant-selected-image-{{bundle.id}}">
+                                                                            <img id="main-product-image-copy"
+                                                                                onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'"
+                                                                                src="{{app.image.getImageUrl("product","standard",bundle.items[0].images[0].id) }}"
+                                                                                width="250" class="img-responsive" alt="" />
+                                                                        </div>
+                                                                    </div>
+                                                                    {# End collection product image #}
+                                                                    {# Begin collection product details #}
+                                                                    <div class="col-xs-8 col-sm-8 col-md-4 col-lg-4">
+                                                                        <div class="details">
+                                                                            <h4 class='name'>{{ bundle.name }}</h4>
+                                                                            {# Begin variation dropdown #}
+                                                                                <div class="price" id="product-price-{{bundle.id}}">${{ bundle.price }}</div>
+                                                                            {# End variation dropdown #}
+                                                                            {# Begin pricing #}
+                                                                                <ul class="pricing" id="pricing-box-{{product.id}}">
+                                                                                    {# Begin regular price #}
+                                                                                    <li class="regular" id="product-standard-price-{{product.id}}">Regular price: ${{ bundle.raw_price }}</li>
+                                                                                    {# End regular price #}
+                                                                                    {# Begin percent off #}
+                                                                                    {% if bundle.discount_type == 'dollar'%}
+                                                                                        <li class="percent" id="save-pricing-{{product.id}}">Total discount: ${{ bundle.discount_value }}</li>
+                                                                                    {% elseif bundle.discount_type == 'percentage' %}
+                                                                                        <li class="percent" id="save-pricing-{{product.id}}">Total discount: {{ bundle.discount_value }}%</li>
+                                                                                    {% elseif bundle.discount_type == 'fixed' %}
+                                                                                        <li class="percent" id="save-pricing-{{product.id}}">Total discount: ${{ bundle.price - bundle.raw_price }}</li>
+                                                                                    {% endif %}
+                                                                                    {# End percent off #}
+                                                                                </ul>
+                                                                            {# End pricing #}
+                                                                            {# Begin estimated shipping #}
+                                                                                <ul class="shipping">
+                                                                                    <li class="estimated-time" id="stock-text-{{product.id}}">
+                                                                                        {% if bundle.has_stock == '1' %}
+                                                                                            In Stock
+                                                                                        {% else %}
+                                                                                            Out of stock
+                                                                                        {% endif %}
+                                                                                    </li>
+                                                                                </ul>
+                                                                            {# End estimated shipping #}
+                                                                            {# Begin product tags #}
+                                                                                    <ul class="tags hidden-xs hidden-sm">
+                                                                                        <li>
+                                                                                            {% for item in bundle.items %}
+                                                                                                {% for tag in item.tags %}
+                                                                                                    <span class="label label-info">{{tag|title}}</span>
+                                                                                                {% endfor %}
+                                                                                            {% endfor %}
+                                                                                        </li>
+                                                                                    </ul>
+                                                                            {# End product tags #}
+                                                                        </div>
+                                                                    </div>
+                                                                    {# End collection product details #}
+                                                                </div>
+
+                                                                <div class="col-xs-8 col-sm-8 col-md-6 col-lg-6">
+                                                                    <div class="details">
+                                                                        <div class="col-md-8 row">
+                                                                            <div class="variation-selection">
+                                                                                {{ bundle.description }}<br/>
+                                                                                <ul>
+                                                                                    {% for item in bundle.items %}
+                                                                                        <li>{{ bundle.variant_id[loop.index - 1].quantity }} X {{ item.name }}</li>
+                                                                                    {% endfor %}
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xs-2 col-md-2 col-md-offset-2">
+                                                                        {# Begin collection product actions #}
+                                                                            <div class="actions">
+                                                                                <div class="btn-toolbar">
+                                                                                    <div class="quantity-input-group quantity" id="div-quantity-{{product.id}}">
+                                                                                        <label for="quantity-selector" class="control-label pT0">Qty</label>
+                                                                                        <div class="input-group">
+                                                                                            <div class="input-group-btn">
+                                                                                                <button class="btn btn-neutral btn-remove" type="button"><i class="fa fa-minus"></i></button>
+                                                                                            </div>
+                                                                                            <input id="variant-input-{{bundle.id}}" data-limit="" class="form-control quantity-selector" type="text" value="0" maxlength="2" placeholder="1" name="bundles[{{ bundle.id }}]">
+                                                                                            <div class="input-group-btn">
+                                                                                                <button class="btn btn-neutral btn-add" type="button"><i class="fa fa-plus"></i></button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        {# End collection product actions #}
+                                                                    </div>
+                                                                </div>
+                                                                {# End variation block of product #}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            {# End collection product #}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        {% endif %}
                         <div id="children" class="tab-pane fade in active">
                             <form method="post" id="productForm" action="{{ app.url }}/product/route" class="form-inline">
                                 <div class="panel panel-default panel-tab">
@@ -287,7 +443,7 @@
                                             {% set children = children|merge( items|find({'id':item}) ) %}
                                         {% endfor %}
                                         {# set children = items|find({'id':layout.items}) #}
-                                        
+
                                         {% if children is not empty %}
                                         <div class="panel-group">
                                             {# Begin collection group header #}
@@ -312,7 +468,7 @@
                                                                 <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2">
                                                                 <img id="main-product-image-copy" onerror="this.src='{{ app.url_asset }}/assets/images/product/image-250x250.jpg'" src="{{ app.url_asset }}/assets/images/product/image-250x250.jpg" width="250" class="img-responsive" alt="" style="display:none"/>
                                                                     <div class="image globalPadding10 thumbnail" id="variant-selected-image-{{product.id}}">
-                                                                            
+
                                                                     </div>
                                                                 </div>
 
@@ -387,7 +543,7 @@
                                                                         {% endif %}
                                                                         {# End product tags #}
                                                                     </div>
-                                                                    <div class="item-sku" id="div-sku-{{product.id}}"> 
+                                                                    <div class="item-sku" id="div-sku-{{product.id}}">
                                                                         <strong>Item: </strong> #<span id="variant-sku-{{product.id}}"></span>
                                                                     </div>
                                                                 </div>
