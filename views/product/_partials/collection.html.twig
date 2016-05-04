@@ -340,26 +340,29 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    {# Begin collection product actions #}
                                                                     <div class="col-xs-2 col-md-2 col-md-offset-2">
-                                                                        {# Begin collection product actions #}
-                                                                            <div class="actions">
-                                                                                <div class="btn-toolbar">
-                                                                                    <div class="quantity-input-group quantity" id="div-quantity-{{product.id}}">
-                                                                                        <label for="quantity-selector" class="control-label pT0">Qty</label>
-                                                                                        <div class="input-group">
-                                                                                            <div class="input-group-btn">
-                                                                                                <button class="btn btn-neutral btn-remove" type="button"><i class="fa fa-minus"></i></button>
-                                                                                            </div>
-                                                                                            <input id="variant-input-{{bundle.id}}" data-limit="" class="form-control quantity-selector" type="text" value="0" maxlength="2" placeholder="1" name="bundles[{{ bundle.id }}]">
-                                                                                            <div class="input-group-btn">
-                                                                                                <button class="btn btn-neutral btn-add" type="button"><i class="fa fa-plus"></i></button>
-                                                                                            </div>
+                                                                        <div class="actions">
+                                                                            <div class="btn-toolbar">
+                                                                                <div class="quantity-input-group quantity" id="div-quantity-{{product.id}}">
+                                                                                    <label for="quantity-selector" class="control-label" style="font-size:12px; color:#42464d;"><strong>Qty</strong></label>
+                                                                                    {# Begin product Quantity #}
+                                                                                    <div class="input-group">
+                                                                                        <div class="input-group-btn">
+                                                                                            <button class="btn btn-remove btn-link bootstrap-touchspin-down" type="button">
+                                                                                                <i class="fa fa-minus"></i>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <input id="variant-input-{{bundle.id}}" data-limit="" class="form-control quantity-selector quanitySniper" type="text" value="0" maxlength="2" placeholder="1" name="bundles[{{ bundle.id }}]" style="width:78px;">
+                                                                                        <div class="input-group-btn">
+                                                                                            <button class="btn btn-add btn-link bootstrap-touchspin-up" type="button"><i class="fa fa-plus"></i></button>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                        {# End collection product actions #}
+                                                                        </div>
                                                                     </div>
+                                                                    {# End collection product actions #}
                                                                 </div>
                                                                 {# End variation block of product #}
                                                             </div>
@@ -373,7 +376,7 @@
                                 </form>
                             </div>
                         {% endif %}
-                        <div id="children" class="tab-pane fade in active">
+                        <div id="children" class="tab-pane fade {% if bundles| length == 0 %} in active {% endif %}">
                             <form method="post" id="productForm" action="{{ app.url }}/product/route" class="form-inline">
                                 <div class="panel panel-default panel-tab">
                                     {# Begin pane actions / registry / wishlist / add to cart #}
